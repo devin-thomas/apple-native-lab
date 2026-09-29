@@ -36,4 +36,7 @@ step "Watch host compiles for the simulator (LabWatch)"
 xcodebuild -project "$PROJECT" -scheme LabWatch -destination 'generic/platform=watchOS Simulator' \
   -derivedDataPath "$DERIVED" build -quiet
 
+step "Release builds of every profile match Config/ProductPolicy.txt (build_manifest.py)"
+python3 script/build_manifest.py
+
 printf '\nAll automated checks passed. Device qualification is not part of this script.\n'

@@ -1,0 +1,14 @@
+// CloudOptional build profile: CloudKit sync and optional Private Cloud Compute or provider
+// adapters (docs/BUILD_AND_DISTRIBUTION.md).
+//
+// No target attaches yet. A target that attaches this file:
+// - declares its own .entitlements file; a CloudKit container entitlement uses
+//   $(LAB_CLOUDKIT_CONTAINER_IDENTIFIER), which each developer registers under their own team;
+// - is never a dependency of a CoreLocal target, and keeps the local-only path as its fallback;
+// - needs a paid team with iCloud for on-device proof: a free Personal Team cannot use iCloud or
+//   Push. Private Cloud Compute also depends on program eligibility and distribution.
+// Swift code can check `#if LAB_PROFILE_CLOUD_OPTIONAL`.
+
+LAB_BUILD_PROFILE = CloudOptional
+LAB_PROFILE_EXTERNAL_SETUP = Paid team with iCloud and your own CloudKit container; per-service eligibility for cloud models
+SWIFT_ACTIVE_COMPILATION_CONDITIONS = $(inherited) LAB_PROFILE_CLOUD_OPTIONAL

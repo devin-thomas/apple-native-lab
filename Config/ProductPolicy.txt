@@ -1,0 +1,53 @@
+# What a built product may link and carry, per build profile and platform.
+# script/build_manifest.py checks every product it builds against these rules, and fails a
+# profile whose product breaks one. A new framework or entitlement is therefore a reviewed line
+# here, never an accident. See docs/BUILD_AND_DISTRIBUTION.md.
+#
+# Platforms: macos, ios, watchos, tvos, visionos (simulator and device builds share a name).
+# A profile or platform of * matches any. Text after # is a comment; keep the reason.
+#
+#   link         <profile> <platform> <Framework>   executables may link /System/Library/Frameworks/<Framework>
+#   entitlement  <profile> <platform> <key>         executables may declare this entitlement
+#   unsupported  <platform> <Framework>             no executable on the platform may link it, whatever `link` says
+#   purpose      <Framework> <Info.plist key>       a Store-lane product that links the framework must declare the key
+
+# Every host
+link         *          *        Foundation          # base
+link         *          *        SwiftUI             # host interface
+link         *          ios      UIKit               # linked by SwiftUI apps on iOS
+link         *          watchos  UIKit               # linked by SwiftUI apps on watchOS
+
+# CoreLocal: capability status probes in LabSupport (CORE-004); none of them prompts
+link         CoreLocal  macos    AVFoundation        # camera and microphone status
+link         CoreLocal  macos    CoreBluetooth       # Bluetooth authorization status
+link         CoreLocal  macos    FoundationModels    # on-device language model availability
+link         CoreLocal  macos    Security            # reads the running build's own entitlements
+link         CoreLocal  macos    Speech              # speech recognition status and on-device assets
+link         CoreLocal  ios      ARKit               # world tracking and scene reconstruction support
+link         CoreLocal  ios      AVFoundation        # camera and microphone status
+link         CoreLocal  ios      CoreBluetooth       # Bluetooth authorization status
+link         CoreLocal  ios      FoundationModels    # on-device language model availability
+link         CoreLocal  ios      NearbyInteraction   # Ultra Wideband device capabilities
+link         CoreLocal  ios      Speech              # speech recognition status and on-device assets
+entitlement  CoreLocal  macos    com.apple.security.app-sandbox   # the Mac host is sandboxed
+
+# Companions: the Watch host's capability status probes (CORE-004)
+link         Companions watchos  AVFAudio            # record permission and audio input
+link         Companions watchos  CoreBluetooth       # Bluetooth authorization status
+link         Companions watchos  NearbyInteraction   # Ultra Wideband device capabilities
+
+# SDK modules that exist but do not provide the lab's API on these platforms (CORE-004 notes)
+unsupported  macos      ARKit                        # the macOS SDK's ARKit has no ARWorldTrackingConfiguration
+unsupported  macos      NearbyInteraction            # NISession is unavailable on macOS
+unsupported  watchos    FoundationModels             # SystemLanguageModel is unavailable on watchOS
+unsupported  tvos       FoundationModels             # SystemLanguageModel is unavailable on tvOS
+unsupported  tvos       Speech                       # SFSpeechRecognizer is unavailable on tvOS
+
+# Purpose strings App Store processing expects when these frameworks' protected APIs are referenced
+purpose      AVFoundation       NSCameraUsageDescription
+purpose      AVFoundation       NSMicrophoneUsageDescription
+purpose      AVFAudio           NSMicrophoneUsageDescription
+purpose      ARKit              NSCameraUsageDescription
+purpose      Speech             NSSpeechRecognitionUsageDescription
+purpose      CoreBluetooth      NSBluetoothAlwaysUsageDescription
+purpose      NearbyInteraction  NSNearbyInteractionUsageDescription

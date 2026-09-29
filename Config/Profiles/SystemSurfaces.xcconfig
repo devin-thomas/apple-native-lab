@@ -1,0 +1,16 @@
+// SystemSurfaces build profile: share, widget, and Control extensions, App Group staging, and
+// App Intents integration tests (docs/BUILD_AND_DISTRIBUTION.md).
+//
+// No target attaches yet. The first ones arrive with the Surface Deck and Share Ingress Station
+// experiments. A target that attaches this file:
+// - declares its own .entitlements file; an App Group entitlement uses $(LAB_APP_GROUP_IDENTIFIER);
+// - is embedded only by a SystemSurfaces host variant with its own scheme (for example
+//   LabPhone-Surfaces), never by LabPhone, so LabPhone-Core never needs App Group provisioning
+//   or extra App IDs;
+// - builds for the simulator with no team. On-device App Group proof needs a paid team: a free
+//   Personal Team cannot use App Groups.
+// Swift code shared with CoreLocal can check `#if LAB_PROFILE_SYSTEM_SURFACES`.
+
+LAB_BUILD_PROFILE = SystemSurfaces
+LAB_PROFILE_EXTERNAL_SETUP = Paid team for on-device App Group staging; simulator builds need none
+SWIFT_ACTIVE_COMPILATION_CONDITIONS = $(inherited) LAB_PROFILE_SYSTEM_SURFACES

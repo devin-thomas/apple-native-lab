@@ -1,0 +1,11 @@
+// FrontierOptional build profile: File Provider, App Clip, Wallet signing, and CarPlay,
+// Push to Talk, Screen Time, and accessory spikes (docs/BUILD_AND_DISTRIBUTION.md).
+//
+// No target attaches yet. Each feature gets its own small target and scheme, its own
+// .entitlements file, and its own setup; a managed capability waits for Apple's approval. A
+// missing approval skips that target and never fails CoreLocal.
+// Swift code can check `#if LAB_PROFILE_FRONTIER_OPTIONAL`.
+
+LAB_BUILD_PROFILE = FrontierOptional
+LAB_PROFILE_EXTERNAL_SETUP = Per-feature setup; managed capability approval where Apple requires it
+SWIFT_ACTIVE_COMPILATION_CONDITIONS = $(inherited) LAB_PROFILE_FRONTIER_OPTIONAL

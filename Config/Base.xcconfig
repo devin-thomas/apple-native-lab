@@ -1,6 +1,10 @@
 // Tracked, safe defaults for every target. Nothing here identifies a person or team.
 // Device signing and personal identifiers belong in Config/Local.xcconfig (ignored by Git);
 // copy Config/Local.xcconfig.example to start one.
+//
+// Layering (docs/BUILD_AND_DISTRIBUTION.md): this file is the project-level configuration,
+// and it includes Config/Local.xcconfig last so local values win. Each target then attaches
+// one Config/Profiles/<Profile>.xcconfig, which names the profile the target belongs to.
 
 // Reverse-DNS prefix for every bundle identifier. Override locally.
 LAB_BUNDLE_PREFIX = org.example
@@ -13,8 +17,30 @@ CODE_SIGN_STYLE = Automatic
 LAB_MAC_DEVELOPMENT_TEAM =
 
 // Provenance written into each Info.plist. script/ entry points pass the real Git revision.
+// LAB_BUILD_PROFILE is replaced by the profile file a target attaches; this default only
+// covers a target that attaches none.
 LAB_SOURCE_REVISION = unknown
 LAB_BUILD_PROFILE = CoreLocal
+
+// Identifiers the optional profiles use. They derive from LAB_BUNDLE_PREFIX, so a developer who
+// sets their own prefix gets their own App Group, Keychain group, and CloudKit container, and no
+// maintainer-owned container is assumed. No CoreLocal target references them. An identifier is
+// not approval: an entitlement that uses one is added to its own executable only after the key
+// is confirmed in the installed SDK and the signing team's provisioning allows it.
+// The Keychain group is written in an entitlements file as $(AppIdentifierPrefix)$(LAB_KEYCHAIN_GROUP).
+LAB_APP_GROUP_IDENTIFIER = group.$(LAB_BUNDLE_PREFIX).nativelab
+LAB_KEYCHAIN_GROUP = $(LAB_BUNDLE_PREFIX).nativelab.shared
+LAB_CLOUDKIT_CONTAINER_IDENTIFIER = iCloud.$(LAB_BUNDLE_PREFIX).nativelab
+
+// Distribution lane: Source (the default, for building from this repository) or Store (App Store
+// and TestFlight archives). Only the Store lane merges the purpose strings in
+// Config/PurposeStrings.xcconfig into each host's Info.plist; a Source build declares none, so
+// its Readiness probes report that the build cannot ask. Any other value declares none either;
+// script/build_manifest.py rejects it.
+LAB_DISTRIBUTION_LANE = Source
+LAB_LANE_DECLARES_PURPOSE_STRINGS_Source = NO
+LAB_LANE_DECLARES_PURPOSE_STRINGS_Store = YES
+LAB_DECLARES_PURPOSE_STRINGS = $(LAB_LANE_DECLARES_PURPOSE_STRINGS_$(LAB_DISTRIBUTION_LANE))
 
 // Feature levels (ADR-009): the core targets the 26 family; 27-generation adapters compile
 // only when building against a 27 SDK. Swift code checks `#if LAB_SDK_27`.
@@ -28,4 +54,5 @@ LAB_SDK_SWIFT_FLAGS[sdk=appletvos27*] = -DLAB_SDK_27
 LAB_SDK_SWIFT_FLAGS[sdk=appletvsimulator27*] = -DLAB_SDK_27
 OTHER_SWIFT_FLAGS = $(inherited) $(LAB_SDK_SWIFT_FLAGS)
 
+#include "PurposeStrings.xcconfig"
 #include? "Local.xcconfig"

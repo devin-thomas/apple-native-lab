@@ -22,6 +22,8 @@
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LabBuildProfile</key>
 	<string>$(LAB_BUILD_PROFILE)</string>
+	<key>LabDistributionLane</key>
+	<string>$(LAB_DISTRIBUTION_LANE)</string>
 	<key>LabSourceRevision</key>
 	<string>$(LAB_SOURCE_REVISION)</string>
 	<key>UIApplicationSceneManifest</key>

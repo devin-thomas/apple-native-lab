@@ -1,0 +1,15 @@
+// CoreLocal build profile: the Mac and iPhone hosts, their tests, original fixtures, local
+// persistence, and local-only experiments (docs/BUILD_AND_DISTRIBUTION.md).
+//
+// A target joins this profile by attaching this file in project.yml (`configFiles`).
+// Attached today: LabMac, LabMacTests, LabPhone (schemes LabMac-Core and LabPhone-Core).
+//
+// Rules: CoreLocal builds with no team for the Mac and the simulators, and with any team,
+// including a free Personal Team, for a device. No CoreLocal target may embed or depend on a
+// target from another profile, reference the App Group, Keychain group, or CloudKit identifiers,
+// or carry an entitlement other than the Mac App Sandbox. script/build_manifest.py checks the
+// built products.
+
+LAB_BUILD_PROFILE = CoreLocal
+LAB_PROFILE_EXTERNAL_SETUP = None for the Mac and simulators; any team, including a free Personal Team, for a device
+SWIFT_ACTIVE_COMPILATION_CONDITIONS = $(inherited) LAB_PROFILE_CORE_LOCAL

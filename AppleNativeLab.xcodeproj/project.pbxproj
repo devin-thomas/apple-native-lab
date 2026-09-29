@@ -35,6 +35,8 @@
 		6BFE3236126CFD99DB8529EC /* LabWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LabWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		700897A06A459DF913708DC1 /* Base.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Base.xcconfig; sourceTree = "<group>"; };
 		748764B9E84663B58F1DA899 /* LabSupport */ = {isa = PBXFileReference; lastKnownFileType = folder; name = LabSupport; path = Packages/LabSupport; sourceTree = SOURCE_ROOT; };
+		BB95D963471D52C06FB3FA80 /* Companions.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Companions.xcconfig; sourceTree = "<group>"; };
+		EA18A3C1245AEABF4BE3110A /* CoreLocal.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = CoreLocal.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -195,6 +197,7 @@
 			isa = PBXGroup;
 			children = (
 				700897A06A459DF913708DC1 /* Base.xcconfig */,
+				C2DF3FEBB3A91D3EBC04C159 /* Profiles */,
 			);
 			path = Config;
 			sourceTree = "<group>";
@@ -208,6 +211,15 @@
 				457B03284C6A2A38C27BE874 /* Watch */,
 			);
 			path = Apps;
+			sourceTree = "<group>";
+		};
+		C2DF3FEBB3A91D3EBC04C159 /* Profiles */ = {
+			isa = PBXGroup;
+			children = (
+				BB95D963471D52C06FB3FA80 /* Companions.xcconfig */,
+				EA18A3C1245AEABF4BE3110A /* CoreLocal.xcconfig */,
+			);
+			path = Profiles;
 			sourceTree = "<group>";
 		};
 		FD0B64B856F1F062EC2B6D9F /* Products */ = {
@@ -449,11 +461,17 @@
 /* Begin XCBuildConfiguration section */
 		07348935BBB6CDE9C4258E24 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = EA18A3C1245AEABF4BE3110A /* CoreLocal.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				GENERATE_INFOPLIST_FILE = NO;
+				GENERATE_INFOPLIST_FILE = "$(LAB_DECLARES_PURPOSE_STRINGS)";
 				INFOPLIST_FILE = Apps/Phone/Info.plist;
+				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "$(LAB_PURPOSE_BLUETOOTH)";
+				INFOPLIST_KEY_NSCameraUsageDescription = "$(LAB_PURPOSE_CAMERA)";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "$(LAB_PURPOSE_MICROPHONE)";
+				INFOPLIST_KEY_NSNearbyInteractionUsageDescription = "$(LAB_PURPOSE_NEARBY_INTERACTION)";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "$(LAB_PURPOSE_SPEECH_RECOGNITION)";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -470,6 +488,7 @@
 		};
 		3398A161CE73E60C7E24C0D2 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = EA18A3C1245AEABF4BE3110A /* CoreLocal.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COMBINE_HIDPI_IMAGES = YES;
@@ -488,10 +507,14 @@
 		};
 		484664177F3A6089DE590F63 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = BB95D963471D52C06FB3FA80 /* Companions.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				GENERATE_INFOPLIST_FILE = NO;
+				GENERATE_INFOPLIST_FILE = "$(LAB_DECLARES_PURPOSE_STRINGS)";
 				INFOPLIST_FILE = Apps/Watch/Info.plist;
+				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "$(LAB_PURPOSE_BLUETOOTH)";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "$(LAB_PURPOSE_MICROPHONE)";
+				INFOPLIST_KEY_NSNearbyInteractionUsageDescription = "$(LAB_PURPOSE_NEARBY_INTERACTION)";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(LAB_BUNDLE_PREFIX).nativelab.watchkitapp";
 				PRODUCT_NAME = NativeLabWatch;
 				SDKROOT = watchos;
@@ -572,11 +595,17 @@
 		};
 		832452E5D579BA10611FCC54 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = EA18A3C1245AEABF4BE3110A /* CoreLocal.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				GENERATE_INFOPLIST_FILE = NO;
+				GENERATE_INFOPLIST_FILE = "$(LAB_DECLARES_PURPOSE_STRINGS)";
 				INFOPLIST_FILE = Apps/Phone/Info.plist;
+				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "$(LAB_PURPOSE_BLUETOOTH)";
+				INFOPLIST_KEY_NSCameraUsageDescription = "$(LAB_PURPOSE_CAMERA)";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "$(LAB_PURPOSE_MICROPHONE)";
+				INFOPLIST_KEY_NSNearbyInteractionUsageDescription = "$(LAB_PURPOSE_NEARBY_INTERACTION)";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "$(LAB_PURPOSE_SPEECH_RECOGNITION)";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -656,6 +685,7 @@
 		};
 		B96E0DFF287957E8EC06D697 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = EA18A3C1245AEABF4BE3110A /* CoreLocal.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COMBINE_HIDPI_IMAGES = YES;
@@ -674,14 +704,19 @@
 		};
 		DEF0FCFEFDCB411B06BE36C8 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = EA18A3C1245AEABF4BE3110A /* CoreLocal.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Apps/Mac/LabMac.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = "$(LAB_MAC_DEVELOPMENT_TEAM)";
 				ENABLE_HARDENED_RUNTIME = YES;
-				GENERATE_INFOPLIST_FILE = NO;
+				GENERATE_INFOPLIST_FILE = "$(LAB_DECLARES_PURPOSE_STRINGS)";
 				INFOPLIST_FILE = Apps/Mac/Info.plist;
+				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "$(LAB_PURPOSE_BLUETOOTH)";
+				INFOPLIST_KEY_NSCameraUsageDescription = "$(LAB_PURPOSE_CAMERA)";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "$(LAB_PURPOSE_MICROPHONE)";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "$(LAB_PURPOSE_SPEECH_RECOGNITION)";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -694,10 +729,14 @@
 		};
 		F37A2AA1990E80E804B3DB45 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = BB95D963471D52C06FB3FA80 /* Companions.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				GENERATE_INFOPLIST_FILE = NO;
+				GENERATE_INFOPLIST_FILE = "$(LAB_DECLARES_PURPOSE_STRINGS)";
 				INFOPLIST_FILE = Apps/Watch/Info.plist;
+				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "$(LAB_PURPOSE_BLUETOOTH)";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "$(LAB_PURPOSE_MICROPHONE)";
+				INFOPLIST_KEY_NSNearbyInteractionUsageDescription = "$(LAB_PURPOSE_NEARBY_INTERACTION)";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(LAB_BUNDLE_PREFIX).nativelab.watchkitapp";
 				PRODUCT_NAME = NativeLabWatch;
 				SDKROOT = watchos;
@@ -708,14 +747,19 @@
 		};
 		F87C32974B223B05479F87D1 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = EA18A3C1245AEABF4BE3110A /* CoreLocal.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Apps/Mac/LabMac.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = "$(LAB_MAC_DEVELOPMENT_TEAM)";
 				ENABLE_HARDENED_RUNTIME = YES;
-				GENERATE_INFOPLIST_FILE = NO;
+				GENERATE_INFOPLIST_FILE = "$(LAB_DECLARES_PURPOSE_STRINGS)";
 				INFOPLIST_FILE = Apps/Mac/Info.plist;
+				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "$(LAB_PURPOSE_BLUETOOTH)";
+				INFOPLIST_KEY_NSCameraUsageDescription = "$(LAB_PURPOSE_CAMERA)";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "$(LAB_PURPOSE_MICROPHONE)";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "$(LAB_PURPOSE_SPEECH_RECOGNITION)";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",

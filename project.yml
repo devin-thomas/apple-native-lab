@@ -1,5 +1,15 @@
 # Source of truth for AppleNativeLab.xcodeproj. Regenerate with script/generate_project.sh.
 # Sources use synchronized folders: add Swift files without regenerating.
+#
+# Build profiles (docs/BUILD_AND_DISTRIBUTION.md): every target attaches exactly one
+# Config/Profiles/<Profile>.xcconfig through `configFiles`, which sets LAB_BUILD_PROFILE and the
+# profile's compilation condition. Schemes by profile:
+#   CoreLocal         LabMac-Core, LabPhone-Core
+#   Companions        LabWatch
+#   SystemSurfaces    none yet
+#   CloudOptional     none yet
+#   FrontierOptional  none yet
+# Entitlements and purpose strings are declared per executable, on the target that uses them.
 name: AppleNativeLab
 
 options:
@@ -34,6 +44,9 @@ targets:
   LabMac:
     type: application
     platform: macOS
+    configFiles:
+      Debug: Config/Profiles/CoreLocal.xcconfig
+      Release: Config/Profiles/CoreLocal.xcconfig
     sources:
       - Apps/Shared
       - Apps/Mac
@@ -51,6 +64,8 @@ targets:
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         LabSourceRevision: $(LAB_SOURCE_REVISION)
         LabBuildProfile: $(LAB_BUILD_PROFILE)
+        LabDistributionLane: $(LAB_DISTRIBUTION_LANE)
+    # The only entitlement in the project. Capability entitlements join the executable that uses them.
     entitlements:
       path: Apps/Mac/LabMac.entitlements
       properties:
@@ -61,12 +76,22 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: $(LAB_BUNDLE_PREFIX).nativelab
         DEVELOPMENT_TEAM: $(LAB_MAC_DEVELOPMENT_TEAM)
         ENABLE_HARDENED_RUNTIME: YES
-        GENERATE_INFOPLIST_FILE: NO
+        # Store lane only: merge purpose strings for the frameworks this host links
+        # (Config/PurposeStrings.xcconfig). Source builds keep the Info.plist above unchanged.
+        GENERATE_INFOPLIST_FILE: $(LAB_DECLARES_PURPOSE_STRINGS)
+        INFOPLIST_KEY_NSCameraUsageDescription: $(LAB_PURPOSE_CAMERA)
+        INFOPLIST_KEY_NSMicrophoneUsageDescription: $(LAB_PURPOSE_MICROPHONE)
+        INFOPLIST_KEY_NSSpeechRecognitionUsageDescription: $(LAB_PURPOSE_SPEECH_RECOGNITION)
+        INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription: $(LAB_PURPOSE_BLUETOOTH)
 
-  # CoreLocal: the iPhone and iPad host.
+  # CoreLocal: the iPhone and iPad host. It embeds no extension: a SystemSurfaces host variant
+  # with its own scheme embeds extensions, so LabPhone-Core never needs their provisioning.
   LabPhone:
     type: application
     platform: iOS
+    configFiles:
+      Debug: Config/Profiles/CoreLocal.xcconfig
+      Release: Config/Profiles/CoreLocal.xcconfig
     sources:
       - Apps/Shared
       - Apps/Phone
@@ -82,6 +107,7 @@ targets:
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         LabSourceRevision: $(LAB_SOURCE_REVISION)
         LabBuildProfile: $(LAB_BUILD_PROFILE)
+        LabDistributionLane: $(LAB_DISTRIBUTION_LANE)
         UILaunchScreen: {}
         UIApplicationSceneManifest:
           UIApplicationSupportsMultipleScenes: true
@@ -102,13 +128,23 @@ targets:
         SUPPORTS_MACCATALYST: NO
         SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD: NO
         SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD: NO
-        GENERATE_INFOPLIST_FILE: NO
+        # Store lane only: merge purpose strings for the frameworks this host links
+        # (Config/PurposeStrings.xcconfig). Source builds keep the Info.plist above unchanged.
+        GENERATE_INFOPLIST_FILE: $(LAB_DECLARES_PURPOSE_STRINGS)
+        INFOPLIST_KEY_NSCameraUsageDescription: $(LAB_PURPOSE_CAMERA)
+        INFOPLIST_KEY_NSMicrophoneUsageDescription: $(LAB_PURPOSE_MICROPHONE)
+        INFOPLIST_KEY_NSSpeechRecognitionUsageDescription: $(LAB_PURPOSE_SPEECH_RECOGNITION)
+        INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription: $(LAB_PURPOSE_BLUETOOTH)
+        INFOPLIST_KEY_NSNearbyInteractionUsageDescription: $(LAB_PURPOSE_NEARBY_INTERACTION)
 
   # Companions: the Watch host installs directly to a paired Watch; it is not embedded in
   # the iPhone app yet, so CoreLocal never depends on Watch provisioning.
   LabWatch:
     type: application
     platform: watchOS
+    configFiles:
+      Debug: Config/Profiles/Companions.xcconfig
+      Release: Config/Profiles/Companions.xcconfig
     sources:
       - Apps/Watch
     dependencies:
@@ -125,16 +161,25 @@ targets:
         CFBundleShortVersionString: $(MARKETING_VERSION)
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         LabSourceRevision: $(LAB_SOURCE_REVISION)
-        LabBuildProfile: Companions
+        LabBuildProfile: $(LAB_BUILD_PROFILE)
+        LabDistributionLane: $(LAB_DISTRIBUTION_LANE)
     settings:
       base:
         PRODUCT_NAME: NativeLabWatch
         PRODUCT_BUNDLE_IDENTIFIER: $(LAB_BUNDLE_PREFIX).nativelab.watchkitapp
-        GENERATE_INFOPLIST_FILE: NO
+        # Store lane only: merge purpose strings for the frameworks this host links
+        # (Config/PurposeStrings.xcconfig). Source builds keep the Info.plist above unchanged.
+        GENERATE_INFOPLIST_FILE: $(LAB_DECLARES_PURPOSE_STRINGS)
+        INFOPLIST_KEY_NSMicrophoneUsageDescription: $(LAB_PURPOSE_MICROPHONE)
+        INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription: $(LAB_PURPOSE_BLUETOOTH)
+        INFOPLIST_KEY_NSNearbyInteractionUsageDescription: $(LAB_PURPOSE_NEARBY_INTERACTION)
 
   LabMacTests:
     type: bundle.unit-test
     platform: macOS
+    configFiles:
+      Debug: Config/Profiles/CoreLocal.xcconfig
+      Release: Config/Profiles/CoreLocal.xcconfig
     sources:
       - Tests/LabMacTests
     dependencies:

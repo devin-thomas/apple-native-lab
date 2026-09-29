@@ -1,0 +1,19 @@
+// Purpose strings for the Store lane (App Store and TestFlight archives). Included by
+// Config/Base.xcconfig for every target, but a host merges them into its Info.plist only when
+// LAB_DISTRIBUTION_LANE = Store, through the INFOPLIST_KEY_* settings on that host in project.yml.
+// A Source build, the default, declares none of them.
+//
+// Why a Store build needs them: every host links AVFoundation, CoreBluetooth, and Speech (and on
+// iPhone ARKit and NearbyInteraction; on Watch AVFAudio and NearbyInteraction) for the no-prompt
+// status probes on the Readiness screen. App Store processing flags a binary that references
+// these privacy-sensitive APIs without the matching purpose string. The permission stager asks
+// only when an experiment action needs the permission, so these strings describe that moment.
+// Before any upload, reread each string against the experiments that build actually contains.
+//
+// Keep the values plain text: no quotes, and no double slash (it starts a comment).
+
+LAB_PURPOSE_CAMERA = Native Lab turns on the camera only while you run a camera or AR experiment that you started.
+LAB_PURPOSE_MICROPHONE = Native Lab listens only while you run an audio or speech experiment that you started.
+LAB_PURPOSE_SPEECH_RECOGNITION = Native Lab transcribes speech only in a speech experiment that you started.
+LAB_PURPOSE_BLUETOOTH = Native Lab uses Bluetooth only in an accessory experiment that you started, with a device you choose.
+LAB_PURPOSE_NEARBY_INTERACTION = Native Lab measures distance to a nearby device only while you run a proximity experiment that you started.

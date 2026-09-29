@@ -1,4 +1,6 @@
 // Copy to Config/Local.xcconfig. That file is ignored by Git and never committed.
+// Every value is optional: without this file, the Mac host and the simulator builds use the
+// neutral defaults in Config/Base.xcconfig. The values below are examples, not real identifiers.
 
 // Your team ID from Xcode > Settings > Accounts. A free Personal Team works for CoreLocal.
 DEVELOPMENT_TEAM = ABCDE12345
@@ -9,3 +11,19 @@ LAB_BUNDLE_PREFIX = com.example.yourname
 
 // Optional: sign the Mac host with your team instead of "Sign to Run Locally".
 // LAB_MAC_DEVELOPMENT_TEAM = ABCDE12345
+
+// Optional-profile identifiers. By default they derive from LAB_BUNDLE_PREFIX, so they are
+// already yours once the prefix is:
+//   App Group           group.$(LAB_BUNDLE_PREFIX).nativelab        (SystemSurfaces)
+//   Keychain group      $(LAB_BUNDLE_PREFIX).nativelab.shared       (written after $(AppIdentifierPrefix))
+//   CloudKit container  iCloud.$(LAB_BUNDLE_PREFIX).nativelab       (CloudOptional)
+// Set one here only to reuse an identifier you already registered under your own team.
+// A free Personal Team cannot use App Groups, iCloud, or Push: on-device SystemSurfaces staging
+// and CloudOptional need a paid team. CoreLocal never does.
+// LAB_APP_GROUP_IDENTIFIER = group.com.example.yourname.nativelab
+// LAB_KEYCHAIN_GROUP = com.example.yourname.nativelab.shared
+// LAB_CLOUDKIT_CONTAINER_IDENTIFIER = iCloud.com.example.yourname.nativelab
+
+// Optional: archive for App Store or TestFlight. The Store lane adds the purpose strings in
+// Config/PurposeStrings.xcconfig to each host; leave it unset for everyday source builds.
+// LAB_DISTRIBUTION_LANE = Store

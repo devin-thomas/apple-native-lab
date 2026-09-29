@@ -1,0 +1,13 @@
+// Companions build profile: separate Watch and TV hosts and the LAN and Watch relays
+// (docs/BUILD_AND_DISTRIBUTION.md).
+//
+// Attached today: LabWatch (scheme LabWatch). It installs directly to a paired Watch and is not
+// embedded in the iPhone app, so CoreLocal never depends on Watch provisioning. A future TV host
+// attaches here too.
+//
+// Simulator builds need no team. Transport, haptics, and camera evidence need physical devices.
+// Swift code can check `#if LAB_PROFILE_COMPANIONS`.
+
+LAB_BUILD_PROFILE = Companions
+LAB_PROFILE_EXTERNAL_SETUP = Physical paired devices for transport evidence; any team for a device install
+SWIFT_ACTIVE_COMPILATION_CONDITIONS = $(inherited) LAB_PROFILE_COMPANIONS
