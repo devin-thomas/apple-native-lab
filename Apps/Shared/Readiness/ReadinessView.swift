@@ -47,15 +47,15 @@ struct ReadinessView: View {
                     Text("This build does not compile these frameworks. Each still has an alternate route.")
                 }
             }
-            if let catalog = model.catalog {
+            if let registry = model.registry {
                 Section("First release journey") {
-                    let progress = catalog.progress(for: .m1)
+                    let progress = registry.progress(for: .m1)
                     LabeledContent("Experiments running", value: "\(progress.live) of \(progress.total)")
-                    ForEach(catalog.experiments(in: .m1)) { experiment in
+                    ForEach(registry.experiments(in: .milestone(.m1))) { experiment in
                         ExperimentRow(experiment: experiment)
                     }
                 }
-            } else if let error = model.catalogError {
+            } else if let error = model.registryError {
                 Section("Catalog") {
                     Label("The bundled catalog failed to load: \(error)", systemImage: "exclamationmark.triangle")
                 }

@@ -8,13 +8,19 @@
 
 /* Begin PBXBuildFile section */
 		06ED0D7F8928725A2A09905A /* LabSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 25231493CA26D8D2F61E46F5 /* LabSupport */; };
-		1B0413E82622210BA72820FA /* LabCatalog in Frameworks */ = {isa = PBXBuildFile; productRef = 21367E5C42D7E02E6E77C8AB /* LabCatalog */; };
+		154C21111E02462DD0A59BE0 /* LabStore in Frameworks */ = {isa = PBXBuildFile; productRef = 6E71D4CE7F5EFA213F132511 /* LabStore */; };
+		1B0413E82622210BA72820FA /* LabDomain in Frameworks */ = {isa = PBXBuildFile; productRef = 0D6B57C2990B445E8BC56C3B /* LabDomain */; };
+		1C7CA3174A557512B2CC9E55 /* seed.json in Resources */ = {isa = PBXBuildFile; fileRef = 4C5126791B7E1A1A049AE090 /* seed.json */; };
 		25972D23C4D3197B1F3EB577 /* LabSupport in Frameworks */ = {isa = PBXBuildFile; productRef = C807DDF95D17BFC6553B448B /* LabSupport */; };
 		3801D1772B69CAE4CA93FDFE /* LabSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 23ACA699398C10114E0D39E7 /* LabSupport */; };
 		45673BBE0F16F89FAE113021 /* LabCatalog in Frameworks */ = {isa = PBXBuildFile; productRef = 0A608BA2376945AD3E608486 /* LabCatalog */; };
 		46B8492EDC6B52F10B6794B1 /* LabCatalog in Frameworks */ = {isa = PBXBuildFile; productRef = 2A29DD32F90A05982B97C0F3 /* LabCatalog */; };
+		4E60DC2D92BC7C909C4D6C56 /* LabCatalog in Frameworks */ = {isa = PBXBuildFile; productRef = 21367E5C42D7E02E6E77C8AB /* LabCatalog */; };
+		682570876F660883019716DB /* seed.json in Resources */ = {isa = PBXBuildFile; fileRef = 4C5126791B7E1A1A049AE090 /* seed.json */; };
 		96EA540221683FF1A975546B /* LabSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 9429B9706DB8D93A799FDA9F /* LabSupport */; };
-		AEB17B224B9BD1CF6EE2746E /* LabCatalog in Frameworks */ = {isa = PBXBuildFile; productRef = D848D3397291632E552B77A2 /* LabCatalog */; };
+		AEB17B224B9BD1CF6EE2746E /* LabDomain in Frameworks */ = {isa = PBXBuildFile; productRef = F41E96699628F4302D6E6EE4 /* LabDomain */; };
+		C5C7E15597C124FFA87914F4 /* LabStore in Frameworks */ = {isa = PBXBuildFile; productRef = 6CF6B1898735341A74FB3DA4 /* LabStore */; };
+		DC14139A63BD575B5A92D755 /* LabCatalog in Frameworks */ = {isa = PBXBuildFile; productRef = D848D3397291632E552B77A2 /* LabCatalog */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -32,9 +38,12 @@
 		0D2046C228154D83652F5963 /* LabMacTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LabMacTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		28C2C1B8B040DD0D06AF070E /* LabPhone.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = LabPhone.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F62DB7E020E6BFDAC86BD42 /* LabMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LabMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4C5126791B7E1A1A049AE090 /* seed.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = seed.json; sourceTree = "<group>"; };
+		51F3AE91A639F249EFFE23A6 /* LabStore */ = {isa = PBXFileReference; lastKnownFileType = folder; name = LabStore; path = Packages/LabStore; sourceTree = SOURCE_ROOT; };
 		6BFE3236126CFD99DB8529EC /* LabWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LabWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		700897A06A459DF913708DC1 /* Base.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Base.xcconfig; sourceTree = "<group>"; };
 		748764B9E84663B58F1DA899 /* LabSupport */ = {isa = PBXFileReference; lastKnownFileType = folder; name = LabSupport; path = Packages/LabSupport; sourceTree = SOURCE_ROOT; };
+		807AD4AFA0A11FF4B4881588 /* LabDomain */ = {isa = PBXFileReference; lastKnownFileType = folder; name = LabDomain; path = Packages/LabDomain; sourceTree = SOURCE_ROOT; };
 		BB95D963471D52C06FB3FA80 /* Companions.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Companions.xcconfig; sourceTree = "<group>"; };
 		EA18A3C1245AEABF4BE3110A /* CoreLocal.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = CoreLocal.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -149,7 +158,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				3801D1772B69CAE4CA93FDFE /* LabSupport in Frameworks */,
-				1B0413E82622210BA72820FA /* LabCatalog in Frameworks */,
+				1B0413E82622210BA72820FA /* LabDomain in Frameworks */,
+				154C21111E02462DD0A59BE0 /* LabStore in Frameworks */,
+				4E60DC2D92BC7C909C4D6C56 /* LabCatalog in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -158,7 +169,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				25972D23C4D3197B1F3EB577 /* LabSupport in Frameworks */,
-				AEB17B224B9BD1CF6EE2746E /* LabCatalog in Frameworks */,
+				AEB17B224B9BD1CF6EE2746E /* LabDomain in Frameworks */,
+				C5C7E15597C124FFA87914F4 /* LabStore in Frameworks */,
+				DC14139A63BD575B5A92D755 /* LabCatalog in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -168,10 +181,20 @@
 		071C35C879138D000B4C815B /* Packages */ = {
 			isa = PBXGroup;
 			children = (
+				807AD4AFA0A11FF4B4881588 /* LabDomain */,
 				0660F733C038430B9F397461 /* LabFeatures */,
+				51F3AE91A639F249EFFE23A6 /* LabStore */,
 				748764B9E84663B58F1DA899 /* LabSupport */,
 			);
 			path = Packages;
+			sourceTree = "<group>";
+		};
+		13F496D456E3A6FB0A6EB3F1 /* demo */ = {
+			isa = PBXGroup;
+			children = (
+				4C5126791B7E1A1A049AE090 /* seed.json */,
+			);
+			path = demo;
 			sourceTree = "<group>";
 		};
 		5C83823CB8A5387C15EF2188 = {
@@ -179,6 +202,7 @@
 			children = (
 				BC360D0928B2D8A28BD1222B /* Apps */,
 				B90AD27F1A068837B4A13316 /* Config */,
+				EBA164BF3EC8D82CC3FA8D3B /* Fixtures */,
 				071C35C879138D000B4C815B /* Packages */,
 				B2A2700360051188212A7089 /* Tests */,
 				FD0B64B856F1F062EC2B6D9F /* Products */,
@@ -220,6 +244,14 @@
 				EA18A3C1245AEABF4BE3110A /* CoreLocal.xcconfig */,
 			);
 			path = Profiles;
+			sourceTree = "<group>";
+		};
+		EBA164BF3EC8D82CC3FA8D3B /* Fixtures */ = {
+			isa = PBXGroup;
+			children = (
+				13F496D456E3A6FB0A6EB3F1 /* demo */,
+			);
+			path = Fixtures;
 			sourceTree = "<group>";
 		};
 		FD0B64B856F1F062EC2B6D9F /* Products */ = {
@@ -279,6 +311,8 @@
 			name = LabMac;
 			packageProductDependencies = (
 				C807DDF95D17BFC6553B448B /* LabSupport */,
+				F41E96699628F4302D6E6EE4 /* LabDomain */,
+				6CF6B1898735341A74FB3DA4 /* LabStore */,
 				D848D3397291632E552B77A2 /* LabCatalog */,
 			);
 			productName = LabMac;
@@ -304,6 +338,8 @@
 			name = LabPhone;
 			packageProductDependencies = (
 				23ACA699398C10114E0D39E7 /* LabSupport */,
+				0D6B57C2990B445E8BC56C3B /* LabDomain */,
+				6E71D4CE7F5EFA213F132511 /* LabStore */,
 				21367E5C42D7E02E6E77C8AB /* LabCatalog */,
 			);
 			productName = LabPhone;
@@ -372,7 +408,9 @@
 			mainGroup = 5C83823CB8A5387C15EF2188;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
+				68EC1628EAAF166849452855 /* XCLocalSwiftPackageReference "Packages/LabDomain" */,
 				4AAABA04484012C6ECF109E0 /* XCLocalSwiftPackageReference "Packages/LabFeatures" */,
+				9077F767E4A8BA5778FF173B /* XCLocalSwiftPackageReference "Packages/LabStore" */,
 				02FFCF9DD9467DDEDF23456F /* XCLocalSwiftPackageReference "Packages/LabSupport" */,
 			);
 			preferredProjectObjectVersion = 77;
@@ -400,6 +438,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1C7CA3174A557512B2CC9E55 /* seed.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -407,6 +446,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				682570876F660883019716DB /* seed.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -829,12 +869,24 @@
 			isa = XCLocalSwiftPackageReference;
 			relativePath = Packages/LabFeatures;
 		};
+		68EC1628EAAF166849452855 /* XCLocalSwiftPackageReference "Packages/LabDomain" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/LabDomain;
+		};
+		9077F767E4A8BA5778FF173B /* XCLocalSwiftPackageReference "Packages/LabStore" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/LabStore;
+		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
 		0A608BA2376945AD3E608486 /* LabCatalog */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = LabCatalog;
+		};
+		0D6B57C2990B445E8BC56C3B /* LabDomain */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = LabDomain;
 		};
 		21367E5C42D7E02E6E77C8AB /* LabCatalog */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -852,6 +904,14 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = LabCatalog;
 		};
+		6CF6B1898735341A74FB3DA4 /* LabStore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = LabStore;
+		};
+		6E71D4CE7F5EFA213F132511 /* LabStore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = LabStore;
+		};
 		9429B9706DB8D93A799FDA9F /* LabSupport */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = LabSupport;
@@ -863,6 +923,10 @@
 		D848D3397291632E552B77A2 /* LabCatalog */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = LabCatalog;
+		};
+		F41E96699628F4302D6E6EE4 /* LabDomain */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = LabDomain;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

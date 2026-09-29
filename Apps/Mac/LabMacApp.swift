@@ -1,35 +1,33 @@
-import LabCatalog
 import SwiftUI
 
 @main
 struct LabMacApp: App {
     @State private var model = LabModel()
+    @State private var library = LabLibrary()
 
     var body: some Scene {
         WindowGroup("Native Lab", id: "catalog") {
-            CatalogSplitView(model: model)
-                .frame(minWidth: 900, minHeight: 540)
+            MainWindow(model: model)
+                .environment(library)
+                .frame(minWidth: 900, minHeight: 560)
         }
-        .defaultSize(width: 1180, height: 760)
+        .defaultSize(width: 1280, height: 800)
+        .windowToolbarStyle(.unified)
         .commands {
-            LabCommands()
+            LabCommands(library: library)
         }
 
+        // One Readiness window; its shortcut also appears in the Window menu.
         Window("Readiness", id: "readiness") {
             ReadinessView(model: model)
                 .frame(minWidth: 460, minHeight: 520)
         }
+        .defaultSize(width: 520, height: 720)
         .keyboardShortcut("0", modifiers: [.command, .shift])
-    }
-}
 
-private struct LabCommands: Commands {
-    @Environment(\.openWindow) private var openWindow
-
-    var body: some Commands {
-        CommandGroup(after: .windowArrangement) {
-            Button("Readiness") { openWindow(id: "readiness") }
-                .keyboardShortcut("0", modifiers: [.command, .shift])
+        Settings {
+            SettingsView()
+                .environment(library)
         }
     }
 }

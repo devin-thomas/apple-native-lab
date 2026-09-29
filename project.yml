@@ -36,6 +36,10 @@ settings:
 packages:
   LabSupport:
     path: Packages/LabSupport
+  LabDomain:
+    path: Packages/LabDomain
+  LabStore:
+    path: Packages/LabStore
   LabFeatures:
     path: Packages/LabFeatures
 
@@ -50,8 +54,13 @@ targets:
     sources:
       - Apps/Shared
       - Apps/Mac
+      # The demo seed, bundled as data. Reset Demo commits it through the operation service.
+      - path: Fixtures/demo/seed.json
+        buildPhase: resources
     dependencies:
       - package: LabSupport
+      - package: LabDomain
+      - package: LabStore
       - package: LabFeatures
         product: LabCatalog
     info:
@@ -95,8 +104,13 @@ targets:
     sources:
       - Apps/Shared
       - Apps/Phone
+      # The demo seed, bundled as data. Reset Demo commits it through the operation service.
+      - path: Fixtures/demo/seed.json
+        buildPhase: resources
     dependencies:
       - package: LabSupport
+      - package: LabDomain
+      - package: LabStore
       - package: LabFeatures
         product: LabCatalog
     info:

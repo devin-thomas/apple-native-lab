@@ -11,10 +11,11 @@ struct CapabilityRow: View {
     /// `nil` while the probe is still running.
     let report: CapabilityReport?
     @State private var showsGates = false
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         Button {
-            withAnimation { showsGates.toggle() }
+            withAnimation(reduceMotion ? nil : .default) { showsGates.toggle() }
         } label: {
             HStack(alignment: .center, spacing: 8) {
                 header

@@ -1,0 +1,115 @@
+import LabCatalog
+import SwiftUI
+
+/// The main window: sidebar, content, and detail columns, with the receipt inspector on the
+/// trailing edge. Its state is per window, so two windows can browse different places.
+struct MainWindow: View {
+    let model: LabModel
+    @State private var window = MainWindowState()
+    // Only which list and which experiment were showing; never data content.
+    @SceneStorage("destination") private var storedDestination = ""
+    @SceneStorage("experiment") private var storedExperiment = ""
+    @FocusState private var isSearchFocused: Bool
+    @Environment(LabLibrary.self) private var library
+    @Environment(\.openWindow) private var openWindow
+
+    var body: some View {
+        NavigationSplitView {
+            SidebarView(registry: model.registry, window: window)
+        } content: {
+            contentColumn
+        } detail: {
+            // The inspector belongs to the detail column; attached to the whole split view it
+            // pushed the columns past the window's edges.
+            detailColumn
+                .navigationSplitViewColumnWidth(min: 320, ideal: 520)
+                .inspector(isPresented: $window.showsInspector) {
+                    ReceiptInspector(window: window)
+                }
+        }
+        .searchable(text: $window.searchText, placement: .sidebar, prompt: searchPrompt)
+        .searchFocused($isSearchFocused)
+        .toolbar {
+            ToolbarItem {
+                Button("Readiness", systemImage: "gauge.with.dots.needle.33percent") {
+                    openWindow(id: "readiness")
+                }
+                .help("Show this build and device (⇧⌘0)")
+            }
+            ToolbarItem {
+                Button {
+                    window.showsInspector.toggle()
+                } label: {
+                    Label(window.showsInspector ? "Hide Receipts" : "Show Receipts", systemImage: "sidebar.trailing")
+                }
+                .help("Show or hide the receipt inspector (⌥⌘I)")
+            }
+        }
+        .resetDemoConfirmation(isPresented: $window.isConfirmingReset) { record in
+            window.inspect(record)
+        }
+        .focusedSceneValue(\.mainWindow, window)
+        .onChange(of: window.searchRequests) { isSearchFocused = true }
+        .onChange(of: window.destination) { old, new in
+            if (old == .collection) != (new == .collection) { window.searchText = "" }
+            // The detail column shows only an experiment the new list contains.
+            if case .catalog(let scope) = new, let id = window.experimentID,
+               let experiment = model.registry?.experiment(id: id), !scope.contains(experiment) {
+                window.experimentID = nil
+            }
+            storedDestination = new?.storageKey ?? ""
+        }
+        .onChange(of: window.experimentID) { _, new in storedExperiment = new ?? "" }
+        .onAppear(perform: restore)
+        .task { await library.start() }
+    }
+
+    @ViewBuilder private var contentColumn: some View {
+        switch window.destination {
+        case .collection:
+            CollectionListColumn(window: window)
+        case .catalog(let scope):
+            if let registry = model.registry {
+                CatalogListColumn(registry: registry, scope: scope, window: window)
+            } else {
+                registryUnavailable
+            }
+        case nil:
+            ContentUnavailableView("Choose a List", systemImage: "sidebar.left",
+                                   description: Text("Pick the lab collection or a slice of the catalog in the sidebar."))
+        }
+    }
+
+    @ViewBuilder private var detailColumn: some View {
+        switch window.destination {
+        case .collection:
+            CollectionDetailColumn(itemID: window.itemID)
+        case .catalog:
+            if let registry = model.registry {
+                CatalogDetailColumn(registry: registry, experimentID: window.experimentID)
+            } else {
+                registryUnavailable
+            }
+        case nil:
+            Color.clear
+        }
+    }
+
+    private var registryUnavailable: some View {
+        ContentUnavailableView("Catalog Unavailable", systemImage: "exclamationmark.triangle",
+                               description: Text(model.registryError ?? "The experiment registry did not load."))
+    }
+
+    private var searchPrompt: String {
+        window.destination == .collection ? "Search samples" : "Search experiments"
+    }
+
+    private func restore() {
+        if let destination = SidebarDestination(storageKey: storedDestination) {
+            window.destination = destination
+        }
+        if !storedExperiment.isEmpty, model.registry?.experiment(id: storedExperiment) != nil {
+            window.experimentID = storedExperiment
+        }
+    }
+}
