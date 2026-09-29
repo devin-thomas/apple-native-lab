@@ -29,3 +29,7 @@ These are design targets to measure, not results. On the minimum tested Mac and 
 For real-time sessions, report median/p95 command admission delay, queue length, packet/retry observations, clock uncertainty, and reconnect time under a declared network. Do not claim hard real-time behavior or advertise a latency number without a reproducible test. For models, separate asset download, cold start, warm start, generation, validation, and correctness. A failed task cannot count as a performance improvement.
 
 Thermal behavior, battery impact, and memory pressure should be observed over a declared run duration on actual hardware. Reduce quality or stop safely under pressure. No benchmark should hide failures through silent fallback.
+
+## Evidence records
+
+Structured evidence lives at `evidence/<ticket-or-experiment-ID>/<name>.json` and is validated by `script/validate/all.py` against the `EvidenceRecord` schema in `Packages/LabSupport`. A physical-device record is the only path to `device-verified`; a simulator or fixture record supports at most `implemented`, and a static review supports at most `spiked`.

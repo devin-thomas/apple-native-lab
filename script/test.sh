@@ -6,8 +6,11 @@ cd "$ROOT"
 
 step() { printf '\n==> %s\n' "$1"; }
 
-step "Catalog matches experiment specs"
-python3 script/generate_catalog.py --check
+step "Repository validators (links, tickets, experiments, catalog, evidence, workflow policy)"
+python3 script/validate/all.py
+
+step "Validator self-tests (negative fixtures in temporary copies)"
+python3 -B -m unittest discover -s script/validate/tests
 
 step "LabSupport package tests"
 swift test --package-path Packages/LabSupport --quiet

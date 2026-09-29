@@ -1,6 +1,9 @@
 # macOS
 .DS_Store
 
+# Python bytecode from script/ tools
+__pycache__/
+
 # Xcode and SwiftPM build products
 DerivedData/
 build/
