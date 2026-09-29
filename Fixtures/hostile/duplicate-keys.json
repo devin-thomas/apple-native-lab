@@ -1,0 +1,8 @@
+{
+  "format": "native-lab-hostile-example",
+  "item": {
+    "title": "What a reviewer is shown",
+    "note": "A harmless note.",
+    "title": "What a last-value-wins decoder would keep"
+  }
+}

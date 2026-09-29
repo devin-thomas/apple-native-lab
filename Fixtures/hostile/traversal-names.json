@@ -1,0 +1,30 @@
+{
+  "format": "native-lab-hostile-names",
+  "formatVersion": 1,
+  "provenance": "Written for this project as synthetic hostile input. MIT License.",
+  "note": "Each case is a file or archive entry name. `name` is text; `hex` is raw bytes for names that are not valid UTF-8 or hold a NUL. `expect` is the PathRejection raw value.",
+  "cases": [
+    { "id": "parent-reference", "name": "../escape.txt", "expect": "parent-reference" },
+    { "id": "nested-parent-reference", "name": "notes/../../escape.txt", "expect": "parent-reference" },
+    { "id": "absolute", "name": "/etc/hosts", "expect": "absolute" },
+    { "id": "absolute-double-slash", "name": "//server/share/escape.txt", "expect": "absolute" },
+    { "id": "windows-drive", "name": "C:/Windows/escape.ini", "expect": "absolute" },
+    { "id": "backslash-traversal", "name": "..\\..\\escape.txt", "expect": "backslash" },
+    { "id": "current-reference", "name": "./hidden/./escape.txt", "expect": "current-reference" },
+    { "id": "empty-component", "name": "notes//escape.txt", "expect": "empty-component" },
+    { "id": "fullwidth-solidus", "name": "..\uff0fescape.txt", "expect": "lookalike-separator" },
+    { "id": "fullwidth-reverse-solidus", "name": "..\uff3cescape.txt", "expect": "lookalike-separator" },
+    { "id": "division-slash", "name": "notes\u2215escape.txt", "expect": "lookalike-separator" },
+    { "id": "colon", "name": "notes:escape.txt", "expect": "lookalike-separator" },
+    { "id": "fullwidth-full-stops", "name": "\uff0e\uff0e/escape.txt", "expect": "lookalike-dot" },
+    { "id": "two-dot-leader", "name": "\u2025/escape.txt", "expect": "lookalike-dot" },
+    { "id": "right-to-left-override", "name": "invoice\u202etxt.exe", "expect": "bidi-control" },
+    { "id": "zero-width-space", "name": "notes\u200b.txt", "expect": "invisible-character" },
+    { "id": "control-character", "name": "notes\u0007.txt", "expect": "control-character" },
+    { "id": "too-deep", "name": "a/b/c/d/e/f/g/h/i/j/k/l/m/n/o/p/escape.txt", "expect": "too-deep" },
+    { "id": "nul-byte", "hex": "6e6f7465732e74787400", "expect": "nul" },
+    { "id": "overlong-solidus", "hex": "2e2ec0af6573636170652e747874", "expect": "invalid-utf8" },
+    { "id": "overlong-full-stops", "hex": "c0aec0ae2f6573636170652e747874", "expect": "invalid-utf8" },
+    { "id": "encoded-surrogate", "hex": "6eeda0802e747874", "expect": "invalid-utf8" }
+  ]
+}

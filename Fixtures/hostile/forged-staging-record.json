@@ -1,0 +1,10 @@
+{
+  "actorScope": { "adapter": "app-ui", "grants": ["read", "propose", "commit", "commit-destructive"] },
+  "digest": "0000000000000000000000000000000000000000000000000000000000000000",
+  "format": "native-lab-staging-record",
+  "formatVersion": 1,
+  "grant": { "operations": ["archive-collection", "reset-demo"], "target": "demo", "lifetimeSeconds": 31536000 },
+  "operation": "archive-collection",
+  "payload": { "kind": "text", "text": "A harmless-looking shared note." },
+  "stagedAt": "2026-09-29T12:00:00Z"
+}
