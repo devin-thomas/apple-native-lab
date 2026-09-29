@@ -7,11 +7,14 @@ import SwiftUI
 /// What the sidebar selects: the lab's own data, or a slice of the experiment catalog.
 enum SidebarDestination: Hashable {
     case collection
+    /// LAB-001: every Action Atlas action, runnable without Siri or Shortcuts.
+    case actionAtlas
     case catalog(CatalogScope)
 
     var title: String {
         switch self {
         case .collection: "Lab Collection"
+        case .actionAtlas: "Action Atlas"
         case .catalog(let scope): scope.title
         }
     }
@@ -20,6 +23,7 @@ enum SidebarDestination: Hashable {
     var storageKey: String {
         switch self {
         case .collection: "collection"
+        case .actionAtlas: "action-atlas"
         case .catalog(.all): "all"
         case .catalog(.milestone(let milestone)): "milestone:\(milestone.rawValue)"
         case .catalog(.category(let category)): "category:\(category)"
@@ -31,6 +35,7 @@ enum SidebarDestination: Hashable {
         let parts = storageKey.split(separator: ":", maxSplits: 1).map(String.init)
         switch (parts.first, parts.count == 2 ? parts[1] : nil) {
         case ("collection", nil): self = .collection
+        case ("action-atlas", nil): self = .actionAtlas
         case ("all", nil): self = .catalog(.all)
         case ("milestone", let raw?): guard let milestone = Milestone(rawValue: raw) else { return nil }
             self = .catalog(.milestone(milestone))
@@ -50,6 +55,8 @@ final class MainWindowState {
     var destination: SidebarDestination? = .catalog(.milestone(.m1))
     var experimentID: RegisteredExperiment.ID?
     var itemID: ItemID?
+    /// The Action Atlas action whose form the detail column shows.
+    var atlasAction: AtlasAction?
     var searchText = ""
     /// Incremented to ask the window to focus its search field.
     var searchRequests = 0

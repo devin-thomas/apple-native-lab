@@ -28,8 +28,10 @@ import Testing
 
     @Test func nothingClaimsToRunWithoutEvidence() {
         // Update this expectation only when a spec's state changes with evidence behind it.
-        #expect(catalog.experiments.allSatisfy { $0.state == .specified })
-        #expect(catalog.progress(for: .m1) == (live: 0, total: 6))
+        // LAB-001 is implemented: its fallback ran on the Mac and in the iOS simulator (LAB-001-A).
+        #expect(catalog.experiments.filter { $0.state != .specified }.map(\.id) == ["LAB-001"])
+        #expect(catalog.experiments.first { $0.id == "LAB-001" }?.state == .implemented)
+        #expect(catalog.progress(for: .m1) == (live: 1, total: 6))
     }
 
     @Test func searchMatchesTitlesAndAPIs() {

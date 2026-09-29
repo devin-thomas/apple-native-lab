@@ -1,3 +1,4 @@
+import ActionAtlas
 import Foundation
 import LabDomain
 import LabStore
@@ -9,6 +10,18 @@ enum CommitAuthority: Sendable {
     /// First run: the host seeds an empty demo namespace. The service checks the namespace is
     /// still empty before issuing the grant, so this path can never remove anything.
     case firstRunSeed
+    /// An App Intent the system ran (LAB-001). It holds a confirmation only when the person
+    /// confirmed this exact change in the system's confirmation dialog, and that confirmation is
+    /// the only way an intent's destructive change gets a grant.
+    case intent(IntentConfirmation?)
+
+    /// The adapter a commit arrives through, fixed by where its authority comes from (ADR-011).
+    var actor: ActorScope {
+        switch self {
+        case .userAction, .firstRunSeed: LabDataService.appUI
+        case .intent: LabDataService.appIntent
+        }
+    }
 }
 
 /// The host's app-UI adapter: the only host code that holds the store or the operation service.
@@ -19,12 +32,20 @@ enum CommitAuthority: Sendable {
 /// committed, only for a `CommitAuthority`, and revokes it as soon as the commit returns. Views
 /// never see this type; they talk to `LabLibrary`, which calls it.
 ///
-/// Reads of demo content go through the service too. The one direct store read is the namespace
-/// census, because the service has no read that lists or counts collections; it returns counts
-/// only, so the user namespace is never read for anything but its size.
+/// App Intents (LAB-001 Action Atlas) take the same path under the App Intent actor: the
+/// authority `.intent` selects that actor, and its grant comes only from the system's
+/// confirmation of the exact change.
+///
+/// Reads of demo content go through the service too. The direct store reads are the namespace
+/// census, which returns counts only, and the collection list, which takes identifiers only and
+/// reads each collection through the service, because the service has no read that lists or
+/// counts collections.
 struct LabDataService: Sendable {
     /// App UI may read, propose, commit, and commit destructive changes such as Reset Demo.
     static let appUI = ActorScope(adapter: .appUI, grants: Set(Permission.allCases))
+    /// App Intents have the same ceiling as the app UI (ADR-011); a destructive commit still needs
+    /// a grant, which only the system's confirmation of that change provides (ADR-013).
+    static let appIntent = ActorScope(adapter: .appIntent, grants: Set(Permission.allCases))
 
     private let store: SQLiteOperationStore
     private let service: OperationService
@@ -53,13 +74,14 @@ struct LabDataService: Sendable {
         requestID: RequestID,
         authority: CommitAuthority
     ) async throws(OperationError) -> ActionReceipt {
+        let actor = authority.actor
         var grant: GrantID?
-        if GrantRequirement.sensitiveCommits.requiresGrant(operation.kind, from: Self.appUI.adapter),
+        if GrantRequirement.sensitiveCommits.requiresGrant(operation.kind, from: actor.adapter),
            await mayGrant(operation, for: authority) {
-            grant = try? grants.issue(for: operation, to: Self.appUI.adapter, lifetime: .seconds(30)).id
+            grant = try? grants.issue(for: operation, to: actor.adapter, lifetime: .seconds(30)).id
         }
         defer { if let grant { grants.revoke(grant) } }
-        return try await service.perform(OperationRequest(id: requestID, operation: operation, actor: Self.appUI))
+        return try await service.perform(OperationRequest(id: requestID, operation: operation, actor: actor))
     }
 
     private func mayGrant(_ operation: DomainOperation, for authority: CommitAuthority) async -> Bool {
@@ -69,7 +91,46 @@ struct LabDataService: Sendable {
         case .firstRunSeed:
             guard case .resetDemo = operation, let census = try? await census() else { return false }
             return census.demo == NamespaceCount(collections: 0, items: 0, archived: 0)
+        case .intent(let confirmation):
+            return confirmation?.covers(operation) == true
         }
+    }
+
+    // MARK: Reads for other in-app adapters (Action Atlas)
+
+    func collection(_ id: CollectionID, as actor: ActorScope) async throws(OperationError) -> LabCollection {
+        try await service.findCollection(id, as: actor)
+    }
+
+    func item(_ id: ItemID, as actor: ActorScope) async throws(OperationError) -> LabItem {
+        try await service.findItem(id, as: actor)
+    }
+
+    func items(_ filter: ItemFilter, as actor: ActorScope) async throws(OperationError) -> [LabItem] {
+        try await service.findItems(filter, as: actor)
+    }
+
+    /// Every collection, each read through the service as `actor`.
+    ///
+    /// The service has no read that lists collections, so the store is asked for identifiers only,
+    /// as the census asks it for counts; every collection's content then comes from an authorized
+    /// `findCollection`. Replace this with a service read when LabDomain gains one.
+    func collections(as actor: ActorScope) async throws(OperationError) -> [LabCollection] {
+        let identifiers: [CollectionID]
+        do {
+            identifiers = try await store.collections().map(\.id)
+        } catch {
+            throw .storeFailure(.readFailed)
+        }
+        var collections: [LabCollection] = []
+        for id in identifiers {
+            do {
+                collections.append(try await service.findCollection(id, as: actor))
+            } catch .notFound {
+                continue
+            }
+        }
+        return collections
     }
 
     /// The seed's collections as stored, each with its items ordered by title. A collection the

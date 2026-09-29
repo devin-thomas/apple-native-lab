@@ -63,6 +63,9 @@ targets:
       - package: LabStore
       - package: LabFeatures
         product: LabCatalog
+      # LAB-001 Action Atlas: App Intents from a package target; their metadata is extracted into the app.
+      - package: LabFeatures
+        product: ActionAtlas
     info:
       path: Apps/Mac/Info.plist
       properties:
@@ -113,6 +116,9 @@ targets:
       - package: LabStore
       - package: LabFeatures
         product: LabCatalog
+      # LAB-001 Action Atlas: App Intents from a package target; their metadata is extracted into the app.
+      - package: LabFeatures
+        product: ActionAtlas
     info:
       path: Apps/Phone/Info.plist
       properties:

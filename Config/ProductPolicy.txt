@@ -33,6 +33,12 @@ link         CoreLocal  ios      NearbyInteraction   # Ultra Wideband device cap
 link         CoreLocal  ios      Speech              # speech recognition status and on-device assets
 entitlement  CoreLocal  macos    com.apple.security.app-sandbox   # the Mac host is sandboxed
 
+# CoreLocal: Action Atlas (LAB-001). App Intents need no entitlement; the in-app browser is the fallback
+link         CoreLocal  macos    AppIntents          # App Intents, entities, and queries over the operation service
+link         CoreLocal  ios      AppIntents          # same, iPhone host
+link         CoreLocal  macos    CoreTransferable    # the action browser's Share button for an export (ShareLink)
+link         CoreLocal  ios      CoreTransferable    # same, iPhone host
+
 # Companions: the Watch host's capability status probes (CORE-004)
 link         Companions watchos  AVFAudio            # record permission and audio input
 link         Companions watchos  CoreBluetooth       # Bluetooth authorization status

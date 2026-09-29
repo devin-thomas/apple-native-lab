@@ -3,7 +3,14 @@ import SwiftUI
 @main
 struct LabMacApp: App {
     @State private var model = LabModel()
-    @State private var library = LabLibrary()
+    @State private var library: LabLibrary
+
+    init() {
+        let library = LabLibrary()
+        _library = State(initialValue: library)
+        // App Intents use this same library, so their receipts join this session's list.
+        ActionAtlasHost.connect(library)
+    }
 
     var body: some Scene {
         WindowGroup("Native Lab", id: "catalog") {

@@ -68,6 +68,8 @@ struct MainWindow: View {
         switch window.destination {
         case .collection:
             CollectionListColumn(window: window)
+        case .actionAtlas:
+            ActionAtlasListColumn(window: window)
         case .catalog(let scope):
             if let registry = model.registry {
                 CatalogListColumn(registry: registry, scope: scope, window: window)
@@ -84,6 +86,8 @@ struct MainWindow: View {
         switch window.destination {
         case .collection:
             CollectionDetailColumn(itemID: window.itemID)
+        case .actionAtlas:
+            ActionAtlasDetailColumn(window: window)
         case .catalog:
             if let registry = model.registry {
                 CatalogDetailColumn(registry: registry, experimentID: window.experimentID)
@@ -101,7 +105,11 @@ struct MainWindow: View {
     }
 
     private var searchPrompt: String {
-        window.destination == .collection ? "Search samples" : "Search experiments"
+        switch window.destination {
+        case .collection: "Search samples"
+        case .actionAtlas: "Search actions"
+        default: "Search experiments"
+        }
     }
 
     private func restore() {

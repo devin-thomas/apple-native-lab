@@ -28,6 +28,9 @@ struct LabCommands: Commands {
             Button("First Release Journey") { window?.destination = .catalog(.milestone(.m1)) }
                 .keyboardShortcut("3", modifiers: .command)
                 .disabled(window == nil)
+            Button("Action Atlas") { window?.destination = .actionAtlas }
+                .keyboardShortcut("4", modifiers: .command)
+                .disabled(window == nil)
         }
 
         CommandGroup(replacing: .textEditing) {

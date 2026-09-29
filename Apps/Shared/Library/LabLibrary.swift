@@ -180,16 +180,65 @@ final class LabLibrary {
             let receipt = try await service.perform(operation, requestID: RequestID(), authority: authority)
             failure = nil
             await refresh()
-            let record = ReceiptRecord(
-                receipt: receipt, recordedAt: .now, names: before.merging(names) { _, current in current }
-            )
-            receipts.insert(record, at: 0)
-            if receipts.count > Self.receiptLimit { receipts.removeLast(receipts.count - Self.receiptLimit) }
-            return record
+            return record(receipt, before: before)
         } catch {
             failure = LibraryMessages.describe(error)
             await refresh()
             return nil
         }
+    }
+
+    /// Lists a new receipt first, with the titles known before and after the change.
+    private func record(_ receipt: ActionReceipt, before: [EntityReference: String]) -> ReceiptRecord {
+        let record = ReceiptRecord(
+            receipt: receipt, recordedAt: .now, names: before.merging(names) { _, current in current }
+        )
+        receipts.insert(record, at: 0)
+        if receipts.count > Self.receiptLimit { receipts.removeLast(receipts.count - Self.receiptLimit) }
+        return record
+    }
+
+    // MARK: Other in-app adapters
+
+    /// Why another adapter's request did not reach the store, or what the service refused.
+    enum SubmitFailure: Error, Hashable {
+        /// The store or the seed cannot be used. The reason is a sentence for a person.
+        case unavailable(String)
+        case refused(OperationError)
+    }
+
+    /// The data service once the store is open. It opens the store the way every window does, so
+    /// an App Intent that launches the app finds the same store and demo.
+    func openedService() async throws(SubmitFailure) -> LabDataService {
+        await start()
+        if phase == .ready, let service { return service }
+        if case .unavailable(let reason) = phase { throw .unavailable(reason) }
+        throw .unavailable("The lab store is still opening. Try again.")
+    }
+
+    /// Commits a change from another in-app adapter (LAB-001 Action Atlas: the action browser or
+    /// an App Intent) and lists its receipt, so the receipt inspector shows it whatever the entry
+    /// point. A retry that returns a receipt already listed is not listed twice.
+    ///
+    /// Unlike the library's own actions it throws, so the adapter reports its own failure, and it
+    /// leaves `failure` to the collection browser. `names` titles entities the demo does not hold.
+    func submit(
+        _ operation: DomainOperation,
+        requestID: RequestID,
+        authority: CommitAuthority,
+        names extra: [EntityReference: String]
+    ) async throws(SubmitFailure) -> ReceiptRecord {
+        let service = try await openedService()
+        let before = names.merging(extra) { _, given in given }
+        let receipt: ActionReceipt
+        do {
+            receipt = try await service.perform(operation, requestID: requestID, authority: authority)
+        } catch {
+            await refresh()
+            throw .refused(error)
+        }
+        await refresh()
+        if let listed = self.receipt(id: receipt.operationID) { return listed }
+        return record(receipt, before: before)
     }
 }

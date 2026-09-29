@@ -7,10 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		049D235E474520D658AD3AD3 /* ActionAtlas in Frameworks */ = {isa = PBXBuildFile; productRef = D681B15E8F4FC00BCB2862EE /* ActionAtlas */; };
 		06ED0D7F8928725A2A09905A /* LabSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 25231493CA26D8D2F61E46F5 /* LabSupport */; };
 		154C21111E02462DD0A59BE0 /* LabStore in Frameworks */ = {isa = PBXBuildFile; productRef = 6E71D4CE7F5EFA213F132511 /* LabStore */; };
 		1B0413E82622210BA72820FA /* LabDomain in Frameworks */ = {isa = PBXBuildFile; productRef = 0D6B57C2990B445E8BC56C3B /* LabDomain */; };
 		1C7CA3174A557512B2CC9E55 /* seed.json in Resources */ = {isa = PBXBuildFile; fileRef = 4C5126791B7E1A1A049AE090 /* seed.json */; };
+		21F31C50AAC169B20AE2CF15 /* ActionAtlas in Frameworks */ = {isa = PBXBuildFile; productRef = 7EC14A55645358F739F46AC7 /* ActionAtlas */; };
 		25972D23C4D3197B1F3EB577 /* LabSupport in Frameworks */ = {isa = PBXBuildFile; productRef = C807DDF95D17BFC6553B448B /* LabSupport */; };
 		3801D1772B69CAE4CA93FDFE /* LabSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 23ACA699398C10114E0D39E7 /* LabSupport */; };
 		45673BBE0F16F89FAE113021 /* LabCatalog in Frameworks */ = {isa = PBXBuildFile; productRef = 0A608BA2376945AD3E608486 /* LabCatalog */; };
@@ -161,6 +163,7 @@
 				1B0413E82622210BA72820FA /* LabDomain in Frameworks */,
 				154C21111E02462DD0A59BE0 /* LabStore in Frameworks */,
 				4E60DC2D92BC7C909C4D6C56 /* LabCatalog in Frameworks */,
+				049D235E474520D658AD3AD3 /* ActionAtlas in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -172,6 +175,7 @@
 				AEB17B224B9BD1CF6EE2746E /* LabDomain in Frameworks */,
 				C5C7E15597C124FFA87914F4 /* LabStore in Frameworks */,
 				DC14139A63BD575B5A92D755 /* LabCatalog in Frameworks */,
+				21F31C50AAC169B20AE2CF15 /* ActionAtlas in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -314,6 +318,7 @@
 				F41E96699628F4302D6E6EE4 /* LabDomain */,
 				6CF6B1898735341A74FB3DA4 /* LabStore */,
 				D848D3397291632E552B77A2 /* LabCatalog */,
+				7EC14A55645358F739F46AC7 /* ActionAtlas */,
 			);
 			productName = LabMac;
 			productReference = 2F62DB7E020E6BFDAC86BD42 /* LabMac.app */;
@@ -341,6 +346,7 @@
 				0D6B57C2990B445E8BC56C3B /* LabDomain */,
 				6E71D4CE7F5EFA213F132511 /* LabStore */,
 				21367E5C42D7E02E6E77C8AB /* LabCatalog */,
+				D681B15E8F4FC00BCB2862EE /* ActionAtlas */,
 			);
 			productName = LabPhone;
 			productReference = 28C2C1B8B040DD0D06AF070E /* LabPhone.app */;
@@ -912,6 +918,10 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = LabStore;
 		};
+		7EC14A55645358F739F46AC7 /* ActionAtlas */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ActionAtlas;
+		};
 		9429B9706DB8D93A799FDA9F /* LabSupport */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = LabSupport;
@@ -919,6 +929,10 @@
 		C807DDF95D17BFC6553B448B /* LabSupport */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = LabSupport;
+		};
+		D681B15E8F4FC00BCB2862EE /* ActionAtlas */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ActionAtlas;
 		};
 		D848D3397291632E552B77A2 /* LabCatalog */ = {
 			isa = XCSwiftPackageProductDependency;

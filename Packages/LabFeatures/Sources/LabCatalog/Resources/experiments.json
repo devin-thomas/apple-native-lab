@@ -23,7 +23,7 @@
       "title": "Action Atlas",
       "category": "System surfaces",
       "milestone": "M1",
-      "state": "specified",
+      "state": "implemented",
       "dependsOn": [],
       "moment": "Create a collection, find an item, mutate it, and inspect the same receipt from three entry points.",
       "hosts": "iPhone, iPad, Mac; Watch adapter later",
