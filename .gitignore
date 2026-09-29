@@ -1,0 +1,47 @@
+# macOS
+.DS_Store
+
+# Xcode and SwiftPM build products
+DerivedData/
+build/
+.build/
+.swiftpm/
+xcuserdata/
+*.xcuserstate
+*.xcscmblueprint
+*.xcarchive
+*.ipa
+*.dSYM/
+*.dSYM.zip
+
+# Local-only configuration (copy Config/Local.xcconfig.example to Config/Local.xcconfig)
+Config/Local.xcconfig
+Config/Local/
+
+# Local runtime data, private evidence, logs, recordings
+LocalData/
+EvidencePrivate/
+*.log
+*.trace
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+*.store
+*.db
+
+# Downloaded models and media
+Models/Downloads/
+Downloads/
+
+# Signing material and secrets
+*.p12
+*.cer
+*.pem
+*.key
+*.mobileprovision
+*.provisionprofile
+.env
+.env.*
+
+# Archives never belong in this repository (including any combined build pack)
+*.zip
