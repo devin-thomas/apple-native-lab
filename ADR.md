@@ -12,3 +12,4 @@ These are the build pack's explicit defaults. Preserve their rationale when a la
 - [ADR-008 — Source-first MIT distribution and evidence-based releases](docs/adr/ADR-008.md)
 - [ADR-009 — 26-family core with isolated 27-generation adapters](docs/adr/ADR-009.md)
 - [ADR-010 — Static modules, not downloaded executable plugins](docs/adr/ADR-010.md)
+- [ADR-011 — Fixed permission ceilings per adapter kind](docs/adr/ADR-011.md)
