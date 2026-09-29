@@ -2,7 +2,8 @@
 
 This is the recorded build evidence for the lab. Update it from real runs only. A row describes what was run, not what the specification intends.
 
-Last updated: 2026-09-29 (CORE-001, CORE-002, CORE-004).
+Last updated: 2026-09-29 (CORE-001 through CORE-004).
+Last updated: 2026-09-29 (CORE-001, CORE-002, CORE-003).
 
 ## Toolchain
 
@@ -68,6 +69,15 @@ Bundle identifiers derive from `LAB_BUNDLE_PREFIX` (default `org.example`), so d
 | 2026-09-29 | CORE-004 Mac Readiness results (manual) | accessibility tree of the running Mac app | Camera unavailable (no camera found; entitlement and purpose string absent). Microphone, Speech recognition, Bluetooth, and Local network unavailable (entitlement or purpose string absent). On-device language model available, not device-verified. AR and Ultra Wideband listed as not on this platform. Rows expose a press action and their full gate text to VoiceOver |
 | 2026-09-29 | CORE-004 iPhone Readiness (manual) | simulator iPhone 17, iOS 27.0 | All nine capabilities shown with gates and alternate routes; at the largest accessibility text size rows stack without truncation; no prompt appeared on screen (simulator TCC log not inspected) |
 | 2026-09-29 | CORE-004 physical-device probes | none | not run |
+| 2026-09-29 | LabStore unit tests (CORE-003) | `swift test --package-path Packages/LabStore` | 37 tests (70 cases with arguments) in 7 suites passed; 0 warnings on a clean build. Not yet part of `script/test.sh` |
+| 2026-09-29 | LabDomain unit tests after CORE-003 | `swift test --package-path Packages/LabDomain` | 65 passed in 10 suites (CORE-002's 49 plus 16 namespace and Reset Demo tests); 0 warnings on a clean build |
+| 2026-09-29 | Interrupted transaction (CORE-003) | `InterruptedTransactionTests` in the LabStore run | passed: stopping at each of 8 fault points before `COMMIT` left every row unchanged; a stop after `COMMIT` left the complete new state; a mid-commit copy of the database and log, with uncommitted pages on disk, recovered the old state |
+| 2026-09-29 | Store repeat runs (CORE-003) | the full LabStore and LabDomain suites 30 times each; LabStore's concurrency, cross-process, and interruption tests 100 times | 0 failures |
+| 2026-09-29 | Store mutation checks (CORE-003) | the LabStore tests against copies of the package, each with one guarantee removed | every mutation was caught: a deferred `BEGIN` (1 test failed), no transaction (8), an upsert clearing `extras` (1), deletable user rows (4) |
+| 2026-09-29 | Cross-process lock (CORE-003) | `CrossProcessTests`, with `/usr/bin/sqlite3` 3.54.0 as the other process | passed: the other process got "database is locked" between the store's checks and writes, then wrote once the commit finished |
+| 2026-09-29 | LabStore simulator and macOS compiles (CORE-003) | `xcodebuild -scheme LabStore -destination 'generic/platform=iOS Simulator' build` in `Packages/LabStore`, then the watchOS Simulator, tvOS Simulator, and `platform=macOS` destinations | all 4 succeeded, 0 warnings |
+| 2026-09-29 | LabDomain compiles after CORE-003 | the same 4 destinations in `Packages/LabDomain` | all 4 succeeded, 0 warnings |
+| 2026-09-29 | Existing automated checks (CORE-003) | `script/test.sh` | passed: catalog check; LabSupport 6, LabDomain 65, and LabFeatures 6 tests; Mac hosted smoke tests; iPhone and Watch simulator compiles. LabStore is not yet in the script |
 
 `script/test.sh` runs every check above that needs no device or signing.
 

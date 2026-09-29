@@ -5,6 +5,7 @@ struct OperationPlan: Sendable {
     var preconditions: [RevisionPrecondition] = []
     var collections: [LabCollection] = []
     var items: [LabItem] = []
+    var removals: [EntityReference] = []
     var undo: DomainOperation?
     var phrase: Phrase
 
@@ -86,6 +87,7 @@ struct OperationPlanner: Sendable {
             let reference = EntityReference.item(draft.id)
             guard try await item(draft.id) == nil else { throw .ruleViolation(.alreadyExists(reference)) }
             let parent = try await requireCollection(draft.collectionID)
+            guard parent.namespace == .user else { throw .ruleViolation(.demoCollection(parent.id)) }
             guard !parent.isArchived else { throw .ruleViolation(.collectionArchived(parent.id)) }
             let created = LabItem(id: draft.id, collectionID: parent.id, title: draft.title, note: draft.note)
             return OperationPlan(
@@ -139,7 +141,104 @@ struct OperationPlanner: Sendable {
                 undo: .archiveItem(id: id, expected: updated.revision),
                 phrase: Phrase("Restored", "Restore", "item “\(current.title)”")
             )
+
+        case .resetDemo(let seed):
+            return try await resetDemo(to: seed)
         }
+    }
+
+    // MARK: Reset Demo
+
+    /// Plans the writes that make the demo namespace equal `seed`.
+    ///
+    /// A sample that already matches the seed is not rewritten. A sample that differs gets the seed
+    /// content at its next revision, never back at revision 1, so an operation prepared before the
+    /// reset cannot silently apply to the restored sample. Every demo entity read is pinned by a
+    /// precondition, and so is the absence of every sample still to be created, so any concurrent
+    /// change makes the service plan again. User entities are never written or removed; a seed that
+    /// names a user entity's identifier is refused.
+    private func resetDemo(to seed: DemoSeed) async throws(OperationError) -> OperationPlan {
+        let storedCollections = try await allCollections()
+        let storedItems = try await allItems()
+        let collectionsByID = Dictionary(storedCollections.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
+        let itemsByID = Dictionary(storedItems.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
+        var plan = OperationPlan(phrase: Phrase(past: "", imperative: ""))
+
+        for draft in seed.collections {
+            let reference = EntityReference.collection(draft.id)
+            let current = collectionsByID[draft.id]
+            if let current, current.namespace != .demo { throw .ruleViolation(.alreadyExists(reference)) }
+            plan.preconditions.append(RevisionPrecondition(entity: reference, expected: current?.revision))
+            if let current, current.title == draft.title, !current.isArchived { continue }
+            let restored = LabCollection(
+                id: draft.id, title: draft.title, revision: current?.revision.next() ?? .initial, namespace: .demo
+            )
+            plan.collections.append(restored)
+            plan.changes.append(EntityChange(entity: reference, previousRevision: current?.revision, newRevision: restored.revision))
+        }
+
+        for draft in seed.items {
+            let reference = EntityReference.item(draft.id)
+            let current = itemsByID[draft.id]
+            if let current, current.namespace != .demo { throw .ruleViolation(.alreadyExists(reference)) }
+            plan.preconditions.append(RevisionPrecondition(entity: reference, expected: current?.revision))
+            if let current, current.collectionID == draft.collectionID, current.title == draft.title,
+               current.note == draft.note, !current.isArchived {
+                continue
+            }
+            let restored = LabItem(
+                id: draft.id, collectionID: draft.collectionID, title: draft.title, note: draft.note,
+                revision: current?.revision.next() ?? .initial, namespace: .demo
+            )
+            plan.items.append(restored)
+            plan.changes.append(EntityChange(entity: reference, previousRevision: current?.revision, newRevision: restored.revision))
+        }
+
+        // Demo entities the seed no longer names, items before the collections that held them.
+        let seedCollectionIDs = Set(seed.collections.map(\.id))
+        let seedItemIDs = Set(seed.items.map(\.id))
+        let leftovers: [(EntityReference, Revision)] =
+            storedItems.filter { $0.namespace == .demo && !seedItemIDs.contains($0.id) }
+                .map { ($0.reference, $0.revision) }.sorted(by: Self.byID)
+            + storedCollections.filter { $0.namespace == .demo && !seedCollectionIDs.contains($0.id) }
+                .map { ($0.reference, $0.revision) }.sorted(by: Self.byID)
+        for (reference, revision) in leftovers {
+            plan.preconditions.append(RevisionPrecondition(entity: reference, expected: revision))
+            plan.removals.append(reference)
+        }
+
+        plan.phrase = resetPhrase(seed, changes: plan.changes, removed: plan.removals.count)
+        return plan
+    }
+
+    private static func byID(_ lhs: (EntityReference, Revision), _ rhs: (EntityReference, Revision)) -> Bool {
+        lhs.0.rawID.uuidString < rhs.0.rawID.uuidString
+    }
+
+    private func resetPhrase(_ seed: DemoSeed, changes: [EntityChange], removed: Int) -> Phrase {
+        let contents = "\(counted(seed.collections.count, "collection")) and \(counted(seed.items.count, "item"))"
+        let added = changes.filter { $0.previousRevision == nil }.count
+        let restored = changes.count - added
+        guard added + restored + removed > 0 else {
+            return Phrase(
+                past: "The demo already matched its original \(contents).",
+                imperative: "The demo already matches its original \(contents)."
+            )
+        }
+        func tally(_ verbs: (String, String, String)) -> String {
+            [(verbs.0, added), (verbs.1, restored), (verbs.2, removed)]
+                .filter { $0.1 > 0 }
+                .map { "\($0.0) \($0.1)" }
+                .joined(separator: ", ")
+        }
+        return Phrase(
+            past: "Reset the demo to its original \(contents): \(tally(("added", "restored", "removed"))).",
+            imperative: "Reset the demo to its original \(contents): \(tally(("add", "restore", "remove")))."
+        )
+    }
+
+    private func counted(_ count: Int, _ noun: String) -> String {
+        "\(count) \(noun)\(count == 1 ? "" : "s")"
     }
 
     // MARK: Plans
@@ -198,6 +297,14 @@ struct OperationPlanner: Sendable {
     }
 
     // MARK: Reads
+
+    private func allCollections() async throws(OperationError) -> [LabCollection] {
+        do { return try await store.collections() } catch { throw .storeFailure(.readFailed) }
+    }
+
+    private func allItems() async throws(OperationError) -> [LabItem] {
+        do { return try await store.items(in: nil) } catch { throw .storeFailure(.readFailed) }
+    }
 
     private func collection(_ id: CollectionID) async throws(OperationError) -> LabCollection? {
         do { return try await store.collection(id) } catch { throw .storeFailure(.readFailed) }

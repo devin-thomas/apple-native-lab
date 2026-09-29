@@ -64,8 +64,8 @@ public struct ItemChanges: Hashable, Sendable, Codable {
 /// Every state change the domain supports, with its validated payload.
 ///
 /// An operation on an existing entity carries the revision the caller last saw. The type makes it
-/// required, so no mutation can silently overwrite a newer state. There is no hard delete:
-/// archiving is the domain's reversible removal.
+/// required, so no mutation can silently overwrite a newer state. Archiving is the domain's
+/// reversible removal. The only deletion is Reset Demo's, and it reaches demo samples only.
 public enum DomainOperation: Hashable, Sendable, Codable {
     case createCollection(draft: CollectionDraft)
     case updateCollection(id: CollectionID, expected: Revision, title: EntityTitle)
@@ -75,6 +75,10 @@ public enum DomainOperation: Hashable, Sendable, Codable {
     case updateItem(id: ItemID, expected: Revision, changes: ItemChanges)
     case archiveItem(id: ItemID, expected: Revision)
     case restoreItem(id: ItemID, expected: Revision)
+    /// Makes the demo namespace match `seed`: every sample the seed names returns to its original
+    /// content, and every other demo entity is removed. User data is never changed or removed.
+    /// Destructive, so only an adapter allowed to commit destructive changes can reset (ADR-011).
+    case resetDemo(seed: DemoSeed)
 
     public var kind: OperationKind {
         switch self {
@@ -86,11 +90,13 @@ public enum DomainOperation: Hashable, Sendable, Codable {
         case .updateItem: .updateItem
         case .archiveItem: .archiveItem
         case .restoreItem: .restoreItem
+        case .resetDemo: .resetDemo
         }
     }
 
-    /// The entity the operation creates or changes.
-    public var target: EntityReference {
+    /// The one entity the operation creates or changes, or `nil` for Reset Demo, which acts on the
+    /// whole demo namespace.
+    public var target: EntityReference? {
         switch self {
         case .createCollection(let draft): .collection(draft.id)
         case .updateCollection(let id, _, _), .archiveCollection(let id, _), .restoreCollection(let id, _):
@@ -98,13 +104,15 @@ public enum DomainOperation: Hashable, Sendable, Codable {
         case .createItem(let draft): .item(draft.id)
         case .updateItem(let id, _, _), .archiveItem(let id, _), .restoreItem(let id, _):
             .item(id)
+        case .resetDemo:
+            nil
         }
     }
 
-    /// The revision the caller expects the target to have, or `nil` for a creation.
+    /// The revision the caller expects the target to have, or `nil` for a creation or a reset.
     public var expectedRevision: Revision? {
         switch self {
-        case .createCollection, .createItem:
+        case .createCollection, .createItem, .resetDemo:
             nil
         case .updateCollection(_, let expected, _), .archiveCollection(_, let expected),
              .restoreCollection(_, let expected), .updateItem(_, let expected, _),
@@ -116,10 +124,11 @@ public enum DomainOperation: Hashable, Sendable, Codable {
     /// The same change aimed at another revision of its target.
     ///
     /// Use it after a conflict, once a person has decided the change still applies to the current
-    /// state, and submit the result under a new request ID. A creation is returned unchanged.
+    /// state, and submit the result under a new request ID. A creation or a reset is returned
+    /// unchanged.
     public func rebased(onto revision: Revision) -> DomainOperation {
         switch self {
-        case .createCollection, .createItem: self
+        case .createCollection, .createItem, .resetDemo: self
         case .updateCollection(let id, _, let title): .updateCollection(id: id, expected: revision, title: title)
         case .archiveCollection(let id, _): .archiveCollection(id: id, expected: revision)
         case .restoreCollection(let id, _): .restoreCollection(id: id, expected: revision)
@@ -140,12 +149,13 @@ public enum OperationKind: String, Hashable, Sendable, Codable, CaseIterable {
     case updateItem = "update-item"
     case archiveItem = "archive-item"
     case restoreItem = "restore-item"
+    case resetDemo = "reset-demo"
 
     /// Whether the operation removes something from normal view. Destructive commits need their
     /// own permission, which no model tool can hold (ADR-007).
     public var isDestructive: Bool {
         switch self {
-        case .archiveCollection, .archiveItem: true
+        case .archiveCollection, .archiveItem, .resetDemo: true
         case .createCollection, .updateCollection, .restoreCollection, .createItem, .updateItem, .restoreItem: false
         }
     }

@@ -62,6 +62,7 @@ public actor OperationService {
                 admitted: admitted,
                 status: plan.status,
                 changes: plan.changes,
+                removed: plan.removals,
                 summary: plan.phrase.past,
                 undo: plan.undo
             )
@@ -69,7 +70,8 @@ public actor OperationService {
                 receipt: receipt,
                 preconditions: plan.preconditions,
                 collections: plan.collections,
-                items: plan.items
+                items: plan.items,
+                removals: plan.removals
             )
             let outcome: CommitOutcome
             do { outcome = try await store.apply(commit) } catch { throw .storeFailure(.commitFailed) }

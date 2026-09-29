@@ -19,6 +19,10 @@ public enum RuleViolation: Hashable, Sendable {
     case archived(EntityReference)
     /// A new item cannot be added to an archived collection.
     case collectionArchived(CollectionID)
+    /// A new item cannot be added to a demo collection. A demo collection holds only the seed's
+    /// samples, so Reset Demo never removes something a person created; add the item to one of
+    /// the person's own collections instead.
+    case demoCollection(CollectionID)
     /// The update would leave every field as it is.
     case noChanges(EntityReference)
 }

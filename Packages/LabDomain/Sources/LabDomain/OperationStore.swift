@@ -11,11 +11,23 @@
 /// 2. Inside that transaction, in order: if a receipt is already recorded for
 ///    `commit.requestID`, write nothing and return `.duplicateRequest` with the recorded receipt.
 ///    Otherwise, if any precondition does not hold, write nothing and return
-///    `.preconditionFailed`. Otherwise upsert every collection and item in the commit, record
-///    `commit.receipt` under `commit.requestID`, and return `.applied`.
+///    `.preconditionFailed`. Otherwise upsert every collection and then every item in the commit,
+///    remove every entity in `commit.removals` in the order given, record `commit.receipt` under
+///    `commit.requestID`, and return `.applied`.
 /// 3. A recorded receipt is never changed or replaced. Request IDs are unique.
-/// 4. Reads return the last applied state. `items(in:)` returns archived items too, in any order.
+/// 4. Reads return the last applied state. `collections()` and `items(in:)` return archived
+///    entities too, in any order.
+/// 5. Namespaces are fixed. An upsert never changes a stored entity's namespace, an item always
+///    has its collection's namespace, and a removal only ever deletes a `demo` entity. A store
+///    throws rather than break one of these rules, so a planning mistake cannot reach user data.
+///    Rule 1 covers that throw too: nothing from the commit is written.
+///
+/// When several processes share one store, such as an app and its extensions in an App Group, each
+/// runs its own service, so the checks in rule 2 must run inside the same write transaction that
+/// writes, holding a lock that excludes other writers (for SQLite, `BEGIN IMMEDIATE`).
 public protocol OperationStore: Sendable {
+    /// Every collection, archived or not, in any order.
+    func collections() async throws -> [LabCollection]
     func collection(_ id: CollectionID) async throws -> LabCollection?
     func item(_ id: ItemID) async throws -> LabItem?
     /// Every item, archived or not, in one collection or, when `collectionID` is `nil`, in all.
@@ -40,17 +52,22 @@ public struct AuthorizedCommit: Sendable {
     public let preconditions: [RevisionPrecondition]
     public let collections: [LabCollection]
     public let items: [LabItem]
+    /// Entities to delete, items before collections. Only Reset Demo removes anything, only demo
+    /// entities, and every removal is also pinned by a precondition.
+    public let removals: [EntityReference]
 
     init(
         receipt: ActionReceipt,
         preconditions: [RevisionPrecondition],
         collections: [LabCollection],
-        items: [LabItem]
+        items: [LabItem],
+        removals: [EntityReference]
     ) {
         self.receipt = receipt
         self.preconditions = preconditions
         self.collections = collections
         self.items = items
+        self.removals = removals
     }
 
     public var requestID: RequestID { receipt.requestID }
@@ -62,4 +79,12 @@ public enum CommitOutcome: Hashable, Sendable {
     case duplicateRequest(ActionReceipt)
     /// The stored revision did not match. Nothing was written.
     case preconditionFailed(RevisionPrecondition, actual: Revision?)
+}
+
+/// A commit would have moved an entity between namespaces, put an item in a collection of another
+/// namespace, or removed an entity that is missing or user data. The store wrote nothing.
+public struct NamespaceViolation: Error, Hashable, Sendable {
+    public let entity: EntityReference
+
+    public init(entity: EntityReference) { self.entity = entity }
 }

@@ -10,6 +10,16 @@ An operation request includes `schemaVersion`, `requestID`, `operation`, `actorS
 
 A persisted receipt includes the admitted request, resulting revisions, status, and a bounded inverse when valid. Redacted UI summaries are separate from private debug payloads. User authorization is a short-lived scoped grant checked at commit, not a boolean remembered forever.
 
+## Local store and namespaces
+
+The local store is one SQLite file behind the `OperationStore` protocol ([ADR-012](adr/ADR-012.md), proposed). `apply` checks the request ID and every expected revision inside one `BEGIN IMMEDIATE` transaction, then writes the change and its receipt, so the checks and the write hold one lock even across processes. A receipt's status is stored as `{"state":"committed"}` or `{"state":"conflict","conflict":{…}}`, and it lists `removed` entities only when there are any. A stored receipt is never updated or deleted.
+
+The schema version is `PRAGMA user_version`: version 1 has entities, receipts, and `extras`, and version 2 adds namespaces. Migrations are append-only SQL steps, each in its own transaction, and a migration never changes an entity's ID. Every entity row has an `extras` JSON object for metadata this build does not interpret; upserts and migrations never rewrite it. A file from a newer schema version is refused unchanged.
+
+Every entity is in exactly one namespace. **`user`**: everything a person creates or imports, through any adapter, plus everything stored before namespaces existed. **`demo`**: the synthetic samples from `Fixtures/demo/seed.json`, which only Reset Demo creates. An item has its collection's namespace, no entity changes namespace, and no item can be added to a demo collection. Reset Demo (`resetDemo`, destructive, app UI and App Intents only) makes the demo namespace match the seed. It restores edited or archived samples at their next revision and removes demo entities the seed no longer names. It never changes or removes user data, and the schema itself refuses to delete a user row.
+
+A demo seed file (`format: "native-lab-demo-seed"`, `formatVersion: 1`) is validated whole before anything is written: size at most 1 MiB, known fields only, valid values, unique IDs, and items in listed collections. A rejected file writes nothing, so it cannot block the next valid one. Seed IDs are stable UUIDs. Changing one is a data change that needs a new `seedVersion`.
+
 ## Portable documents
 
 `.anlab` is a UTF-8 JSON metadata document with an app-defined UTType chosen during bundle-identifier configuration. JSON and native document representations preserve the same logical model; a text representation is deliberately lossy and labeled as such. A URL representation is offered only when a meaningful user-approved destination exists.

@@ -1,3 +1,14 @@
+/// Who owns an entity's lifecycle.
+///
+/// Everything a person creates or imports is `user` data. `demo` entities are the synthetic
+/// samples from the bundled seed: only Reset Demo creates them, and Reset Demo only ever rewrites or
+/// removes `demo` entities. An entity never changes namespace, and an item always has its
+/// collection's namespace, so nothing a person adds can end up inside the demo.
+public enum DataNamespace: String, Hashable, Sendable, Codable, CaseIterable {
+    case user
+    case demo
+}
+
 /// A small named group of items.
 ///
 /// Named `LabCollection` rather than `Collection` so it never shadows the standard library's
@@ -9,12 +20,21 @@ public struct LabCollection: DomainEntity, Identifiable {
     public let title: EntityTitle
     public let isArchived: Bool
     public let revision: Revision
+    /// Whether a person owns the collection or it is a demo sample. It never changes.
+    public let namespace: DataNamespace
 
-    public init(id: CollectionID, title: EntityTitle, isArchived: Bool = false, revision: Revision = .initial) {
+    public init(
+        id: CollectionID,
+        title: EntityTitle,
+        isArchived: Bool = false,
+        revision: Revision = .initial,
+        namespace: DataNamespace = .user
+    ) {
         self.id = id
         self.title = title
         self.isArchived = isArchived
         self.revision = revision
+        self.namespace = namespace
     }
 
     public var reference: EntityReference { .collection(id) }
@@ -25,7 +45,25 @@ public struct LabCollection: DomainEntity, Identifiable {
             id: id,
             title: title ?? self.title,
             isArchived: isArchived ?? self.isArchived,
-            revision: revision.next()
+            revision: revision.next(),
+            namespace: namespace
+        )
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case id, title, isArchived, revision, namespace
+    }
+
+    /// A value encoded before namespaces existed has no `namespace` and decodes as user data, the
+    /// reading under which Reset Demo can never remove it.
+    public init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        try self.init(
+            id: container.decode(CollectionID.self, forKey: .id),
+            title: container.decode(EntityTitle.self, forKey: .title),
+            isArchived: container.decode(Bool.self, forKey: .isArchived),
+            revision: container.decode(Revision.self, forKey: .revision),
+            namespace: container.decodeIfPresent(DataNamespace.self, forKey: .namespace) ?? .user
         )
     }
 }
@@ -40,6 +78,8 @@ public struct LabItem: DomainEntity, Identifiable {
     public let note: ItemNote
     public let isArchived: Bool
     public let revision: Revision
+    /// Always the namespace of the item's collection. It never changes.
+    public let namespace: DataNamespace
 
     public init(
         id: ItemID,
@@ -47,7 +87,8 @@ public struct LabItem: DomainEntity, Identifiable {
         title: EntityTitle,
         note: ItemNote = .empty,
         isArchived: Bool = false,
-        revision: Revision = .initial
+        revision: Revision = .initial,
+        namespace: DataNamespace = .user
     ) {
         self.id = id
         self.collectionID = collectionID
@@ -55,6 +96,7 @@ public struct LabItem: DomainEntity, Identifiable {
         self.note = note
         self.isArchived = isArchived
         self.revision = revision
+        self.namespace = namespace
     }
 
     public var reference: EntityReference { .item(id) }
@@ -67,7 +109,26 @@ public struct LabItem: DomainEntity, Identifiable {
             title: title ?? self.title,
             note: note ?? self.note,
             isArchived: isArchived ?? self.isArchived,
-            revision: revision.next()
+            revision: revision.next(),
+            namespace: namespace
+        )
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case id, collectionID, title, note, isArchived, revision, namespace
+    }
+
+    /// A value encoded before namespaces existed has no `namespace` and decodes as user data.
+    public init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        try self.init(
+            id: container.decode(ItemID.self, forKey: .id),
+            collectionID: container.decode(CollectionID.self, forKey: .collectionID),
+            title: container.decode(EntityTitle.self, forKey: .title),
+            note: container.decode(ItemNote.self, forKey: .note),
+            isArchived: container.decode(Bool.self, forKey: .isArchived),
+            revision: container.decode(Revision.self, forKey: .revision),
+            namespace: container.decodeIfPresent(DataNamespace.self, forKey: .namespace) ?? .user
         )
     }
 }

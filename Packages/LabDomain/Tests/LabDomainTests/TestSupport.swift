@@ -87,6 +87,7 @@ actor SpyStore: OperationStore {
 
     func runBeforeNextCommit(_ body: @escaping @Sendable () async -> Void) { beforeNextCommit = body }
 
+    func collections() async throws -> [LabCollection] { try await inner.collections() }
     func collection(_ id: CollectionID) async throws -> LabCollection? { try await inner.collection(id) }
     func item(_ id: ItemID) async throws -> LabItem? { try await inner.item(id) }
     func items(in collectionID: CollectionID?) async throws -> [LabItem] { try await inner.items(in: collectionID) }
