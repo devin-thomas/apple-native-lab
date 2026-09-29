@@ -24,6 +24,7 @@ link         CoreLocal  macos    FoundationModels    # on-device language model 
 link         CoreLocal  macos    Security            # reads the running build's own entitlements
 link         CoreLocal  macos    Speech              # speech recognition status and on-device assets
 link         CoreLocal  macos    CryptoKit           # LabStore demo fixture: SHA-256 of the bundled seed
+link         CoreLocal  macos    AppKit              # accessibility announcements SwiftUI does not supply
 link         CoreLocal  ios      ARKit               # world tracking and scene reconstruction support
 link         CoreLocal  ios      AVFoundation        # camera and microphone status
 link         CoreLocal  ios      CoreBluetooth       # Bluetooth authorization status

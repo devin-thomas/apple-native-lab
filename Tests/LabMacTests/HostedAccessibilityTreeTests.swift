@@ -45,7 +45,8 @@ import Testing
         let atlas = try #require(try ExperimentRegistry.bundled().experiment(id: "LAB-001"))
         let hosted = HostedView(VStack { ExperimentRow(experiment: atlas) })
         defer { hosted.close() }
-        #expect(try await hosted.tree().labels == ["Action Atlas, State: Specified, LAB-001, M1, System surfaces"])
+        // The state comes from the registry, so this stays true as the experiment advances.
+        #expect(try await hosted.tree().labels == ["Action Atlas, State: \(atlas.state.title), LAB-001, M1, System surfaces"])
     }
 
     @Test func resetDemoSaysWhatItDoesBeforeItAsks() async throws {

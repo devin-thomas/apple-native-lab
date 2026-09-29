@@ -50,7 +50,7 @@ These support the manual passes and never replace them. The last run is in the C
 |---|---|---|---|
 | Status vocabulary | `AccessibilityVocabularyTests` in `script/test.sh` (Mac hosted tests) | Each lifecycle state, readiness value, gate state, and receipt status has its own word and symbol. Spoken labels name the kind. | How a screen reader pronounces them |
 | Key controls through the accessibility API | `HostedAccessibilityTreeTests` in `script/test.sh` | Renders the real shared views in the running app and reads their accessibility tree. Checks labels, hints, values, and the receipt's reading order. Presses Archive, Restore, Undo, and a Readiness row through the accessibility press action. It repeats this with environment overrides that stand in for Reduce Motion, Reduce Transparency, Increase Contrast, Differentiate Without Color, and the largest text size. | The system settings themselves, VoiceOver speech, or focus movement |
-| Announcements and summaries | `AnnouncementAndSummaryTests` in `script/test.sh` | The words announced for a commit, an undo, a reset, a refused change, and a failure. The Readiness summary sentence. | That speech happens: the Mac cannot post announcements yet (see Known gaps) |
+| Announcements and summaries | `AnnouncementAndSummaryTests` in `script/test.sh` | The words announced for a commit, an undo, a reset, a refused change, and a failure. The Readiness summary sentence. | That speech happens: both hosts post announcements (iPhone through UIKit, Mac through AppKit), but only a person listening can confirm VoiceOver speaks them |
 | Keyboard commands and Tab order | `KeyboardAccessTests` in `script/test.sh` | Every essential Mac command is in the running app's menus with its shortcut, and no two ⌘ shortcuts collide. Tab visits the window's stops in reading order and cannot loop on one. | Key presses in a real window (next row) |
 | Running Mac app | The accessibility API and System Events key presses against `script/build_and_run.sh` | Tab order from the search field, and Escape from the inspector and from Reset Demo. The shortcuts do what their menus say, and the labels and groups are in the live tree. | VoiceOver speech; Full Keyboard Access |
 | iPhone journey and audit | A UI-test harness in a throwaway copy, iOS Simulator, at the default and largest accessibility text sizes and with Increase Contrast | The core flows work by accessibility label, the primary actions (including Undo) can be tapped without scrolling, and Xcode's accessibility audit results are recorded per screen | A physical iPhone, VoiceOver, Voice Control |
@@ -92,7 +92,7 @@ Each pass covers the core flows below on the named device. All of them are `not-
 - **VoiceOver (Mac).**
   - The sidebar reads each row as its name and count, such as "Blocked, 0 experiments" and "Lab Collection, 12 samples".
   - The results list names its scope and count, and a row reads "Action Atlas, State: Specified, LAB-001, M1, System surfaces".
-  - In F4 and F6, press the button and listen. Until announcements work on the Mac, confirm that the button's new title ("Restore Sample") and the receipt (⌥⌘L) carry the result. Record whether anything is spoken.
+  - In F4 and F6, press the button and listen for the announcement. Also confirm that the button's new title ("Restore Sample") and the receipt (⌥⌘L) carry the result. Record what is spoken.
   - In F5, the alert reads its message and Cancel is reachable.
 - **VoiceOver (iPhone).**
   - The tab bar, the state legend, and the state filter read their state words.
@@ -117,7 +117,7 @@ Record each pass in [EVIDENCE_TEMPLATE](EVIDENCE_TEMPLATE.md) form, and list the
 
 ## Known gaps
 
-- **The Mac posts no announcements yet.** `LabAnnouncement.post()` needs AppKit's announcement notification. `Config/ProductPolicy.txt` doesn't yet allow the Mac host to link AppKit, and the release manifest refuses a product that links a framework the policy doesn't list. The iPhone posts announcements through UIKit today. Until the policy line lands, a Mac VoiceOver user relies on the changed button title, the receipt inspector, and Show Latest Receipt (⌥⌘L).
+- **Mac announcements are posted but not yet heard.** Since the integration of CORE-010, `LabAnnouncement.post()` uses AppKit's `announcementRequested` notification on the Mac (the product policy allows AppKit for that). No person has yet confirmed that VoiceOver speaks them; that stays a manual row.
 - **Only forward Tab is routed on the Mac.** Tab runs sidebar, search, results, the inspector's receipt list, then back to the sidebar. Shift-Tab is left to the system. It reaches every stop, but not in the exact reverse order.
 - **The forward Tab order may skip controls under keyboard navigation.** With keyboard navigation on, forward Tab from the search field goes to the results and passes over the detail column's and inspector's controls. Shift-Tab still reaches them. Archive, Restore, and Undo also have menu commands (⌃⌘A, ⌥⌘Z). The Full Keyboard Access pass decides whether the forward order should include the detail column.
 - **Return in the search field doesn't move to the results.** Tab does.

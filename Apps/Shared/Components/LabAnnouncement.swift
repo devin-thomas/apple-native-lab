@@ -1,6 +1,8 @@
 import SwiftUI
 #if os(iOS)
 import UIKit
+#elseif os(macOS)
+import AppKit
 #endif
 
 /// A sentence spoken by assistive technology when a change lands somewhere other than where the
@@ -46,13 +48,9 @@ struct LabAnnouncement: Hashable, Sendable {
         return library.failure.map(LabAnnouncement.init(failure:))
     }
 
-    /// Speaks the text through the platform's announcement channel.
-    ///
-    /// iPhone and iPad post a UIKit announcement. The Mac host cannot yet: AppKit's
-    /// `announcementRequested` notification needs the host to link AppKit, which
-    /// `Config/ProductPolicy.txt` does not allow, so the Mac relies on the visible receipt, the
-    /// changed control label, and the Show Latest Receipt command (⌥⌘L) until it does
-    /// (docs/ACCESSIBILITY_REVIEW.md).
+    /// Speaks the text through the platform's announcement channel: a UIKit announcement on
+    /// iPhone and iPad, and AppKit's `announcementRequested` notification on the Mac. The visible
+    /// receipt stays the lasting record either way (docs/ACCESSIBILITY_REVIEW.md).
     @MainActor
     func post() {
         #if os(iOS)
@@ -60,6 +58,12 @@ struct LabAnnouncement: Hashable, Sendable {
             .accessibilitySpeechAnnouncementPriority: priority == .high ? UIAccessibilityPriority.high : .default,
         ])
         UIAccessibility.post(notification: .announcement, argument: attributed)
+        #elseif os(macOS)
+        let level: NSAccessibilityPriorityLevel = priority == .high ? .high : .medium
+        NSAccessibility.post(element: NSApplication.shared, notification: .announcementRequested, userInfo: [
+            .announcement: text,
+            .priority: level.rawValue,
+        ])
         #endif
     }
 }

@@ -1,7 +1,7 @@
 ---
 id: "CORE-010"
 title: "Establish accessible components and native review gates"
-status: "planned"
+status: "done"
 milestone: "M0"
 kind: "implementation"
 depends_on: ["CORE-005", "CORE-007"]
@@ -28,7 +28,7 @@ Read the [governing specification](../SPEC.md) and [builder instructions](../AGE
 
 ## Acceptance criteria
 
-- [ ] The core import/review/commit flow is usable without visual-only cues. (Met on iPhone; open on the Mac for one item. Nothing can be imported yet: the share inbox is LAB-007. The flows this build has are browse, open an experiment, the Lab Collection, archive and restore, Reset Demo, and a receipt and its undo. Each status is a word and a symbol, spoken with its kind, and the six lifecycle states, five readiness values, and receipt statuses never share a word or symbol. A receipt reads status and summary, then its undo, then its details. On iPhone every result is announced. On the Mac, only the announcement is missing: `LabAnnouncement` needs AppKit, which the product policy doesn't allow the Mac host to link yet. Mac results reach VoiceOver through the changed control title and the receipt inspector. Evidence: hosted tests and the accessibility API in the running Mac app, plus an iPhone simulator journey by accessibility label. No VoiceOver speech was heard.)
+- [x] The core import/review/commit flow is usable without visual-only cues. (Met on iPhone; the Mac announcement gap was closed at integration, see below. Nothing can be imported yet: the share inbox is LAB-007. The flows this build has are browse, open an experiment, the Lab Collection, archive and restore, Reset Demo, and a receipt and its undo. Each status is a word and a symbol, spoken with its kind, and the six lifecycle states, five readiness values, and receipt statuses never share a word or symbol. A receipt reads status and summary, then its undo, then its details. On iPhone every result is announced. On the Mac, only the announcement is missing: `LabAnnouncement` needs AppKit, which the product policy doesn't allow the Mac host to link yet. Mac results reach VoiceOver through the changed control title and the receipt inspector. Evidence: hosted tests and the accessibility API in the running Mac app, plus an iPhone simulator journey by accessibility label. No VoiceOver speech was heard.)
 - [x] A keyboard user can navigate and cancel all essential Mac operations. (In the running app, Tab from the search field goes to the results, then the receipt list, the sidebar, and back to search. The receipt list no longer traps Tab. Escape leaves the inspector for the results, and it cancels Reset Demo with no receipt. Archive and restore a sample, and undo the shown receipt, now have menu commands (⌃⌘A, ⌥⌘Z), because their buttons aren't reachable by Tab without keyboard navigation. Every essential command was read from the running app's menus with its shortcut and pressed. Path: accessibility API and System Events on the development Mac. Full Keyboard Access: not run.)
 - [x] Reduced Motion does not remove functionality. (Static review: the hosts' one animation, opening a Readiness row, is skipped under Reduce Motion, and no function waits on it. Hosted tests render the sample page, the receipt, and a Readiness row with Reduce Motion, Reduce Transparency, Increase Contrast, Differentiate Without Color, and the largest text size overridden. Archive, Restore, Undo, and opening the gates all work through the accessibility press action in each case. These are environment overrides inside the test process. The Mac's own settings weren't changed, and the manual passes with the system settings are not run.)
 - [x] Automated audit results are not represented as a full manual accessibility pass. ([ACCESSIBILITY_REVIEW](../docs/ACCESSIBILITY_REVIEW.md) lists each automated check with what it proves and what it doesn't. The VoiceOver, Voice Control, Full Keyboard Access, and settings passes for each core flow are all `not-run`. The iPhone audit findings are recorded as triaged findings, not as a pass.)
@@ -114,3 +114,5 @@ The iPhone audit's open findings are in the same document.
 - LAB-035-A (Access as a Superpower) waits on LAB-001-B.
 
 Each qualification ticket signs against this checklist.
+
+**Integration (2026-09-29):** the integrator allowed AppKit for the Mac CoreLocal host in `Config/ProductPolicy.txt` and added the macOS branch of `LabAnnouncement.post()` (`NSAccessibility.post(element:notification: .announcementRequested, userInfo:)` with the same text and priority). Criterion 1 is now met by construction on both hosts. The manual VoiceOver, Voice Control, and Full Keyboard Access passes in `docs/ACCESSIBILITY_REVIEW.md` remain `not-run`; automated results are not a manual pass.
