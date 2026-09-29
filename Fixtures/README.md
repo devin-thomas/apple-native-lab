@@ -25,3 +25,5 @@ The demo seed has 3 collections and 12 items (LAB-001's 12 original sample objec
 ## Per-experiment fixtures
 
 Each experiment's own fixtures belong to that experiment's lead, under `Fixtures/<LAB-ID>/`. They follow the same rules: original, synthetic, stable IDs, and no private or imported content.
+
+Replayable showcase scripts and their seeds live in [`showcase/`](showcase/README.md); `Packages/LabDemo` runs them.

@@ -14,6 +14,7 @@ Packages/LabDomain/   IDs, operations, validation, receipts, grants, staging pol
 Packages/LabStore/    local transactions, migrations, fixture namespaces
 Packages/LabSupport/  capability probes, evidence records
 Packages/LabStaging/  file-system import staging and bounded archive expansion
+Packages/LabDemo/     replayable demonstrations and confined evidence export
 Packages/LabFeatures/ independent experiment modules and native adapters
 Fixtures/             original, public-safe data and media
 Tests/                unit, integration, UI, import fuzz, and recorded protocol cases

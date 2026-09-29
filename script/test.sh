@@ -24,6 +24,9 @@ swift test --package-path Packages/LabStore --quiet
 step "LabStaging package tests"
 swift test --package-path Packages/LabStaging --quiet
 
+step "LabDemo package tests"
+swift test --package-path Packages/LabDemo --quiet
+
 step "LabFeatures package tests"
 swift test --package-path Packages/LabFeatures --quiet
 

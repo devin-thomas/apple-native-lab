@@ -101,6 +101,12 @@ jobs:
           python3 script/validate/ci.py run swift-test:LabStaging --expect-tests --
           swift test --package-path Packages/LabStaging
 
+      - name: LabDemo package tests
+        if: ${{ !cancelled() && env.LAB_XCODE_READY == 'true' }}
+        run: >-
+          python3 script/validate/ci.py run swift-test:LabDemo --expect-tests --
+          swift test --package-path Packages/LabDemo
+
       - name: LabFeatures package tests
         if: ${{ !cancelled() && env.LAB_XCODE_READY == 'true' }}
         run: >-
@@ -183,7 +189,7 @@ jobs:
             validate:links validate:ticket-frontmatter validate:ticket-graph validate:experiment-frontmatter
             validate:state-vocabulary validate:catalog validate:evidence-records validate:workflow-policy
             validator-self-tests
-            swift-test:LabSupport swift-test:LabDomain swift-test:LabStore swift-test:LabStaging swift-test:LabFeatures
+            swift-test:LabSupport swift-test:LabDomain swift-test:LabStore swift-test:LabStaging swift-test:LabDemo swift-test:LabFeatures
             xcodebuild:LabMac-Core:test xcodebuild:LabPhone-Core:build xcodebuild:LabWatch:build
             feature-level:LabMac-Core feature-level:LabPhone-Core feature-level:LabWatch
           OPTIONAL: >-
