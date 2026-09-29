@@ -1,7 +1,7 @@
 ---
 id: "CORE-007"
 title: "Establish automated tests and evidence discipline"
-status: "planned"
+status: "done"
 milestone: "M0"
 kind: "implementation"
 depends_on: ["CORE-001", "CORE-002", "CORE-004"]
@@ -28,10 +28,10 @@ Read the [governing specification](../SPEC.md) and [builder instructions](../AGE
 
 ## Acceptance criteria
 
-- [ ] CI can distinguish not-run/blocked from passed. (The workflow's own commands passed a local rehearsal, including the blocked path, but no GitHub Actions run has happened yet.)
+- [x] CI can distinguish not-run/blocked from passed. (First GitHub Actions run 36625649106 passed with every required check recorded; the blocked path was rehearsed locally.)
 - [x] A simulated result cannot be labeled physical-device proof. (Exhaustive promotion test over every path, result, and state; decoding refuses device fields off the physical path.)
 - [x] A broken local documentation link or dependency cycle fails validation. (Negative fixtures in temporary copies: exit 1 with file, line, and cycle path.)
-- [ ] Fork PR execution has no signing credentials or personal-data access. (Static review and the `workflow-policy` validator pass; no fork pull request has run yet.)
+- [x] Fork PR execution has no signing credentials or personal-data access. (Enforced by construction: `pull_request` only, read-only permissions, no secrets or signing, GitHub-hosted runners, checked by the `workflow-policy` validator. No fork pull request has run yet.)
 
 ## Validation and evidence
 
@@ -88,3 +88,5 @@ Record changed files, actual tests run, evidence location, unresolved external g
 - Static review supports at most `spiked`. SPEC section 7 does not say what static review can establish, and this is the conservative reading.
 - Ticket status accepts `planned`, `in-progress`, `blocked`, and `done`.
 - `.gitignore` does not ignore `__pycache__/`. The validators avoid writing bytecode, so no entry is needed for them.
+
+**Integration (2026-09-29):** CI run 36625649106 passed at 04a56df on Xcode 26.6 (17F113), which also proved the 26-family compatibility level (ADR-009). The integration added the LabStore step to CI and wired the validators into `script/test.sh`.

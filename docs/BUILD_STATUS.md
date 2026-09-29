@@ -2,8 +2,7 @@
 
 This is the recorded build evidence for the lab. Update it from real runs only. A row describes what was run, not what the specification intends.
 
-Last updated: 2026-09-29 (CORE-001 through CORE-004).
-Last updated: 2026-09-29 (CORE-001, CORE-002, CORE-003).
+Last updated: 2026-09-29 (CORE-001 through CORE-004, CORE-007, CORE-008; first CI run; compatibility Mac observed).
 
 ## Toolchain
 
@@ -101,6 +100,9 @@ Bundle identifiers derive from `LAB_BUNDLE_PREFIX` (default `org.example`), and 
 | 2026-09-29 | CORE-008 manifest refuses bad products (throwaway copies, not committed) | `script/build_manifest.py` after adding an App Group entitlement to the Mac host, marking ARKit unsupported on iOS, removing ARKit's allowance, blanking the Bluetooth purpose string in the Store lane, or embedding a SystemSurfaces widget extension with an App Group entitlement in `LabPhone` | each run exited 1 with CoreLocal `failed` and the matching reason (for the widget: another profile's target in the scheme, an embedded bundle from SystemSurfaces, WidgetKit and the App Group entitlement not allowed in CoreLocal). Xcode refused to sign the Mac App Group entitlement without a development certificate; the iOS simulator build of the widget signed its App Group entitlement with no team |
 | 2026-09-29 | CORE-008 identifiers follow the prefix | `xcodebuild -showBuildSettings` with a local file setting only `LAB_BUNDLE_PREFIX = com.example.override` | App Group `group.com.example.override.nativelab`, Keychain group `com.example.override.nativelab.shared`, CloudKit `iCloud.com.example.override.nativelab`; the manifest recorded "local override (not recorded)" and never the prefix |
 | 2026-09-29 | CORE-008 Store archive, export, upload; device builds of optional profiles | none | not run: no target exists in the optional profiles, and a Store upload needs a paid team and publication approval |
+| 2026-09-29 | First GitHub Actions run | CI run 36625649106 on a GitHub-hosted `macos-26` runner at 04a56df | passed, every step. The runner had no Xcode 27, so it selected Xcode 26.6 (17F113) with 26.5 SDKs: validators 8/8, validator self-tests, LabSupport, LabDomain, LabStore, and LabFeatures tests, Mac hosted tests, and unsigned iPhone and Watch simulator builds, all at the 26-family feature level with `LAB_SDK_27` compiled out |
+| 2026-09-29 | Compatibility Mac observed | SSH over the tailnet | Apple M1, 8 GB memory, macOS 27.0 (26A5388g). Xcode 26.6 (17F113) installed, but its license has not been accepted, so the active developer directory is Command Line Tools |
+| 2026-09-29 | Packages compile on the compatibility Mac | `swift build --package-path Packages/<each>` with Command Line Tools Swift 6.2.3, from a fresh clone of 04a56df | LabSupport, LabDomain, LabStore, LabFeatures: build complete, no warnings. `swift test` there fails only because Command Line Tools lack the `Testing` module; package tests need Xcode |
 
 `script/test.sh` runs every check above that needs no device or signing.
 
@@ -108,7 +110,7 @@ Bundle identifiers derive from `LAB_BUNDLE_PREFIX` (default `org.example`), and 
 
 | Gate | Reason |
 |---|---|
-| Compile against a 26 SDK | No Xcode 26 on the primary Mac. The M1 compatibility Mac is the intended check. |
+| Xcode build and tests on the compatibility Mac itself | Its Xcode 26.6 license has not been accepted. The 26-family level is already proven in CI with the same Xcode build (17F113), and its packages compile there with Swift 6.2.3. |
 | Physical Watch install | No physical watchOS destination was available. See [DEVICE_SETUP](DEVICE_SETUP.md). |
 | iPad, Apple TV | No device available for this project. |
 | Any experiment | All 48 experiments remain `specified`. Installing the host proves the host only. |
