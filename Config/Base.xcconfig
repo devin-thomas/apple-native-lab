@@ -1,0 +1,31 @@
+// Tracked, safe defaults for every target. Nothing here identifies a person or team.
+// Device signing and personal identifiers belong in Config/Local.xcconfig (ignored by Git);
+// copy Config/Local.xcconfig.example to start one.
+
+// Reverse-DNS prefix for every bundle identifier. Override locally.
+LAB_BUNDLE_PREFIX = org.example
+
+// iPhone, iPad, and Watch device builds need a team. Simulator builds do not.
+DEVELOPMENT_TEAM =
+CODE_SIGN_STYLE = Automatic
+
+// The Mac host signs to run locally unless LAB_MAC_DEVELOPMENT_TEAM is set.
+LAB_MAC_DEVELOPMENT_TEAM =
+
+// Provenance written into each Info.plist. script/ entry points pass the real Git revision.
+LAB_SOURCE_REVISION = unknown
+LAB_BUILD_PROFILE = CoreLocal
+
+// Feature levels (ADR-009): the core targets the 26 family; 27-generation adapters compile
+// only when building against a 27 SDK. Swift code checks `#if LAB_SDK_27`.
+LAB_SDK_SWIFT_FLAGS =
+LAB_SDK_SWIFT_FLAGS[sdk=macosx27*] = -DLAB_SDK_27
+LAB_SDK_SWIFT_FLAGS[sdk=iphoneos27*] = -DLAB_SDK_27
+LAB_SDK_SWIFT_FLAGS[sdk=iphonesimulator27*] = -DLAB_SDK_27
+LAB_SDK_SWIFT_FLAGS[sdk=watchos27*] = -DLAB_SDK_27
+LAB_SDK_SWIFT_FLAGS[sdk=watchsimulator27*] = -DLAB_SDK_27
+LAB_SDK_SWIFT_FLAGS[sdk=appletvos27*] = -DLAB_SDK_27
+LAB_SDK_SWIFT_FLAGS[sdk=appletvsimulator27*] = -DLAB_SDK_27
+OTHER_SWIFT_FLAGS = $(inherited) $(LAB_SDK_SWIFT_FLAGS)
+
+#include? "Local.xcconfig"

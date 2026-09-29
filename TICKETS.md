@@ -1,7 +1,7 @@
 # Implementation ticket index
 
 
-**108 tickets. All are currently planned.** Markdown tickets are not created GitHub issues; no remote mutation is authorized merely by their presence.
+**108 tickets.** CORE-001 is done; the rest are planned. Each ticket file's `status` is authoritative. Markdown tickets are not created GitHub issues; no remote mutation is authorized merely by their presence.
 
 
 A ticket is ready only after its dependencies are complete or an explicit scoped fixture-only implementation decision is recorded. Complete implementation and qualification separately. Wave labels express priority; the dependency graph wins when a later public component is required.

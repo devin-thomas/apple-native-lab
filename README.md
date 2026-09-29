@@ -4,7 +4,18 @@
 
 This is a public, local-first laboratory of 48 focused experiments spanning system actions, sharing, intelligence, audio, accessibility, continuity, spatial computing, media, and commercial integrations. Each experiment has a concrete user payoff, a bounded implementation, a fallback, and a device-evidence gate.
 
-**Current state: documentation-only build pack.** This snapshot contains specifications and implementation tickets. It does not yet contain application source, an Xcode project, compiled applications, verified screenshots, or passing device-test claims. The public repository is intended to become independently buildable and usable as its tickets are completed. Do not treat planned commands or target names as files already present.
+**Current state: foundation build (CORE-001).** Native Mac, iPhone/iPad, and Watch hosts build from this repository and browse the 48-experiment catalog, and a Readiness screen reports the real toolchain and device. Every experiment is still `specified`; nothing in the catalog claims to run yet. [BUILD_STATUS](docs/BUILD_STATUS.md) records what was actually built, tested, and installed, and what was not.
+
+## Build and run
+
+Requires Xcode 27 (the core targets the 26 OS family; see [BUILD_STATUS](docs/BUILD_STATUS.md)). No account, key, or private configuration is needed for the Mac or simulators.
+
+```sh
+script/build_and_run.sh      # build and open the Mac app
+script/test.sh               # every automated check that needs no device
+```
+
+Device installs (iPhone, iPad, Apple Watch) use your own signing team: see [DEVICE_SETUP](docs/DEVICE_SETUP.md).
 
 ## Begin
 
@@ -26,6 +37,8 @@ The interface is native SwiftUI with narrow UIKit/AppKit interoperability. Mac m
 | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Packages, host targets, extension boundaries, and operation flow |
 | [docs/DATA_CONTRACTS.md](docs/DATA_CONTRACTS.md) | Stable IDs, import formats, operation receipts, and network envelopes |
 | [docs/BUILD_AND_DISTRIBUTION.md](docs/BUILD_AND_DISTRIBUTION.md) | Planned build profiles, signing, device qualification, and release paths |
+| [docs/BUILD_STATUS.md](docs/BUILD_STATUS.md) | Recorded toolchain, schemes, evidence, and gates not yet run |
+| [docs/DEVICE_SETUP.md](docs/DEVICE_SETUP.md) | Signing, Mac, iPhone, and Apple Watch installation |
 | [docs/SECURITY_AND_PRIVACY.md](docs/SECURITY_AND_PRIVACY.md) | Consent, data minimization, hostile input, local networking, and release safety |
 | [docs/TEST_STRATEGY.md](docs/TEST_STRATEGY.md) | Reproducible tests, evidence states, and hardware limits |
 | [docs/SOURCE_INDEX.md](docs/SOURCE_INDEX.md) | Dated primary-source research and reference-only leads |

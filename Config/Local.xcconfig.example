@@ -1,0 +1,11 @@
+// Copy to Config/Local.xcconfig. That file is ignored by Git and never committed.
+
+// Your team ID from Xcode > Settings > Accounts. A free Personal Team works for CoreLocal.
+DEVELOPMENT_TEAM = ABCDE12345
+
+// A prefix you control. Each new prefix registers new app IDs, and free teams have a weekly
+// app ID limit, so pick one and keep it.
+LAB_BUNDLE_PREFIX = com.example.yourname
+
+// Optional: sign the Mac host with your team instead of "Sign to Run Locally".
+// LAB_MAC_DEVELOPMENT_TEAM = ABCDE12345

@@ -1,0 +1,184 @@
+# Source of truth for AppleNativeLab.xcodeproj. Regenerate with script/generate_project.sh.
+# Sources use synchronized folders: add Swift files without regenerating.
+name: AppleNativeLab
+
+options:
+  defaultSourceDirectoryType: syncedFolder
+  createIntermediateGroups: true
+  deploymentTarget:
+    iOS: "26.0"
+    macOS: "26.0"
+    watchOS: "26.0"
+
+configFiles:
+  Debug: Config/Base.xcconfig
+  Release: Config/Base.xcconfig
+
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    MARKETING_VERSION: "0.1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    ENABLE_USER_SCRIPT_SANDBOXING: YES
+    DEAD_CODE_STRIPPING: YES
+    LOCALIZATION_PREFERS_STRING_CATALOGS: YES
+
+packages:
+  LabSupport:
+    path: Packages/LabSupport
+  LabFeatures:
+    path: Packages/LabFeatures
+
+targets:
+  # CoreLocal: the Mac host. Signs to run locally by default; sandboxed.
+  LabMac:
+    type: application
+    platform: macOS
+    sources:
+      - Apps/Shared
+      - Apps/Mac
+    dependencies:
+      - package: LabSupport
+      - package: LabFeatures
+        product: LabCatalog
+    info:
+      path: Apps/Mac/Info.plist
+      properties:
+        CFBundleDisplayName: Native Lab
+        CFBundleName: Native Lab
+        LSApplicationCategoryType: public.app-category.developer-tools
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        LabSourceRevision: $(LAB_SOURCE_REVISION)
+        LabBuildProfile: $(LAB_BUILD_PROFILE)
+    entitlements:
+      path: Apps/Mac/LabMac.entitlements
+      properties:
+        com.apple.security.app-sandbox: true
+    settings:
+      base:
+        PRODUCT_NAME: NativeLab
+        PRODUCT_BUNDLE_IDENTIFIER: $(LAB_BUNDLE_PREFIX).nativelab
+        DEVELOPMENT_TEAM: $(LAB_MAC_DEVELOPMENT_TEAM)
+        ENABLE_HARDENED_RUNTIME: YES
+        GENERATE_INFOPLIST_FILE: NO
+
+  # CoreLocal: the iPhone and iPad host.
+  LabPhone:
+    type: application
+    platform: iOS
+    sources:
+      - Apps/Shared
+      - Apps/Phone
+    dependencies:
+      - package: LabSupport
+      - package: LabFeatures
+        product: LabCatalog
+    info:
+      path: Apps/Phone/Info.plist
+      properties:
+        CFBundleDisplayName: Native Lab
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        LabSourceRevision: $(LAB_SOURCE_REVISION)
+        LabBuildProfile: $(LAB_BUILD_PROFILE)
+        UILaunchScreen: {}
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: true
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+    settings:
+      base:
+        PRODUCT_NAME: NativeLab
+        PRODUCT_BUNDLE_IDENTIFIER: $(LAB_BUNDLE_PREFIX).nativelab
+        TARGETED_DEVICE_FAMILY: "1,2"
+        SUPPORTS_MACCATALYST: NO
+        SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD: NO
+        SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD: NO
+        GENERATE_INFOPLIST_FILE: NO
+
+  # Companions: the Watch host installs directly to a paired Watch; it is not embedded in
+  # the iPhone app yet, so CoreLocal never depends on Watch provisioning.
+  LabWatch:
+    type: application
+    platform: watchOS
+    sources:
+      - Apps/Watch
+    dependencies:
+      - package: LabSupport
+      - package: LabFeatures
+        product: LabCatalog
+    info:
+      path: Apps/Watch/Info.plist
+      properties:
+        CFBundleDisplayName: Native Lab
+        WKApplication: true
+        WKCompanionAppBundleIdentifier: $(LAB_BUNDLE_PREFIX).nativelab
+        WKRunsIndependentlyOfCompanionApp: true
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        LabSourceRevision: $(LAB_SOURCE_REVISION)
+        LabBuildProfile: Companions
+    settings:
+      base:
+        PRODUCT_NAME: NativeLabWatch
+        PRODUCT_BUNDLE_IDENTIFIER: $(LAB_BUNDLE_PREFIX).nativelab.watchkitapp
+        GENERATE_INFOPLIST_FILE: NO
+
+  LabMacTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - Tests/LabMacTests
+    dependencies:
+      - target: LabMac
+      - package: LabSupport
+      - package: LabFeatures
+        product: LabCatalog
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: $(LAB_BUNDLE_PREFIX).nativelab.tests
+        TEST_HOST: $(BUILT_PRODUCTS_DIR)/NativeLab.app/Contents/MacOS/NativeLab
+        BUNDLE_LOADER: $(TEST_HOST)
+        DEVELOPMENT_TEAM: $(LAB_MAC_DEVELOPMENT_TEAM)
+        GENERATE_INFOPLIST_FILE: YES
+
+schemes:
+  LabMac-Core:
+    build:
+      targets:
+        LabMac: all
+        LabMacTests: [test]
+    run:
+      config: Debug
+    test:
+      config: Debug
+      targets:
+        - LabMacTests
+    archive:
+      config: Release
+
+  LabPhone-Core:
+    build:
+      targets:
+        LabPhone: all
+    run:
+      config: Debug
+    archive:
+      config: Release
+
+  LabWatch:
+    build:
+      targets:
+        LabWatch: all
+    run:
+      config: Debug
+    archive:
+      config: Release

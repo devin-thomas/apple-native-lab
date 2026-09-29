@@ -23,6 +23,6 @@ Split nontrivial features into views, models, services, and tests; do not build 
 
 No arbitrary shell invocation from app intents, model tools, imports, or network messages. No hidden cloud fallback. No authorization based solely on model output, a link, a barcode, or a display name. No secrets in source, fixtures, logs, screenshots, issue bodies, or generated release ZIPs. Do not weaken Gatekeeper, sandboxing, or platform permissions to make a demo appear successful.
 
-The default local run entry point will be `script/build_and_run.sh` after bootstrap. It must build and open a real Mac `.app` bundle, not masquerade a raw GUI executable as a complete launch. Stop only the known lab process. The script does not exist in this planning snapshot.
+The local run entry point is `script/build_and_run.sh`. It builds and opens the real Mac `.app` bundle and stops only the known lab process. `script/test.sh` runs every check that needs no device. `project.yml` is the project's source of truth: sources are synchronized folders, so add files without regenerating, and run `script/generate_project.sh` only when targets, settings, packages, or schemes change. Never hand-edit `experiments.json`; change the experiment spec and run `script/generate_catalog.py`.
 
 Create a decision record when changing behavior, platform support, costs, external service use, or data ownership. Do not rewrite an unrelated downstream application to make the lab easier.

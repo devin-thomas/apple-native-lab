@@ -1,0 +1,902 @@
+{
+  "schemaVersion": 1,
+  "sourceReview": "2026-09-29",
+  "categories": [
+    "System surfaces",
+    "Intelligence",
+    "Sharing",
+    "Audio",
+    "Continuity",
+    "Watch",
+    "Spatial",
+    "Interaction",
+    "Media",
+    "Accessibility",
+    "Commercial",
+    "Security",
+    "Mac",
+    "Graphics"
+  ],
+  "experiments": [
+    {
+      "id": "LAB-001",
+      "title": "Action Atlas",
+      "category": "System surfaces",
+      "milestone": "M1",
+      "state": "specified",
+      "dependsOn": [],
+      "moment": "Create a collection, find an item, mutate it, and inspect the same receipt from three entry points.",
+      "hosts": "iPhone, iPad, Mac; Watch adapter later",
+      "primaryAPIs": "AppIntents, AppEntity, entity queries",
+      "tickets": [
+        "LAB-001-A",
+        "LAB-001-B"
+      ],
+      "specPath": "experiments/LAB-001-action-atlas.md"
+    },
+    {
+      "id": "LAB-002",
+      "title": "Context Cards",
+      "category": "System surfaces",
+      "milestone": "M2",
+      "state": "specified",
+      "dependsOn": [
+        "LAB-001"
+      ],
+      "moment": "Ask about the visible object, then complete a small decision inside a system presentation.",
+      "hosts": "iPhone and iPad; Mac support probed separately",
+      "primaryAPIs": "App Schemas, NSUserActivity, SwiftUI snippets",
+      "tickets": [
+        "LAB-002-A",
+        "LAB-002-B"
+      ],
+      "specPath": "experiments/LAB-002-context-cards.md"
+    },
+    {
+      "id": "LAB-003",
+      "title": "Shortcut Workbench",
+      "category": "System surfaces",
+      "milestone": "M2",
+      "state": "specified",
+      "dependsOn": [
+        "LAB-001",
+        "LAB-008"
+      ],
+      "moment": "Turn the lab into a small typed automation toolbox, not a collection of launch-app commands.",
+      "hosts": "iPhone, iPad, Mac",
+      "primaryAPIs": "AppIntents, Shortcuts, 27-generation Storage actions",
+      "tickets": [
+        "LAB-003-A",
+        "LAB-003-B"
+      ],
+      "specPath": "experiments/LAB-003-shortcut-workbench.md"
+    },
+    {
+      "id": "LAB-004",
+      "title": "Surface Deck",
+      "category": "System surfaces",
+      "milestone": "M1",
+      "state": "specified",
+      "dependsOn": [
+        "LAB-001"
+      ],
+      "moment": "One reversible session state appears in a widget, a Control, and the main app.",
+      "hosts": "iPhone, iPad, Mac; supported Watch surfaces",
+      "primaryAPIs": "WidgetKit, Control widgets, AppIntents",
+      "tickets": [
+        "LAB-004-A",
+        "LAB-004-B"
+      ],
+      "specPath": "experiments/LAB-004-surface-deck.md"
+    },
+    {
+      "id": "LAB-005",
+      "title": "Live Session Beacon",
+      "category": "System surfaces",
+      "milestone": "M2",
+      "state": "specified",
+      "dependsOn": [
+        "LAB-004",
+        "LAB-032"
+      ],
+      "moment": "Follow a real finite export or rehearsal with a cancel button and honest progress.",
+      "hosts": "iPhone; system-mediated companion presentations probed",
+      "primaryAPIs": "ActivityKit, WidgetKit",
+      "tickets": [
+        "LAB-005-A",
+        "LAB-005-B"
+      ],
+      "specPath": "experiments/LAB-005-live-session-beacon.md"
+    },
+    {
+      "id": "LAB-006",
+      "title": "Find the Thing",
+      "category": "Intelligence",
+      "milestone": "M2",
+      "state": "specified",
+      "dependsOn": [
+        "LAB-001",
+        "LAB-010"
+      ],
+      "moment": "Search a deliberately messy local collection and see exactly which owned records informed the answer.",
+      "hosts": "iPhone, iPad, Mac",
+      "primaryAPIs": "Core Spotlight, AppEntity indexing, optional model retrieval",
+      "tickets": [
+        "LAB-006-A",
+        "LAB-006-B"
+      ],
+      "specPath": "experiments/LAB-006-find-the-thing.md"
+    },
+    {
+      "id": "LAB-007",
+      "title": "Share Ingress Station",
+      "category": "Sharing",
+      "milestone": "M1",
+      "state": "specified",
+      "dependsOn": [
+        "LAB-001"
+      ],
+      "moment": "Share a page, image, or video into a staging inbox without losing the source context.",
+      "hosts": "iPhone, iPad; separate Mac Share extension",
+      "primaryAPIs": "Share extensions, NSItemProvider, App Groups",
+      "tickets": [
+        "LAB-007-A",
+        "LAB-007-B"
+      ],
+      "specPath": "experiments/LAB-007-share-ingress-station.md"
+    },
+    {
+      "id": "LAB-008",
+      "title": "Portable Objects",
+      "category": "Sharing",
+      "milestone": "M1",
+      "state": "specified",
+      "dependsOn": [
+        "LAB-001"
+      ],
+      "moment": "Drag a rich lab object into another window or export it as a inspectable document.",
+      "hosts": "iPhone, iPad, Mac",
+      "primaryAPIs": "Transferable, UTType, document import/export",
+      "tickets": [
+        "LAB-008-A",
+        "LAB-008-B"
+      ],
+      "specPath": "experiments/LAB-008-portable-objects.md"
+    },
+    {
+      "id": "LAB-009",
+      "title": "Documents Everywhere",
+      "category": "Sharing",
+      "milestone": "M4",
+      "state": "specified",
+      "dependsOn": [
+        "LAB-008"
+      ],
+      "moment": "Preview a custom document in the system and browse an opt-in sample provider.",
+      "hosts": "Mac and iPhone/iPad extensions separately",
+      "primaryAPIs": "Quick Look, File Provider, document coordination",
+      "tickets": [
+        "LAB-009-A",
+        "LAB-009-B"
+      ],
+      "specPath": "experiments/LAB-009-documents-everywhere.md"
+    },
+    {
+      "id": "LAB-010",
+      "title": "Typed Local Intelligence",
+      "category": "Intelligence",
+      "milestone": "M1",
+      "state": "specified",
+      "dependsOn": [
+        "LAB-001"
+      ],
+      "moment": "Turn an ambiguous note into a typed proposal, then let a deterministic operation perform the approved change.",
+      "hosts": "Apple-Intelligence-capable iPhone/iPad/Mac",
+      "primaryAPIs": "Foundation Models, guided generation, Tool",
+      "tickets": [
+        "LAB-010-A",
+        "LAB-010-B"
+      ],
+      "specPath": "experiments/LAB-010-typed-local-intelligence.md"
+    },
+    {
+      "id": "LAB-011",
+      "title": "Model Routing Observatory",
+      "category": "Intelligence",
+      "milestone": "M4",
+      "state": "specified",
+      "dependsOn": [
+        "LAB-010"
+      ],
+      "moment": "See where a request would run, what may leave the device, and why a larger model is or is not available.",
+      "hosts": "iPhone, iPad, Mac; optional watchOS 27 PCC path",
+      "primaryAPIs": "Foundation Models LanguageModel, PCC, optional provider adapter",
+      "tickets": [
+        "LAB-011-A",
+        "LAB-011-B"
+      ],
+      "specPath": "experiments/LAB-011-model-routing-observatory.md"
+    },
+    {
+      "id": "LAB-012",
+      "title": "Point, Inspect, Propose",
+      "category": "Intelligence",
+      "milestone": "M3",
+      "state": "specified",
+      "dependsOn": [
+        "LAB-007",
+        "LAB-010"
+      ],
+      "moment": "Inspect an object or screenshot and turn observations into a reviewable lab record.",
+      "hosts": "Supported iPhone; iPad/Mac camera-import fallback",
+      "primaryAPIs": "Vision, Foundation Models image input, Visual Intelligence integration",
+      "tickets": [
+        "LAB-012-A",
+        "LAB-012-B"
+      ],
+      "specPath": "experiments/LAB-012-point-inspect-propose.md"
+    },
+    {
+      "id": "LAB-013",
+      "title": "Speech Timeline",
+      "category": "Audio",
+      "milestone": "M2",
+      "state": "specified",
+      "dependsOn": [
+        "LAB-008"
+      ],
+      "moment": "Record or import speech and scrub a time-aligned transcript that improves while you watch.",
+      "hosts": "iPhone, iPad, Mac subject to language/device support",
+      "primaryAPIs": "SpeechAnalyzer, SpeechTranscriber, AssetInventory",
+      "tickets": [
+        "LAB-013-A",
+        "LAB-013-B"
+      ],
+      "specPath": "experiments/LAB-013-speech-timeline.md"
+    },
+    {
+      "id": "LAB-014",
+      "title": "Language Bridge",
+      "category": "Intelligence",
+      "milestone": "M3",
+      "state": "specified",
+      "dependsOn": [
+        "LAB-013"
+      ],
+      "moment": "Read a translated caption beside its original and immediately inspect uncertainty or an unavailable language.",
+      "hosts": "iPhone, iPad, Mac after runtime check",
+      "primaryAPIs": "Translation, Speech output where supported",
+      "tickets": [
+        "LAB-014-A",
+        "LAB-014-B"
+      ],
+      "specPath": "experiments/LAB-014-language-bridge.md"
+    },
+    {
+      "id": "LAB-015",
+      "title": "Local Model Bench",
+      "category": "Intelligence",
+      "milestone": "M3",
+      "state": "specified",
+      "dependsOn": [
+        "LAB-010"
+      ],
+      "moment": "Compare small local tasks across machines with correctness, latency, memory, and thermal evidence rather than a flashy token counter.",
+      "hosts": "Apple-silicon Mac; optional capable iPhone/iPad",
+      "primaryAPIs": "Core ML, optional MLX/provider bridge, Foundation Models evaluation",
+      "tickets": [
+        "LAB-015-A",
+        "LAB-015-B"
+      ],
+      "specPath": "experiments/LAB-015-local-model-bench.md"
+    },
+    {
+      "id": "LAB-016",
+      "title": "Pick Up Here",
+      "category": "Continuity",
+      "milestone": "M2",
+      "state": "specified",
+      "dependsOn": [
+        "LAB-008"
+      ],
+      "moment": "Move a draft to another device and resume at the exact selected section without pretending Handoff is file sync.",
+      "hosts": "iPhone, iPad, Mac",
+      "primaryAPIs": "NSUserActivity, Handoff, universal-link routing",
+      "tickets": [
+        "LAB-016-A",
+        "LAB-016-B"
+      ],
+      "specPath": "experiments/LAB-016-pick-up-here.md"
+    },
+    {
+      "id": "LAB-017",
+      "title": "Durable Sync Ledger",
+      "category": "Continuity",
+      "milestone": "M3",
+      "state": "specified",
+      "dependsOn": [
+        "LAB-008"
+      ],
+      "moment": "Edit offline on two devices, reconnect, and explain exactly how the final state was chosen.",
+      "hosts": "iPhone, iPad, Mac; companion state distribution separately",
+      "primaryAPIs": "CloudKit, CKSyncEngine, local transactional store",
+      "tickets": [
+        "LAB-017-A",
+        "LAB-017-B"
+      ],
+      "specPath": "experiments/LAB-017-durable-sync-ledger.md"
+    },
+    {
+      "id": "LAB-018",
+      "title": "Together Mode",
+      "category": "Continuity",
+      "milestone": "M3",
+      "state": "specified",
+      "dependsOn": [
+        "LAB-019",
+        "LAB-031"
+      ],
+      "moment": "Invite another person into the same media inspection or drawing activity with late-join recovery.",
+      "hosts": "Supported iPhone, iPad, Mac; tvOS participation independently proved",
+      "primaryAPIs": "GroupActivities, GroupSessionMessenger, AVPlayer coordination",
+      "tickets": [
+        "LAB-018-A",
+        "LAB-018-B"
+      ],
+      "specPath": "experiments/LAB-018-together-mode.md"
+    },
+    {
+      "id": "LAB-019",
+      "title": "Local Constellation",
+      "category": "Continuity",
+      "milestone": "M2",
+      "state": "specified",
+      "dependsOn": [
+        "LAB-001"
+      ],
+      "moment": "Use a Mac as conductor, a phone as controller, and a television as a stateful display without an internet server.",
+      "hosts": "Mac, iPhone, iPad, Apple TV on a local network; Watch relayed",
+      "primaryAPIs": "Network framework, Bonjour, authenticated transport",
+      "tickets": [
+        "LAB-019-A",
+        "LAB-019-B"
+      ],
+      "specPath": "experiments/LAB-019-local-constellation.md"
+    },
+    {
+      "id": "LAB-020",
+      "title": "Aware Link",
+      "category": "Continuity",
+      "milestone": "M4",
+      "state": "specified",
+      "dependsOn": [
+        "LAB-019",
+        "LAB-008"
+      ],
+      "moment": "Transfer a sample asset over a deliberately paired direct link and display the measured transport difference.",
+      "hosts": "Supported devices only; iPhone/iPad proof before any broader promise",
+      "primaryAPIs": "WiFiAware, DeviceDiscoveryUI, Network",
+      "tickets": [
+        "LAB-020-A",
+        "LAB-020-B"
+      ],
+      "specPath": "experiments/LAB-020-aware-link.md"
+    },
+    {
+      "id": "LAB-021",
+      "title": "Wrist Relay",
+      "category": "Watch",
+      "milestone": "M2",
+      "state": "specified",
+      "dependsOn": [
+        "LAB-001",
+        "LAB-019"
+      ],
+      "moment": "Tap a small wrist control and see a durable acknowledgement, even when delivery must wait.",
+      "hosts": "Paired iPhone and Watch; Mac/TV receive through a separate link",
+      "primaryAPIs": "WatchConnectivity, watchOS SwiftUI, system haptics",
+      "tickets": [
+        "LAB-021-A",
+        "LAB-021-B"
+      ],
+      "specPath": "experiments/LAB-021-wrist-relay.md"
+    },
+    {
+      "id": "LAB-022",
+      "title": "Proximity Instrument",
+      "category": "Spatial",
+      "milestone": "M4",
+      "state": "specified",
+      "dependsOn": [
+        "LAB-019",
+        "LAB-021"
+      ],
+      "moment": "Watch an instrument respond to measured distance, confidence, and unavailable direction—not invented radar.",
+      "hosts": "Participating UWB-capable devices; per-role distance/direction check",
+      "primaryAPIs": "NearbyInteraction",
+      "tickets": [
+        "LAB-022-A",
+        "LAB-022-B"
+      ],
+      "specPath": "experiments/LAB-022-proximity-instrument.md"
+    },
+    {
+      "id": "LAB-023",
+      "title": "Tabletop Reality",
+      "category": "Spatial",
+      "milestone": "M3",
+      "state": "specified",
+      "dependsOn": [
+        "LAB-001"
+      ],
+      "moment": "Place a small interactive system on a real table, move around it, and inspect occlusion and tracking quality.",
+      "hosts": "ARKit-supported iPhone/iPad; non-AR Mac viewer",
+      "primaryAPIs": "ARKit, RealityKit",
+      "tickets": [
+        "LAB-023-A",
+        "LAB-023-B"
+      ],
+      "specPath": "experiments/LAB-023-tabletop-reality.md"
+    },
+    {
+      "id": "LAB-024",
+      "title": "Room Ledger",
+      "category": "Spatial",
+      "milestone": "M3",
+      "state": "specified",
+      "dependsOn": [
+        "LAB-023",
+        "LAB-008"
+      ],
+      "moment": "Turn a scanned room into an editable semantic inventory and compare the scan to manual corrections.",
+      "hosts": "LiDAR-capable iPhone/iPad capture; Mac review",
+      "primaryAPIs": "RoomPlan, RealityKit",
+      "tickets": [
+        "LAB-024-A",
+        "LAB-024-B"
+      ],
+      "specPath": "experiments/LAB-024-room-ledger.md"
+    },
+    {
+      "id": "LAB-025",
+      "title": "Object Forge",
+      "category": "Spatial",
+      "milestone": "M3",
+      "state": "specified",
+      "dependsOn": [
+        "LAB-008",
+        "LAB-032"
+      ],
+      "moment": "Scan an everyday object, inspect reconstruction failures, and share a viewable 3D artifact.",
+      "hosts": "Supported iPhone capture and supported Mac/device reconstruction",
+      "primaryAPIs": "RealityKit Object Capture, PhotogrammetrySession",
+      "tickets": [
+        "LAB-025-A",
+        "LAB-025-B"
+      ],
+      "specPath": "experiments/LAB-025-object-forge.md"
+    },
+    {
+      "id": "LAB-026",
+      "title": "Camera Instrument Panel",
+      "category": "Spatial",
+      "milestone": "M3",
+      "state": "specified",
+      "dependsOn": [
+        "LAB-012"
+      ],
+      "moment": "Show segmentation, OCR, and simple pose landmarks as instruments with visible confidence and frame timing.",
+      "hosts": "iPhone/iPad; Mac uses selected frames or available camera",
+      "primaryAPIs": "AVFoundation, Vision, Core Image",
+      "tickets": [
+        "LAB-026-A",
+        "LAB-026-B"
+      ],
+      "specPath": "experiments/LAB-026-camera-instrument-panel.md"
+    },
+    {
+      "id": "LAB-027",
+      "title": "Sound in Space",
+      "category": "Audio",
+      "milestone": "M3",
+      "state": "specified",
+      "dependsOn": [
+        "LAB-023"
+      ],
+      "moment": "Move a sound behind a virtual wall and hear the scene change while inspecting the sound graph.",
+      "hosts": "iPhone, iPad, Mac; output-device capabilities checked",
+      "primaryAPIs": "PHASE, AVAudioEngine, optional headphone motion",
+      "tickets": [
+        "LAB-027-A",
+        "LAB-027-B"
+      ],
+      "specPath": "experiments/LAB-027-sound-in-space.md"
+    },
+    {
+      "id": "LAB-028",
+      "title": "Recognize Our Audio",
+      "category": "Audio",
+      "milestone": "M2",
+      "state": "specified",
+      "dependsOn": [
+        "LAB-013"
+      ],
+      "moment": "Play an original reference clip anywhere and let a second screen find the matching point.",
+      "hosts": "Supported iPhone/iPad/Mac; microphone input separately gated",
+      "primaryAPIs": "ShazamKit SHCustomCatalog, AVAudioEngine",
+      "tickets": [
+        "LAB-028-A",
+        "LAB-028-B"
+      ],
+      "specPath": "experiments/LAB-028-recognize-our-audio.md"
+    },
+    {
+      "id": "LAB-029",
+      "title": "Audio Workshop",
+      "category": "Audio",
+      "milestone": "M3",
+      "state": "specified",
+      "dependsOn": [
+        "LAB-008"
+      ],
+      "moment": "Build a tiny usable audio processor with a inspectable graph, MIDI control, and an optional plugin form.",
+      "hosts": "Mac and iPhone/iPad; AUv3 target isolated",
+      "primaryAPIs": "AVAudioEngine, Audio Units, Core MIDI",
+      "tickets": [
+        "LAB-029-A",
+        "LAB-029-B"
+      ],
+      "specPath": "experiments/LAB-029-audio-workshop.md"
+    },
+    {
+      "id": "LAB-030",
+      "title": "Tactile Grammar",
+      "category": "Interaction",
+      "milestone": "M2",
+      "state": "specified",
+      "dependsOn": [
+        "LAB-004"
+      ],
+      "moment": "Design three distinguishable tactile cues and compare actual device output rather than treating haptics as decoration.",
+      "hosts": "Capable iPhone, supported controllers, Watch system haptics separately",
+      "primaryAPIs": "Core Haptics, GameController, Watch haptic APIs",
+      "tickets": [
+        "LAB-030-A",
+        "LAB-030-B"
+      ],
+      "specPath": "experiments/LAB-030-tactile-grammar.md"
+    },
+    {
+      "id": "LAB-031",
+      "title": "Native Screening Room",
+      "category": "Media",
+      "milestone": "M2",
+      "state": "specified",
+      "dependsOn": [
+        "LAB-008"
+      ],
+      "moment": "Watch a rights-cleared clip, switch native playback surfaces, and resume without losing position or captions.",
+      "hosts": "iPhone, iPad, Mac, Apple TV",
+      "primaryAPIs": "AVPlayer, AVKit, Now Playing, PiP/AirPlay where supported",
+      "tickets": [
+        "LAB-031-A",
+        "LAB-031-B"
+      ],
+      "specPath": "experiments/LAB-031-native-screening-room.md"
+    },
+    {
+      "id": "LAB-032",
+      "title": "Render That Survives",
+      "category": "Media",
+      "milestone": "M2",
+      "state": "specified",
+      "dependsOn": [
+        "LAB-008"
+      ],
+      "moment": "Start a render, leave the screen, return, and see a truthful recoverable job instead of a vanished spinner.",
+      "hosts": "iPhone/iPad user-started background work; Mac foreground worker",
+      "primaryAPIs": "AVFoundation export, BackgroundTasks, optional GPU path",
+      "tickets": [
+        "LAB-032-A",
+        "LAB-032-B"
+      ],
+      "specPath": "experiments/LAB-032-render-that-survives.md"
+    },
+    {
+      "id": "LAB-033",
+      "title": "Capture With Consent",
+      "category": "Media",
+      "milestone": "M3",
+      "state": "specified",
+      "dependsOn": [
+        "LAB-013",
+        "LAB-032"
+      ],
+      "moment": "Record one chosen window with an unmistakable capture state and export redacted diagnostics.",
+      "hosts": "Mac capture host; optional iPhone Continuity Camera",
+      "primaryAPIs": "ScreenCaptureKit, AVFoundation, system content picker",
+      "tickets": [
+        "LAB-033-A",
+        "LAB-033-B"
+      ],
+      "specPath": "experiments/LAB-033-capture-with-consent.md"
+    },
+    {
+      "id": "LAB-034",
+      "title": "Television Stage",
+      "category": "Media",
+      "milestone": "M3",
+      "state": "specified",
+      "dependsOn": [
+        "LAB-019",
+        "LAB-031"
+      ],
+      "moment": "Turn the TV into a stage with a user-chosen phone camera and a separate controller.",
+      "hosts": "Apple TV 4K second generation or later for the camera sample; paired camera device",
+      "primaryAPIs": "tvOS AVKit Continuity Camera, Network transport",
+      "tickets": [
+        "LAB-034-A",
+        "LAB-034-B"
+      ],
+      "specPath": "experiments/LAB-034-television-stage.md"
+    },
+    {
+      "id": "LAB-035",
+      "title": "Access as a Superpower",
+      "category": "Accessibility",
+      "milestone": "M1",
+      "state": "specified",
+      "dependsOn": [
+        "LAB-001"
+      ],
+      "moment": "Complete the same meaningful task visually, by VoiceOver, with keyboard control, and through a sonified chart.",
+      "hosts": "iPhone, iPad, Mac; Watch/TV adapt primary tasks",
+      "primaryAPIs": "SwiftUI accessibility, AXChartDescriptor, custom actions",
+      "tickets": [
+        "LAB-035-A",
+        "LAB-035-B"
+      ],
+      "specPath": "experiments/LAB-035-access-as-a-superpower.md"
+    },
+    {
+      "id": "LAB-036",
+      "title": "Workout Session Mirror",
+      "category": "Watch",
+      "milestone": "M4",
+      "state": "specified",
+      "dependsOn": [
+        "LAB-021"
+      ],
+      "moment": "Observe a clearly consented test workout on Watch and phone while preserving a fully synthetic learning mode.",
+      "hosts": "Watch and paired iPhone; health-capable target",
+      "primaryAPIs": "HealthKit workout sessions and mirroring",
+      "tickets": [
+        "LAB-036-A",
+        "LAB-036-B"
+      ],
+      "specPath": "experiments/LAB-036-workout-session-mirror.md"
+    },
+    {
+      "id": "LAB-037",
+      "title": "Home Scene Sandbox",
+      "category": "Commercial",
+      "milestone": "M4",
+      "state": "specified",
+      "dependsOn": [
+        "LAB-001"
+      ],
+      "moment": "Preview a home-scene diff, execute only selected harmless actions, and explain partial failure.",
+      "hosts": "iPhone/iPad; supported Mac client separately",
+      "primaryAPIs": "HomeKit, Matter optional controller investigation",
+      "tickets": [
+        "LAB-037-A",
+        "LAB-037-B"
+      ],
+      "specPath": "experiments/LAB-037-home-scene-sandbox.md"
+    },
+    {
+      "id": "LAB-038",
+      "title": "Wallet Moment",
+      "category": "Commercial",
+      "milestone": "M4",
+      "state": "specified",
+      "dependsOn": [
+        "LAB-008"
+      ],
+      "moment": "Build an original event pass with a useful update story and an explicit signing boundary.",
+      "hosts": "iPhone; Watch Wallet display is system-managed",
+      "primaryAPIs": "Wallet passes, PassKit",
+      "tickets": [
+        "LAB-038-A",
+        "LAB-038-B"
+      ],
+      "specPath": "experiments/LAB-038-wallet-moment.md"
+    },
+    {
+      "id": "LAB-039",
+      "title": "Tiny Doorway",
+      "category": "Commercial",
+      "milestone": "M4",
+      "state": "specified",
+      "dependsOn": [
+        "LAB-001",
+        "LAB-008"
+      ],
+      "moment": "Scan a code or open a link and arrive at one tightly scoped native action instead of a giant onboarding funnel.",
+      "hosts": "iPhone with optional App Clip; universal-link fallback elsewhere",
+      "primaryAPIs": "App Clips, associated domains, universal links",
+      "tickets": [
+        "LAB-039-A",
+        "LAB-039-B"
+      ],
+      "specPath": "experiments/LAB-039-tiny-doorway.md"
+    },
+    {
+      "id": "LAB-040",
+      "title": "Commerce Without Tricks",
+      "category": "Commercial",
+      "milestone": "M4",
+      "state": "specified",
+      "dependsOn": [
+        "LAB-001"
+      ],
+      "moment": "Exercise buy, restore, refund, pending approval, and offline entitlement states using test products.",
+      "hosts": "StoreKit-supported iPhone/iPad/Mac/TV targets independently",
+      "primaryAPIs": "StoreKit 2, StoreKit configuration tests",
+      "tickets": [
+        "LAB-040-A",
+        "LAB-040-B"
+      ],
+      "specPath": "experiments/LAB-040-commerce-without-tricks.md"
+    },
+    {
+      "id": "LAB-041",
+      "title": "Trust Desk",
+      "category": "Security",
+      "milestone": "M2",
+      "state": "specified",
+      "dependsOn": [
+        "LAB-001"
+      ],
+      "moment": "Authorize a sensitive local action and inspect how a passkey flow differs from just unlocking an app.",
+      "hosts": "iPhone, iPad, Mac; passkey service is optional",
+      "primaryAPIs": "Keychain, LocalAuthentication, AuthenticationServices",
+      "tickets": [
+        "LAB-041-A",
+        "LAB-041-B"
+      ],
+      "specPath": "experiments/LAB-041-trust-desk.md"
+    },
+    {
+      "id": "LAB-042",
+      "title": "Desktop Native Power",
+      "category": "Mac",
+      "milestone": "M2",
+      "state": "specified",
+      "dependsOn": [
+        "LAB-001",
+        "LAB-008"
+      ],
+      "moment": "Use a command palette, menu-bar status, multiwindow documents, and one deliberate automation entry point.",
+      "hosts": "Mac only",
+      "primaryAPIs": "SwiftUI scenes, AppKit, Services, optional scripting",
+      "tickets": [
+        "LAB-042-A",
+        "LAB-042-B"
+      ],
+      "specPath": "experiments/LAB-042-desktop-native-power.md"
+    },
+    {
+      "id": "LAB-043",
+      "title": "Respectful Attention",
+      "category": "System surfaces",
+      "milestone": "M3",
+      "state": "specified",
+      "dependsOn": [
+        "LAB-004"
+      ],
+      "moment": "Compare an ordinary reminder, an app Focus filter, and a user-authorized alarm without spamming the system.",
+      "hosts": "iPhone primary; supported Mac/Watch behavior separate",
+      "primaryAPIs": "UserNotifications, Focus filters, AlarmKit",
+      "tickets": [
+        "LAB-043-A",
+        "LAB-043-B"
+      ],
+      "specPath": "experiments/LAB-043-respectful-attention.md"
+    },
+    {
+      "id": "LAB-044",
+      "title": "Play Together Native",
+      "category": "Interaction",
+      "milestone": "M4",
+      "state": "specified",
+      "dependsOn": [
+        "LAB-019",
+        "LAB-030"
+      ],
+      "moment": "Play a tiny original cooperative challenge with real identity/match lifecycle and a local fallback.",
+      "hosts": "Supported iPhone/iPad/Mac/TV; device qualification required",
+      "primaryAPIs": "GameKit, GameController",
+      "tickets": [
+        "LAB-044-A",
+        "LAB-044-B"
+      ],
+      "specPath": "experiments/LAB-044-play-together-native.md"
+    },
+    {
+      "id": "LAB-045",
+      "title": "Ink Has Structure",
+      "category": "Interaction",
+      "milestone": "M4",
+      "state": "specified",
+      "dependsOn": [
+        "LAB-008",
+        "LAB-035"
+      ],
+      "moment": "Annotate an object and keep the ink as editable data rather than flattening everything to a screenshot.",
+      "hosts": "iPad/Pencil optional; touch on iPhone and pointer on Mac",
+      "primaryAPIs": "PencilKit, native document APIs",
+      "tickets": [
+        "LAB-045-A",
+        "LAB-045-B"
+      ],
+      "specPath": "experiments/LAB-045-ink-has-structure.md"
+    },
+    {
+      "id": "LAB-046",
+      "title": "Pocket Render Museum",
+      "category": "Graphics",
+      "milestone": "M3",
+      "state": "specified",
+      "dependsOn": [
+        "LAB-023",
+        "LAB-030"
+      ],
+      "moment": "Flip between deliberately constrained retro rendering and modern material/lighting while the same scene stays readable.",
+      "hosts": "Metal-capable iPhone/iPad/Mac/TV with feature probes",
+      "primaryAPIs": "Metal, RealityKit interoperability where justified",
+      "tickets": [
+        "LAB-046-A",
+        "LAB-046-B"
+      ],
+      "specPath": "experiments/LAB-046-pocket-render-museum.md"
+    },
+    {
+      "id": "LAB-047",
+      "title": "Accessory Without a Factory",
+      "category": "Commercial",
+      "milestone": "M4",
+      "state": "specified",
+      "dependsOn": [
+        "LAB-019",
+        "LAB-041"
+      ],
+      "moment": "Give a tiny button/light peripheral a polished pairing, control, and firmware-version story.",
+      "hosts": "iPhone host; optional paired Watch; user-supplied compatible peripheral",
+      "primaryAPIs": "AccessorySetupKit, CoreBluetooth, optional Core MIDI",
+      "tickets": [
+        "LAB-047-A",
+        "LAB-047-B"
+      ],
+      "specPath": "experiments/LAB-047-accessory-without-a-factory.md"
+    },
+    {
+      "id": "LAB-048",
+      "title": "Commercial Frontier Desk",
+      "category": "Commercial",
+      "milestone": "M4",
+      "state": "specified",
+      "dependsOn": [
+        "LAB-041"
+      ],
+      "moment": "Learn how a public app reaches privileged system surfaces without treating entitlements as magic flags.",
+      "hosts": "iPhone primary; three isolated optional targets",
+      "primaryAPIs": "PushToTalk, CarPlay, FamilyControls/DeviceActivity",
+      "tickets": [
+        "LAB-048-A",
+        "LAB-048-B"
+      ],
+      "specPath": "experiments/LAB-048-commercial-frontier-desk.md"
+    }
+  ]
+}

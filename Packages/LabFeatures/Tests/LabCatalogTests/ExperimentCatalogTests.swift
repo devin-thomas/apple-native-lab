@@ -1,0 +1,51 @@
+import Foundation
+import LabSupport
+import Testing
+@testable import LabCatalog
+
+@Suite struct ExperimentCatalogTests {
+    let catalog: ExperimentCatalog
+
+    init() throws { catalog = try ExperimentCatalog.bundled() }
+
+    @Test func bundlesAllFortyEightExperiments() {
+        #expect(catalog.experiments.count == 48)
+        #expect(Set(catalog.experiments.map(\.id)).count == 48)
+    }
+
+    @Test func firstReleaseMatchesTheSpecification() {
+        #expect(catalog.experiments(in: .m1).map(\.id) == [
+            "LAB-001", "LAB-004", "LAB-007", "LAB-008", "LAB-010", "LAB-035",
+        ])
+    }
+
+    @Test func everyExperimentHasTwoTicketsAndAPayoff() {
+        for experiment in catalog.experiments {
+            #expect(experiment.tickets == ["\(experiment.id)-A", "\(experiment.id)-B"])
+            #expect(!experiment.moment.isEmpty, "\(experiment.id) has no payoff")
+        }
+    }
+
+    @Test func nothingClaimsToRunWithoutEvidence() {
+        // Update this expectation only when a spec's state changes with evidence behind it.
+        #expect(catalog.experiments.allSatisfy { $0.state == .specified })
+        #expect(catalog.progress(for: .m1) == (live: 0, total: 6))
+    }
+
+    @Test func searchMatchesTitlesAndAPIs() {
+        #expect(catalog.search("action atlas").map(\.id) == ["LAB-001"])
+        #expect(catalog.search("AppIntents").contains { $0.id == "LAB-001" })
+        #expect(catalog.search("   ").count == 48)
+    }
+
+    @Test func rejectsDuplicateIDs() throws {
+        let json = """
+        {"schemaVersion":1,"sourceReview":"x","categories":["A"],"experiments":[
+        {"id":"LAB-900","title":"T","category":"A","milestone":"M1","state":"specified","dependsOn":[],"moment":"m","hosts":"h","primaryAPIs":"p","tickets":[],"specPath":"s"},
+        {"id":"LAB-900","title":"T","category":"A","milestone":"M1","state":"specified","dependsOn":[],"moment":"m","hosts":"h","primaryAPIs":"p","tickets":[],"specPath":"s"}]}
+        """
+        #expect(throws: ExperimentCatalog.LoadError.duplicateID("LAB-900")) {
+            try ExperimentCatalog(data: Data(json.utf8))
+        }
+    }
+}
