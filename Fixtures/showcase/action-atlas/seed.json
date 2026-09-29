@@ -1,0 +1,85 @@
+{
+  "format": "native-lab-demo-seed",
+  "formatVersion": 1,
+  "seedVersion": 1,
+  "provenance": "Original synthetic sample data written for this project and distributed under its MIT License.",
+  "collections": [
+    { "id": "A40194B3-5E91-4C5C-AE02-CF703BE23224", "title": "Pigment swatches" },
+    { "id": "A222A032-267A-4208-B1F9-F55D739D3C24", "title": "Mineral specimens" },
+    { "id": "E7EEE9BB-FA3B-41F1-805E-41BDB71B44A3", "title": "Paper stock" }
+  ],
+  "items": [
+    {
+      "id": "DB666EF1-F642-43F1-B415-895B6ECFF693",
+      "collection": "A40194B3-5E91-4C5C-AE02-CF703BE23224",
+      "title": "Amber swatch",
+      "note": "Warm yellow-brown. Reads darker on matte paper."
+    },
+    {
+      "id": "9B97BF2F-4D0B-4197-9CA8-36489DF40455",
+      "collection": "A40194B3-5E91-4C5C-AE02-CF703BE23224",
+      "title": "Cobalt swatch",
+      "note": "Deep cool blue. Pairs with the amber swatch."
+    },
+    {
+      "id": "3A1711A8-E1DB-489E-8321-414266A8DF49",
+      "collection": "A40194B3-5E91-4C5C-AE02-CF703BE23224",
+      "title": "Verdigris swatch",
+      "note": "Blue-green with a chalky finish."
+    },
+    {
+      "id": "C8E1904C-E8DC-40A0-93D3-53F6C0FFF95D",
+      "collection": "A40194B3-5E91-4C5C-AE02-CF703BE23224",
+      "title": "Ochre swatch",
+      "note": "Earthy yellow. The most forgiving of the four."
+    },
+    {
+      "id": "AF451890-CA80-4DE9-B18B-4007066C9177",
+      "collection": "A222A032-267A-4208-B1F9-F55D739D3C24",
+      "title": "Quartz point",
+      "note": "Clear and six-sided, about the length of a thumb."
+    },
+    {
+      "id": "D279FB0E-642E-463A-B3DA-299442A1C7CB",
+      "collection": "A222A032-267A-4208-B1F9-F55D739D3C24",
+      "title": "Banded agate slice",
+      "note": "Polished on one face. Hold it to the light to see the bands."
+    },
+    {
+      "id": "0FCB968F-7FEC-452A-A67C-20773B9C7761",
+      "collection": "A222A032-267A-4208-B1F9-F55D739D3C24",
+      "title": "Pyrite cube",
+      "note": "Brassy and heavy for its size."
+    },
+    {
+      "id": "C6468C0B-4BF6-48E8-AE5D-F5FC7A041097",
+      "collection": "A222A032-267A-4208-B1F9-F55D739D3C24",
+      "title": "Obsidian flake",
+      "note": "Glassy black with a sharp edge. Handle it by the sides."
+    },
+    {
+      "id": "8223D442-4B96-4026-B686-99CCFA09F1E8",
+      "collection": "E7EEE9BB-FA3B-41F1-805E-41BDB71B44A3",
+      "title": "Cold-press sheet",
+      "note": "Textured watercolor paper, 300 gsm."
+    },
+    {
+      "id": "6933AC83-9E61-4264-8EB8-0535B3C5E0F8",
+      "collection": "E7EEE9BB-FA3B-41F1-805E-41BDB71B44A3",
+      "title": "Tracing vellum",
+      "note": "Translucent. Ink sits on top and dries slowly."
+    },
+    {
+      "id": "6E2CED9D-B946-4188-8417-2E85C6A7268C",
+      "collection": "E7EEE9BB-FA3B-41F1-805E-41BDB71B44A3",
+      "title": "Kraft card",
+      "note": "Brown and stiff. Takes pencil well."
+    },
+    {
+      "id": "E8E32999-AA3C-47C7-A530-2ABEE1EECC57",
+      "collection": "E7EEE9BB-FA3B-41F1-805E-41BDB71B44A3",
+      "title": "Newsprint pad",
+      "note": "Cheap and thin, for quick sketches."
+    }
+  ]
+}

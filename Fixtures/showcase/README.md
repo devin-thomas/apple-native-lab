@@ -16,6 +16,28 @@ A replay in the spirit of [LAB-001](../../experiments/LAB-001-action-atlas.md), 
 
 The seed's IDs and the request IDs are stable UUIDs generated once at random for this fixture. Never change or reuse one. Changing any byte of either file changes its input hash, and with it the replay fingerprint and every receipt ID.
 
+## `action-atlas/`
+
+The complete [LAB-001](../../experiments/LAB-001-action-atlas.md) fixture interaction, from a clean store, for the LAB-001-B qualification. Its `seed.json` is a byte-for-byte copy of the app's demo seed, [`Fixtures/demo/seed.json`](../demo/seed.json), so it starts from the same 12 samples the app seeds on its first run. `ActionAtlasShowcaseTests` in `Packages/LabDemo` fails if the two copies differ.
+
+| Step | What it does |
+|---|---|
+| `approve-reset`, `reset` | The person confirms Reset Demo, which creates the 3 collections and 12 items of the seed in the demo namespace. |
+| `create-collection`, `create-item` | Create one of the person's own collections, Field notes, and an item in it, Graphite stick. Their IDs are the ones Create Lab Collection and Create Lab Item derive from the same request IDs. |
+| `find-graphite`, `find-swatches` | Find the new item by text, then list the Pigment swatches collection by title. |
+| `update-item`, `update-sample`, `find-renamed` | Rewrite the new item's note, rename the amber sample, and find it by its new title. |
+| `approve-archive`, `archive-item`, `find-after-archive`, `find-archived` | The person confirms, the new item is archived, a search no longer shows it, and a search that includes archived items still does. |
+| `undo-archive`, `find-after-undo` | Submit the undo recorded in the archive's receipt, and the item appears again. |
+| `approve-reset-again`, `reset-again`, `find-after-reset`, `find-yours-after-reset` | A second Reset Demo restores the renamed sample and leaves the person's collection and item exactly as they were. |
+
+The same script is replayed three ways:
+
+- by `Packages/LabDemo` as evidence, once composed as the app-UI adapter and once as the App Intent adapter (no intent type runs there);
+- through the Action Atlas actions and App Intent types in `ActionAtlasShowcaseReplayTests` (`Packages/LabFeatures`);
+- in the Mac app by `ActionAtlasHostEvidenceTests`, with the same request IDs.
+
+The request IDs were generated once at random for this fixture. Never change or reuse one.
+
 ## Script format
 
 `script.json` (`format: "native-lab-demo-script"`, `formatVersion: 1`) names its seed, a file in the same folder in the demo seed format that `Fixtures/demo/seed.json` uses. `DemoScript(folder:)` loads both:

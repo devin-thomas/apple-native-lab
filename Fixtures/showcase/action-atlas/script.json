@@ -1,0 +1,147 @@
+{
+  "format": "native-lab-demo-script",
+  "formatVersion": 1,
+  "id": "action-atlas",
+  "subject": "LAB-001",
+  "title": "Create a collection and an item, find, update, archive, undo, and reset the demo",
+  "dataTier": "public-fixture",
+  "provenance": "Original synthetic script written for this project's LAB-001 qualification replay and distributed under its MIT License. Its seed is a byte-for-byte copy of the app's demo seed, Fixtures/demo/seed.json.",
+  "seed": "seed.json",
+  "untested": [
+    "The App Intents and the in-app action browser: the replay submits each change to OperationService as the adapter it is composed with, and never runs an intent type or the Action Atlas action library.",
+    "The system's confirmation and disambiguation dialogs: an approve step stands in for the person's confirmation.",
+    "Host views and the receipt inspector: the replay renders nothing.",
+    "Imported user data: the person's collection and item here are created by operations, not adopted from staging.",
+    "Shortcuts, Siri, physical devices, and the iOS, watchOS, and tvOS simulators: the replay runs in the package test process on the Mac."
+  ],
+  "steps": [
+    {
+      "id": "approve-reset",
+      "approve": "reset",
+      "description": "The person confirms Reset Demo."
+    },
+    {
+      "id": "reset",
+      "request": "572F94FC-8159-4406-8058-03EFCB46BA0D",
+      "resetDemo": {},
+      "description": "Reset Demo creates the 12 original samples: 3 collections and 12 items in the demo namespace."
+    },
+    {
+      "id": "create-collection",
+      "request": "BD1CF7CD-9082-4135-BDE0-48953A92C51B",
+      "createCollection": { "id": "7EDF340E-5341-42F6-BE23-8B56F95106D8", "title": "Field notes" },
+      "description": "Create one of the person's own collections, with the ID Create Lab Collection derives from this request ID."
+    },
+    {
+      "id": "create-item",
+      "request": "1F8B4B32-F4DB-4B83-B38B-E71A907BF8B8",
+      "createItem": {
+        "id": "45D11168-AE81-41D9-A9D1-BD40CA21A2E2",
+        "collection": "7EDF340E-5341-42F6-BE23-8B56F95106D8",
+        "title": "Graphite stick",
+        "note": "Soft, 6B."
+      },
+      "description": "Create an item in that collection, with the ID Create Lab Item derives from this request ID."
+    },
+    {
+      "id": "find-graphite",
+      "find": { "text": "graphite", "expect": ["45D11168-AE81-41D9-A9D1-BD40CA21A2E2"] },
+      "description": "Find the new item by text."
+    },
+    {
+      "id": "find-swatches",
+      "find": {
+        "collection": "A40194B3-5E91-4C5C-AE02-CF703BE23224",
+        "expect": [
+          "DB666EF1-F642-43F1-B415-895B6ECFF693",
+          "9B97BF2F-4D0B-4197-9CA8-36489DF40455",
+          "C8E1904C-E8DC-40A0-93D3-53F6C0FFF95D",
+          "3A1711A8-E1DB-489E-8321-414266A8DF49"
+        ]
+      },
+      "description": "List the Pigment swatches demo collection, ordered by title."
+    },
+    {
+      "id": "update-item",
+      "request": "ECA3A07F-3857-4B7A-B775-B2735070424F",
+      "updateItem": {
+        "id": "45D11168-AE81-41D9-A9D1-BD40CA21A2E2",
+        "expected": 1,
+        "note": "Soft, 6B. Smudges easily."
+      },
+      "description": "Rewrite the new item's note at revision 1."
+    },
+    {
+      "id": "update-sample",
+      "request": "C41C9EC0-EC7E-4E21-A794-CF0A0D718C9E",
+      "updateItem": {
+        "id": "DB666EF1-F642-43F1-B415-895B6ECFF693",
+        "expected": 1,
+        "title": "Amber swatch, matte"
+      },
+      "description": "Rename the amber demo sample at revision 1. It stays in the demo namespace."
+    },
+    {
+      "id": "find-renamed",
+      "find": { "text": "SWATCH, MATTE", "expect": ["DB666EF1-F642-43F1-B415-895B6ECFF693"] },
+      "description": "Find the renamed sample by its new title, ignoring case."
+    },
+    {
+      "id": "approve-archive",
+      "approve": "archive-item",
+      "description": "The person confirms archiving the new item."
+    },
+    {
+      "id": "archive-item",
+      "request": "034ACB7C-C530-4EE1-9648-32B2B29392D7",
+      "archiveItem": { "id": "45D11168-AE81-41D9-A9D1-BD40CA21A2E2", "expected": 2 },
+      "description": "Archive the new item at revision 2."
+    },
+    {
+      "id": "find-after-archive",
+      "find": { "text": "graphite", "expect": [] },
+      "description": "The archived item no longer appears in a search."
+    },
+    {
+      "id": "find-archived",
+      "find": { "text": "graphite", "includeArchived": true, "expect": ["45D11168-AE81-41D9-A9D1-BD40CA21A2E2"] },
+      "description": "It is still there when archived items are included: archiving deletes nothing."
+    },
+    {
+      "id": "undo-archive",
+      "request": "112ECEA7-CE96-4666-A8B2-598D2181C139",
+      "undo": "archive-item",
+      "description": "Undo the archive with the operation its receipt recorded."
+    },
+    {
+      "id": "find-after-undo",
+      "find": { "text": "graphite", "expect": ["45D11168-AE81-41D9-A9D1-BD40CA21A2E2"] },
+      "description": "The restored item appears in a search again."
+    },
+    {
+      "id": "approve-reset-again",
+      "approve": "reset-again",
+      "description": "The person confirms Reset Demo a second time."
+    },
+    {
+      "id": "reset-again",
+      "request": "4993AA6B-8976-4313-8FD4-FB3A30533C63",
+      "resetDemo": {},
+      "description": "Reset Demo restores the renamed sample and leaves the person's own collection and item alone."
+    },
+    {
+      "id": "find-after-reset",
+      "find": { "text": "swatch, matte", "expect": [] },
+      "description": "The sample's edit is gone: it has its seed title again."
+    },
+    {
+      "id": "find-yours-after-reset",
+      "find": {
+        "collection": "7EDF340E-5341-42F6-BE23-8B56F95106D8",
+        "text": "smudges",
+        "expect": ["45D11168-AE81-41D9-A9D1-BD40CA21A2E2"]
+      },
+      "description": "The person's item is untouched, note and all."
+    }
+  ]
+}

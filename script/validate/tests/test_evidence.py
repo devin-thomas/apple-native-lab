@@ -3,6 +3,7 @@ from __future__ import annotations
 import copy
 import json
 import re
+import shutil
 import unittest
 
 from support import ROOT, RepositoryCopyTestCase
@@ -89,16 +90,34 @@ class StoredEvidenceTests(RepositoryCopyTestCase):
         record["subject"] = subject
         return record
 
+    def clear_evidence(self) -> None:
+        """Empties evidence/ in this test's copy only, so a count does not depend on the records
+        the checkout already stores."""
+        shutil.rmtree(self.root / "evidence", ignore_errors=True)
+
     def test_no_records_yet_is_stated(self):
+        self.clear_evidence()
         result = evidence.check(self.root)
         self.assertEqual(result.result, "passed")
         self.assertIn("0 JSON files", result.summary)
 
     def test_valid_record_in_its_subject_folder_passes(self):
+        self.clear_evidence()
         self.store("CORE-007/3d138f6-sample.json", self.record())
         result = evidence.check(self.root)
         self.assertEqual(result.result, "passed", result.problems)
         self.assertIn("1 evidence records", result.summary)
+
+    def test_a_new_record_beside_the_stored_ones_is_checked_with_them(self):
+        stored = len(list((self.root / "evidence").rglob("*.json"))) if (self.root / "evidence").is_dir() else 0
+        self.store("CORE-007/3d138f6-sample.json", self.record())
+        result = evidence.check(self.root)
+        self.assertEqual(result.result, "passed", result.problems)
+        self.assertIn(f"{stored + 1} evidence records", result.summary)
+
+    def test_the_stored_records_are_valid(self):
+        result = evidence.check(ROOT)
+        self.assertEqual(result.result, "passed", result.problems)
 
     def test_record_in_the_wrong_folder_fails(self):
         self.store("CORE-004/sample.json", self.record("CORE-007"))
