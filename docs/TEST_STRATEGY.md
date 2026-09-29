@@ -33,3 +33,18 @@ Thermal behavior, battery impact, and memory pressure should be observed over a 
 ## Evidence records
 
 Structured evidence lives at `evidence/<ticket-or-experiment-ID>/<name>.json` and is validated by `script/validate/all.py` against the `EvidenceRecord` schema in `Packages/LabSupport`. A physical-device record is the only path to `device-verified`; a simulator or fixture record supports at most `implemented`, and a static review supports at most `spiked`.
+
+## Replayable demonstrations
+
+`Packages/LabDemo` replays a declared script from [`Fixtures/showcase/`](../Fixtures/showcase/README.md) against a new, empty store, through `OperationService`, and records each step as `passed`, `failed`, `blocked`, or `not-run`:
+
+- Only a step that ran can pass.
+- After a step that does not pass, the rest are `not-run` (skipped).
+- After a cancellation, the steps that had not started are `not-run` (cancelled).
+- A missing prerequisite, such as a store that cannot open, makes every step `blocked`.
+
+A replay is fixture evidence and supports at most `implemented`.
+
+Two replays of the same inputs must agree on everything except the fields `DemoRun.fieldsExcludedFromReplay` names: the run ID, the wall-clock start, the store and clock, and the monotonic intervals. The replay fingerprint is the SHA-256 of the rest. Step intervals come from an injected monotonic clock, and its timebase is written beside them. A duration is published only as a `PerformanceClaim` from a passing step or run on a real-time clock. An export refuses a claim whose run it does not contain.
+
+`EvidenceExporter` writes a folder a person selects and previews first. Keep export folders outside `evidence/`, which holds only `EvidenceRecord` files, and copy the exported record there when it should be kept.

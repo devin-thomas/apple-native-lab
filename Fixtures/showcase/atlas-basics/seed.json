@@ -1,0 +1,42 @@
+{
+  "format": "native-lab-demo-seed",
+  "formatVersion": 1,
+  "seedVersion": 1,
+  "provenance": "Original synthetic sample data written for this project's showcase replay and distributed under its MIT License.",
+  "collections": [
+    { "id": "806C6A4B-D828-4215-9AD3-3A4BCE562A2D", "title": "Shoreline finds" },
+    { "id": "29B9382F-0B3E-4E20-AF8E-94B872953653", "title": "Loom threads" }
+  ],
+  "items": [
+    {
+      "id": "14F1D683-BDFA-45A3-82A7-5B8513C8CDC2",
+      "collection": "806C6A4B-D828-4215-9AD3-3A4BCE562A2D",
+      "title": "Periwinkle shell",
+      "note": "Small and spiral, striped brown and cream."
+    },
+    {
+      "id": "07E994E4-9EF4-46EC-B09A-B670F9EBB07B",
+      "collection": "806C6A4B-D828-4215-9AD3-3A4BCE562A2D",
+      "title": "Sea glass shard",
+      "note": "Found at low tide."
+    },
+    {
+      "id": "77286AF0-A4EE-41CE-B2E1-263C51FAB517",
+      "collection": "806C6A4B-D828-4215-9AD3-3A4BCE562A2D",
+      "title": "Kelp holdfast",
+      "note": "Dried root knot, light as cork."
+    },
+    {
+      "id": "6369622A-580B-4332-AACC-454DB6DC77CA",
+      "collection": "29B9382F-0B3E-4E20-AF8E-94B872953653",
+      "title": "Indigo cotton skein",
+      "note": "Dyed in three dips. Rubs off a little when new."
+    },
+    {
+      "id": "CAE2CCCA-CDD1-4185-B343-5BA126E5C460",
+      "collection": "29B9382F-0B3E-4E20-AF8E-94B872953653",
+      "title": "Madder wool skein",
+      "note": "Brick red from a single bath."
+    }
+  ]
+}

@@ -1,0 +1,88 @@
+{
+  "format": "native-lab-demo-script",
+  "formatVersion": 1,
+  "id": "atlas-basics",
+  "subject": "CORE-009",
+  "title": "Reset, find, rename, archive, and undo a demo sample",
+  "dataTier": "public-fixture",
+  "provenance": "Original synthetic script written for this project's showcase replay and distributed under its MIT License.",
+  "seed": "seed.json",
+  "untested": [
+    "App Intents and Shortcuts entry points: the replay submits every request as the app UI adapter.",
+    "Host views: the replay calls the domain service directly and renders nothing.",
+    "Physical devices and the iOS, watchOS, and tvOS simulators: the replay runs in the package test process on the Mac."
+  ],
+  "steps": [
+    {
+      "id": "approve-reset",
+      "approve": "reset",
+      "description": "The person confirms Reset Demo."
+    },
+    {
+      "id": "reset",
+      "request": "4113E244-82EE-4334-9EA4-780021DB24CD",
+      "resetDemo": {},
+      "description": "Reset Demo creates the showcase samples: 2 collections and 5 items in the demo namespace."
+    },
+    {
+      "id": "list-shoreline",
+      "find": {
+        "collection": "806C6A4B-D828-4215-9AD3-3A4BCE562A2D",
+        "expect": [
+          "77286AF0-A4EE-41CE-B2E1-263C51FAB517",
+          "14F1D683-BDFA-45A3-82A7-5B8513C8CDC2",
+          "07E994E4-9EF4-46EC-B09A-B670F9EBB07B"
+        ]
+      },
+      "description": "List the Shoreline finds collection, ordered by title."
+    },
+    {
+      "id": "find-glass",
+      "find": { "text": "glass", "expect": ["07E994E4-9EF4-46EC-B09A-B670F9EBB07B"] },
+      "description": "Find the sample whose title or note mentions glass."
+    },
+    {
+      "id": "rename-glass",
+      "request": "DFE23201-E492-4232-8FF2-F46253AB1C09",
+      "updateItem": {
+        "id": "07E994E4-9EF4-46EC-B09A-B670F9EBB07B",
+        "expected": 1,
+        "title": "Frosted sea glass",
+        "note": "Pale green, edges worn smooth by sand."
+      },
+      "description": "Rename the sea glass sample and rewrite its note."
+    },
+    {
+      "id": "find-frosted",
+      "find": { "text": "FROSTED", "expect": ["07E994E4-9EF4-46EC-B09A-B670F9EBB07B"] },
+      "description": "Find the renamed sample by its new title, ignoring case."
+    },
+    {
+      "id": "approve-archive",
+      "approve": "archive-glass",
+      "description": "The person confirms archiving the sample."
+    },
+    {
+      "id": "archive-glass",
+      "request": "AB533A85-D64F-409A-A4E2-AFBF645DACC6",
+      "archiveItem": { "id": "07E994E4-9EF4-46EC-B09A-B670F9EBB07B", "expected": 2 },
+      "description": "Archive the renamed sample."
+    },
+    {
+      "id": "find-after-archive",
+      "find": { "text": "glass", "expect": [] },
+      "description": "The archived sample no longer appears in a search."
+    },
+    {
+      "id": "undo-archive",
+      "request": "F555CF93-C7CB-449B-9324-8C547AD2EF6F",
+      "undo": "archive-glass",
+      "description": "Undo the archive with the operation its receipt recorded."
+    },
+    {
+      "id": "find-after-undo",
+      "find": { "text": "glass", "expect": ["07E994E4-9EF4-46EC-B09A-B670F9EBB07B"] },
+      "description": "The restored sample appears in a search again."
+    }
+  ]
+}
