@@ -2,7 +2,7 @@
 
 This is the recorded build evidence for the lab. Update it from real runs only. A row describes what was run, not what the specification intends.
 
-Last updated: 2026-09-29 (CORE-001 through CORE-009; first CI run; compatibility Mac observed).
+Last updated: 2026-09-29 (CORE-001 through CORE-009, LAB-001-A; first CI run; compatibility Mac observed).
 
 ## Toolchain
 
@@ -155,7 +155,7 @@ Bundle identifiers derive from `LAB_BUNDLE_PREFIX` (default `org.example`), and 
 | Xcode build and tests on the compatibility Mac itself | Its Xcode 26.6 license has not been accepted. The 26-family level is already proven in CI with the same Xcode build (17F113), and its packages compile there with Swift 6.2.3. |
 | Physical Watch install | No physical watchOS destination was available. See [DEVICE_SETUP](DEVICE_SETUP.md). |
 | iPad, Apple TV | No device available for this project. |
-| Any experiment | All 48 experiments remain `specified`. Installing the host proves the host only. |
+| Device verification of any experiment | LAB-001 Action Atlas is `implemented` (Mac and iOS simulator, fallback and Shortcuts in the simulator); the other 47 remain `specified`. No experiment is `device-verified` until its qualification ticket runs on a physical device. |
 
 ## Known constraints
 

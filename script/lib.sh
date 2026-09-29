@@ -33,3 +33,15 @@ require_local_signing() {
     exit 78
   fi
 }
+
+# Stops only the copy of the lab's Mac app running from this exact bundle, so a build from one
+# checkout never quits another checkout's build or the installed app.
+stop_app_at() {
+  local executable="$1/Contents/MacOS/NativeLab" pid path stopped=0
+  while read -r pid path; do
+    if [[ "$path" == "$executable" ]]; then
+      kill "$pid" 2>/dev/null && stopped=1
+    fi
+  done < <(ps -axww -o pid=,comm=)
+  if [[ "$stopped" == 1 ]]; then sleep 1; fi
+}

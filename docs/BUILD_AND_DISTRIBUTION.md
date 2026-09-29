@@ -117,3 +117,7 @@ To link a new framework or declare a new entitlement, add a line with its reason
 ## Release checklist
 
 Release from an allowlisted checkout/artifact directory, never from its parent workspace. Include only approved source, docs, original assets, license notices, and actual tested outputs. Exclude local overrides, generated model downloads, databases, device traces, signing material, and adjacent projects. Rebuild from a clean checkout, write and inspect the release manifest, verify provenance and hashes, inspect the final archive contents, and test the documented install path on a fresh environment before calling a release ready.
+
+## App Intents live in CoreLocal
+
+App Intents need no entitlement, so Action Atlas's intents ship in the CoreLocal hosts (`Packages/LabFeatures` target `ActionAtlas`, registered through an `AppIntentsPackage`). SystemSurfaces keeps the extension targets (share, widget, Control, Live Activity) and the App Group they need.

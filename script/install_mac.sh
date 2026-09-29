@@ -8,7 +8,7 @@ xcodebuild -project "$PROJECT" -scheme LabMac-Core -configuration Release \
 
 SOURCE="$DERIVED/Build/Products/Release/NativeLab.app"
 TARGET="$HOME/Applications/Native Lab.app"
-pkill -x NativeLab 2>/dev/null && sleep 1 || true
+stop_app_at "$TARGET"
 mkdir -p "$HOME/Applications"
 rm -rf "$TARGET"
 ditto "$SOURCE" "$TARGET"

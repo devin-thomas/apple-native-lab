@@ -1,7 +1,7 @@
 ---
 id: "LAB-001-A"
 title: "Implement Action Atlas"
-status: "planned"
+status: "done"
 milestone: "M1"
 kind: "implementation"
 depends_on: ["CORE-003", "CORE-004", "CORE-005", "CORE-006", "CORE-008"]
