@@ -44,18 +44,16 @@ import Testing
     }
 }
 
-/// Writes the showcase's evidence when asked, for the evidence desk: two replays on SQLite with
-/// the continuous clock, their records, the inputs, and the performance of the first run.
+/// The showcase end to end: two replays on SQLite with the continuous clock, their record, the
+/// inputs, and two performance claims from the first run, exported and written.
+///
+/// It writes into a temporary folder that is removed afterwards. To keep the export for the
+/// evidence desk, name a folder and the build facts:
 ///
 ///     LAB_DEMO_EVIDENCE_DIR=<folder> LAB_SOURCE_REVISION=<sha> LAB_SDK_NAME=macosx27.0 \
 ///     LAB_XCODE_VERSION=27.0 LAB_XCODE_BUILD=27A266a swift test --filter ShowcaseEvidence
-///
-/// Without `LAB_DEMO_EVIDENCE_DIR` the test is skipped and writes nothing.
 @Suite struct ShowcaseEvidence {
-    static let destination = ProcessInfo.processInfo.environment["LAB_DEMO_EVIDENCE_DIR"]
-
-    @Test(.enabled(if: destination != nil, "Set LAB_DEMO_EVIDENCE_DIR to write the showcase evidence"))
-    func writeShowcaseEvidence() async throws {
+    @Test func theShowcaseExportsEndToEnd() async throws {
         let environment = ProcessInfo.processInfo.environment
         let provenance = BuildProvenance(
             sourceRevision: environment["LAB_SOURCE_REVISION"] ?? "unknown",
@@ -67,6 +65,8 @@ import Testing
         let runner = DemoRunner(store: .temporarySQLite)
         let first = await runner.run(script)
         let second = await runner.run(script)
+        checkStepInvariants(first)
+        checkStepInvariants(second)
         #expect(first.result == .passed && second.result == .passed)
         #expect(ReplayComparison(first, second).isIdentical)
 
@@ -84,8 +84,15 @@ import Testing
             untested: ["Any host app: no view, intent, or extension called the runner."],
             provenance: provenance
         ))
-        let folder = URL(filePath: try #require(Self.destination), directoryHint: .isDirectory)
+        #expect(preview.result == .passed)
+        #expect(preview.refused.isEmpty)
+
+        let temporary = try TemporaryFolder()
+        let folder = environment["LAB_DEMO_EVIDENCE_DIR"].map { URL(filePath: $0, directoryHint: .isDirectory) } ?? temporary.url
         let written = try preview.write(into: folder, folderName: "core-009-showcase")
-        #expect(FileManager.default.fileExists(atPath: written.appending(path: "manifest.json").path(percentEncoded: false)))
+        #expect(temporary.files(below: written) == Set(preview.files.map(\.path)))
+        let stored = try JSONDecoder().decode(EvidenceRecord.self, from: Data(contentsOf: written.appending(path: "records/atlas-basics.json")))
+        #expect(stored == record)
+        #expect(stored.supportedState == .implemented)
     }
 }
