@@ -13,3 +13,4 @@ These are the build pack's explicit defaults. Preserve their rationale when a la
 - [ADR-009 — 26-family core with isolated 27-generation adapters](docs/adr/ADR-009.md)
 - [ADR-010 — Static modules, not downloaded executable plugins](docs/adr/ADR-010.md)
 - [ADR-011 — Fixed permission ceilings per adapter kind](docs/adr/ADR-011.md)
+- [ADR-012 — SQLite local store with fixed demo and user namespaces](docs/adr/ADR-012.md)

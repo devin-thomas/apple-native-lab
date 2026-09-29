@@ -32,7 +32,7 @@ App Entities use stable identifiers and queries backed by the current local doma
 
 ## Storage and processes
 
-Use one transactional local store behind a protocol. Choose SwiftData/Core Data/SQLite implementation during CORE-003 according to migration, extension, and conflict needs; this spec does not require a new third-party database library. Separate synthetic demo data from user-imported data by namespace and storage location. Reset Demo removes only the synthetic namespace.
+Use one transactional local store behind a protocol. Choose SwiftData/Core Data/SQLite implementation during CORE-003 according to migration, extension, and conflict needs; this spec does not require a new third-party database library. Separate synthetic demo data from user-imported data by namespace; the store keeps both in one SQLite file so every commit and its receipt stay atomic, and the read-only seed lives apart in `Fixtures/` ([ADR-012](adr/ADR-012.md)). Reset Demo removes only the synthetic namespace.
 
 An extension writes a small durable staging record into an explicitly configured App Group and finishes. It must not assume the main app is running. The app then validates and adopts the staging record. Use immutable widget snapshots, a bounded refresh policy, and safe default redaction; do not have widgets poll the full database or run inference.
 
