@@ -88,7 +88,7 @@ final class LabLibrary {
         // operation as Reset Demo. It removes nothing, because there is nothing to remove, and a
         // demo that already exists is never reset without the person asking.
         if census?.demo == NamespaceCount(collections: 0, items: 0, archived: 0) {
-            _ = await commit(.resetDemo(seed: fixture.seed))
+            _ = await commit(.resetDemo(seed: fixture.seed), authority: .firstRunSeed)
         }
         phase = .ready
     }
@@ -118,7 +118,7 @@ final class LabLibrary {
     @discardableResult
     func resetDemo() async -> ReceiptRecord? {
         guard let seed else { return nil }
-        return await commit(.resetDemo(seed: seed.seed))
+        return await commit(.resetDemo(seed: seed.seed), authority: .userAction)
     }
 
     /// Archives or restores one demo sample at the revision the caller saw.
@@ -128,7 +128,7 @@ final class LabLibrary {
         let operation: DomainOperation = archived
             ? .archiveItem(id: item.id, expected: item.revision)
             : .restoreItem(id: item.id, expected: item.revision)
-        return await commit(operation)
+        return await commit(operation, authority: .userAction)
     }
 
     /// Submits a receipt's undo offer as a new request. The offer is pinned to the revision the
@@ -136,7 +136,7 @@ final class LabLibrary {
     @discardableResult
     func undo(_ record: ReceiptRecord) async -> ReceiptRecord? {
         guard let operation = record.receipt.undo, undone[record.id] == nil else { return nil }
-        let result = await commit(operation)
+        let result = await commit(operation, authority: .userAction)
         if let result, result.receipt.conflict == nil {
             undone[record.id] = result.id
         }
@@ -171,13 +171,13 @@ final class LabLibrary {
 
     // MARK: Commit
 
-    private func commit(_ operation: DomainOperation) async -> ReceiptRecord? {
+    private func commit(_ operation: DomainOperation, authority: CommitAuthority) async -> ReceiptRecord? {
         guard let service, !isWorking else { return nil }
         isWorking = true
         defer { isWorking = false }
         let before = names
         do {
-            let receipt = try await service.perform(operation, requestID: RequestID())
+            let receipt = try await service.perform(operation, requestID: RequestID(), authority: authority)
             failure = nil
             await refresh()
             let record = ReceiptRecord(

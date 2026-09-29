@@ -1,6 +1,6 @@
 # Builder instructions
 
-Read [START_HERE](START_HERE.md), [SPEC](SPEC.md), the relevant [ticket](TICKETS.md), and its linked experiment before changing code. This snapshot is documentation-only; do not report planned source files as existing.
+Read [START_HERE](START_HERE.md), [SPEC](SPEC.md), the relevant [ticket](TICKETS.md), and its linked experiment before changing code. [BUILD_STATUS](docs/BUILD_STATUS.md) records what exists and what was actually verified; do not report planned source files or unrun checks as existing.
 
 ## Working contract
 

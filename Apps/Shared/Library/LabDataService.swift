@@ -2,11 +2,22 @@ import Foundation
 import LabDomain
 import LabStore
 
+/// Why the host is committing a change. A commit grant (ADR-013) is issued only for these reasons.
+enum CommitAuthority: Sendable {
+    /// A person pressed a control or confirmed a dialog for this exact change.
+    case userAction
+    /// First run: the host seeds an empty demo namespace. The service checks the namespace is
+    /// still empty before issuing the grant, so this path can never remove anything.
+    case firstRunSeed
+}
+
 /// The host's app-UI adapter: the only host code that holds the store or the operation service.
 ///
 /// Every change goes through `OperationService` under the app-UI actor, so it is authorized,
-/// idempotent per request ID, and recorded with its receipt (ADR-011). Views never see this type;
-/// they talk to `LabLibrary`, which calls it.
+/// idempotent per request ID, and recorded with its receipt (ADR-011). Destructive changes also
+/// need a short-lived grant (ADR-013): this adapter issues one for exactly the operation being
+/// committed, only for a `CommitAuthority`, and revokes it as soon as the commit returns. Views
+/// never see this type; they talk to `LabLibrary`, which calls it.
 ///
 /// Reads of demo content go through the service too. The one direct store read is the namespace
 /// census, because the service has no read that lists or counts collections; it returns counts
@@ -17,10 +28,13 @@ struct LabDataService: Sendable {
 
     private let store: SQLiteOperationStore
     private let service: OperationService
+    private let grants: GrantLedger
 
     private init(store: SQLiteOperationStore) {
         self.store = store
-        service = OperationService(store: store)
+        let grants = GrantLedger()
+        self.grants = grants
+        service = OperationService(store: store, policy: GrantAuthorizationPolicy(ledger: grants))
     }
 
     /// Opens the store at `url`, creating or migrating the file as needed.
@@ -30,8 +44,32 @@ struct LabDataService: Sendable {
 
     /// Commits one request. A retry of the same intent passes the same request ID and gets the
     /// original receipt back instead of a second change.
-    func perform(_ operation: DomainOperation, requestID: RequestID) async throws(OperationError) -> ActionReceipt {
-        try await service.perform(OperationRequest(id: requestID, operation: operation, actor: Self.appUI))
+    ///
+    /// When the operation needs a grant, one is issued for this operation alone and revoked when
+    /// the commit returns. If it cannot be issued, the policy refuses the commit: the path fails
+    /// closed rather than open.
+    func perform(
+        _ operation: DomainOperation,
+        requestID: RequestID,
+        authority: CommitAuthority
+    ) async throws(OperationError) -> ActionReceipt {
+        var grant: GrantID?
+        if GrantRequirement.sensitiveCommits.requiresGrant(operation.kind, from: Self.appUI.adapter),
+           await mayGrant(operation, for: authority) {
+            grant = try? grants.issue(for: operation, to: Self.appUI.adapter, lifetime: .seconds(30)).id
+        }
+        defer { if let grant { grants.revoke(grant) } }
+        return try await service.perform(OperationRequest(id: requestID, operation: operation, actor: Self.appUI))
+    }
+
+    private func mayGrant(_ operation: DomainOperation, for authority: CommitAuthority) async -> Bool {
+        switch authority {
+        case .userAction:
+            return true
+        case .firstRunSeed:
+            guard case .resetDemo = operation, let census = try? await census() else { return false }
+            return census.demo == NamespaceCount(collections: 0, items: 0, archived: 0)
+        }
     }
 
     /// The seed's collections as stored, each with its items ordered by title. A collection the

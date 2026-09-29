@@ -1,7 +1,7 @@
 ---
 id: "CORE-005"
 title: "Build native host navigation and the experiment registry"
-status: "blocked"
+status: "done"
 milestone: "M0"
 kind: "implementation"
 depends_on: ["CORE-002", "CORE-003", "CORE-004"]
@@ -85,3 +85,5 @@ With those lines in a throwaway copy of this branch, the manifest exited 0 (Core
 - `OperationService` has no read that lists or counts collections, so `LabDataService` reads the store directly for the namespace census, returning counts only.
 
 **Next dependency-ready tickets:** CORE-010 (needs CORE-005 and CORE-007) once this ticket is done; CORE-006 is in progress elsewhere. Every LAB-nnn-A ticket also waits on CORE-006.
+
+**Integration (2026-09-29):** the integrator allowed CryptoKit for CoreLocal in `Config/ProductPolicy.txt` (the LabStore demo fixture hashes the bundled seed), which cleared the manifest blocker. The host now composes `OperationService` with `GrantAuthorizationPolicy` (ADR-013): each destructive change gets a 30-second grant for that operation only, issued for a user action or the first-run seed of an empty demo namespace, and revoked after the commit. `LabGrantHostTests` cover it; `script/test.sh` passes, and the Mac hosted suite runs 15 tests.

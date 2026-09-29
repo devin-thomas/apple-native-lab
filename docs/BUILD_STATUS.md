@@ -2,7 +2,7 @@
 
 This is the recorded build evidence for the lab. Update it from real runs only. A row describes what was run, not what the specification intends.
 
-Last updated: 2026-09-29 (CORE-001 through CORE-004, CORE-006 through CORE-008; first CI run; compatibility Mac observed).
+Last updated: 2026-09-29 (CORE-001 through CORE-008; first CI run; compatibility Mac observed).
 
 ## Toolchain
 
@@ -123,7 +123,7 @@ Bundle identifiers derive from `LAB_BUNDLE_PREFIX` (default `org.example`), and 
 | 2026-09-29 | CORE-005 automated checks | `script/test.sh` | failed at the last step only: validators 8/8, validator self-tests, LabSupport 97, LabDomain 65, LabStore 37, LabFeatures 14, Mac hosted 12, iPhone and Watch simulator compiles all passed; the release manifest failed CoreLocal because LabMac and LabPhone now link CryptoKit (LabStore `DemoFixture`), which `Config/ProductPolicy.txt` does not allow |
 | 2026-09-29 | CORE-005 policy fix (throwaway copy, not committed) | `script/build_manifest.py` with `link CoreLocal macos CryptoKit` and `link CoreLocal ios CryptoKit` added | exit 0: CoreLocal and Companions built. Linked frameworks match the CORE-008 row plus CryptoKit on the Mac and iPhone |
 | 2026-09-29 | CORE-005 device, VoiceOver, keyboard, and motion passes | none | not run: no physical device run; VoiceOver speech, Full Keyboard Access, Reduce Motion, and Increase Contrast need system settings this run did not change |
-
+| 2026-09-29 | CORE-005 integration: grants and policy | `script/test.sh`; `xcodebuild -scheme LabMac-Core test` | passed. CryptoKit allowed for CoreLocal; the host issues ADR-013 grants per operation. Mac hosted tests: 15 passed, including `LabGrantHostTests` (first-run seed refused when the demo already has data; user actions still commit) |
 `script/test.sh` runs every check above that needs no device or signing.
 
 ## Not run
