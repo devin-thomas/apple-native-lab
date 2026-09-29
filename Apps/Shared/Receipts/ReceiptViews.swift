@@ -28,22 +28,33 @@ struct ReceiptRow: View {
     }
 }
 
-/// Committed or not, as a word and a symbol.
+/// Committed or not, as a word and a symbol, spoken as "Status: <word>".
 struct ReceiptStatusLabel: View {
     let presentation: ReceiptPresentation
 
     var body: some View {
-        Label(presentation.status, systemImage: presentation.isCommitted ? "checkmark.circle" : "exclamationmark.triangle")
-            .font(.caption.weight(.semibold))
-            .foregroundStyle(presentation.isCommitted ? Color.green : Color.orange)
-            .accessibilityLabel("Status: \(presentation.status)")
+        StatusLabel(status: presentation.statusDescriptor)
+    }
+}
+
+extension ReceiptPresentation {
+    var statusDescriptor: StatusDescriptor {
+        StatusDescriptor(
+            kind: "Status", title: status,
+            symbol: isCommitted ? "checkmark.circle" : "exclamationmark.triangle",
+            tone: isCommitted ? .success : .attention
+        )
     }
 }
 
 /// Every field of one receipt: status and summary, the undo offer if there is one, then operation
 /// and request IDs and each affected entity with its revisions.
+///
+/// On iPhone the Undo button is pinned above the tab bar, so it is reachable without scrolling at
+/// every text size; the Undo section above the details still says what the undo does.
 struct ReceiptDetailView: View {
     let record: ReceiptRecord
+    @Environment(LabLibrary.self) private var library
 
     var body: some View {
         let presentation = ReceiptPresentation(record)
@@ -94,6 +105,16 @@ struct ReceiptDetailView: View {
             }
         }
         .formStyle(.grouped)
+        #if os(iOS)
+        .safeAreaInset(edge: .bottom) {
+            if let undo = presentation.undo, library.undone[record.id] == nil {
+                PinnedActionBar {
+                    UndoButton(record: record, offer: undo)
+                        .frame(maxWidth: .infinity)
+                }
+            }
+        }
+        #endif
     }
 }
 
@@ -146,6 +167,8 @@ private struct EntityLineRow: View {
     }
 }
 
+/// What the undo does and, once used, what it did. On the Mac the Undo button sits here too; on
+/// iPhone it is pinned at the bottom of the receipt instead.
 private struct UndoOfferRow: View {
     let record: ReceiptRecord
     let offer: ReceiptPresentation.UndoOffer
@@ -162,19 +185,39 @@ private struct UndoOfferRow: View {
                     .fixedSize(horizontal: false, vertical: true)
             }
             if let undoneBy = library.undone[record.id] {
-                Label("Undone by operation \(undoneBy.description.prefix(8))…", systemImage: "arrow.uturn.backward.circle")
+                let result = library.receipt(id: undoneBy)?.receipt.summary
+                    ?? "Operation \(undoneBy.description.prefix(8))."
+                Label("Undone: \(result)", systemImage: "arrow.uturn.backward.circle")
                     .font(.footnote)
-                    .accessibilityLabel("Already undone by operation \(undoneBy.description.prefix(8))")
+                    .fixedSize(horizontal: false, vertical: true)
             } else {
-                Button("Undo", systemImage: "arrow.uturn.backward") {
-                    Task { await library.undo(record) }
-                }
-                .disabled(!library.canAct)
-                .accessibilityLabel("Undo: \(offer.title)")
-                .accessibilityHint("Submits the undo as a new request with its own receipt.")
+                #if os(macOS)
+                UndoButton(record: record, offer: offer)
+                #endif
             }
         }
         .padding(.vertical, 2)
+    }
+}
+
+/// Submits a receipt's undo offer as a new request and announces the result. Voice Control
+/// accepts "Undo" as well as the full label, which names what the undo restores.
+struct UndoButton: View {
+    let record: ReceiptRecord
+    let offer: ReceiptPresentation.UndoOffer
+    @Environment(LabLibrary.self) private var library
+
+    var body: some View {
+        Button("Undo", systemImage: "arrow.uturn.backward") {
+            Task {
+                let result = await library.undo(record)
+                LabAnnouncement.outcome(of: result, in: library)?.post()
+            }
+        }
+        .disabled(!library.canAct || library.undone[record.id] != nil)
+        .accessibilityLabel("Undo: \(offer.title)")
+        .accessibilityInputLabels(["Undo", "Undo \(offer.title)"])
+        .accessibilityHint("Submits the undo as a new request with its own receipt.")
     }
 }
 

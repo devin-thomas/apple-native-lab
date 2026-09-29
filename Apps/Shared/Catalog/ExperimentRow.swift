@@ -26,6 +26,8 @@ struct ExperimentRow: View {
         }
         .padding(.vertical, 2)
         .accessibilityElement(children: .combine)
+        // Spoken in reading order with commas, not the visual middle dots.
+        .accessibilityLabel("\(experiment.title), \(experiment.state.status.spokenLabel), \(experiment.id), \(experiment.milestone.rawValue), \(experiment.category)")
     }
 
     private var metadata: some View {

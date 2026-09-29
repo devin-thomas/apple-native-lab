@@ -16,6 +16,9 @@ struct SidebarView: View {
                 Label("Lab Collection", systemImage: "tray.full")
                     .badge(library.census.map { Text("\($0.demo.items)") })
                     .tag(SidebarDestination.collection)
+                    .accessibilityLabel(library.census.map { census in
+                        "Lab Collection, \(census.demo.items == 1 ? "1 sample" : "\(census.demo.items) samples")"
+                    } ?? "Lab Collection")
                     .accessibilityHint("The demo samples stored on this Mac")
                 Label("Action Atlas", systemImage: "bolt.horizontal")
                     .tag(SidebarDestination.actionAtlas)

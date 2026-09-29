@@ -28,6 +28,7 @@ struct ReadinessView: View {
                 LabeledContent("Processor cores", value: "\(model.device.processorCount)")
             }
             Section {
+                CountSummaryText(summary: capabilities.summary)
                 ForEach(capabilities.probed) { capability in
                     CapabilityRow(capability: capability, report: capabilities.reports[capability])
                 }

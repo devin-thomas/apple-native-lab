@@ -23,6 +23,7 @@ struct CollectionListColumn: View {
                 }
             }
         }
+        .accessibilityLabel(resultsLabel(contents))
         .overlay {
             if library.collections.isEmpty {
                 LibraryPhaseView()
@@ -38,6 +39,11 @@ struct CollectionListColumn: View {
                     .help("Restore every demo sample (⇧⌘R)")
             }
         }
+    }
+
+    private func resultsLabel(_ contents: [DemoCollection]) -> String {
+        let count = contents.reduce(0) { $0 + $1.items.count }
+        return "Lab Collection, \(count == 1 ? "1 sample" : "\(count) samples")"
     }
 }
 

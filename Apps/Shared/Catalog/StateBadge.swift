@@ -2,23 +2,13 @@ import LabCatalog
 import LabSupport
 import SwiftUI
 
-/// Implementation state with icon, text, and color, so meaning never depends on color alone.
-/// Each of the six states has its own symbol and its own word.
+/// Implementation state as a shared status badge: each of the six states has its own symbol and
+/// its own word, and is spoken as "State: <word>", so meaning never depends on color alone.
 struct StateBadge: View {
     let state: ImplementationState
 
     var body: some View {
-        Label(state.title, systemImage: state.symbolName)
-            .labelStyle(.titleAndIcon)
-            .font(.caption.weight(.semibold))
-            .lineLimit(1)
-            .fixedSize()
-            .padding(.horizontal, 8)
-            .padding(.vertical, 3)
-            .foregroundStyle(state.tint)
-            .background(state.tint.opacity(0.14), in: .capsule)
-            .accessibilityElement(children: .ignore)
-            .accessibilityLabel("State: \(state.title)")
+        StatusBadge(status: state.status)
     }
 }
 
@@ -60,6 +50,10 @@ struct StateLegendRow: View {
 }
 
 extension ImplementationState {
+    var status: StatusDescriptor {
+        StatusDescriptor(kind: "State", title: title, symbol: symbolName, tone: tone)
+    }
+
     var symbolName: String {
         switch self {
         case .specified: "doc.text"
@@ -71,13 +65,15 @@ extension ImplementationState {
         }
     }
 
-    var tint: Color {
+    var tone: StatusTone {
         switch self {
-        case .specified: .secondary
-        case .spiked: .orange
-        case .implemented: .blue
-        case .deviceVerified, .releaseReady: .green
-        case .blocked: .red
+        case .specified: .neutral
+        case .spiked: .attention
+        case .implemented: .active
+        case .deviceVerified, .releaseReady: .success
+        case .blocked: .critical
         }
     }
+
+    var tint: Color { tone.color }
 }

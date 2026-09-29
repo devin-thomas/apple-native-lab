@@ -48,6 +48,41 @@ struct LabCommands: Commands {
             }
             .keyboardShortcut("l", modifiers: [.command, .option])
             .disabled(window == nil || library.latestReceipt == nil)
+
+            Divider()
+
+            // The sample and receipt actions also live on buttons in the window. These give them a
+            // keyboard path that does not depend on keyboard navigation reaching those buttons.
+            archiveCommand
+            undoCommand
         }
+    }
+
+    private var archiveCommand: some View {
+        let sample = window?.selectedSample(in: library)
+        return Button(sample?.isArchived == true ? "Restore Sample" : "Archive Sample") {
+            guard let sample else { return }
+            Task {
+                let result = await library.setArchived(sample, !sample.isArchived)
+                LabAnnouncement.outcome(of: result, in: library)?.post()
+            }
+        }
+        .keyboardShortcut("a", modifiers: [.command, .control])
+        .disabled(sample == nil || !library.canAct)
+    }
+
+    private var undoCommand: some View {
+        let receipt = window?.shownReceipt(in: library)
+        let presentation = receipt.map(ReceiptPresentation.init)
+        let isOffered = presentation?.undo != nil && receipt.map { library.undone[$0.id] == nil } == true
+        return Button(isOffered ? "Undo \(presentation?.operation ?? "")" : "Undo Receipt Change") {
+            guard let receipt else { return }
+            Task {
+                let result = await library.undo(receipt)
+                LabAnnouncement.outcome(of: result, in: library)?.post()
+            }
+        }
+        .keyboardShortcut("z", modifiers: [.command, .option])
+        .disabled(!isOffered || !library.canAct)
     }
 }

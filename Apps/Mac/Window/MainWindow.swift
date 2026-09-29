@@ -9,26 +9,35 @@ struct MainWindow: View {
     // Only which list and which experiment were showing; never data content.
     @SceneStorage("destination") private var storedDestination = ""
     @SceneStorage("experiment") private var storedExperiment = ""
-    @FocusState private var isSearchFocused: Bool
+    @FocusState private var focusedPane: WindowPane?
     @Environment(LabLibrary.self) private var library
     @Environment(\.openWindow) private var openWindow
 
     var body: some View {
         NavigationSplitView {
             SidebarView(registry: model.registry, window: window)
+                .focused($focusedPane, equals: .sidebar)
         } content: {
             contentColumn
+                .focused($focusedPane, equals: .results)
         } detail: {
             // The inspector belongs to the detail column; attached to the whole split view it
             // pushed the columns past the window's edges.
             detailColumn
                 .navigationSplitViewColumnWidth(min: 320, ideal: 520)
                 .inspector(isPresented: $window.showsInspector) {
-                    ReceiptInspector(window: window)
+                    ReceiptInspector(window: window, focusedPane: $focusedPane)
+                        // Escape leaves the inspector for the results, from any control in it.
+                        .onExitCommand { focusedPane = .results }
                 }
         }
         .searchable(text: $window.searchText, placement: .sidebar, prompt: searchPrompt)
-        .searchFocused($isSearchFocused)
+        .searchFocused($focusedPane, equals: .search)
+        .onKeyPress(.tab, phases: .down) { press in
+            guard !press.modifiers.contains(.shift), let pane = focusedPane else { return .ignored }
+            focusedPane = pane.next(receiptsShowing: window.showsReceiptList(in: library))
+            return .handled
+        }
         .toolbar {
             ToolbarItem {
                 Button("Readiness", systemImage: "gauge.with.dots.needle.33percent") {
@@ -49,7 +58,7 @@ struct MainWindow: View {
             window.inspect(record)
         }
         .focusedSceneValue(\.mainWindow, window)
-        .onChange(of: window.searchRequests) { isSearchFocused = true }
+        .onChange(of: window.searchRequests) { focusedPane = .search }
         .onChange(of: window.destination) { old, new in
             if (old == .collection) != (new == .collection) { window.searchText = "" }
             // The detail column shows only an experiment the new list contains.

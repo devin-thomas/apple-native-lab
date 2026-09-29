@@ -6,7 +6,7 @@ Unit tests cover typed IDs, validation, authorization, idempotency, migrations, 
 
 Adapter integration tests cover actual intent/entity resolution, extension staging, model readiness, permission-denial routing, storage snapshots, and peer protocol admission. AppIntentsTesting is a system-path tool with its own signing requirements, not a replacement for pure domain tests. [S05](SOURCE_INDEX.md#s05).
 
-UI tests cover the M1 journey, reset boundaries, keyboard/VoiceOver affordances, unreadable small/large layouts, focus management, and error recovery. Accessibility audits support but do not replace hands-on assistive-technology review.
+UI tests cover the M1 journey, reset boundaries, keyboard/VoiceOver affordances, unreadable small/large layouts, focus management, and error recovery. Accessibility audits support but do not replace hands-on assistive-technology review. [ACCESSIBILITY_REVIEW](ACCESSIBILITY_REVIEW.md) is the release accessibility checklist: it separates the automated checks from the manual VoiceOver, Voice Control, and Full Keyboard Access passes, which stay `not-run` until a person performs them on a device.
 
 Device tests cover camera/AR/LiDAR, spatial audio/headphone behavior, microphone routes, real Watch transport, Apple TV Continuity Camera, UWB, haptics, background expiration, and managed capabilities. A simulator can validate views/state machines while leaving these tests `not-run`.
 
@@ -20,7 +20,7 @@ Use [EVIDENCE_TEMPLATE](EVIDENCE_TEMPLATE.md). Include exact toolchain/OS/device
 
 A clean checkout builds the declared CoreLocal schemes. The first-run flow works offline with original fixtures and no sign-in. The integrated share/import → review → commit → query → surface flow produces consistent records and receipts. The manual path is complete when intelligence is unavailable. Duplicate imports do not duplicate data. Reset Demo leaves a deliberately imported user record intact. A failed optional extension profile does not block the core build.
 
-Essential navigation passes the accessibility matrix. A release archive passes link validation, dependency checks, source/asset license inventory, secret scans, and manual metadata inspection. Installation instructions are tested on the actual advertised distribution path.
+Essential navigation passes the accessibility matrix in [ACCESSIBILITY_REVIEW](ACCESSIBILITY_REVIEW.md). A release archive passes link validation, dependency checks, source/asset license inventory, secret scans, and manual metadata inspection. Installation instructions are tested on the actual advertised distribution path.
 
 ## Proposed performance budgets
 

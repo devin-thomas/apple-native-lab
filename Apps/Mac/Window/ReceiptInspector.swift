@@ -5,6 +5,7 @@ import SwiftUI
 /// it to switch between.
 struct ReceiptInspector: View {
     @Bindable var window: MainWindowState
+    var focusedPane: FocusState<WindowPane?>.Binding
     @Environment(LabLibrary.self) private var library
 
     var body: some View {
@@ -23,12 +24,13 @@ struct ReceiptInspector: View {
             }
         }
         .inspectorColumnWidth(min: 280, ideal: 340, max: 480)
+        // One named group around the receipt and the list, rather than the name landing on
+        // whichever child happens to be first.
+        .accessibilityElement(children: .contain)
         .accessibilityLabel("Receipt inspector")
     }
 
-    private var shown: ReceiptRecord? {
-        window.inspectedReceiptID.flatMap(library.receipt(id:)) ?? library.latestReceipt
-    }
+    private var shown: ReceiptRecord? { window.shownReceipt(in: library) }
 
     private var earlier: some View {
         List(selection: $window.inspectedReceiptID) {
@@ -40,5 +42,7 @@ struct ReceiptInspector: View {
             }
         }
         .frame(minHeight: 140, idealHeight: 200, maxHeight: 260)
+        .focused(focusedPane, equals: .receipts)
+        .accessibilityLabel("This session's receipts, \(library.receipts.count)")
     }
 }

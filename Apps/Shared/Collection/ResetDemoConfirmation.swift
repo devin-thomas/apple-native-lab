@@ -14,7 +14,9 @@ struct ResetDemoConfirmation: ViewModifier {
         content.alert("Reset the demo?", isPresented: $isPresented) {
             Button("Reset Demo", role: .destructive) {
                 Task {
-                    if let record = await library.resetDemo() { onReset(record) }
+                    let record = await library.resetDemo()
+                    if let record { onReset(record) }
+                    LabAnnouncement.outcome(of: record, in: library)?.post()
                 }
             }
             Button("Cancel", role: .cancel) {}

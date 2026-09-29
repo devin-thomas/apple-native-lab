@@ -76,9 +76,7 @@ struct CapabilityRow: View {
         if let report {
             ReadinessBadge(readiness: report.readiness)
         } else {
-            Label("Probing", systemImage: "ellipsis.circle")
-                .font(.caption.weight(.semibold))
-                .foregroundStyle(.secondary)
+            StatusLabel(status: StatusDescriptor(kind: "Readiness", title: "Probing", symbol: "ellipsis.circle", tone: .neutral))
         }
     }
 
@@ -142,26 +140,20 @@ private struct FallbackRow: View {
     }
 }
 
-/// Readiness with icon, text, and color, matching `StateBadge`.
+/// Readiness as a shared status badge, spoken as "Readiness: <word>".
 struct ReadinessBadge: View {
     let readiness: CapabilityReadiness
 
     var body: some View {
-        Label(readiness.title, systemImage: readiness.symbolName)
-            .labelStyle(.titleAndIcon)
-            .font(.caption.weight(.semibold))
-            .lineLimit(1)
-            .fixedSize()
-            .padding(.horizontal, 8)
-            .padding(.vertical, 3)
-            .foregroundStyle(readiness.tint)
-            .background(readiness.tint.opacity(0.14), in: .capsule)
-            .accessibilityElement(children: .ignore)
-            .accessibilityLabel("Readiness: \(readiness.title)")
+        StatusBadge(status: readiness.status)
     }
 }
 
 extension CapabilityReadiness {
+    var status: StatusDescriptor {
+        StatusDescriptor(kind: "Readiness", title: title, symbol: symbolName, tone: tone)
+    }
+
     var symbolName: String {
         switch self {
         case .available: "checkmark.circle"
@@ -172,15 +164,17 @@ extension CapabilityReadiness {
         }
     }
 
-    var tint: Color {
+    var tone: StatusTone {
         switch self {
-        case .available: .green
-        case .needsAction: .blue
-        case .unknown: .secondary
-        case .denied: .orange
-        case .unavailable: .red
+        case .available: .success
+        case .needsAction: .active
+        case .unknown: .neutral
+        case .denied: .attention
+        case .unavailable: .critical
         }
     }
+
+    var tint: Color { tone.color }
 }
 
 extension GateState {
@@ -195,15 +189,17 @@ extension GateState {
         }
     }
 
-    var tint: Color {
+    var tone: StatusTone {
         switch self {
-        case .met: .green
-        case .needsAction: .blue
-        case .denied, .restricted: .orange
-        case .unmet: .red
-        case .unknown: .secondary
+        case .met: .success
+        case .needsAction: .active
+        case .denied, .restricted: .attention
+        case .unmet: .critical
+        case .unknown: .neutral
         }
     }
+
+    var tint: Color { tone.color }
 }
 
 extension CapabilityGate {

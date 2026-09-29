@@ -51,7 +51,10 @@ struct ArchiveToggleButton: View {
 
     var body: some View {
         Button {
-            Task { await library.setArchived(item, !item.isArchived) }
+            Task {
+                let result = await library.setArchived(item, !item.isArchived)
+                LabAnnouncement.outcome(of: result, in: library)?.post()
+            }
         } label: {
             if item.isArchived {
                 Label("Restore Sample", systemImage: "arrow.uturn.backward")
@@ -60,6 +63,7 @@ struct ArchiveToggleButton: View {
             }
         }
         .disabled(!library.canAct)
+        .accessibilityInputLabels(item.isArchived ? ["Restore Sample", "Restore"] : ["Archive Sample", "Archive"])
         .accessibilityHint(item.isArchived
             ? "Returns the sample to the collection. The receipt offers an undo."
             : "Hides the sample from normal view without deleting it. The receipt offers an undo.")

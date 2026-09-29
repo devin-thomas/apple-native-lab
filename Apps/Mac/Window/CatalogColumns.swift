@@ -13,6 +13,7 @@ struct CatalogListColumn: View {
         List(experiments, selection: $window.experimentID) { experiment in
             ExperimentRow(experiment: experiment)
         }
+        .accessibilityLabel("\(scope.title), \(experiments.count == 1 ? "1 experiment" : "\(experiments.count) experiments")")
         .overlay {
             if experiments.isEmpty {
                 if !window.searchText.trimmingCharacters(in: .whitespaces).isEmpty {
