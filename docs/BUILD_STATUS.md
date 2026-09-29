@@ -51,6 +51,14 @@ Bundle identifiers derive from `LAB_BUNDLE_PREFIX` (default `org.example`), so d
 | 2026-09-29 | Mac install | `script/install_mac.sh` | Release app installed to `~/Applications/Native Lab.app`, signature verified, launched |
 | 2026-09-29 | iPhone install | `script/install_phone.sh <device-id>` | installed and launched on iPhone17,1 (iPhone 16 Pro), iOS 27.0 (24A5430a), Personal Team signing |
 | 2026-09-29 | iPhone UI check | simulator iPhone18,3, iOS 27.0 | Catalog, experiment detail, and Readiness screens reviewed |
+| 2026-09-29 | LabDomain unit tests (CORE-002) | `swift test --package-path Packages/LabDomain` | 49 passed in 9 suites, one test covering all 5 adapter kinds; 0 warnings on a clean build. Not yet part of `script/test.sh` |
+| 2026-09-29 | LabDomain concurrency repeat (CORE-002) | the concurrency tests 100 times, then the full suite 50 times | 0 failures after a fix; before it, the duplicate-submission test failed 17 of 25 runs |
+| 2026-09-29 | LabDomain iOS simulator compile (CORE-002) | `xcodebuild -scheme LabDomain -destination 'generic/platform=iOS Simulator' build` in `Packages/LabDomain` | succeeded, 0 warnings |
+| 2026-09-29 | LabDomain watchOS simulator compile (CORE-002) | same, `generic/platform=watchOS Simulator` | succeeded, 0 warnings |
+| 2026-09-29 | LabDomain tvOS simulator compile (CORE-002) | same, `generic/platform=tvOS Simulator` | succeeded, 0 warnings |
+| 2026-09-29 | LabDomain macOS compile (CORE-002) | same, `platform=macOS` | succeeded, 0 warnings |
+| 2026-09-29 | Store cannot be written around the service (CORE-002) | `swift build` of a throwaway package outside the repository that depends on LabDomain | failed as intended: an `AuthorizedCommit` cannot be created or decoded, a receipt cannot be created, and an `OperationRequest` cannot be decoded |
+| 2026-09-29 | Existing automated checks still pass (CORE-002) | `script/test.sh` with LabDomain present | passed, unchanged: catalog check, 12 package tests, Mac hosted smoke tests, iPhone and Watch simulator compiles |
 
 `script/test.sh` runs every check above that needs no device or signing.
 
