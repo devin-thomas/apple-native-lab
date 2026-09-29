@@ -2,7 +2,7 @@
 
 This is the recorded build evidence for the lab. Update it from real runs only. A row describes what was run, not what the specification intends.
 
-Last updated: 2026-09-29 (CORE-001 through CORE-004, CORE-007, CORE-008; first CI run; compatibility Mac observed).
+Last updated: 2026-09-29 (CORE-001 through CORE-004, CORE-006 through CORE-008; first CI run; compatibility Mac observed).
 
 ## Toolchain
 

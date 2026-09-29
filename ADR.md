@@ -14,3 +14,4 @@ These are the build pack's explicit defaults. Preserve their rationale when a la
 - [ADR-010 — Static modules, not downloaded executable plugins](docs/adr/ADR-010.md)
 - [ADR-011 — Fixed permission ceilings per adapter kind](docs/adr/ADR-011.md)
 - [ADR-012 — SQLite local store with fixed demo and user namespaces](docs/adr/ADR-012.md)
+- [ADR-013 — Short-lived, scoped grants for destructive and external commits](docs/adr/ADR-013.md)

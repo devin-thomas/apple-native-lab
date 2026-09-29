@@ -10,9 +10,10 @@ Proposed source layout after bootstrap:
 AppleNativeLab.xcworkspace
 Apps/                 iOS, macOS, watchOS, tvOS native host targets
 Extensions/           share, widgets, controls, previews; advanced targets isolated
-Packages/LabDomain/   IDs, operations, validation, receipts, contracts
+Packages/LabDomain/   IDs, operations, validation, receipts, grants, staging policy, metadata-only diagnostics
 Packages/LabStore/    local transactions, migrations, fixture namespaces
-Packages/LabSupport/  capability probes, metadata-only diagnostics, evidence records
+Packages/LabSupport/  capability probes, evidence records
+Packages/LabStaging/  file-system import staging and bounded archive expansion
 Packages/LabFeatures/ independent experiment modules and native adapters
 Fixtures/             original, public-safe data and media
 Tests/                unit, integration, UI, import fuzz, and recorded protocol cases
