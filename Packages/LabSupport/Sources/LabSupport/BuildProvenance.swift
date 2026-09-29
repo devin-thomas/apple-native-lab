@@ -30,8 +30,36 @@ public struct BuildProvenance: Sendable, Equatable {
         minimumOS = minimum == "unknown" ? value("LSMinimumSystemVersion") : minimum
     }
 
+    /// Provenance measured outside a bundle, such as by a package test run or CI. Blank values
+    /// become "unknown" rather than being invented.
+    public init(
+        sourceRevision: String,
+        sdkName: String,
+        xcodeVersion: String,
+        xcodeBuild: String = "unknown",
+        appVersion: String = "unknown",
+        buildNumber: String = "unknown",
+        buildProfile: String = "unknown",
+        minimumOS: String = "unknown"
+    ) {
+        func known(_ raw: String) -> String { raw.isBlank ? "unknown" : raw }
+        self.sourceRevision = known(sourceRevision)
+        self.sdkName = known(sdkName)
+        self.xcodeVersion = known(xcodeVersion)
+        self.xcodeBuild = known(xcodeBuild)
+        self.appVersion = known(appVersion)
+        self.buildNumber = known(buildNumber)
+        self.buildProfile = known(buildProfile)
+        self.minimumOS = known(minimumOS)
+    }
+
     public static var current: BuildProvenance {
         BuildProvenance(infoDictionary: Bundle.main.infoDictionary ?? [:])
+    }
+
+    /// The toolchain in one line, such as "Xcode 27.0 (27A266a), macosx27.0".
+    public var toolchainSummary: String {
+        "Xcode \(xcodeVersion) (\(xcodeBuild)), \(sdkName)"
     }
 
     /// Xcode records its version as digits, such as "2700" for 27.0 or "2631" for 26.3.1.
@@ -42,5 +70,48 @@ public struct BuildProvenance: Sendable, Equatable {
         let minor = String(digits[2])
         let patch = String(digits[3])
         return patch == "0" ? "\(major).\(minor)" : "\(major).\(minor).\(patch)"
+    }
+}
+
+/// Evidence records carry provenance as JSON. A missing or blank value decodes as "unknown".
+extension BuildProvenance: Codable {
+    private enum CodingKeys: String, CodingKey {
+        case sourceRevision
+        case sdkName
+        case xcodeVersion
+        case xcodeBuild
+        case appVersion
+        case buildNumber
+        case buildProfile
+        case minimumOS
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        func value(_ key: CodingKeys) throws -> String {
+            try container.decodeIfPresent(String.self, forKey: key) ?? "unknown"
+        }
+        self.init(
+            sourceRevision: try value(.sourceRevision),
+            sdkName: try value(.sdkName),
+            xcodeVersion: try value(.xcodeVersion),
+            xcodeBuild: try value(.xcodeBuild),
+            appVersion: try value(.appVersion),
+            buildNumber: try value(.buildNumber),
+            buildProfile: try value(.buildProfile),
+            minimumOS: try value(.minimumOS)
+        )
+    }
+
+    public func encode(to encoder: any Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(sourceRevision, forKey: .sourceRevision)
+        try container.encode(sdkName, forKey: .sdkName)
+        try container.encode(xcodeVersion, forKey: .xcodeVersion)
+        try container.encode(xcodeBuild, forKey: .xcodeBuild)
+        try container.encode(appVersion, forKey: .appVersion)
+        try container.encode(buildNumber, forKey: .buildNumber)
+        try container.encode(buildProfile, forKey: .buildProfile)
+        try container.encode(minimumOS, forKey: .minimumOS)
     }
 }

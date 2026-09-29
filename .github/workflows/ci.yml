@@ -1,0 +1,183 @@
+# Public CI: repository validators, package tests, and unsigned builds on a GitHub-hosted Mac.
+#
+# Every check writes passed, failed, blocked, or not-run to a run ledger, and the last step
+# publishes that ledger as the job summary. Only passed is passing: a check that was skipped,
+# blocked, or ran no tests fails the job and says why (script/validate/ci.py).
+#
+# Trust boundary (docs/SECURITY_AND_PRIVACY.md): pull requests, including forks, run the
+# `pull_request` event with a read-only token, no repository secrets, no signing identity, no
+# caches, and no self-hosted or personal runner. Signing, installs, and device evidence stay local.
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+# A newer push to the same pull request replaces the older run; every push to main runs in full.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  core:
+    name: Validate, test, and build unsigned
+    # GitHub-hosted and ephemeral. macos-26 carries the 26 family of Xcode and, once GitHub
+    # installs it, Xcode 27; the selection step uses 27 only when the runner actually has it.
+    runs-on: macos-26
+    timeout-minutes: 90
+    defaults:
+      run:
+        shell: bash
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+    steps:
+      - name: Check out
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        with:
+          persist-credentials: false
+
+      - name: Start the evidence ledger
+        run: |
+          {
+            echo "LAB_CI_LEDGER=$RUNNER_TEMP/lab-ci-ledger.jsonl"
+            echo "LAB_DERIVED=$RUNNER_TEMP/DerivedData"
+            echo "LAB_SOURCE_REVISION=${GITHUB_SHA::7}"
+          } >> "$GITHUB_ENV"
+
+      - name: Available Xcode and SDKs (runner default)
+        run: |
+          sw_vers
+          ls -d /Applications/Xcode*.app || true
+          xcodebuild -version
+          xcodebuild -showsdks
+          python3 --version
+
+      - name: Select Xcode (27 when installed, otherwise the newest 26)
+        run: python3 script/validate/ci.py select-xcode
+
+      - name: Selected Xcode and SDKs
+        if: ${{ !cancelled() && env.LAB_XCODE_READY == 'true' }}
+        run: |
+          echo "DEVELOPER_DIR=$DEVELOPER_DIR"
+          xcodebuild -version
+          xcodebuild -showsdks
+          swift --version
+
+      - name: Repository validators
+        if: ${{ !cancelled() }}
+        run: python3 script/validate/all.py --ledger "$LAB_CI_LEDGER"
+
+      - name: Validator self-tests (negative fixtures in temporary copies)
+        if: ${{ !cancelled() }}
+        run: >-
+          python3 script/validate/ci.py run validator-self-tests --expect-tests --
+          python3 -m unittest discover -s script/validate/tests -v
+
+      - name: LabSupport package tests
+        if: ${{ !cancelled() && env.LAB_XCODE_READY == 'true' }}
+        run: >-
+          python3 script/validate/ci.py run swift-test:LabSupport --expect-tests --
+          swift test --package-path Packages/LabSupport
+
+      - name: LabDomain package tests
+        if: ${{ !cancelled() && env.LAB_XCODE_READY == 'true' }}
+        run: >-
+          python3 script/validate/ci.py run swift-test:LabDomain --expect-tests --
+          swift test --package-path Packages/LabDomain
+
+      - name: LabFeatures package tests
+        if: ${{ !cancelled() && env.LAB_XCODE_READY == 'true' }}
+        run: >-
+          python3 script/validate/ci.py run swift-test:LabFeatures --expect-tests --
+          swift test --package-path Packages/LabFeatures
+
+      - name: Mac host tests (LabMac-Core, ad hoc signature, no identity)
+        if: ${{ !cancelled() && env.LAB_XCODE_READY == 'true' }}
+        run: >-
+          python3 script/validate/ci.py run xcodebuild:LabMac-Core:test --expect-tests --
+          xcodebuild -project AppleNativeLab.xcodeproj -scheme LabMac-Core -destination platform=macOS
+          -derivedDataPath "$LAB_DERIVED" CODE_SIGN_IDENTITY=- LAB_SOURCE_REVISION="$LAB_SOURCE_REVISION" test
+
+      - name: iPhone host builds for the simulator (LabPhone-Core, unsigned)
+        if: ${{ !cancelled() && env.LAB_XCODE_READY == 'true' }}
+        run: >-
+          python3 script/validate/ci.py run xcodebuild:LabPhone-Core:build --
+          xcodebuild -project AppleNativeLab.xcodeproj -scheme LabPhone-Core
+          -destination 'generic/platform=iOS Simulator'
+          -derivedDataPath "$LAB_DERIVED" CODE_SIGNING_ALLOWED=NO LAB_SOURCE_REVISION="$LAB_SOURCE_REVISION" build
+
+      - name: Watch host builds for the simulator (LabWatch, unsigned)
+        if: ${{ !cancelled() && env.LAB_XCODE_READY == 'true' }}
+        run: >-
+          python3 script/validate/ci.py run xcodebuild:LabWatch:build --
+          xcodebuild -project AppleNativeLab.xcodeproj -scheme LabWatch
+          -destination 'generic/platform=watchOS Simulator'
+          -derivedDataPath "$LAB_DERIVED" CODE_SIGNING_ALLOWED=NO LAB_SOURCE_REVISION="$LAB_SOURCE_REVISION" build
+
+      - name: Feature level built (ADR-009)
+        if: ${{ !cancelled() && env.LAB_XCODE_READY == 'true' }}
+        run: >-
+          python3 script/validate/ci.py feature-level
+          LabMac-Core=platform=macOS
+          'LabPhone-Core=generic/platform=iOS Simulator'
+          'LabWatch=generic/platform=watchOS Simulator'
+          -- -derivedDataPath "$LAB_DERIVED"
+
+      - name: 26-family compatibility compile (ADR-009)
+        if: ${{ !cancelled() && env.LAB_XCODE_READY == 'true' }}
+        run: |
+          schemes=(LabMac-Core LabPhone-Core LabWatch)
+          if [[ -z "${LAB_COMPAT_DEVELOPER_DIR:-}" ]]; then
+            for scheme in "${schemes[@]}"; do
+              python3 script/validate/ci.py record "compat-26:$scheme" not-run "No separate 26 SDK compile: $LAB_COMPAT_REASON."
+            done
+            exit 0
+          fi
+          export DEVELOPER_DIR="$LAB_COMPAT_DEVELOPER_DIR"
+          xcodebuild -version
+          derived="$RUNNER_TEMP/DerivedData-26"
+          status=0
+          python3 script/validate/ci.py run compat-26:LabMac-Core -- \
+            xcodebuild -project AppleNativeLab.xcodeproj -scheme LabMac-Core -destination platform=macOS \
+            -derivedDataPath "$derived" CODE_SIGN_IDENTITY=- build || status=1
+          python3 script/validate/ci.py run compat-26:LabPhone-Core -- \
+            xcodebuild -project AppleNativeLab.xcodeproj -scheme LabPhone-Core -destination 'generic/platform=iOS Simulator' \
+            -derivedDataPath "$derived" CODE_SIGNING_ALLOWED=NO build || status=1
+          python3 script/validate/ci.py run compat-26:LabWatch -- \
+            xcodebuild -project AppleNativeLab.xcodeproj -scheme LabWatch -destination 'generic/platform=watchOS Simulator' \
+            -derivedDataPath "$derived" CODE_SIGNING_ALLOWED=NO build || status=1
+          python3 script/validate/ci.py feature-level --check-prefix compat-26: \
+            LabMac-Core=platform=macOS 'LabPhone-Core=generic/platform=iOS Simulator' \
+            'LabWatch=generic/platform=watchOS Simulator' -- -derivedDataPath "$derived" || status=1
+          exit "$status"
+
+      - name: Record what CI never runs
+        if: ${{ always() }}
+        run: |
+          python3 script/validate/ci.py record device-qualification not-run \
+            "Hosted runners have no physical devices. Device evidence is recorded separately and never inferred from CI."
+          python3 script/validate/ci.py record signed-builds not-run \
+            "CI holds no signing credentials. Signed builds and installs are local, manual steps."
+
+      - name: Evidence summary
+        if: ${{ always() }}
+        env:
+          REQUIRED: >-
+            xcode-selection
+            validate:links validate:ticket-frontmatter validate:ticket-graph validate:experiment-frontmatter
+            validate:state-vocabulary validate:catalog validate:evidence-records validate:workflow-policy
+            validator-self-tests
+            swift-test:LabSupport swift-test:LabDomain swift-test:LabFeatures
+            xcodebuild:LabMac-Core:test xcodebuild:LabPhone-Core:build xcodebuild:LabWatch:build
+            feature-level:LabMac-Core feature-level:LabPhone-Core feature-level:LabWatch
+          OPTIONAL: >-
+            compat-26:* device-qualification signed-builds
+        run: |
+          # Each word is one check ID or glob pattern; splitting is intended and globbing is off.
+          set -f
+          # shellcheck disable=SC2086
+          python3 script/validate/ci.py summarize --require $REQUIRED --optional $OPTIONAL
