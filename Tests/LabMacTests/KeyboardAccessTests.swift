@@ -84,8 +84,11 @@ import Testing
 
     /// Command shortcuts only: AppKit adds its own globe-key items (dictation, emoji) to Edit.
     /// A failure names each colliding item, its menu, and whether it is hidden or an alternate.
+    /// The system Services menu is left out: other installed apps fill it, and on CI's macOS 26
+    /// runner Terminal's hidden man-page services use ⌘M and ⌘A.
     @Test func noTwoCommandShortcutsCollide() {
         let items = Self.menuItems(NSApp.mainMenu)
+            .filter { !$0.isHidden && $0.menu !== NSApp.servicesMenu }
             .filter { !$0.keyEquivalent.isEmpty && $0.keyEquivalentModifierMask.contains(.command) }
         let byShortcut = Dictionary(grouping: items) {
             "\($0.keyEquivalentModifierMask.intersection(.deviceIndependentFlagsMask).rawValue)-\($0.keyEquivalent.lowercased())"
