@@ -22,4 +22,10 @@ xcodebuild -project "$PROJECT" -scheme LabTV -configuration Debug \
 APP="$DERIVED/Build/Products/Debug-appletvos/NativeLabTV.app"
 BUNDLE="$(bundle_id "$APP/Info.plist")"
 xcrun devicectl device install app --device "$DEVICE" "$APP"
-xcrun devicectl device process launch --terminate-existing --device "$DEVICE" "$BUNDLE"
+# An Apple TV that is asleep refuses a foreground launch ("System is asleep"), though the install
+# above has already succeeded.
+if ! xcrun devicectl device process launch --terminate-existing --device "$DEVICE" "$BUNDLE"; then
+  echo "Installed, but the Apple TV refused the launch. If it is asleep, wake it with its remote and" >&2
+  echo "run this script again, or open Native Lab from its Home screen." >&2
+  exit 1
+fi

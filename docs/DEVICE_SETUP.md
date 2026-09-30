@@ -95,5 +95,6 @@ The host is driven by the remote alone. Up and Down move focus, Select opens an 
 |---|---|
 | Not listed under Discovered, or `devicectl list devices` does not show it | Wake the Apple TV, keep it on **Remote App and Devices**, and confirm the Mac and the Apple TV are on the same network. |
 | `Developer Mode disabled` | Turn on Developer Mode on the Apple TV, restart it, and list destinations again. |
+| `System is asleep - foreground app launch forbidden` | The app is already installed. Wake the Apple TV with its remote, then run `script/install_tv.sh <device-id>` again, or open Native Lab from the Home screen. |
 
 An Apple TV that runs the host proves installation only. TV experiments still need their own device evidence.
