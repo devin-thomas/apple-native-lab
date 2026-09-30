@@ -138,6 +138,14 @@ public actor Client<V: SessionVocabulary> {
     /// The conductor this device paired with, if any.
     public var pairedHost: PeerIdentity? { host }
 
+    /// Unpins the conductor, as after it refused a resume because it forgot this device. The next
+    /// join pairs again with a code.
+    public func forgetHost() async {
+        if let host { await configuration.trust.forget(host.id) }
+        host = nil
+        publish()
+    }
+
     /// Says goodbye and closes the link. Queued commands stay queued until they expire.
     public func disconnect() async {
         if let link, let sessionID, let epoch {

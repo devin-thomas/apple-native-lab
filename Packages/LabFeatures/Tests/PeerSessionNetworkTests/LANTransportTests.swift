@@ -30,7 +30,7 @@ import Testing
         let port = try await eventually { listener.port.flatMap { $0 == 0 ? nil : $0 } }
         #expect(port > 0)
         listener.stop()
-        var statuses: [LANStatus] = []
+        var statuses: [NetworkStatus] = []
         for await status in listener.statuses {
             statuses.append(status)
             if status == .stopped { break }
@@ -39,8 +39,8 @@ import Testing
     }
 
     @Test func aPolicyDeniedBonjourErrorIsReportedAsDenied() {
-        #expect(LANStatus.from(.dns(-65570)) == .denied)
-        #expect(LANStatus.from(.posix(.ECONNREFUSED)) != .denied)
+        #expect(NetworkStatus.from(.dns(-65570)) == .denied)
+        #expect(NetworkStatus.from(.posix(.ECONNREFUSED)) != .denied)
     }
 }
 

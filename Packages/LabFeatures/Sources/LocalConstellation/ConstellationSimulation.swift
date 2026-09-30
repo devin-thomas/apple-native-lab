@@ -179,6 +179,11 @@ public final class ConstellationSimulation {
         await clients[role]?.cancelCode()
     }
 
+    /// Opens pairing at the conductor without a simulated device asking yet.
+    public func openPairingWindow() async {
+        await host?.conductor.openPairing(for: .seconds(120), attempts: 3)
+    }
+
     /// The person at the conductor answers the pairing request.
     public func answerPairing(allow: Bool) async {
         await host?.conductor.answerPairing(allow: allow)

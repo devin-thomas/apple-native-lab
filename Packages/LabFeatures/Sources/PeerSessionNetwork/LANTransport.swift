@@ -4,33 +4,10 @@ import Network
 import PeerSession
 import Synchronization
 
-/// What the local-network adapter can tell a person about itself.
-public enum LANStatus: Hashable, Sendable {
-    case starting
-    /// Advertising or browsing on the local network.
-    case ready
-    /// The system refused local network access: the person declined the prompt, or turned it off
-    /// in Settings, or a policy blocks it. The single-device simulation is the route from here.
-    case denied
-    /// Waiting for a usable network, such as Wi-Fi being off.
-    case waiting(String)
-    case failed(String)
-    case stopped
-
-    public var title: String {
-        switch self {
-        case .starting: "Starting"
-        case .ready: "Ready"
-        case .denied: "Local network access denied"
-        case .waiting: "Waiting for a local network"
-        case .failed: "Failed"
-        case .stopped: "Stopped"
-        }
-    }
-
+extension NetworkStatus {
     /// Maps a Network framework error. `kDNSServiceErr_PolicyDenied` (-65570) is how Bonjour
     /// reports that local network access is denied.
-    static func from(_ error: NWError) -> LANStatus {
+    static func from(_ error: NWError) -> NetworkStatus {
         if case .dns(let code) = error, code == -65570 { return .denied }
         return .failed(String(describing: error))
     }
@@ -68,7 +45,7 @@ public final class LANConnection: PeerConnection {
     private let connection: NWConnection
     private let continuation: AsyncThrowingStream<Data, any Error>.Continuation
     private let reader = Mutex(FrameReader())
-    private let statusBox = Mutex<LANStatus>(.starting)
+    private let statusBox = Mutex<NetworkStatus>(.starting)
     private let queue = DispatchQueue(label: "native-lab.lan-connection")
 
     init(_ connection: NWConnection, label: String) {
@@ -80,7 +57,7 @@ public final class LANConnection: PeerConnection {
         receiveNext()
     }
 
-    public var status: LANStatus { statusBox.withLock { $0 } }
+    public var status: NetworkStatus { statusBox.withLock { $0 } }
 
     private func stateChanged(_ state: NWConnection.State) {
         switch state {
@@ -94,7 +71,7 @@ public final class LANConnection: PeerConnection {
                 connection.cancel()
             }
         case .failed(let error):
-            statusBox.withLock { $0 = LANStatus.from(error) }
+            statusBox.withLock { $0 = NetworkStatus.from(error) }
             continuation.finish(throwing: TransportError.failed(String(describing: error)))
         case .cancelled:
             statusBox.withLock { $0 = .stopped }
@@ -149,10 +126,10 @@ public final class LANConnection: PeerConnection {
 public final class LANListener: PeerListener {
     public let connections: AsyncStream<any PeerConnection>
     /// Status changes, newest first to matter.
-    public let statuses: AsyncStream<LANStatus>
+    public let statuses: AsyncStream<NetworkStatus>
     private let listener: NWListener
     private let continuation: AsyncStream<any PeerConnection>.Continuation
-    private let statusContinuation: AsyncStream<LANStatus>.Continuation
+    private let statusContinuation: AsyncStream<NetworkStatus>.Continuation
     private let queue = DispatchQueue(label: "native-lab.lan-listener")
 
     /// - Parameters:
@@ -170,15 +147,15 @@ public final class LANListener: PeerListener {
             listener.service = NWListener.Service(name: WireText.clean(name, limit: 63), type: serviceType, domain: "local.")
         }
         (connections, continuation) = AsyncStream<any PeerConnection>.makeStream()
-        (statuses, statusContinuation) = AsyncStream<LANStatus>.makeStream(bufferingPolicy: .bufferingNewest(4))
+        (statuses, statusContinuation) = AsyncStream<NetworkStatus>.makeStream(bufferingPolicy: .bufferingNewest(4))
         listener.newConnectionLimit = 8
         listener.stateUpdateHandler = { [weak self] state in
             guard let self else { return }
             switch state {
             case .ready: statusContinuation.yield(.ready)
-            case .waiting(let error): statusContinuation.yield(LANStatus.from(error) == .denied ? .denied : .waiting(String(describing: error)))
+            case .waiting(let error): statusContinuation.yield(NetworkStatus.from(error) == .denied ? .denied : .waiting(String(describing: error)))
             case .failed(let error):
-                statusContinuation.yield(LANStatus.from(error))
+                statusContinuation.yield(NetworkStatus.from(error))
                 continuation.finish()
             case .cancelled:
                 statusContinuation.yield(.stopped)
@@ -234,10 +211,45 @@ public struct LANEndpoint: Hashable, Sendable, Identifiable {
     }
 }
 
+/// The local network as a `PeerNetwork`: Bonjour advertising and browsing for one service type,
+/// and TCP within `scope`. The system may ask for local network permission when either starts,
+/// so a host starts them only from a person's action.
+public struct LANNetwork: PeerNetwork {
+    public let serviceType: String
+    public let scope: LANScope
+
+    public init(serviceType: String, scope: LANScope = .localNetwork) {
+        self.serviceType = serviceType
+        self.scope = scope
+    }
+
+    public func advertise(as name: String) throws(TransportError) -> PeerAdvertisement {
+        let listener = try LANListener(scope: scope, serviceType: serviceType, name: name)
+        return PeerAdvertisement(listener: listener, statuses: listener.statuses)
+    }
+
+    public func browse() -> PeerBrowse {
+        let browser = LANBrowser(serviceType: serviceType)
+        let scope = scope
+        let results = AsyncStream<[PeerEndpoint]> { continuation in
+            let task = Task {
+                for await found in browser.results {
+                    continuation.yield(found.map { endpoint in
+                        PeerEndpoint(id: endpoint.id, name: endpoint.name) { endpoint.connect(scope: scope) }
+                    })
+                }
+                continuation.finish()
+            }
+            continuation.onTermination = { _ in task.cancel() }
+        }
+        return PeerBrowse(results: results, statuses: browser.statuses) { browser.stop() }
+    }
+}
+
 /// Finds conductors advertising on the local network.
 public final class LANBrowser: Sendable {
     public let results: AsyncStream<[LANEndpoint]>
-    public let statuses: AsyncStream<LANStatus>
+    public let statuses: AsyncStream<NetworkStatus>
     private let browser: NWBrowser
     private let queue = DispatchQueue(label: "native-lab.lan-browser")
 
@@ -245,7 +257,7 @@ public final class LANBrowser: Sendable {
         let parameters = LANScope.localNetwork.parameters(listening: false)
         browser = NWBrowser(for: .bonjour(type: serviceType, domain: "local."), using: parameters)
         let (results, resultContinuation) = AsyncStream<[LANEndpoint]>.makeStream(bufferingPolicy: .bufferingNewest(1))
-        let (statuses, statusContinuation) = AsyncStream<LANStatus>.makeStream(bufferingPolicy: .bufferingNewest(4))
+        let (statuses, statusContinuation) = AsyncStream<NetworkStatus>.makeStream(bufferingPolicy: .bufferingNewest(4))
         self.results = results
         self.statuses = statuses
         browser.browseResultsChangedHandler = { found, _ in
@@ -259,9 +271,9 @@ public final class LANBrowser: Sendable {
         browser.stateUpdateHandler = { state in
             switch state {
             case .ready: statusContinuation.yield(.ready)
-            case .waiting(let error): statusContinuation.yield(LANStatus.from(error) == .denied ? .denied : .waiting(String(describing: error)))
+            case .waiting(let error): statusContinuation.yield(NetworkStatus.from(error) == .denied ? .denied : .waiting(String(describing: error)))
             case .failed(let error):
-                statusContinuation.yield(LANStatus.from(error))
+                statusContinuation.yield(NetworkStatus.from(error))
                 resultContinuation.finish()
             case .cancelled:
                 statusContinuation.yield(.stopped)

@@ -12,6 +12,10 @@ import Testing
         try await rig.pair(rig.display, label: "tv")
         let id = await rig.controller.send(.add(3))
         try await until { await rig.display.state.snapshot?.value == 3 }
+        // The snapshot reaches every peer before the sender's own answer does.
+        try await until {
+            if case .finished = await rig.controller.state.commands.first(where: { $0.id == id })?.stage { true } else { false }
+        }
         let command = try #require(await rig.controller.state.commands.first { $0.id == id })
         guard case .finished(let result) = command.stage else { Issue.record("\(command.stage)"); return }
         #expect(result.disposition == .applied && result.revision == 1)
@@ -228,8 +232,9 @@ import Testing
         let asked = await rig.controller.send(.ask(40))
         let pending = try await eventually { await rig.conductor.state.pending.first }
         #expect(pending.from.name == "Pocket phone" && pending.command == .ask(40))
-        if case .received = await rig.controller.state.commands.first(where: { $0.id == asked })?.stage {} else {
-            Issue.record("the phone should see that the conductor received it")
+        // The phone hears that the conductor received it and is waiting.
+        try await until {
+            if case .received = await rig.controller.state.commands.first(where: { $0.id == asked })?.stage { true } else { false }
         }
         await rig.conductor.resolve(asked) { _ in .apply(Tally.Snapshot(value: 40), summary: "Allowed: set to 40.") }
         try await until { await rig.controller.state.snapshot?.value == 40 }
