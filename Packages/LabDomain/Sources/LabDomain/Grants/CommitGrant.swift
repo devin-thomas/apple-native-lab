@@ -51,6 +51,8 @@ public enum GrantTarget: Hashable, Sendable {
             true
         case (.entity(.item), .updateItem), (.entity(.item), .archiveItem), (.entity(.item), .restoreItem):
             true
+        case (.entity(.session), .setSession):
+            true
         default: false
         }
     }

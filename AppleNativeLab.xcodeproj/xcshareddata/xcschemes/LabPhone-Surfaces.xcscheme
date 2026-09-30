@@ -35,6 +35,20 @@
                ReferencedContainer = "container:AppleNativeLab.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "54BD900CBAD2819FFDE15F5F"
+               BuildableName = "SurfaceWidgets.appex"
+               BlueprintName = "SurfaceWidgets"
+               ReferencedContainer = "container:AppleNativeLab.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction

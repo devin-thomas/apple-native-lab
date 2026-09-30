@@ -115,6 +115,10 @@ public enum DomainOperation: Hashable, Sendable, Codable {
     /// content, and every other demo entity is removed. User data is never changed or removed.
     /// Destructive, so only an adapter allowed to commit destructive changes can reset (ADR-011).
     case resetDemo(seed: DemoSeed)
+    /// Starts (`running: true`) or pauses a session (LAB-004 Surface Deck). `expected` is the
+    /// revision the caller last saw, or `nil` when it saw a session that was never started. Not
+    /// destructive: pausing hides nothing, and the undo is the opposite change.
+    case setSession(id: SessionID, expected: Revision?, running: Bool)
 
     public var kind: OperationKind {
         switch self {
@@ -127,6 +131,7 @@ public enum DomainOperation: Hashable, Sendable, Codable {
         case .archiveItem: .archiveItem
         case .restoreItem: .restoreItem
         case .resetDemo: .resetDemo
+        case .setSession: .setSession
         }
     }
 
@@ -140,12 +145,15 @@ public enum DomainOperation: Hashable, Sendable, Codable {
         case .createItem(let draft): .item(draft.id)
         case .updateItem(let id, _, _), .archiveItem(let id, _), .restoreItem(let id, _):
             .item(id)
+        case .setSession(let id, _, _):
+            .session(id)
         case .resetDemo:
             nil
         }
     }
 
     /// The revision the caller expects the target to have, or `nil` for a creation or a reset.
+    /// For a session, `nil` means the caller saw a session that was never started.
     public var expectedRevision: Revision? {
         switch self {
         case .createCollection, .createItem, .resetDemo:
@@ -153,6 +161,8 @@ public enum DomainOperation: Hashable, Sendable, Codable {
         case .updateCollection(_, let expected, _), .archiveCollection(_, let expected),
              .restoreCollection(_, let expected), .updateItem(_, let expected, _),
              .archiveItem(_, let expected), .restoreItem(_, let expected):
+            expected
+        case .setSession(_, let expected, _):
             expected
         }
     }
@@ -171,6 +181,7 @@ public enum DomainOperation: Hashable, Sendable, Codable {
         case .updateItem(let id, _, let changes): .updateItem(id: id, expected: revision, changes: changes)
         case .archiveItem(let id, _): .archiveItem(id: id, expected: revision)
         case .restoreItem(let id, _): .restoreItem(id: id, expected: revision)
+        case .setSession(let id, _, let running): .setSession(id: id, expected: revision, running: running)
         }
     }
 }
@@ -186,13 +197,15 @@ public enum OperationKind: String, Hashable, Sendable, Codable, CaseIterable {
     case archiveItem = "archive-item"
     case restoreItem = "restore-item"
     case resetDemo = "reset-demo"
+    case setSession = "set-session"
 
     /// Whether the operation removes something from normal view. Destructive commits need their
     /// own permission, which no model tool can hold (ADR-007).
     public var isDestructive: Bool {
         switch self {
         case .archiveCollection, .archiveItem, .resetDemo: true
-        case .createCollection, .updateCollection, .restoreCollection, .createItem, .updateItem, .restoreItem: false
+        case .createCollection, .updateCollection, .restoreCollection, .createItem, .updateItem, .restoreItem, .setSession:
+            false
         }
     }
 

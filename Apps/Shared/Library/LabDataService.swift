@@ -135,6 +135,11 @@ struct LabDataService: Sendable {
         try await service.findItems(filter, as: actor)
     }
 
+    /// A session's state, or `nil` when it was never started (LAB-004 Surface Deck).
+    func session(_ id: SessionID, as actor: ActorScope) async throws(OperationError) -> LabSession? {
+        try await service.findSession(id, as: actor)
+    }
+
     /// Validates an operation as `actor` without committing or recording anything (LAB-010 Typed
     /// Local Intelligence proposes as the model-tool adapter, which can never commit).
     func propose(_ operation: DomainOperation, as actor: ActorScope) async throws(OperationError) -> OperationProposal {

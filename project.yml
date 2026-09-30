@@ -6,7 +6,7 @@
 # profile's compilation condition. Schemes by profile:
 #   CoreLocal         LabMac-Core, LabPhone-Core
 #   Companions        LabWatch
-#   SystemSurfaces    LabPhone-Surfaces
+#   SystemSurfaces    LabPhone-Surfaces (the host variant, the share extension, the widget and Control extension)
 #   CloudOptional     none yet
 #   FrontierOptional  none yet
 # Entitlements and purpose strings are declared per executable, on the target that uses them.
@@ -84,6 +84,9 @@ targets:
       # LAB-008 Portable Objects: the .anlab document, its Transferable representations, and staged imports.
       - package: LabFeatures
         product: PortableObjects
+      # LAB-004 Surface Deck: the demo session's deck, its intents, and the in-app widget previews.
+      - package: LabFeatures
+        product: SurfaceDeck
     info:
       path: Apps/Mac/Info.plist
       properties:
@@ -167,6 +170,9 @@ targets:
       # LAB-008 Portable Objects: the .anlab document, its Transferable representations, and staged imports.
       - package: LabFeatures
         product: PortableObjects
+      # LAB-004 Surface Deck: the demo session's deck, its intents, and the in-app widget previews.
+      - package: LabFeatures
+        product: SurfaceDeck
     info:
       path: Apps/Phone/Info.plist
       properties:
@@ -214,7 +220,8 @@ targets:
         INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription: $(LAB_PURPOSE_BLUETOOTH)
         INFOPLIST_KEY_NSNearbyInteractionUsageDescription: $(LAB_PURPOSE_NEARBY_INTERACTION)
 
-  # SystemSurfaces: the iPhone host variant that embeds the share extension (LAB-007). Same sources
+  # SystemSurfaces: the iPhone host variant that embeds the share extension (LAB-007) and the widget
+  # and Control extension (LAB-004). Same sources
   # and bundle identifier as LabPhone, so it replaces the CoreLocal app rather than adding one; its
   # own scheme, LabPhone-Surfaces, keeps LabPhone-Core free of App Group provisioning. It and the
   # extension each declare the App Group, derived from LAB_BUNDLE_PREFIX. Simulator builds need no
@@ -234,6 +241,10 @@ targets:
       - Apps/Icon
       - path: Fixtures/demo/seed.json
         buildPhase: resources
+      - path: Fixtures/intelligence/intelligence-ambiguous-note.txt
+        buildPhase: resources
+      - path: Fixtures/intelligence/intelligence-injected-note.txt
+        buildPhase: resources
     dependencies:
       - package: LabSupport
       - package: LabDomain
@@ -250,7 +261,11 @@ targets:
         product: AccessSuperpower
       - package: LabFeatures
         product: PortableObjects
+        product: SurfaceDeck
       - target: ShareExtension
+        embed: true
+      # LAB-004: the widget and Control extension, embedded only in this SystemSurfaces variant.
+      - target: SurfaceWidgets
         embed: true
     info:
       path: Extensions/PhoneSurfacesHost/Info.plist
@@ -337,6 +352,47 @@ targets:
       base:
         PRODUCT_NAME: ShareExtension
         PRODUCT_BUNDLE_IDENTIFIER: $(LAB_BUNDLE_PREFIX).nativelab.share
+        TARGETED_DEVICE_FAMILY: "1,2"
+        APPLICATION_EXTENSION_API_ONLY: YES
+        SKIP_INSTALL: YES
+
+  # SystemSurfaces: the widget and Control extension (LAB-004 Surface Deck). It reads the session
+  # snapshot the host variant writes into the App Group and nothing else: it never opens the store,
+  # composes an operation service, or runs a model. Its toggle and button run App Intents whose
+  # perform() needs the app. Embedded only by LabPhoneSurfaces.
+  SurfaceWidgets:
+    type: app-extension
+    platform: iOS
+    configFiles:
+      Debug: Config/Profiles/SystemSurfaces.xcconfig
+      Release: Config/Profiles/SystemSurfaces.xcconfig
+    sources:
+      - Extensions/SurfaceWidgets
+    dependencies:
+      - package: LabDomain
+      - package: LabFeatures
+        product: SurfaceDeck
+    info:
+      path: Extensions/SurfaceWidgets/Info.plist
+      properties:
+        CFBundleDisplayName: Native Lab Surfaces
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        LabSourceRevision: $(LAB_SOURCE_REVISION)
+        LabBuildProfile: $(LAB_BUILD_PROFILE)
+        LabDistributionLane: $(LAB_DISTRIBUTION_LANE)
+        LabAppGroupIdentifier: $(LAB_APP_GROUP_IDENTIFIER)
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+    entitlements:
+      path: Extensions/SurfaceWidgets/SurfaceWidgets.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - $(LAB_APP_GROUP_IDENTIFIER)
+    settings:
+      base:
+        PRODUCT_NAME: SurfaceWidgets
+        PRODUCT_BUNDLE_IDENTIFIER: $(LAB_BUNDLE_PREFIX).nativelab.widgets
         TARGETED_DEVICE_FAMILY: "1,2"
         APPLICATION_EXTENSION_API_ONLY: YES
         SKIP_INSTALL: YES
@@ -430,6 +486,7 @@ schemes:
       targets:
         LabPhoneSurfaces: all
         ShareExtension: all
+        SurfaceWidgets: all
     run:
       config: Debug
     archive:

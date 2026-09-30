@@ -10,11 +10,14 @@ struct LabPhoneApp: App {
         _library = State(initialValue: library)
         // App Intents use this same library, so their receipts join this session's list.
         ActionAtlasHost.connect(library)
+        SurfaceDeckHost.connect(library)
     }
 
     var body: some Scene {
         WindowGroup {
             PhoneRootView(model: model)
+                // Inside the library's environment: the deck it presents reads the library.
+                .surfaceDeckPresenter()
                 .environment(library)
                 .task { await library.start() }
         }

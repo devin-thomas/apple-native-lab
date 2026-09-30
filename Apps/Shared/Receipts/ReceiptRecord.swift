@@ -54,7 +54,7 @@ struct ReceiptPresentation: Hashable {
         let kind = receipt.admitted.operation.kind
         func name(_ reference: EntityReference) -> String? { record.names[reference] }
 
-        operation = kind.title
+        operation = receipt.admitted.operation.title
         adapter = receipt.admitted.adapter.title
         operationID = receipt.operationID.description
         requestID = receipt.requestID.description
@@ -81,7 +81,7 @@ struct ReceiptPresentation: Hashable {
         if let undoOperation = receipt.undo {
             let target = undoOperation.target.flatMap(name).map { " “\($0)”" } ?? ""
             undo = UndoOffer(
-                title: "\(undoOperation.kind.title)\(target)",
+                title: "\(undoOperation.title)\(target)",
                 expectedRevision: undoOperation.expectedRevision.map { "Expects revision \($0)" } ?? ""
             )
             noUndoReason = nil
@@ -110,7 +110,15 @@ extension OperationKind {
         case .archiveItem: "Archive Item"
         case .restoreItem: "Restore Item"
         case .resetDemo: "Reset Demo"
+        case .setSession: "Set Session"
         }
+    }
+}
+
+extension DomainOperation {
+    /// What the operation does, naming the direction when the kind alone does not (LAB-004).
+    var title: String {
+        if case .setSession(_, _, let running) = self { running ? "Start Session" : "Pause Session" } else { kind.title }
     }
 }
 
@@ -131,6 +139,7 @@ extension EntityKind {
         switch self {
         case .collection: "Collection"
         case .item: "Item"
+        case .session: "Session"
         }
     }
 }

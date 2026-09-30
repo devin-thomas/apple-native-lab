@@ -3,6 +3,7 @@
 public actor InMemoryOperationStore: OperationStore {
     private var collectionsByID: [CollectionID: LabCollection] = [:]
     private var itemsByID: [ItemID: LabItem] = [:]
+    private var sessionsByID: [SessionID: LabSession] = [:]
     private var receiptsByRequest: [RequestID: ActionReceipt] = [:]
 
     public init() {}
@@ -19,6 +20,10 @@ public actor InMemoryOperationStore: OperationStore {
     }
 
     public func receipt(for requestID: RequestID) -> ActionReceipt? { receiptsByRequest[requestID] }
+
+    public func session(_ id: SessionID) -> LabSession? { sessionsByID[id] }
+
+    public func sessions() -> [LabSession] { Array(sessionsByID.values) }
 
     /// Checks and writes without suspending, so the actor makes the whole commit atomic. Every
     /// check runs before the first write, so a throw leaves nothing written.
@@ -45,10 +50,14 @@ public actor InMemoryOperationStore: OperationStore {
                 )
             } ?? item
         }
+        for session in commit.sessions {
+            sessionsByID[session.id] = session
+        }
         for removal in commit.removals {
             switch removal {
             case .collection(let id): collectionsByID[id] = nil
             case .item(let id): itemsByID[id] = nil
+            case .session(let id): sessionsByID[id] = nil
             }
         }
         receiptsByRequest[commit.requestID] = commit.receipt
@@ -80,6 +89,7 @@ public actor InMemoryOperationStore: OperationStore {
         switch entity {
         case .collection(let id): collectionsByID[id]?.namespace
         case .item(let id): itemsByID[id]?.namespace
+        case .session(let id): sessionsByID[id]?.namespace
         }
     }
 
@@ -87,6 +97,7 @@ public actor InMemoryOperationStore: OperationStore {
         switch entity {
         case .collection(let id): collectionsByID[id]?.revision
         case .item(let id): itemsByID[id]?.revision
+        case .session(let id): sessionsByID[id]?.revision
         }
     }
 }

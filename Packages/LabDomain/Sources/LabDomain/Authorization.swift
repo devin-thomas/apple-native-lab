@@ -53,6 +53,7 @@ public enum ReadTarget: Hashable, Sendable {
     case collection(CollectionID)
     case item(ItemID)
     case items(ItemFilter)
+    case session(SessionID)
     case receipt(RequestID)
 }
 

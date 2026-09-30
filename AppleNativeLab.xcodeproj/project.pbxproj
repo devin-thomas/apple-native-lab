@@ -10,6 +10,7 @@
 		049D235E474520D658AD3AD3 /* ActionAtlas in Frameworks */ = {isa = PBXBuildFile; productRef = D681B15E8F4FC00BCB2862EE /* ActionAtlas */; };
 		04A714E690365F240DA19ECC /* seed.json in Resources */ = {isa = PBXBuildFile; fileRef = 4C5126791B7E1A1A049AE090 /* seed.json */; };
 		06ED0D7F8928725A2A09905A /* LabSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 25231493CA26D8D2F61E46F5 /* LabSupport */; };
+		0A76696BFB66718AF104AB2B /* SurfaceDeck in Frameworks */ = {isa = PBXBuildFile; productRef = D251249EBC83B2887F7B36D3 /* SurfaceDeck */; };
 		154C21111E02462DD0A59BE0 /* LabStore in Frameworks */ = {isa = PBXBuildFile; productRef = 6E71D4CE7F5EFA213F132511 /* LabStore */; };
 		1ABEE97B7C7ACB1EAF41ABC4 /* ShareIngress in Frameworks */ = {isa = PBXBuildFile; productRef = A7B30E9CC74D5DACCC486C60 /* ShareIngress */; };
 		1B0413E82622210BA72820FA /* LabDomain in Frameworks */ = {isa = PBXBuildFile; productRef = 0D6B57C2990B445E8BC56C3B /* LabDomain */; };
@@ -17,7 +18,9 @@
 		21F31C50AAC169B20AE2CF15 /* ActionAtlas in Frameworks */ = {isa = PBXBuildFile; productRef = 7EC14A55645358F739F46AC7 /* ActionAtlas */; };
 		25972D23C4D3197B1F3EB577 /* LabSupport in Frameworks */ = {isa = PBXBuildFile; productRef = C807DDF95D17BFC6553B448B /* LabSupport */; };
 		29496A5626839FD3F7D5287D /* PortableObjects in Frameworks */ = {isa = PBXBuildFile; productRef = F9A656A9EA01777E437005A8 /* PortableObjects */; };
+		302604032E20F6AE4A5120CB /* SurfaceWidgets.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 82FD43D87B67084E0C795F37 /* SurfaceWidgets.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		330EBB105739FBBAFDAE5C28 /* ActionAtlas in Frameworks */ = {isa = PBXBuildFile; productRef = 88023F30308C4118D4A07ABA /* ActionAtlas */; };
+		34205B0D4B75B6C58B2006B2 /* intelligence-ambiguous-note.txt in Resources */ = {isa = PBXBuildFile; fileRef = AE4F4AB8C2CC86E0A0AF350A /* intelligence-ambiguous-note.txt */; };
 		3801D1772B69CAE4CA93FDFE /* LabSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 23ACA699398C10114E0D39E7 /* LabSupport */; };
 		45673BBE0F16F89FAE113021 /* LabCatalog in Frameworks */ = {isa = PBXBuildFile; productRef = 0A608BA2376945AD3E608486 /* LabCatalog */; };
 		46B8492EDC6B52F10B6794B1 /* LabCatalog in Frameworks */ = {isa = PBXBuildFile; productRef = 2A29DD32F90A05982B97C0F3 /* LabCatalog */; };
@@ -33,9 +36,11 @@
 		5CDF75C467BB20F773986DD1 /* PortableObjects in Frameworks */ = {isa = PBXBuildFile; productRef = 4E31A68F4912B6784D878C4C /* PortableObjects */; };
 		61C2EFB9489E9A7476A1E7A0 /* LabDomain in Frameworks */ = {isa = PBXBuildFile; productRef = C8548B319C70F000CAD5D26E /* LabDomain */; };
 		682570876F660883019716DB /* seed.json in Resources */ = {isa = PBXBuildFile; fileRef = 4C5126791B7E1A1A049AE090 /* seed.json */; };
-		6DE4F776CBFE16A956072B91 /* PortableObjects in Frameworks */ = {isa = PBXBuildFile; productRef = 5138B46379EB0CDA5C7A520B /* PortableObjects */; };
+		6DE4F776CBFE16A956072B91 /* SurfaceDeck in Frameworks */ = {isa = PBXBuildFile; productRef = 3CF19F7CC72BE703FC6929AD /* SurfaceDeck */; };
 		6F93A9AD463D59BB11A8A5EC /* LabDomain in Frameworks */ = {isa = PBXBuildFile; productRef = CACF77BD90DF68CDE4C515EA /* LabDomain */; };
+		72DC9866A6C7DE5D6279D72F /* intelligence-injected-note.txt in Resources */ = {isa = PBXBuildFile; fileRef = D89DA08F5504526396A194FA /* intelligence-injected-note.txt */; };
 		778984D260ECA5DC69A502E1 /* LabStore in Frameworks */ = {isa = PBXBuildFile; productRef = F26F0DA29E5E4B99D5E4143F /* LabStore */; };
+		7BC2B01F79C7BDAE1AA50AC5 /* SurfaceDeck in Frameworks */ = {isa = PBXBuildFile; productRef = CE841A8FB5E31C78D4112220 /* SurfaceDeck */; };
 		7FB3F8343A67C0DA7E22236A /* intelligence-injected-note.txt in Resources */ = {isa = PBXBuildFile; fileRef = D89DA08F5504526396A194FA /* intelligence-injected-note.txt */; };
 		7FCD81C07A37C7401F6D675C /* intelligence-ambiguous-note.txt in Resources */ = {isa = PBXBuildFile; fileRef = AE4F4AB8C2CC86E0A0AF350A /* intelligence-ambiguous-note.txt */; };
 		811E4F2E9F9F36796576B37D /* intelligence-injected-note.txt in Resources */ = {isa = PBXBuildFile; fileRef = D89DA08F5504526396A194FA /* intelligence-injected-note.txt */; };
@@ -43,14 +48,23 @@
 		89E214F72A8F8E59C59B440C /* AccessSuperpower in Frameworks */ = {isa = PBXBuildFile; productRef = CC0630EDCCDE6FC7F7BF2FBC /* AccessSuperpower */; };
 		96EA540221683FF1A975546B /* LabSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 9429B9706DB8D93A799FDA9F /* LabSupport */; };
 		AEB17B224B9BD1CF6EE2746E /* LabDomain in Frameworks */ = {isa = PBXBuildFile; productRef = F41E96699628F4302D6E6EE4 /* LabDomain */; };
+		B55D587C861F0C54393A2BD7 /* LabDomain in Frameworks */ = {isa = PBXBuildFile; productRef = A6A3022C8795348044F49723 /* LabDomain */; };
 		B888B057D5B4B13CA4C86B32 /* LabSupport in Frameworks */ = {isa = PBXBuildFile; productRef = F44C6435C9B6A97B75C33F44 /* LabSupport */; };
 		C5C7E15597C124FFA87914F4 /* LabStore in Frameworks */ = {isa = PBXBuildFile; productRef = 6CF6B1898735341A74FB3DA4 /* LabStore */; };
 		DC14139A63BD575B5A92D755 /* LabCatalog in Frameworks */ = {isa = PBXBuildFile; productRef = D848D3397291632E552B77A2 /* LabCatalog */; };
 		E10047C202637983EF3886EE /* TypedIntelligence in Frameworks */ = {isa = PBXBuildFile; productRef = FA764C388624F65B1FE0AC12 /* TypedIntelligence */; };
+		E70BDD2C02F2994CBB681ED7 /* SurfaceDeck in Frameworks */ = {isa = PBXBuildFile; productRef = C00FE8FBC35881E832DADD27 /* SurfaceDeck */; };
 		F4026F15E90968A3C198C0E5 /* AccessSuperpower in Frameworks */ = {isa = PBXBuildFile; productRef = C1686806D655F8ADADCF3268 /* AccessSuperpower */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		0570E3DC8ABE612DEEAF2A3B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9BC4DFD4FB07703D0EA4E56B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 54BD900CBAD2819FFDE15F5F;
+			remoteInfo = SurfaceWidgets;
+		};
 		30D0E928463CD88AAA186016 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 9BC4DFD4FB07703D0EA4E56B /* Project object */;
@@ -75,6 +89,7 @@
 			dstSubfolderSpec = 13;
 			files = (
 				47F8EF47F63CC3723EA8DEA5 /* ShareExtension.appex in Embed Foundation Extensions */,
+				302604032E20F6AE4A5120CB /* SurfaceWidgets.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -93,6 +108,7 @@
 		700897A06A459DF913708DC1 /* Base.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Base.xcconfig; sourceTree = "<group>"; };
 		748764B9E84663B58F1DA899 /* LabSupport */ = {isa = PBXFileReference; lastKnownFileType = folder; name = LabSupport; path = Packages/LabSupport; sourceTree = SOURCE_ROOT; };
 		807AD4AFA0A11FF4B4881588 /* LabDomain */ = {isa = PBXFileReference; lastKnownFileType = folder; name = LabDomain; path = Packages/LabDomain; sourceTree = SOURCE_ROOT; };
+		82FD43D87B67084E0C795F37 /* SurfaceWidgets.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = SurfaceWidgets.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D8791DE695E10C7EC57F692 /* ShareExtension.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = ShareExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		9A57B8DBFF3F863D70D41513 /* LabPhoneSurfaces.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = LabPhoneSurfaces.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AE4F4AB8C2CC86E0A0AF350A /* intelligence-ambiguous-note.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "intelligence-ambiguous-note.txt"; sourceTree = "<group>"; };
@@ -102,6 +118,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		4352BF1014FDDA97012FEE17 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 54BD900CBAD2819FFDE15F5F /* SurfaceWidgets */;
+		};
 		82F571B045A6942B2E7955E5 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -140,6 +163,19 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		00D76A0ACEA49E3EA52EB7F3 /* SurfaceWidgets */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				4352BF1014FDDA97012FEE17 /* PBXFileSystemSynchronizedBuildFileExceptionSet */,
+			);
+			explicitFileTypes = {
+			};
+			explicitFolders = (
+			);
+			name = SurfaceWidgets;
+			path = SurfaceWidgets;
+			sourceTree = "<group>";
+		};
 		457B03284C6A2A38C27BE874 /* Watch */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -243,7 +279,7 @@
 				1ABEE97B7C7ACB1EAF41ABC4 /* ShareIngress in Frameworks */,
 				5971E4B6D5596414791531A0 /* TypedIntelligence in Frameworks */,
 				89E214F72A8F8E59C59B440C /* AccessSuperpower in Frameworks */,
-				6DE4F776CBFE16A956072B91 /* PortableObjects in Frameworks */,
+				6DE4F776CBFE16A956072B91 /* SurfaceDeck in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -269,6 +305,16 @@
 				542F57ACC91C3B5DD11837E2 /* AccessSuperpower in Frameworks */,
 				4C323A1952AE6012980ED83A /* ShareIngress in Frameworks */,
 				5CDF75C467BB20F773986DD1 /* PortableObjects in Frameworks */,
+				E70BDD2C02F2994CBB681ED7 /* SurfaceDeck in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EFB4CE1D5316042BF40AEF69 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B55D587C861F0C54393A2BD7 /* LabDomain in Frameworks */,
+				0A76696BFB66718AF104AB2B /* SurfaceDeck in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -285,6 +331,7 @@
 				F4026F15E90968A3C198C0E5 /* AccessSuperpower in Frameworks */,
 				526F4C3176A2E25CFBA613A9 /* ShareIngress in Frameworks */,
 				29496A5626839FD3F7D5287D /* PortableObjects in Frameworks */,
+				7BC2B01F79C7BDAE1AA50AC5 /* SurfaceDeck in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -314,6 +361,7 @@
 			isa = PBXGroup;
 			children = (
 				F8C61BABB4107F84427D411E /* ShareExtension */,
+				00D76A0ACEA49E3EA52EB7F3 /* SurfaceWidgets */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -397,6 +445,7 @@
 				9A57B8DBFF3F863D70D41513 /* LabPhoneSurfaces.app */,
 				6BFE3236126CFD99DB8529EC /* LabWatch.app */,
 				8D8791DE695E10C7EC57F692 /* ShareExtension.appex */,
+				82FD43D87B67084E0C795F37 /* SurfaceWidgets.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -442,6 +491,7 @@
 			);
 			dependencies = (
 				A4268EFFAD8D1C0F75C304D2 /* PBXTargetDependency */,
+				FC690C80BF1A790921360006 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				E3BE00E555188C2418B856DE /* Icon */,
@@ -458,7 +508,7 @@
 				A7B30E9CC74D5DACCC486C60 /* ShareIngress */,
 				76F28CA76CDDB3E1BD522DA9 /* TypedIntelligence */,
 				CC0630EDCCDE6FC7F7BF2FBC /* AccessSuperpower */,
-				5138B46379EB0CDA5C7A520B /* PortableObjects */,
+				3CF19F7CC72BE703FC6929AD /* SurfaceDeck */,
 			);
 			productName = LabPhoneSurfaces;
 			productReference = 9A57B8DBFF3F863D70D41513 /* LabPhoneSurfaces.app */;
@@ -492,10 +542,35 @@
 				C1686806D655F8ADADCF3268 /* AccessSuperpower */,
 				208ADB6FEE46A094CE66A041 /* ShareIngress */,
 				F9A656A9EA01777E437005A8 /* PortableObjects */,
+				CE841A8FB5E31C78D4112220 /* SurfaceDeck */,
 			);
 			productName = LabMac;
 			productReference = 2F62DB7E020E6BFDAC86BD42 /* LabMac.app */;
 			productType = "com.apple.product-type.application";
+		};
+		54BD900CBAD2819FFDE15F5F /* SurfaceWidgets */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 08879D9450BD016530AA756E /* Build configuration list for PBXNativeTarget "SurfaceWidgets" */;
+			buildPhases = (
+				8A946625AE8A63A848DB3C9B /* Sources */,
+				AE640835CA4D53D14BFED315 /* Resources */,
+				EFB4CE1D5316042BF40AEF69 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				00D76A0ACEA49E3EA52EB7F3 /* SurfaceWidgets */,
+			);
+			name = SurfaceWidgets;
+			packageProductDependencies = (
+				A6A3022C8795348044F49723 /* LabDomain */,
+				D251249EBC83B2887F7B36D3 /* SurfaceDeck */,
+			);
+			productName = SurfaceWidgets;
+			productReference = 82FD43D87B67084E0C795F37 /* SurfaceWidgets.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 		A1ACB82DE30AFBBFB5948C2B /* LabPhone */ = {
 			isa = PBXNativeTarget;
@@ -525,6 +600,7 @@
 				540B210369D029C191E89BAB /* AccessSuperpower */,
 				5879A7CAEDD8078739ABF6D6 /* ShareIngress */,
 				4E31A68F4912B6784D878C4C /* PortableObjects */,
+				C00FE8FBC35881E832DADD27 /* SurfaceDeck */,
 			);
 			productName = LabPhone;
 			productReference = 28C2C1B8B040DD0D06AF070E /* LabPhone.app */;
@@ -600,6 +676,10 @@
 						DevelopmentTeam = "$(LAB_MAC_DEVELOPMENT_TEAM)";
 						ProvisioningStyle = Automatic;
 					};
+					54BD900CBAD2819FFDE15F5F = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+					};
 					A1ACB82DE30AFBBFB5948C2B = {
 						DevelopmentTeam = "";
 						ProvisioningStyle = Automatic;
@@ -638,6 +718,7 @@
 				A1ACB82DE30AFBBFB5948C2B /* LabPhone */,
 				30E5D77184963759D2D3494D /* LabPhoneSurfaces */,
 				EC3F7DFE3B8431537C8D22AA /* ShareExtension */,
+				54BD900CBAD2819FFDE15F5F /* SurfaceWidgets */,
 				13A3DB99D4B21A7DD1CAD0F3 /* LabWatch */,
 				BB1651A25A6528AE95605E65 /* LabMacTests */,
 			);
@@ -669,6 +750,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		AE640835CA4D53D14BFED315 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		BCF6826D1C7E6A4A47CA6029 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -690,6 +778,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				34205B0D4B75B6C58B2006B2 /* intelligence-ambiguous-note.txt in Resources */,
+				72DC9866A6C7DE5D6279D72F /* intelligence-injected-note.txt in Resources */,
 				04A714E690365F240DA19ECC /* seed.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -732,6 +822,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		8A946625AE8A63A848DB3C9B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C5EC10648A27BE8CC891BB48 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -751,6 +848,11 @@
 			isa = PBXTargetDependency;
 			target = EC3F7DFE3B8431537C8D22AA /* ShareExtension */;
 			targetProxy = 30D0E928463CD88AAA186016 /* PBXContainerItemProxy */;
+		};
+		FC690C80BF1A790921360006 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 54BD900CBAD2819FFDE15F5F /* SurfaceWidgets */;
+			targetProxy = 0570E3DC8ABE612DEEAF2A3B /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -992,6 +1094,26 @@
 			};
 			name = Debug;
 		};
+		99884E0D5A6323A36F38AEDC /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3A7D251E0AD8AD98128FE7C9 /* SystemSurfaces.xcconfig */;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = Extensions/SurfaceWidgets/SurfaceWidgets.entitlements;
+				INFOPLIST_FILE = Extensions/SurfaceWidgets/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(LAB_BUNDLE_PREFIX).nativelab.widgets";
+				PRODUCT_NAME = SurfaceWidgets;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		A06638F2F9C79F61F515488B /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 700897A06A459DF913708DC1 /* Base.xcconfig */;
@@ -1054,6 +1176,26 @@
 				WATCHOS_DEPLOYMENT_TARGET = 26.0;
 			};
 			name = Release;
+		};
+		B3BFC6E1F4F7BC3AD52CB723 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3A7D251E0AD8AD98128FE7C9 /* SystemSurfaces.xcconfig */;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = Extensions/SurfaceWidgets/SurfaceWidgets.entitlements;
+				INFOPLIST_FILE = Extensions/SurfaceWidgets/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(LAB_BUNDLE_PREFIX).nativelab.widgets";
+				PRODUCT_NAME = SurfaceWidgets;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
 		};
 		B96E0DFF287957E8EC06D697 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -1174,6 +1316,15 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
+		08879D9450BD016530AA756E /* Build configuration list for PBXNativeTarget "SurfaceWidgets" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B3BFC6E1F4F7BC3AD52CB723 /* Debug */,
+				99884E0D5A6323A36F38AEDC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
 		0A290207686ED22427676534 /* Build configuration list for PBXNativeTarget "LabPhoneSurfaces" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -1278,11 +1429,11 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = LabCatalog;
 		};
-		4E31A68F4912B6784D878C4C /* PortableObjects */ = {
+		3CF19F7CC72BE703FC6929AD /* SurfaceDeck */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = PortableObjects;
+			productName = SurfaceDeck;
 		};
-		5138B46379EB0CDA5C7A520B /* PortableObjects */ = {
+		4E31A68F4912B6784D878C4C /* PortableObjects */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = PortableObjects;
 		};
@@ -1322,6 +1473,10 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = LabSupport;
 		};
+		A6A3022C8795348044F49723 /* LabDomain */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = LabDomain;
+		};
 		A7B30E9CC74D5DACCC486C60 /* ShareIngress */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ShareIngress;
@@ -1329,6 +1484,10 @@
 		A89F084FC0938D0139A2042E /* LabCatalog */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = LabCatalog;
+		};
+		C00FE8FBC35881E832DADD27 /* SurfaceDeck */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SurfaceDeck;
 		};
 		C0E3086832C7401036381F13 /* ShareIngress */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -1353,6 +1512,14 @@
 		CC0630EDCCDE6FC7F7BF2FBC /* AccessSuperpower */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = AccessSuperpower;
+		};
+		CE841A8FB5E31C78D4112220 /* SurfaceDeck */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SurfaceDeck;
+		};
+		D251249EBC83B2887F7B36D3 /* SurfaceDeck */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SurfaceDeck;
 		};
 		D681B15E8F4FC00BCB2862EE /* ActionAtlas */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -154,3 +154,34 @@ public struct LabItem: DomainEntity, Identifiable {
         if !extras.isEmpty { try container.encode(extras, forKey: .extras) }
     }
 }
+
+/// A small, reversible running-or-paused state that the app and system surfaces show (LAB-004
+/// Surface Deck).
+///
+/// A session is synthetic lab state, never a person's content, so it always belongs to the demo
+/// namespace: Reset Demo pauses it, and nothing a person creates depends on it. A session that was
+/// never started is not stored and reads as paused. Starting and pausing are each other's undo, so
+/// every change is reversible.
+public struct LabSession: DomainEntity, Identifiable {
+    public static let kind = EntityKind.session
+
+    public let id: SessionID
+    public let isRunning: Bool
+    public let revision: Revision
+
+    public init(id: SessionID, isRunning: Bool, revision: Revision = .initial) {
+        self.id = id
+        self.isRunning = isRunning
+        self.revision = revision
+    }
+
+    /// Always `demo`: a session is lab state that Reset Demo may pause.
+    public var namespace: DataNamespace { .demo }
+
+    public var reference: EntityReference { .session(id) }
+
+    /// The next revision in the given state.
+    func revised(isRunning: Bool) -> LabSession {
+        LabSession(id: id, isRunning: isRunning, revision: revision.next())
+    }
+}

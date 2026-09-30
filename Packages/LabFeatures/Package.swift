@@ -11,6 +11,7 @@ let package = Package(
         .library(name: "AccessSuperpower", targets: ["AccessSuperpower"]),
         .library(name: "ShareIngress", targets: ["ShareIngress"]),
         .library(name: "PortableObjects", targets: ["PortableObjects"]),
+        .library(name: "SurfaceDeck", targets: ["SurfaceDeck"]),
     ],
     dependencies: [
         .package(path: "../LabSupport"),
@@ -93,6 +94,18 @@ let package = Package(
         .testTarget(
             name: "PortableObjectsTests",
             dependencies: ["PortableObjects", .product(name: "LabDomain", package: "LabDomain")]
+        ),
+        // LAB-004 Surface Deck: the demo session's actions and App Intents over the host's
+        // OperationService, the immutable snapshot the app writes for surfaces, and the widget
+        // views. SwiftUI and AppIntents only: the widget extension adds WidgetKit, and nothing here
+        // opens the store or runs a model.
+        .target(
+            name: "SurfaceDeck",
+            dependencies: [.product(name: "LabDomain", package: "LabDomain")]
+        ),
+        .testTarget(
+            name: "SurfaceDeckTests",
+            dependencies: ["SurfaceDeck", .product(name: "LabDomain", package: "LabDomain")]
         ),
     ]
 )

@@ -76,7 +76,7 @@
       "title": "Surface Deck",
       "category": "System surfaces",
       "milestone": "M1",
-      "state": "specified",
+      "state": "implemented",
       "dependsOn": [
         "LAB-001"
       ],

@@ -23,6 +23,8 @@ M1 should implement approximately 8–12 meaningful domain actions, not hundreds
 
 These are domain-level contracts. Exact AppIntent return types, parameter presentation, dialogs, and system availability must be compiled and tested. Protected actions cannot trust a shortcut merely because it originated on the user's device.
 
+LAB-004-A implements the session rows for the demo session as Get Demo Session and Set Demo Session, plus the launch action Open Surface Deck ([LAB-004](../experiments/LAB-004-surface-deck.md)). Set Demo Session takes the desired value, not a toggle. A widget or Control also passes the revision it showed; if the session changed since, the service records a conflict and nothing moves. Its intent runs in the app's process, where the operation service is; from a widget or Control that needs its iOS `LiveActivityIntent` conformance (see the experiment's implementation notes).
+
 ## Recipe depth
 
 Document recipes for share/import → inspect → transform → export; query → filter → create report; and selected media → finite export job → open result. A user may combine the lab's actions with system and other participating apps. The lab does not programmatically install personal automations, bypass confirmation, or acquire arbitrary access to another application's data.

@@ -15,6 +15,7 @@ enum StoreSchema {
     static let migrations = [
         Migration(version: 1, sql: version1),
         Migration(version: 2, sql: version2),
+        Migration(version: 3, sql: version3),
     ]
 
     static var currentVersion: Int { migrations[migrations.count - 1].version }
@@ -93,5 +94,19 @@ enum StoreSchema {
         CREATE TRIGGER user_items_are_never_deleted BEFORE DELETE ON items
         WHEN OLD.namespace = 'user'
         BEGIN SELECT RAISE(ABORT, 'lab-namespace: user data is never deleted'); END;
+        """
+
+    /// Version 3: sessions (LAB-004 Surface Deck).
+    ///
+    /// A session is a running-or-paused flag with a revision. It is lab state, so its namespace is
+    /// always `demo`: Reset Demo pauses it and never touches user data. Nothing earlier changes.
+    static let version3 = """
+        CREATE TABLE sessions (
+            id TEXT PRIMARY KEY NOT NULL CHECK (length(id) = 36),
+            is_running INTEGER NOT NULL CHECK (is_running IN (0, 1)),
+            revision INTEGER NOT NULL CHECK (revision >= 1),
+            namespace TEXT NOT NULL DEFAULT 'demo' CHECK (namespace = 'demo'),
+            extras TEXT NOT NULL DEFAULT '{}' CHECK (json_valid(extras))
+        ) STRICT;
         """
 }

@@ -1,4 +1,5 @@
 import LabCatalog
+import SurfaceDeck
 import SwiftUI
 
 /// Menu bar commands for the essential actions, each with a keyboard shortcut. Window-specific
@@ -36,6 +37,9 @@ struct LabCommands: Commands {
                 .disabled(window == nil)
             Button("Share Inbox") { window?.destination = .shareInbox }
                 .keyboardShortcut("6", modifiers: .command)
+                .disabled(window == nil)
+            Button(SurfaceDeck.title) { window?.destination = .surfaceDeck }
+                .keyboardShortcut("7", modifiers: .command)
                 .disabled(window == nil)
             Button("Portable Objects") { window?.destination = .portableObjects }
                 .keyboardShortcut("8", modifiers: .command)

@@ -83,6 +83,18 @@ public actor SQLiteOperationStore: OperationStore {
         try recordedReceipt(for: requestID)
     }
 
+    public func session(_ id: SessionID) throws(StoreError) -> LabSession? {
+        try entities(read {
+            try database.rows(
+                "SELECT \(Self.sessionColumns) FROM sessions WHERE id = ?1", [.text(id.rawValue.uuidString)], map: Self.session
+            )
+        }).first
+    }
+
+    public func sessions() throws(StoreError) -> [LabSession] {
+        try entities(read { try database.rows("SELECT \(Self.sessionColumns) FROM sessions", map: Self.session) })
+    }
+
     // MARK: Commit
 
     public func apply(_ commit: AuthorizedCommit) throws(StoreError) -> CommitOutcome {
@@ -122,6 +134,10 @@ public actor SQLiteOperationStore: OperationStore {
         for item in commit.items {
             try upsert(item)
             try checkpoint(.wrote(item.reference))
+        }
+        for session in commit.sessions {
+            try upsert(session)
+            try checkpoint(.wrote(session.reference))
         }
         for entity in commit.removals {
             try remove(entity)
@@ -173,13 +189,22 @@ public actor SQLiteOperationStore: OperationStore {
         }
     }
 
+    private func upsert(_ session: LabSession) throws(StoreError) {
+        try change(session.reference) {
+            try database.run(
+                """
+                INSERT INTO sessions (id, is_running, revision) VALUES (?1, ?2, ?3)
+                ON CONFLICT (id) DO UPDATE SET is_running = excluded.is_running, revision = excluded.revision
+                """,
+                [.text(session.id.rawValue.uuidString), .integer(session.isRunning ? 1 : 0), .integer(session.revision.rawValue)]
+            )
+        }
+    }
+
     /// Deletes one demo entity. The `namespace` condition means a user row is never matched, and
     /// the schema's triggers refuse a user deletion from any other path too.
     private func remove(_ entity: EntityReference) throws(StoreError) {
-        let table = switch entity {
-        case .collection: "collections"
-        case .item: "items"
-        }
+        let table = Self.table(of: entity)
         let removed = try change(entity) {
             try database.run("DELETE FROM \(table) WHERE id = ?1 AND namespace = 'demo'", [.text(entity.rawID.uuidString)])
         }
@@ -214,10 +239,7 @@ public actor SQLiteOperationStore: OperationStore {
     }
 
     private func revision(of entity: EntityReference) throws(StoreError) -> Revision? {
-        let table = switch entity {
-        case .collection: "collections"
-        case .item: "items"
-        }
+        let table = Self.table(of: entity)
         let values = try read {
             try database.rows("SELECT revision FROM \(table) WHERE id = ?1", [.text(entity.rawID.uuidString)]) { $0.integer(0) }
         }
@@ -226,10 +248,28 @@ public actor SQLiteOperationStore: OperationStore {
         return revision
     }
 
+    private static func table(of entity: EntityReference) -> String {
+        switch entity {
+        case .collection: "collections"
+        case .item: "items"
+        case .session: "sessions"
+        }
+    }
+
     // MARK: Rows
 
     private static let collectionColumns = "id, title, is_archived, revision, namespace"
     private static let itemColumns = "id, collection_id, title, note, is_archived, revision, namespace, extras"
+    private static let sessionColumns = "id, is_running, revision, namespace"
+
+    private static func session(_ row: SQLiteStatement) -> LabSession? {
+        guard let id = row.text(0).flatMap(UUID.init(uuidString:)),
+              let revision = Revision(rawValue: row.integer(2)),
+              row.text(3) == DataNamespace.demo.rawValue,
+              [0, 1].contains(row.integer(1))
+        else { return nil }
+        return LabSession(id: SessionID(rawValue: id), isRunning: row.integer(1) == 1, revision: revision)
+    }
 
     private static func collection(_ row: SQLiteStatement) -> LabCollection? {
         guard let id = row.text(0).flatMap(UUID.init(uuidString:)),

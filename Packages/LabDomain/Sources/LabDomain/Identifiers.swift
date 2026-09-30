@@ -4,6 +4,8 @@ import Foundation
 public enum EntityKind: String, Codable, Sendable, CaseIterable {
     case collection
     case item
+    /// A running-or-paused session that system surfaces show (LAB-004 Surface Deck).
+    case session
 }
 
 /// A stored domain value with a stable identity and a revision.
@@ -39,6 +41,7 @@ public struct EntityID<Entity: DomainEntity>: RawRepresentable, Hashable, Sendab
 
 public typealias CollectionID = EntityID<LabCollection>
 public typealias ItemID = EntityID<LabItem>
+public typealias SessionID = EntityID<LabSession>
 
 /// Names one requested decision. An adapter creates it once per user intent and reuses it on
 /// every retry, so a retry returns the original receipt instead of mutating again.
@@ -123,11 +126,13 @@ public struct Revision: RawRepresentable, Hashable, Comparable, Sendable, Codabl
 public enum EntityReference: Hashable, Sendable, Codable, CustomStringConvertible {
     case collection(CollectionID)
     case item(ItemID)
+    case session(SessionID)
 
     public var kind: EntityKind {
         switch self {
         case .collection: .collection
         case .item: .item
+        case .session: .session
         }
     }
 
@@ -135,6 +140,7 @@ public enum EntityReference: Hashable, Sendable, Codable, CustomStringConvertibl
         switch self {
         case .collection(let id): id.rawValue
         case .item(let id): id.rawValue
+        case .session(let id): id.rawValue
         }
     }
 
@@ -151,6 +157,7 @@ public enum EntityReference: Hashable, Sendable, Codable, CustomStringConvertibl
         switch try container.decode(EntityKind.self, forKey: .kind) {
         case .collection: self = .collection(CollectionID(rawValue: id))
         case .item: self = .item(ItemID(rawValue: id))
+        case .session: self = .session(SessionID(rawValue: id))
         }
     }
 

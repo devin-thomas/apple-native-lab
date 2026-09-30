@@ -5,6 +5,7 @@ struct OperationPlan: Sendable {
     var preconditions: [RevisionPrecondition] = []
     var collections: [LabCollection] = []
     var items: [LabItem] = []
+    var sessions: [LabSession] = []
     var removals: [EntityReference] = []
     var undo: DomainOperation?
     var phrase: Phrase
@@ -146,7 +147,59 @@ struct OperationPlanner: Sendable {
 
         case .resetDemo(let seed):
             return try await resetDemo(to: seed)
+
+        case .setSession(let id, let expected, let running):
+            return try await setSession(id, expected: expected, running: running)
         }
+    }
+
+    // MARK: Sessions (LAB-004 Surface Deck)
+
+    /// Plans starting or pausing a session.
+    ///
+    /// A session that was never started is not stored and reads as paused, so the first start
+    /// creates it at revision 1 and pausing it is a no-change. A caller that saw a stored session
+    /// at an older revision gets a conflict receipt and nothing moves, which is how a stale widget
+    /// or Control toggle reconciles instead of overwriting a newer change. A caller that saw no
+    /// session when one now exists is refused as `alreadyExists`, the rule a creation follows.
+    private func setSession(_ id: SessionID, expected: Revision?, running: Bool) async throws(OperationError) -> OperationPlan {
+        let reference = EntityReference.session(id)
+        let current = try await session(id)
+        guard let current else {
+            guard expected == nil else { throw .notFound(reference) }
+            guard running else { throw .ruleViolation(.noChanges(reference)) }
+            let created = LabSession(id: id, isRunning: true)
+            return OperationPlan(
+                changes: [EntityChange(entity: reference, previousRevision: nil, newRevision: created.revision)],
+                preconditions: [RevisionPrecondition(entity: reference, expected: nil)],
+                sessions: [created],
+                undo: .setSession(id: id, expected: created.revision, running: false),
+                phrase: Self.sessionPhrase(running: true)
+            )
+        }
+        guard let expected else { throw .ruleViolation(.alreadyExists(reference)) }
+        guard current.revision == expected else {
+            let detail = "the demo session changed: expected revision \(expected), found \(current.revision)."
+            return OperationPlan(
+                conflict: RevisionConflict(entity: reference, expected: expected, current: current.revision),
+                phrase: Phrase(past: "Not applied because \(detail)", imperative: "Out of date because \(detail)")
+            )
+        }
+        guard current.isRunning != running else { throw .ruleViolation(.noChanges(reference)) }
+        let updated = current.revised(isRunning: running)
+        return OperationPlan(
+            changes: [EntityChange(entity: reference, previousRevision: current.revision, newRevision: updated.revision)],
+            preconditions: [RevisionPrecondition(entity: reference, expected: current.revision)],
+            sessions: [updated],
+            undo: .setSession(id: id, expected: updated.revision, running: current.isRunning),
+            phrase: Self.sessionPhrase(running: running)
+        )
+    }
+
+    private static func sessionPhrase(running: Bool) -> Phrase {
+        running
+            ? Phrase("Started", "Start", "the demo session")
+            : Phrase("Paused", "Pause", "the demo session")
     }
 
     // MARK: Reset Demo
@@ -211,6 +264,16 @@ struct OperationPlanner: Sendable {
             plan.removals.append(reference)
         }
 
+        // Sessions are demo state outside the seed. A running one is paused at its next revision,
+        // never removed, so a stale toggle prepared before the reset finds a newer revision.
+        for session in try await allSessions().sorted(by: { $0.id.rawValue.uuidString < $1.id.rawValue.uuidString }) {
+            plan.preconditions.append(RevisionPrecondition(entity: session.reference, expected: session.revision))
+            guard session.isRunning else { continue }
+            let paused = session.revised(isRunning: false)
+            plan.sessions.append(paused)
+            plan.changes.append(EntityChange(entity: session.reference, previousRevision: session.revision, newRevision: paused.revision))
+        }
+
         plan.phrase = resetPhrase(seed, changes: plan.changes, removed: plan.removals.count)
         return plan
     }
@@ -221,23 +284,27 @@ struct OperationPlanner: Sendable {
 
     private func resetPhrase(_ seed: DemoSeed, changes: [EntityChange], removed: Int) -> Phrase {
         let contents = "\(counted(seed.collections.count, "collection")) and \(counted(seed.items.count, "item"))"
-        let added = changes.filter { $0.previousRevision == nil }.count
-        let restored = changes.count - added
-        guard added + restored + removed > 0 else {
+        // A reset only ever pauses a session, so session changes are counted apart from samples.
+        let paused = changes.filter { $0.entity.kind == .session }.count
+        let samples = changes.filter { $0.entity.kind != .session }
+        let added = samples.filter { $0.previousRevision == nil }.count
+        let restored = samples.count - added
+        guard added + restored + removed + paused > 0 else {
             return Phrase(
                 past: "The demo already matched its original \(contents).",
                 imperative: "The demo already matches its original \(contents)."
             )
         }
-        func tally(_ verbs: (String, String, String)) -> String {
-            [(verbs.0, added), (verbs.1, restored), (verbs.2, removed)]
+        func tally(_ verbs: (String, String, String, String)) -> String {
+            let counts = [(verbs.0, added), (verbs.1, restored), (verbs.2, removed)]
                 .filter { $0.1 > 0 }
                 .map { "\($0.0) \($0.1)" }
-                .joined(separator: ", ")
+            let sessions = paused > 0 ? ["\(verbs.3) \(counted(paused, "session"))"] : []
+            return (counts + sessions).joined(separator: ", ")
         }
         return Phrase(
-            past: "Reset the demo to its original \(contents): \(tally(("added", "restored", "removed"))).",
-            imperative: "Reset the demo to its original \(contents): \(tally(("add", "restore", "remove")))."
+            past: "Reset the demo to its original \(contents): \(tally(("added", "restored", "removed", "paused"))).",
+            imperative: "Reset the demo to its original \(contents): \(tally(("add", "restore", "remove", "pause")))."
         )
     }
 
@@ -316,6 +383,14 @@ struct OperationPlanner: Sendable {
 
     private func item(_ id: ItemID) async throws(OperationError) -> LabItem? {
         do { return try await store.item(id) } catch { throw .storeFailure(.readFailed) }
+    }
+
+    private func session(_ id: SessionID) async throws(OperationError) -> LabSession? {
+        do { return try await store.session(id) } catch { throw .storeFailure(.readFailed) }
+    }
+
+    private func allSessions() async throws(OperationError) -> [LabSession] {
+        do { return try await store.sessions() } catch { throw .storeFailure(.readFailed) }
     }
 
     private func requireCollection(_ id: CollectionID) async throws(OperationError) -> LabCollection {

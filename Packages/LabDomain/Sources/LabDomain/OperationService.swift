@@ -71,6 +71,7 @@ public actor OperationService {
                 preconditions: plan.preconditions,
                 collections: plan.collections,
                 items: plan.items,
+                sessions: plan.sessions,
                 removals: plan.removals
             )
             let outcome: CommitOutcome
@@ -131,6 +132,13 @@ public actor OperationService {
         }
         let candidates = try await read { try await $0.items(in: filter.collectionID) }
         return filter.select(from: candidates)
+    }
+
+    /// A session's current state, or `nil` when it was never started and so reads as paused
+    /// (LAB-004 Surface Deck).
+    public func findSession(_ id: SessionID, as actor: ActorScope) async throws(OperationError) -> LabSession? {
+        try authorize(.read(.session(id)), for: actor)
+        return try await read { try await $0.session(id) }
     }
 
     /// The receipt recorded for a request, or `nil` if that request was never admitted.

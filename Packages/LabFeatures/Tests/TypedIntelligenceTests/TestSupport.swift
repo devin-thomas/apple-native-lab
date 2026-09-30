@@ -70,6 +70,8 @@ final class CountingStore: OperationStore {
     func item(_ id: ItemID) async throws -> LabItem? { await base.item(id) }
     func items(in collectionID: CollectionID?) async throws -> [LabItem] { await base.items(in: collectionID) }
     func receipt(for requestID: RequestID) async throws -> ActionReceipt? { await base.receipt(for: requestID) }
+    func session(_ id: SessionID) async throws -> LabSession? { await base.session(id) }
+    func sessions() async throws -> [LabSession] { await base.sessions() }
 
     func apply(_ commit: AuthorizedCommit) async throws -> CommitOutcome {
         let outcome = try await base.apply(commit)

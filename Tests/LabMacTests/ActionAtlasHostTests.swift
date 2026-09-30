@@ -249,11 +249,16 @@ import Testing
         let url = try #require(Bundle.main.url(forResource: "extract", withExtension: "actionsdata", subdirectory: "Metadata.appintents"))
         let metadata = try #require(try JSONSerialization.jsonObject(with: Data(contentsOf: url)) as? [String: Any])
         let actions = try #require(metadata["actions"] as? [String: [String: Any]])
-        #expect(Set(actions.keys) == [
+        func intents(from module: String) -> Set<String> {
+            Set(actions.filter { ($0.value["fullyQualifiedTypeName"] as? String)?.hasPrefix(module + ".") == true }.keys)
+        }
+        #expect(intents(from: "ActionAtlas") == [
             "CreateCollectionIntent", "CreateItemIntent", "FindItemsIntent", "GetItemIntent",
             "UpdateItemIntent", "ArchiveItemIntent", "RestoreItemIntent", "ExportItemIntent",
         ])
-        #expect(actions.values.allSatisfy { ($0["fullyQualifiedTypeName"] as? String)?.hasPrefix("ActionAtlas.") == true })
+        // LAB-004 Surface Deck's toggle, read, and launch action join them, and nothing else does.
+        #expect(intents(from: "SurfaceDeck") == ["SetDemoSessionIntent", "GetDemoSessionIntent", "OpenSurfaceDeckIntent"])
+        #expect(actions.count == 11)
         let entities = try #require(metadata["entities"] as? [String: Any])
         #expect(Set(entities.keys) == ["LabItemEntity", "LabCollectionEntity"])
         let queries = try #require(metadata["queries"] as? [String: Any])

@@ -1,5 +1,6 @@
 import LabCatalog
 import LabSupport
+import SurfaceDeck
 import SwiftUI
 
 /// The sidebar: the lab's own collection first, then the catalog by milestone, lifecycle state, and
@@ -35,6 +36,9 @@ struct SidebarView: View {
                 Label("Portable Objects", systemImage: "shippingbox")
                     .tag(SidebarDestination.portableObjects)
                     .accessibilityHint("Drag, export, and import lab objects")
+                Label(SurfaceDeck.title, systemImage: SurfaceDeck.symbol)
+                    .tag(SidebarDestination.surfaceDeck)
+                    .accessibilityHint("The demo session, its receipts, and previews of its widget and Control")
             }
             Section("Experiments") {
                 row(.all, symbol: "square.grid.2x2")
