@@ -1,0 +1,54 @@
+{
+  "check" : "The first six-lab journey in the running Mac app on the development Mac, driven through the Accessibility API by process ID with the manual editor and no model: paste the shared note, add it to a new collection of your own, review a change from it by hand, find, rename, archive, and restore it, start, pause, and resume the session, finish the accessible task, then Reset Demo; the object stays one item with one identity and survives the reset",
+  "date" : "2026-09-30T22:49:48Z",
+  "execution" : {
+    "device" : {
+      "deviceClass" : "Mac17,14 (Mac Studio, M5 Max)",
+      "osVersion" : "27.0 (26A425)",
+      "platform" : "macOS"
+    },
+    "path" : "physical"
+  },
+  "inputs" : [
+    "seed:app-bundle@sha256:d132b2dc787cea268736ac6a4ac4acc1f582b430bbb1a30f59dff2d02201041d",
+    "note:Fixtures/intelligence/intelligence-injected-note.txt@sha256:3c698a5d914355d243288491422b45bdaf9d8bf3b5ec8b2229a2c70554070019",
+    "store-copy:Lab.sqlite@sha256:2e96884c16791c7d4bde90a6db2c9da33c2a2aab3e52088adc148c368552a423",
+    "store-copy:Lab.sqlite-wal@sha256:a188275116e0fb5852acf4ccda60c231c4c6fb3d3e388ac60d9983d3e041a6c6",
+    "store-copy:Lab.sqlite-shm@sha256:827089e872b7791641ad10fcde890048f728992c2558054e59f087ec20948a21"
+  ],
+  "limitations" : [
+    "An agent drove the run through the Accessibility API by process ID; no person used a pointer or keyboard, no key event was posted, and VoiceOver was off. Text fields were set through the API and confirmed.",
+    "Physical path for the Mac host only, a CoreLocal Debug build under a ticket-only bundle prefix, not the installed app. It proves the Mac's app UI adapter: no App Intent, Shortcuts, widget, Control, or share extension ran, and the Mac build has none of the last three.",
+    "The review step drafted from the host's bundled copy of the same note (the same bytes as the object's note), not from the stored object: the Mac workbench picks from its fixture notes. The on-device model was available and deliberately not used.",
+    "The object was not exported to a file or imported back: only the export preview was read. LAB-008-B's physical Mac run covers the file dialogs.",
+    "The Mac's own pasteboard was overwritten with the note fixture for the paste.",
+    "No iPhone, iPad, or simulator took part."
+  ],
+  "outcome" : {
+    "detail" : "Passed. The paste staged one text import from Paste as App UI, and its review read the note in full. New Collection… with an empty title stayed on the review screen with “A collection needs a title of 1 to 120 characters.” and no receipt; the second made Field notes, and Add committed Create Item as App UI, the note's first line the title. The sample chooser offered the 12 demo samples and not the object. The manual proposal committed Update Item on Kraft card, revision 1 → 2, as App UI. Find Lab Items for override, archived included, returned 1 item, the object. Update Item renamed it at revision 2, Archive Item made it Archived at revision 3, and Restore Item made it Active at revision 4, each under the same identifier 22FA8EBB-9CB8-8F21-BA26-6E1065852C92 in Field notes, namespace Yours. The session ran at revision 1, paused, and ran at revision 3. Set Up Practice archived 6 samples; the task's list and chart held demo samples only; Restore Quartz point gave Task: Done and “Task done: Mineral specimens had the most archived samples (3).” The export preview showed the same identifier at revision 4. Reset Demo's confirmation said the person's data would not change, and its receipt read “restored 6, paused 1 session.” Afterwards the Lab Collection page read 3 demo collections and 12 items and Your data 1 collection and 1 item, and Get Lab Item read the object Active at revision 4. The store copy held 18 receipts, all committed as App UI (2 Reset Demo, 1 Create Collection, 1 Create Item, 2 Update Item, 7 Archive Item, 2 Restore Item, 3 Set Session); only Create, Update, Archive, and Restore Item touched the object. It held 12 demo items, none archived, the session paused at revision 4, and 1 item of the person's own: the object at revision 4, unarchived, whose note's SHA-256 is the fixture's.",
+    "result" : "passed"
+  },
+  "provenance" : {
+    "appVersion" : "0.1.0",
+    "buildNumber" : "1",
+    "buildProfile" : "CoreLocal",
+    "minimumOS" : "26.0",
+    "sdkName" : "macosx27.0",
+    "sourceRevision" : "d7b386a",
+    "xcodeBuild" : "27A266a",
+    "xcodeVersion" : "27.0"
+  },
+  "schemaVersion" : 1,
+  "steps" : [
+    "xcodebuild -scheme LabMac-Core -configuration Debug build at d7b386a with LAB_BUNDLE_PREFIX=org.example.core012, so the app ran in a new container of its own; open -g -n on the built app, whose first run seeded the demo; every later action addressed its process ID",
+    "Share Inbox (LAB-007): pbcopy of the note fixture (the pasteboard's SHA-256 matched the file's), then Paste; the row selected; New Collection… with an empty title, then again with Field notes; Add to Collection",
+    "Typed Local Intelligence (LAB-010): the note with injected instructions, Write It Myself, sample Kraft card, the note's first line as the added text, Apply Change. The on-device model read Available and was not used",
+    "Action Atlas (LAB-001): Find Lab Items for override with archived items included; Update Lab Item to rename the object Kraft card wear note; Archive Lab Item; Restore Lab Item",
+    "Surface Deck (LAB-004): Start Session, Pause Session, Start Session",
+    "Access as a Superpower (LAB-035): Set Up Practice, then the Quartz point row's Restore Quartz point accessibility action",
+    "Portable Objects (LAB-008): the object selected and its export preview read; no file was written",
+    "Lab Collection: Reset Demo… and its confirmation; Action Atlas Get Lab Item on the object",
+    "The app stopped by SIGTERM to its process ID; the container's store copied and read read-only as aggregates"
+  ],
+  "subject" : "CORE-012"
+}
