@@ -2,7 +2,7 @@
 
 This is the recorded build evidence for the lab. Update it from real runs only. A row describes what was run, not what the specification intends.
 
-Last updated: 2026-09-30 (M0 complete; all six M1 experiments implemented; LAB-001 qualified; app icon; first physical-device evidence; first physical Watch install; LAB-008-B, LAB-010-B, and LAB-035-B done).
+Last updated: 2026-09-30 (M0 complete; all six M1 experiments implemented; LAB-001 qualified; app icon; first physical-device evidence; first physical Watch install; LAB-008-B, LAB-010-B, and LAB-035-B done; Apple TV host and all-platform smoke tests, CORE-013).
 
 ## Toolchain
 
@@ -21,7 +21,7 @@ Captured with `script/toolchain_report.sh` on the primary development Mac.
 
 | Setting | Value | Evidence |
 |---|---|---|
-| iOS, macOS, watchOS floor | 26.0 | `LSMinimumSystemVersion`/`MinimumOSVersion` = 26.0 in built bundles |
+| iOS, macOS, watchOS, tvOS floor | 26.0 | `LSMinimumSystemVersion`/`MinimumOSVersion` = 26.0 in built bundles |
 | Swift language mode | 6 | project setting `SWIFT_VERSION = 6.0`; packages use tools version 6.2 |
 | 27-generation adapters | compiled only against a 27 SDK | `OTHER_SWIFT_FLAGS = -DLAB_SDK_27` resolved for `macosx27.0`; Readiness shows the level at runtime |
 
@@ -32,8 +32,9 @@ Captured with `script/toolchain_report.sh` on the primary development Mac.
 | Scheme | Target | Platform | Profile | Signing default |
 |---|---|---|---|---|
 | `LabMac-Core` | `LabMac` + `LabMacTests` | macOS | CoreLocal | Sign to Run Locally, App Sandbox on |
-| `LabPhone-Core` | `LabPhone` | iOS/iPadOS | CoreLocal | Automatic; device builds need `Config/Local.xcconfig` |
-| `LabWatch` | `LabWatch` | watchOS | Companions | Automatic; installs directly to a paired Watch, not embedded in the iPhone app |
+| `LabPhone-Core` | `LabPhone` + `LabPhoneTests` | iOS/iPadOS | CoreLocal | Automatic; device builds need `Config/Local.xcconfig` |
+| `LabWatch` | `LabWatch` + `LabWatchTests` (+ LabSupport and LabCatalog package tests) | watchOS | Companions | Automatic; installs directly to a paired Watch, not embedded in the iPhone app |
+| `LabTV` | `LabTV` + `LabTVTests` + `LabTVUITests` (+ LabSupport and LabCatalog package tests) | tvOS | Companions | Automatic; installs directly to a paired Apple TV; shares `$(LAB_BUNDLE_PREFIX).nativelab` with the iPhone host; no entitlements |
 | `LabPhone-Surfaces` | `LabPhoneSurfaces` + `ShareExtension` (LAB-007) + `SurfaceWidgets` (LAB-004) | iOS/iPadOS | SystemSurfaces | Automatic; simulator builds sign the App Group with no team; a device needs a team that can use App Groups |
 
 Each target takes its profile from the `Config/Profiles/<Profile>.xcconfig` file it attaches in `project.yml`, and that value reaches the `LabBuildProfile` Info.plist key. CloudOptional and FrontierOptional have their profile files but no targets or schemes yet; the release manifest reports them as skipped ([BUILD_AND_DISTRIBUTION](BUILD_AND_DISTRIBUTION.md#build-profiles)).
@@ -256,6 +257,12 @@ Bundle identifiers derive from `LAB_BUNDLE_PREFIX` (default `org.example`), and 
 | 2026-09-30 | LAB-008-B evidence export | `LAB_008_RUN_FACTS=<facts> LAB_HOST_EVIDENCE_RECORD=<record> LAB_DEMO_EVIDENCE_DIR=<folder> swift test --package-path Packages/LabDemo --filter PortableObjectsEvidence` | passed: the summary led with "Passed: 0 demo runs and 3 evidence records exported"; all 3 approved as `public-fixture`, no override; `manifest.json` SHA-256 `64c0ba5a…`. 3 records went to `evidence/LAB-008/` |
 | 2026-09-30 | LAB-008-B automated checks | `python3 script/validate/all.py`; `script/test.sh` on ed64c53 | passed: validators 8 of 8 (7 evidence records valid), 93 validator self-tests, every package, Mac hosted 98 (96 passed, 1 skipped, 1 expected failure), iPhone and Watch simulator compiles, and the release manifest (CoreLocal, SystemSurfaces, Companions built; 2 profiles skipped) |
 | 2026-09-30 | LAB-008-B drags, physical iPhone, iPad, Share…, assistive-technology passes | none | not run. No pointer events were posted on the shared desktop; a person's drag, between windows or to Finder, is still not run, and LAB-008-A's Finder failure stands. No iPhone install; no iPad. Share…, AirDrop, and iCloud Drive arrivals were not used. No VoiceOver, Voice Control, or Full Keyboard Access pass |
+| 2026-09-30 | CORE-013 clean copy, no `Config/Local.xcconfig` | `xcodebuild -scheme LabTV` for `generic/platform=tvOS Simulator`, and for `generic/platform=tvOS` with `CODE_SIGNING_ALLOWED=NO` | both succeeded, 0 warnings; `org.example.nativelab`, `LabBuildProfile` Companions, `MinimumOSVersion` 26.0. A signed device build without a team stops at "Signing for LabTV requires a development team" |
+| 2026-09-30 | CORE-013 host smoke tests in simulators | `script/test.sh` at 592a96a (simulators created from the newest runtime and deleted afterwards) | passed: LabPhone-Core 4 on iOS 27.0 (24A434); LabWatch 115 (4 smoke, LabSupport 97, LabCatalog 14) on watchOS 27.0 (24R362); LabTV 116 (4 smoke, 1 remote-driven UI test, LabSupport 97, LabCatalog 14) on tvOS 27.0 (24J360). The remote-driven test reaches a catalog row, opens its detail with Select, returns with Menu, opens Readiness, and leaves the app with Menu |
+| 2026-09-30 | CORE-013 automated checks | `script/test.sh` at 592a96a | passed: validators 8 of 8, 93 validator self-tests, package tests (LabSupport 97, LabDomain 156, LabStore 44, LabStaging 40, LabDemo 70, LabFeatures 233), Mac hosted 93 (91 passed, 1 expected failure, 1 skipped), the three simulator runs above, and the release manifest (CoreLocal, SystemSurfaces, Companions built; two profiles skipped) |
+| 2026-09-30 | CORE-013 TV linked frameworks | `script/build_manifest.py` (Release, Source lane); `--profile Companions --lane Store` | LabTV links CoreBluetooth, Foundation, SwiftUI, and UIKit (weak); no FoundationModels or Speech; no declared entitlements; the signature adds only `application-identifier`. Store lane: `NSBluetoothAlwaysUsageDescription`, and Xcode adds `LSRequiresIPhoneOS` |
+| 2026-09-30 | CORE-013 tvOS app icon | `script/make_app_icon.py` | actool 27.0 does not compile Icon Composer documents for tvOS, so the script writes a 3-layer tvOS brand-assets icon, the App Store image, and both Top Shelf images from the same path functions; `Apps/Icon/AppIcon.icon` regenerates byte-identical. The icon appears on the tvOS simulator Home screen; Top Shelf on a device was not seen |
+| 2026-09-30 | Apple TV install (CORE-013) | `script/install_tv.sh <device-id>` | built and installed on AppleTV11,1, tvOS 27.0 (24J361), Personal Team; a tvOS team provisioning profile for the existing app identifier, expiring 2026-10-07; installed as Native Lab 0.1.0 (1) at 592a96a. Both launches were refused: "System is asleep - foreground app launch forbidden". Proves installation only |
 
 `script/test.sh` runs every check above that needs no device or signing.
 
@@ -265,7 +272,7 @@ Bundle identifiers derive from `LAB_BUNDLE_PREFIX` (default `org.example`), and 
 |---|---|
 | Xcode build and tests on the compatibility Mac itself | Its Xcode 26.6 license has not been accepted. The 26-family level is already proven in CI with the same Xcode build (17F113), and its packages compile there with Swift 6.2.3. |
 | iPad | No device available for this project. |
-| Apple TV install | The paired Apple TV 4K (2nd generation) runs tvOS 27.0, which meets every package's tvOS 26.0 floor, but the project has no tvOS host target yet. One arrives with the first TV experiment (LAB-019, LAB-031, or LAB-034). |
+| Apple TV launch on the device | Native Lab is installed on the Apple TV 4K (2nd generation), tvOS 27.0 (CORE-013), but its launch was refused while the TV was asleep, so remote focus on the device has not run. No TV experiment exists yet. |
 | Device verification of any experiment | LAB-001 Action Atlas's in-app path is verified on a physical iPhone (`evidence/LAB-001/action-atlas-iphone-in-app.json`); its Shortcuts path only in the simulator, so it stays `implemented`. LAB-010 Typed Local Intelligence's on-device model is verified on the physical development Mac (`evidence/LAB-010/typed-intelligence-model-mac.json`, `-mac-app.json`); no iPhone run, so it stays `implemented`. All six M1 experiments (LAB-001, 004, 007, 008, 010, 035) are `implemented` on the Mac and in the simulator. Share Ingress's extension and Surface Deck's widget and Control are blocked on a device by Personal Team signing (no App Groups). The other 42 remain `specified`. |
 
 ## Known constraints

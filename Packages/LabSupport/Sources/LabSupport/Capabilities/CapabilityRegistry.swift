@@ -70,7 +70,7 @@ extension Capability {
         case (.camera, .watchOS):
             "AVCaptureDevice is unavailable on watchOS."
         case (.camera, _), (.microphone, _):
-            "The \(platform.title) host is not part of the plan yet."
+            "No probe is built for the \(platform.title) host yet."
         case (.speechRecognition, .watchOS):
             "The watchOS SDK has no Speech framework."
         case (.speechRecognition, _):

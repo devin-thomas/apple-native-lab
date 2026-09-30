@@ -1,7 +1,7 @@
 ---
 id: "CORE-013"
 title: "Bring up the Apple TV host and an all-platform smoke gate"
-status: "in-progress"
+status: "done"
 milestone: "M1"
 kind: "implementation"
 depends_on: ["CORE-001", "CORE-004", "CORE-008"]
@@ -48,3 +48,26 @@ Retain existing data and the last usable fallback. New behavior must be disabled
 ## Completion note
 
 Record changed files, actual tests run, evidence location, unresolved external gates, and any specification correction. Leave status `planned` until work begins; use `blocked` with the exact reason when an external prerequisite is missing.
+
+## Completion record (2026-09-30)
+
+**Acceptance.**
+
+- [x] `LabTV` builds for the tvOS simulator and for a device from a clean checkout with the neutral defaults: both unsigned builds succeeded with 0 warnings; a signed device build without a team stops, as it should, at the signing step.
+- [x] Focus moves through the catalog, a detail page, and Readiness with the remote alone, and Menu always leads back: the remote-driven `LabTVUITests` in the tvOS 27.0 simulator. Not yet run on the physical TV.
+- [x] The tvOS host links no framework marked unsupported on tvOS and declares no entitlement (release manifest).
+- [x] `script/test.sh` runs smoke tests on all four platforms without a device: Mac hosted tests, `LabPhoneTests` on iOS, `LabWatchTests` on watchOS, and `LabTVTests` plus `LabTVUITests` on tvOS, each in a simulator created and deleted by the script. The release manifest records the tvOS host.
+- [x] `script/install_tv.sh` lists destinations and installs on a paired Apple TV in Developer Mode. The launch was refused while the TV was asleep, and the script now says so.
+- [ ] Public CI compiles the tvOS host: the workflow step and required checks are added and rehearsed locally through `ci.py`; the first run on GitHub's hosted runner happens after the push.
+
+**Decisions:** the Companions profile, following the Watch host; the iPhone host's bundle identifier, which XcodeGen, `xcodebuild`, the manifest, and automatic signing all accepted; a tvOS brand-assets icon generated from the Icon Composer source's geometry. Recorded in [ADR-014](../docs/adr/ADR-014.md), and the SPEC's platform sentence now says the hosts come first.
+
+**Changed:** `project.yml` and the regenerated project (the `LabTV` target and scheme; `LabTVTests`, `LabTVUITests`, `LabWatchTests`, and `LabPhoneTests`), `Apps/TV/`, `Tests/LabTVTests`, `Tests/LabTVUITests`, `Tests/LabWatchTests`, `Tests/LabPhoneTests`, `script/install_tv.sh`, `script/simulator.py`, `script/test.sh`, `script/make_app_icon.py`, `Config/ProductPolicy.txt`, profile comments, `.github/workflows/ci.yml`, `docs/DEVICE_SETUP.md`, and `docs/BUILD_AND_DISTRIBUTION.md`. At integration: the capability exclusion note no longer says a host is outside the plan, ADR-014, the SPEC sentence, and the BUILD_STATUS rows.
+
+**Commands and results:** see the CORE-013 rows in [BUILD_STATUS](../docs/BUILD_STATUS.md). `script/test.sh` and `python3 script/validate/all.py` passed at 592a96a.
+
+**Not run:** the launch and remote focus on the physical Apple TV (asleep); the first hosted CI run; a 26-SDK compile of `LabTV`; a tvOS VoiceOver and large-text pass; Top Shelf on a device's Home screen.
+
+**Follow-ups:** `script/test.sh` runs the Mac hosted tests under the developer's own bundle prefix, so on a machine with a personal prefix they share the installed app's container; `ItemProviderAttachment.swift` uses `suggestedName`, which is unavailable on watchOS, so `LabFeatures-Package` cannot build for watchOS (no shipping target is affected); VoiceOver and native review of the TV host.
+
+**Next dependency-ready tickets:** LAB-019-A (Local Constellation) and LAB-031-A (Native Screening Room).

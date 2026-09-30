@@ -10,7 +10,7 @@ The product has three audiences: curious owners who want to try unusual device b
 
 ## 2. Product shape
 
-A shared Swift domain core supports separate native iPhone/iPad, Mac, Watch, and Apple TV hosts. The Mac and iPhone are the first implementation targets. Watch and TV enter when their experiments do. Optional iPad/Pencil support is welcome but not a prerequisite for a release. Vision Pro is not required and a visionOS target is outside the initial plan.
+A shared Swift domain core supports separate native iPhone/iPad, Mac, Watch, and Apple TV hosts. The Mac and iPhone were the first implementation targets. Watch and Apple TV smoke hosts followed (CORE-001, CORE-013, [ADR-014](docs/adr/ADR-014.md)), so every change is built and smoke-tested on all four platforms; Watch and TV experiments add their surfaces through their own tickets. Optional iPad/Pencil support is welcome but not a prerequisite for a release. Vision Pro is not required and a visionOS target is outside the initial plan.
 
 The host contains a searchable catalog, capability/readiness information, a fixture browser, a per-experiment experience, a compact action/receipt inspector, and a settings area. A catalog entry remains useful even when its live adapter is unavailable: it explains the missing gate and offers an honest fallback where one exists.
 
