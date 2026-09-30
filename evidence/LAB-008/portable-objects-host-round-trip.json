@@ -1,0 +1,49 @@
+{
+  "check" : "Portable Objects round trip in the Mac host: export, import into a second store, export again, byte-identical under one stable ID; reimports, a traversal attachment, and Reset Demo",
+  "date" : "2026-09-30T21:06:20Z",
+  "execution" : {
+    "path" : "fixture"
+  },
+  "inputs" : [
+    "sample:app-bundle@sha256:4dfbd2a9e9199fd8a87d19e709e0661df3e1125e1443057bbe51da5c0fa04a4f",
+    "traversal:Fixtures/LAB-008/traversal-attachment.anlab@sha256:49905ccd9317ff9c381533953a7735e20d82e4783e76a6ba52c830ffa7cf591a",
+    "seed:app-bundle@sha256:d132b2dc787cea268736ac6a4ac4acc1f582b430bbb1a30f59dff2d02201041d",
+    "variant:decomposed-empty-note@sha256:efa7a5550b616cefd40753fc3a47c6ad96b259df2c893286e93448c08dc13a80",
+    "variant:zwj-null-note@sha256:9c36d4169b6f021113eeec7cdd0a7042da804a0556972cc06801908a5c409688",
+    "variant:rtl-cjk-no-fields@sha256:a34091c22a6940a20f505963d59bf5360a535e6ff15b74b6e793de1120252266",
+    "variant:empty-containers@sha256:e61dbec19aaaf4a95d92e68bbf0e632354307d514f9f2aa9d22b6a313137e83d",
+    "variant:unicode-keys@sha256:28858a2af58e5d99dceaddca52f9b76e00ec32751c64400180d9771537704d5a"
+  ],
+  "limitations" : [
+    "Fixture path: hosted tests in the sandboxed Mac app on the development Mac, on fresh stores in the app container. It supports implemented at most.",
+    "Drags and drops are the item-provider transfers a drag carries, run in process. No window, pointer, Finder, or save panel took part; the file was written by the Transferable file export the save panel uses.",
+    "No physical iPhone or iPad and no iOS simulator ran in this check."
+  ],
+  "outcome" : {
+    "detail" : "All 28 checks matched. The sample (682 bytes) exported from store A with its exact bytes, as data and as a file; store B imported the file under the stable ID F1586771-0F15-4044-A372-5F9BC9968FDB and exported the same bytes. Reimporting by file, by drop, and from the bundle each reviewed as already in the lab, committed nothing, and added no receipt. 5 Unicode and empty-field variants were byte-identical through both stores. The traversal fixture was refused by file and by drop with its sentence, leaving no receipt and nothing in staging. Reset Demo left the imported object and its bytes unchanged. Store B held one item under the stable ID, 6 items of the person's own, and 12 demo items.",
+    "result" : "passed"
+  },
+  "provenance" : {
+    "appVersion" : "0.1.0",
+    "buildNumber" : "1",
+    "buildProfile" : "CoreLocal",
+    "minimumOS" : "26.0",
+    "sdkName" : "macosx27.0",
+    "sourceRevision" : "6a59e44",
+    "xcodeBuild" : "27A266a",
+    "xcodeVersion" : "27.0"
+  },
+  "schemaVersion" : 1,
+  "steps" : [
+    "xcodebuild -scheme LabMac-Core -only-testing:LabMacTests/PortableObjectsHostEvidenceTests test",
+    "Stores A and B: fresh SQLite stores in the app container, each seeded by the host's first run (Reset Demo), each with one collection of the person's own",
+    "A: Import Sample Object, then Import (PortableObjectsSession, as the app UI)",
+    "A: the export preview's object, as data and written by the Transferable file export",
+    "B: Import from File… with that file, then Import; B's export preview",
+    "B: the same file again, a drop of A's object, and Import Sample Object: each reviewed, and committing does nothing",
+    "5 Unicode and empty-field variants: imported into A by file, dropped from A into B, exported from both",
+    "B: the traversal fixture by file and by drop",
+    "B: Reset Demo, then the export preview again; store B read directly"
+  ],
+  "subject" : "LAB-008"
+}

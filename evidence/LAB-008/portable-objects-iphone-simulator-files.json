@@ -1,0 +1,56 @@
+{
+  "check" : "Portable Objects Files round trip in the iOS simulator: the bundled sample exported to On My iPhone, then a document the Mac exported imported into a fresh store and exported again byte-identical; reimports change nothing, and six hostile files from Files are refused",
+  "date" : "2026-09-30T20:53:07Z",
+  "execution" : {
+    "path" : "simulator",
+    "simulator" : {
+      "deviceClass" : "iPhone 17",
+      "osVersion" : "27.0 (24A434)",
+      "platform" : "iOS"
+    }
+  },
+  "inputs" : [
+    "sample:app-bundle@sha256:4dfbd2a9e9199fd8a87d19e709e0661df3e1125e1443057bbe51da5c0fa04a4f",
+    "from-mac:Mac export (M1)@sha256:4dfbd2a9e9199fd8a87d19e709e0661df3e1125e1443057bbe51da5c0fa04a4f",
+    "seed:app-bundle@sha256:d132b2dc787cea268736ac6a4ac4acc1f582b430bbb1a30f59dff2d02201041d",
+    "malformed:Fixtures/LAB-008/malformed.anlab@sha256:7bf6318001b67eeb4b279a29f6acaabc1c4f3867462501b0b9a0f9a7e6ab3e6e",
+    "oversized:generated, 2097191 bytes@sha256:e420bb60f4723e930a11f94f2179c41ed9d4003225b198b41684302eb2410b9c",
+    "traversal:Fixtures/LAB-008/traversal-attachment.anlab@sha256:49905ccd9317ff9c381533953a7735e20d82e4783e76a6ba52c830ffa7cf591a",
+    "newer-schema:Fixtures/LAB-008/newer-schema.anlab@sha256:dc9953b9acd1708c00acd71d93a5f2655799edd651d6bc14ee40310fc3bd69b3",
+    "authority-field:Fixtures/LAB-008/authority-field.anlab@sha256:5398ae828de2c263aa4e3e1e6102030ae4a95caf8c04ef74f59b6e1f315677b4",
+    "duplicate-keys:Fixtures/LAB-008/duplicate-keys.anlab@sha256:8ea8ceff326adfd8f74b0a51c39b90de785c011d28d9549b04776e9daa60ef90"
+  ],
+  "limitations" : [
+    "Simulator path: the iOS 27.0 simulator on the development Mac. It supports implemented at most and is no proof for a physical iPhone or iPad.",
+    "The Mac's export and the hostile files were copied by the host into the simulator's On My iPhone storage folder, not delivered by AirDrop, iCloud Drive, or another app. The document picker listed them, and the app received them through its file importer.",
+    "Saving over an existing file's name did not complete: in two attempts, pressing Save wrote nothing and showed no confirmation the harness could reach. The run saved under a new name. LAB-008-A replaced a file with the same bytes.",
+    "Driven by a UI-test harness that is not committed. No drag, drop, or Share… ran; iPhone rows are not drag sources.",
+    "No VoiceOver, Voice Control, or Full Keyboard Access pass."
+  ],
+  "outcome" : {
+    "detail" : "Passed, simulator only. Phase 1: the sample reviewed “New to this lab” and imported, and Export… saved 682 bytes to On My iPhone, SHA-256 4dfbd2a9…, identical to the sample. Phase 2, on a fresh store: the Mac's export M1 reviewed “New to this lab” and imported under the stable ID F1586771-0F15-4044-A372-5F9BC9968FDB; Export… saved from-simulator.anlab (S1), 682 bytes, SHA-256 4dfbd2a9…, byte-identical to M1. M1 again and the bundled sample then reviewed “Already in this lab”. The six hostile files were each refused with a sentence and no review opened, as on the Mac: “The document is not valid JSON, so it was refused.”; “The document is larger than 2 MB, the most a lab object can be.”; “Attachment 1 has a path that points outside the object (it contains “..”), so the object was refused.”; “This object was saved in schema version 2 by a newer version of the lab; this version reads version 1.”; “This object carries a field that claims permissions or file access. Objects are data only, so it was refused.”; and “The document names the same field twice, so it was refused.” Each ended “Nothing was imported.” The list held one row for the object. Afterwards the store held 12 demo items, 1 item of the person's own under the stable ID, and 3 committed app-UI receipts (the first-run Reset Demo, Create Collection, and Create Item), and every staging folder was empty.",
+    "result" : "passed"
+  },
+  "provenance" : {
+    "appVersion" : "0.1.0",
+    "buildNumber" : "1",
+    "buildProfile" : "CoreLocal",
+    "minimumOS" : "26.0",
+    "sdkName" : "iphonesimulator27.0",
+    "sourceRevision" : "6a59e44",
+    "xcodeBuild" : "27A266a",
+    "xcodeVersion" : "27.0"
+  },
+  "schemaVersion" : 1,
+  "steps" : [
+    "A throwaway UI-test harness, not committed: a copy of 6a59e44 with only a UI-test target and scheme added; the app's sources and settings unchanged",
+    "xcodebuild -scheme <harness> -destination 'platform=iOS Simulator,id=<ticket simulator>' test, one phase at a time, on a simulator created for this ticket and erased first",
+    "The app was uninstalled before each phase, so each started with an empty store while Files kept its documents",
+    "Phase 1: Actions, Create Lab Collection “Imports”; Catalog, Portable Objects, Open Portable Objects; Import Sample Object; Import; the object, Export…, On My iPhone, Save (S0)",
+    "Between phases, on the Mac: S0 copied out and compared; the Mac's export M1 and six hostile files placed in the simulator's On My iPhone storage folder",
+    "Phase 2: Create Lab Collection “Imports”; Import from File…, On My iPhone, from-mac.anlab; Import; the object, Export…, saved as “from-simulator” (S1)",
+    "Phase 2: Import from File… with from-mac.anlab again, Import Sample Object, then each hostile file in turn",
+    "After: S1 copied out and compared with M1; the app's store and staging folders read from copies"
+  ],
+  "subject" : "LAB-008"
+}
