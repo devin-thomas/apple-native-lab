@@ -335,8 +335,12 @@ struct SquareImage {
         }
         try #require(drawn)
         self.width = width
-        luminance = stride(from: 0, to: bytes.count, by: 4).map { index in
-            (0.2126 * Double(bytes[index]) + 0.7152 * Double(bytes[index + 1]) + 0.0722 * Double(bytes[index + 2])) / 255
+        // Split into typed steps: Swift 6.2's type checker times out on the one-line sum.
+        luminance = stride(from: 0, to: bytes.count, by: 4).map { (index: Int) -> Double in
+            let red: Double = 0.2126 * Double(bytes[index])
+            let green: Double = 0.7152 * Double(bytes[index + 1])
+            let blue: Double = 0.0722 * Double(bytes[index + 2])
+            return (red + green + blue) / 255
         }
     }
 
