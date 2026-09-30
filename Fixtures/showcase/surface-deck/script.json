@@ -1,0 +1,78 @@
+{
+  "format": "native-lab-demo-script",
+  "formatVersion": 1,
+  "id": "surface-deck",
+  "subject": "LAB-004",
+  "title": "Start, pause, and undo the demo session, then reset the demo and start it again",
+  "dataTier": "public-fixture",
+  "provenance": "Original synthetic script written for this project's LAB-004 qualification replay and distributed under its MIT License. Its seed is a byte-for-byte copy of the app's demo seed, Fixtures/demo/seed.json, and its session ID is the one the app, its widget, and its Controls share.",
+  "seed": "seed.json",
+  "untested": [
+    "The widget, the Controls, and the App Intents: the replay submits each change to OperationService as the adapter it is composed with, and never runs an intent type, WidgetKit, or the snapshot file.",
+    "A stale toggle: the runner counts a conflict receipt as a step that did not pass, so a stale surface's conflict is proved by the SurfaceDeck package and Mac hosted qualification tests instead.",
+    "The snapshot, its redaction, and its stale indicator: the replay writes no snapshot and draws no surface.",
+    "Host views and the receipt list: the replay renders nothing.",
+    "Physical devices and the iOS, watchOS, and tvOS simulators: the replay runs in the package test process on the Mac."
+  ],
+  "steps": [
+    {
+      "id": "approve-reset",
+      "approve": "reset",
+      "description": "The person confirms Reset Demo."
+    },
+    {
+      "id": "reset",
+      "request": "C9ACC498-C8DF-4DD7-A889-E8C83F6A7EFF",
+      "resetDemo": {},
+      "description": "Reset Demo creates the 12 original samples. There is no session yet: it has never been started."
+    },
+    {
+      "id": "start-session",
+      "request": "42C528A8-FFF5-4EDA-91AB-299E9C3BE78F",
+      "setSession": { "id": "9B54BD13-C217-4447-BF24-6664727C367A", "running": true },
+      "description": "Start the session, as the deck's Start Session or a toggle that showed a never-started session does. It is created, running, at revision 1."
+    },
+    {
+      "id": "pause-session",
+      "request": "8C4DDC09-FB8B-4DB7-9E8F-905C6C0B6F05",
+      "setSession": { "id": "9B54BD13-C217-4447-BF24-6664727C367A", "expected": 1, "running": false },
+      "description": "Pause the session from the revision a surface showed, 1. It is paused at revision 2."
+    },
+    {
+      "id": "undo-pause",
+      "request": "59447952-98E1-4EC6-8E48-3BEAA5846188",
+      "undo": "pause-session",
+      "description": "Undo the pause with the operation its receipt recorded. The session runs again at revision 3."
+    },
+    {
+      "id": "find-swatches",
+      "find": {
+        "collection": "A40194B3-5E91-4C5C-AE02-CF703BE23224",
+        "expect": [
+          "DB666EF1-F642-43F1-B415-895B6ECFF693",
+          "9B97BF2F-4D0B-4197-9CA8-36489DF40455",
+          "C8E1904C-E8DC-40A0-93D3-53F6C0FFF95D",
+          "3A1711A8-E1DB-489E-8321-414266A8DF49"
+        ]
+      },
+      "description": "List the Pigment swatches collection by title: the session's changes touched no sample."
+    },
+    {
+      "id": "approve-reset-again",
+      "approve": "reset-again",
+      "description": "The person confirms Reset Demo a second time."
+    },
+    {
+      "id": "reset-again",
+      "request": "409EBA74-0AA7-4A15-B614-F49470AC8CB2",
+      "resetDemo": {},
+      "description": "Reset Demo pauses the running session at its next revision, 4, and removes nothing."
+    },
+    {
+      "id": "start-after-reset",
+      "request": "B7F89C77-2F24-4FAF-A770-526BEA099190",
+      "setSession": { "id": "9B54BD13-C217-4447-BF24-6664727C367A", "expected": 4, "running": true },
+      "description": "Start the session from the paused state the reset left, revision 4. It runs at revision 5."
+    }
+  ]
+}

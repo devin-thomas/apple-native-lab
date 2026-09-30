@@ -29,7 +29,8 @@ extension DemoScript {
     ///     { "id": "reset", "request": "<UUID>", "resetDemo": {} },
     ///     { "id": "find-glass", "find": { "text": "glass", "expect": ["<item UUID>"] } },
     ///     { "id": "rename", "request": "<UUID>", "updateItem": { "id": "<UUID>", "expected": 1, "title": "…" } },
-    ///     { "id": "undo-rename", "request": "<UUID>", "undo": "rename" }
+    ///     { "id": "undo-rename", "request": "<UUID>", "undo": "rename" },
+    ///     { "id": "start", "request": "<UUID>", "setSession": { "id": "<UUID>", "running": true } }
     ///   ]
     /// }
     /// ```
@@ -191,7 +192,7 @@ private struct StepEntry: Decodable {
 
     private static let performKeys: [String] = [
         "resetDemo", "createCollection", "updateCollection", "archiveCollection", "restoreCollection",
-        "createItem", "updateItem", "archiveItem", "restoreItem", "undo",
+        "createItem", "updateItem", "archiveItem", "restoreItem", "setSession", "undo",
     ]
     private static let actionKeys = ["approve", "find"] + performKeys
 
@@ -248,6 +249,7 @@ private struct OperationEntry: Decodable {
     let expected: Int?
     let title: String?
     let note: String?
+    let running: Bool?
 
     init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: AnyKey.self)
@@ -258,6 +260,7 @@ private struct OperationEntry: Decodable {
         expected = try container.decodeIfPresent(Int.self, forKey: AnyKey(stringValue: "expected"))
         title = try container.decodeIfPresent(String.self, forKey: AnyKey(stringValue: "title"))
         note = try container.decodeIfPresent(String.self, forKey: AnyKey(stringValue: "note"))
+        running = try container.decodeIfPresent(Bool.self, forKey: AnyKey(stringValue: "running"))
     }
 
     private func failure(_ make: (String) -> DemoScriptError, _ key: String) -> ScriptFileFailure {
@@ -334,6 +337,14 @@ private struct OperationEntry: Decodable {
         case "restoreItem":
             try allow(["id", "expected"])
             return .restoreItem(id: ItemID(rawValue: try entityID()), expected: try revision())
+        case "setSession":
+            // LAB-004. `expected` is absent for a session that was never started.
+            try allow(["id", "expected", "running"])
+            return .setSession(
+                id: SessionID(rawValue: try entityID()),
+                expected: expected == nil ? nil : try revision(),
+                running: try required(running, "running")
+            )
         default:
             throw ScriptFileFailure(error: .unknownField(path: path))
         }

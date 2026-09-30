@@ -38,6 +38,24 @@ The same script is replayed three ways:
 
 The request IDs were generated once at random for this fixture. Never change or reuse one.
 
+## `surface-deck/`
+
+The complete [LAB-004](../../experiments/LAB-004-surface-deck.md) fixture interaction, from a clean store, for the LAB-004-B qualification. Its `seed.json` is a byte-for-byte copy of the app's demo seed, and its session ID is the one the app, its widget, and its Controls share. `SurfaceDeckShowcaseTests` in `Packages/LabDemo` fails if either differs.
+
+| Step | What it does |
+|---|---|
+| `approve-reset`, `reset` | The person confirms Reset Demo, which creates the 12 samples. The session has never been started. |
+| `start-session` | Start the session, as the deck's Start Session or a toggle that showed a never-started session does. It is created, running, at revision 1. |
+| `pause-session` | Pause it from the revision a surface showed, 1. It is paused at revision 2. |
+| `undo-pause` | Submit the undo recorded in the pause's receipt. It runs again at revision 3. |
+| `find-swatches` | List the Pigment swatches collection by title: the session's changes touched no sample. |
+| `approve-reset-again`, `reset-again` | A second Reset Demo pauses the running session at revision 4 and removes nothing. |
+| `start-after-reset` | Start it from the paused state the reset left, revision 4. It runs at revision 5. |
+
+A stale toggle is not in the script. The runner counts a conflict receipt as a step that did not pass, so a stale surface's conflict is proved by the qualification tests instead: `SurfaceDeckQualificationTests` (`Packages/LabFeatures`) and `SurfaceDeckQualificationHostTests` and `SurfaceDeckHostEvidenceTests` in the Mac app. `SurfaceDeckShowcaseTests` also replays a copy with a stale step, to show it is refused and changes nothing.
+
+The request IDs were generated once at random for this fixture. Never change or reuse one.
+
 ## Script format
 
 `script.json` (`format: "native-lab-demo-script"`, `formatVersion: 1`) names its seed, a file in the same folder in the demo seed format that `Fixtures/demo/seed.json` uses. `DemoScript(folder:)` loads both:
@@ -47,7 +65,7 @@ The request IDs were generated once at random for this fixture. Never change or 
 - **Steps.** Each step has an `id` and exactly one action:
   - `approve`: the name of a later step.
   - `find`: optional `collection`, `text`, `includeArchived`, and `limit`, and the ordered item IDs it must `expect`.
-  - A change, with a `request` UUID: `resetDemo`, one of the domain operations such as `updateItem` or `archiveItem`, or `undo`, which names an earlier step.
+  - A change, with a `request` UUID: `resetDemo`, one of the domain operations such as `updateItem`, `archiveItem`, or `setSession` (`id`, `running`, and `expected` unless the session was never started), or `undo`, which names an earlier step.
 - **Order.** The first change must be `resetDemo`, with the script's own seed.
 
 A script cannot choose its adapter, permissions, or grants. The runner acts as the app UI with that adapter's fixed ceiling ([ADR-011](../../docs/adr/ADR-011.md)). Its only grants are the ones its `approve` steps ask the in-memory ledger for, each covering exactly one later step ([ADR-013](../../docs/adr/ADR-013.md)). Each run starts from a new, empty store and refuses one that already holds data.
