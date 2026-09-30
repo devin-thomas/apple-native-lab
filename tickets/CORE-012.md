@@ -1,7 +1,7 @@
 ---
 id: "CORE-012"
 title: "Qualify the complete first six-lab journey"
-status: "planned"
+status: "in-progress"
 milestone: "M1"
 kind: "implementation"
 depends_on: ["CORE-006", "CORE-007", "CORE-008", "CORE-009", "CORE-010", "LAB-001-B", "LAB-004-B", "LAB-007-B", "LAB-008-B", "LAB-010-B", "LAB-035-B"]
