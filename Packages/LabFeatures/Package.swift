@@ -107,5 +107,16 @@ let package = Package(
             name: "SurfaceDeckTests",
             dependencies: ["SurfaceDeck", .product(name: "LabDomain", package: "LabDomain")]
         ),
+        // CORE-012: the first six-lab journey across every M1 module over one OperationService.
+        // Tests only; no product or host links it.
+        .testTarget(
+            name: "FirstJourneyTests",
+            dependencies: [
+                "ActionAtlas", "SurfaceDeck", "ShareIngress", "PortableObjects", "TypedIntelligence", "AccessSuperpower",
+                .product(name: "LabDomain", package: "LabDomain"),
+                .product(name: "LabStaging", package: "LabStaging"),
+                .product(name: "LabSupport", package: "LabSupport"),
+            ]
+        ),
     ]
 )
