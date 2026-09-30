@@ -12,6 +12,7 @@ let package = Package(
         .library(name: "ShareIngress", targets: ["ShareIngress"]),
         .library(name: "PortableObjects", targets: ["PortableObjects"]),
         .library(name: "SurfaceDeck", targets: ["SurfaceDeck"]),
+        .library(name: "TabletopReality", targets: ["TabletopReality"]),
     ],
     dependencies: [
         .package(path: "../LabSupport"),
@@ -106,6 +107,25 @@ let package = Package(
         .testTarget(
             name: "SurfaceDeckTests",
             dependencies: ["SurfaceDeck", .product(name: "LabDomain", package: "LabDomain")]
+        ),
+        // LAB-023 Tabletop Reality: the original procedural kit, placement rules, tracking gates,
+        // relocalization and mapping policy, and the lab-owned anchor operations, over LabDomain
+        // values. No RealityKit or ARKit here: the hosts draw the scene and run the AR adapter.
+        .target(
+            name: "TabletopReality",
+            dependencies: [
+                .product(name: "LabDomain", package: "LabDomain"),
+                .product(name: "LabSupport", package: "LabSupport"),
+            ],
+            resources: [.copy("Resources/tabletop-kit.json")]
+        ),
+        .testTarget(
+            name: "TabletopRealityTests",
+            dependencies: [
+                "TabletopReality",
+                .product(name: "LabDomain", package: "LabDomain"),
+                .product(name: "LabSupport", package: "LabSupport"),
+            ]
         ),
     ]
 )

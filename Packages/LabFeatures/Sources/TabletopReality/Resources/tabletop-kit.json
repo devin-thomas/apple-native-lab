@@ -1,0 +1,86 @@
+{
+  "format": "native-lab-tabletop-kit",
+  "version": 1,
+  "title": "Harbor village",
+  "table": { "title": "Oak table", "width": 900, "depth": 600, "thickness": 30, "color": "oak" },
+  "fixtures": [
+    {
+      "key": "windmill",
+      "title": "Windmill",
+      "summary": "A round stone windmill with a red cap and four cloth sails facing its front.",
+      "radius": 65,
+      "parts": [
+        { "shape": "cylinder", "size": [100, 140, 100], "offset": [0, 70, 0], "color": "stone" },
+        { "shape": "cone", "size": [120, 70, 120], "offset": [0, 175, 0], "color": "roof" },
+        { "shape": "box", "size": [14, 200, 6], "offset": [0, 130, 56], "color": "sail" },
+        { "shape": "box", "size": [200, 14, 6], "offset": [0, 130, 56], "color": "sail" }
+      ]
+    },
+    {
+      "key": "lighthouse",
+      "title": "Lighthouse",
+      "summary": "A tall white tower on a stone plinth, with a glass lamp room and a red roof.",
+      "radius": 45,
+      "parts": [
+        { "shape": "cylinder", "size": [80, 40, 80], "offset": [0, 20, 0], "color": "stone" },
+        { "shape": "cylinder", "size": [56, 200, 56], "offset": [0, 140, 0], "color": "chalk" },
+        { "shape": "cylinder", "size": [64, 36, 64], "offset": [0, 258, 0], "color": "glass" },
+        { "shape": "cone", "size": [70, 40, 70], "offset": [0, 296, 0], "color": "roof" }
+      ]
+    },
+    {
+      "key": "cottage",
+      "title": "Cottage",
+      "summary": "A small brick cottage with a flat red roof and a wooden door on its front.",
+      "radius": 70,
+      "parts": [
+        { "shape": "box", "size": [120, 80, 90], "offset": [0, 40, 0], "color": "brick" },
+        { "shape": "box", "size": [130, 20, 100], "offset": [0, 90, 0], "color": "roof" },
+        { "shape": "box", "size": [24, 44, 4], "offset": [0, 22, 46], "color": "bark" }
+      ]
+    },
+    {
+      "key": "pine",
+      "title": "Pine Tree",
+      "summary": "A pine tree with two tiers of green branches on a short trunk.",
+      "radius": 40,
+      "parts": [
+        { "shape": "cylinder", "size": [20, 40, 20], "offset": [0, 20, 0], "color": "bark" },
+        { "shape": "cone", "size": [80, 90, 80], "offset": [0, 85, 0], "color": "leaf" },
+        { "shape": "cone", "size": [60, 70, 60], "offset": [0, 140, 0], "color": "leaf" }
+      ]
+    },
+    {
+      "key": "water-tower",
+      "title": "Water Tower",
+      "summary": "A blue water tank on four metal legs, with a conical lid.",
+      "radius": 50,
+      "parts": [
+        { "shape": "cylinder", "size": [10, 120, 10], "offset": [-35, 60, -35], "color": "metal" },
+        { "shape": "cylinder", "size": [10, 120, 10], "offset": [35, 60, -35], "color": "metal" },
+        { "shape": "cylinder", "size": [10, 120, 10], "offset": [-35, 60, 35], "color": "metal" },
+        { "shape": "cylinder", "size": [10, 120, 10], "offset": [35, 60, 35], "color": "metal" },
+        { "shape": "cylinder", "size": [90, 70, 90], "offset": [0, 155, 0], "color": "water" },
+        { "shape": "cone", "size": [96, 30, 96], "offset": [0, 205, 0], "color": "roof" }
+      ]
+    },
+    {
+      "key": "lantern",
+      "title": "Lantern",
+      "summary": "A small metal lantern with a glowing core behind glass.",
+      "radius": 30,
+      "parts": [
+        { "shape": "cylinder", "size": [40, 10, 40], "offset": [0, 5, 0], "color": "metal" },
+        { "shape": "box", "size": [30, 40, 30], "offset": [0, 30, 0], "color": "glass" },
+        { "shape": "sphere", "size": [16, 16, 16], "offset": [0, 30, 0], "color": "lamp" },
+        { "shape": "cone", "size": [40, 16, 40], "offset": [0, 58, 0], "color": "metal" }
+      ]
+    }
+  ],
+  "starter": [
+    { "fixture": "windmill", "x": -240, "z": -60, "yaw": 20 },
+    { "fixture": "cottage", "x": 60, "z": -120, "yaw": 0 },
+    { "fixture": "pine", "x": 250, "z": 90, "yaw": 0 },
+    { "fixture": "lantern", "x": -60, "z": 150, "yaw": 0 }
+  ]
+}
