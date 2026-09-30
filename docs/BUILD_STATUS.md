@@ -228,6 +228,7 @@ Bundle identifiers derive from `LAB_BUNDLE_PREFIX` (default `org.example`), and 
 | 2026-09-29 | LAB-004-A device, Lock Screen, budget, Mac widget | none | not run. The widget, the Controls, and the App Group snapshot on a device are blocked: a free Personal Team cannot sign App Groups. The CoreLocal deck and previews need no App Group; only the integrator installs to devices. Also not run: a real Lock Screen widget on a locked device, a denied WidgetKit budget and the hour to the stale entry, the Action button, a Mac or Watch widget (not built), VoiceOver, iPad, a 26-SDK compile, and `build_manifest.py --lane Store` |
 | 2026-09-30 | Watch install | `script/install_watch.sh <device-id>` | installed and launched on Watch8,2 (Apple Watch Series 12), watchOS 27.0, paired to this Mac with Developer Mode on, Personal Team signing; about 80 seconds end to end. The build was acd0425 with four scheme files changed locally (`LabSourceRevision` = `acd0425-dirty`). The first install registered `$(LAB_BUNDLE_PREFIX).nativelab.watchkitapp`. Right after it, `devicectl device info processes` did not list the app. A relaunch with `--terminate-existing` printed "A required XPC connection to remoteService was unavailable", yet the process list then showed `NativeLabWatch` running. This proves installation only; no Watch experiment ran |
 | 2026-09-30 | Apple TV destination | `xcrun devicectl device info details` | AppleTV11,1 (Apple TV 4K, 2nd generation), tvOS 18.6: paired, Developer Mode enabled, developer disk image services available. Nothing installed: the project has no tvOS host target, and every package's tvOS floor is 26.0 |
+| 2026-09-30 | Apple TV update | `xcrun devicectl device info details` | the same AppleTV11,1 now reports tvOS 27.0 (24J361): paired, Developer Mode enabled, developer disk image services available, connected. It meets every package's tvOS 26.0 floor. Nothing installed: the project still has no tvOS host target |
 
 `script/test.sh` runs every check above that needs no device or signing.
 
@@ -237,7 +238,7 @@ Bundle identifiers derive from `LAB_BUNDLE_PREFIX` (default `org.example`), and 
 |---|---|
 | Xcode build and tests on the compatibility Mac itself | Its Xcode 26.6 license has not been accepted. The 26-family level is already proven in CI with the same Xcode build (17F113), and its packages compile there with Swift 6.2.3. |
 | iPad | No device available for this project. |
-| Apple TV install | The paired Apple TV 4K (2nd generation) runs tvOS 18.6, below every package's tvOS 26.0 floor, and the project has no tvOS host target yet. |
+| Apple TV install | The paired Apple TV 4K (2nd generation) runs tvOS 27.0, which meets every package's tvOS 26.0 floor, but the project has no tvOS host target yet. One arrives with the first TV experiment (LAB-019, LAB-031, or LAB-034). |
 | Device verification of any experiment | LAB-001 Action Atlas's in-app path is verified on a physical iPhone (`evidence/LAB-001/action-atlas-iphone-in-app.json`); its Shortcuts path only in the simulator, so it stays `implemented`. All six M1 experiments (LAB-001, 004, 007, 008, 010, 035) are `implemented` on the Mac and in the simulator. Share Ingress's extension and Surface Deck's widget and Control are blocked on a device by Personal Team signing (no App Groups). The other 42 remain `specified`. |
 
 ## Known constraints
