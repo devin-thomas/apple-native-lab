@@ -6,6 +6,7 @@ struct OperationPlan: Sendable {
     var collections: [LabCollection] = []
     var items: [LabItem] = []
     var sessions: [LabSession] = []
+    var jobs: [LabJob] = []
     var removals: [EntityReference] = []
     var undo: DomainOperation?
     var phrase: Phrase
@@ -150,7 +151,97 @@ struct OperationPlanner: Sendable {
 
         case .setSession(let id, let expected, let running):
             return try await setSession(id, expected: expected, running: running)
+
+        case .startJob(let draft):
+            return try await startJob(draft)
+
+        case .updateJob(let id, let expected, let transition):
+            return try await updateJob(id, expected: expected, transition: transition)
         }
+    }
+
+    // MARK: Jobs (LAB-032 Render That Survives)
+
+    /// Plans a new running job with none of its work durable yet.
+    private func startJob(_ draft: JobDraft) async throws(OperationError) -> OperationPlan {
+        let reference = EntityReference.job(draft.id)
+        guard try await job(draft.id) == nil else { throw .ruleViolation(.alreadyExists(reference)) }
+        let progress: JobProgress
+        do { progress = try JobProgress(completed: 0, total: draft.total) } catch { throw .invalidPayload(error) }
+        let created = LabJob(
+            id: draft.id, jobKind: draft.kind, title: draft.title, progress: progress, namespace: draft.namespace
+        )
+        return OperationPlan(
+            changes: [EntityChange(entity: reference, previousRevision: nil, newRevision: created.revision)],
+            preconditions: [RevisionPrecondition(entity: reference, expected: nil)],
+            jobs: [created],
+            undo: nil,
+            phrase: Phrase("Started", "Start", "\(draft.kind) job “\(draft.title)”")
+        )
+    }
+
+    /// Plans one lifecycle step. A stale revision gets a conflict receipt, as every update does, so
+    /// a worker that lost a race with a person's cancel learns it and stops. A finished job, a
+    /// step the current phase does not allow, and progress that would not move forward are refused
+    /// before anything is recorded.
+    private func updateJob(_ id: JobID, expected: Revision, transition: JobTransition) async throws(OperationError) -> OperationPlan {
+        let current = try await requireJob(id)
+        if let conflict = conflict(current.reference, current.title, current.revision, expected) { return conflict }
+        guard !current.phase.isFinished else { throw .ruleViolation(.jobFinished(id)) }
+        let subject = "\(current.jobKind) job “\(current.title)”"
+        let phase = current.phase.name
+
+        func require(_ allowed: Set<JobPhase.Name>) throws(OperationError) {
+            guard allowed.contains(phase) else { throw .ruleViolation(.jobPhase(id, current: phase)) }
+        }
+
+        let updated: LabJob
+        let phrase: Phrase
+        switch transition {
+        case .checkpoint(let completed):
+            try require([.running])
+            guard completed != current.progress.completed else { throw .ruleViolation(.noChanges(current.reference)) }
+            guard completed > current.progress.completed,
+                  let progress = try? JobProgress(completed: completed, total: current.progress.total)
+            else { throw .ruleViolation(.jobProgress(id)) }
+            updated = current.revised(phase: .running, progress: progress)
+            phrase = Phrase("Saved", "Save", "\(subject) at \(progress.phrase)")
+        case .interrupt(let reason):
+            try require([.running])
+            updated = current.revised(phase: .interrupted(reason: reason))
+            phrase = Phrase(
+                past: "Stopped \(subject) at \(current.progress.phrase) because \(reason.clause). It can resume.",
+                imperative: "Stop \(subject) at \(current.progress.phrase) because \(reason.clause)."
+            )
+        case .resume:
+            try require([.interrupted])
+            updated = current.revised(phase: .running)
+            phrase = Phrase("Resumed", "Resume", "\(subject) from \(current.progress.phrase)")
+        case .cancel:
+            try require([.running, .interrupted])
+            updated = current.revised(phase: .cancelled)
+            phrase = Phrase("Cancelled", "Cancel", subject)
+        case .fail(let failure):
+            try require([.running, .interrupted])
+            updated = current.revised(phase: .failed(failure: failure))
+            phrase = Phrase(
+                past: "\(subject.prefix(1).uppercased())\(subject.dropFirst()) failed: \(failure.message)",
+                imperative: "Mark \(subject) as failed: \(failure.message)"
+            )
+        case .succeed(let output):
+            try require([.running])
+            let total = current.progress.total ?? current.progress.completed
+            let progress = (try? JobProgress(completed: total, total: current.progress.total)) ?? current.progress
+            updated = current.revised(phase: .succeeded(output: output), progress: progress)
+            phrase = Phrase("Finished", "Finish", "\(subject) as “\(output.name)”")
+        }
+        return OperationPlan(
+            changes: [EntityChange(entity: current.reference, previousRevision: current.revision, newRevision: updated.revision)],
+            preconditions: [RevisionPrecondition(entity: current.reference, expected: current.revision)],
+            jobs: [updated],
+            undo: nil,
+            phrase: phrase
+        )
     }
 
     // MARK: Sessions (LAB-004 Surface Deck)
@@ -264,6 +355,13 @@ struct OperationPlanner: Sendable {
             plan.removals.append(reference)
         }
 
+        // Demo jobs are experiment state outside the seed. They are removed, and the experiment
+        // that ran one removes its own files when it sees the receipt. User jobs are never touched.
+        for job in try await allJobs().filter({ $0.namespace == .demo }).sorted(by: { $0.id.rawValue.uuidString < $1.id.rawValue.uuidString }) {
+            plan.preconditions.append(RevisionPrecondition(entity: job.reference, expected: job.revision))
+            plan.removals.append(job.reference)
+        }
+
         // Sessions are demo state outside the seed. A running one is paused at its next revision,
         // never removed, so a stale toggle prepared before the reset finds a newer revision.
         for session in try await allSessions().sorted(by: { $0.id.rawValue.uuidString < $1.id.rawValue.uuidString }) {
@@ -274,7 +372,8 @@ struct OperationPlanner: Sendable {
             plan.changes.append(EntityChange(entity: session.reference, previousRevision: session.revision, newRevision: paused.revision))
         }
 
-        plan.phrase = resetPhrase(seed, changes: plan.changes, removed: plan.removals.count)
+        let removedJobs = plan.removals.count(where: { $0.kind == .job })
+        plan.phrase = resetPhrase(seed, changes: plan.changes, removed: plan.removals.count - removedJobs, removedJobs: removedJobs)
         return plan
     }
 
@@ -282,14 +381,14 @@ struct OperationPlanner: Sendable {
         lhs.0.rawID.uuidString < rhs.0.rawID.uuidString
     }
 
-    private func resetPhrase(_ seed: DemoSeed, changes: [EntityChange], removed: Int) -> Phrase {
+    private func resetPhrase(_ seed: DemoSeed, changes: [EntityChange], removed: Int, removedJobs: Int) -> Phrase {
         let contents = "\(counted(seed.collections.count, "collection")) and \(counted(seed.items.count, "item"))"
         // A reset only ever pauses a session, so session changes are counted apart from samples.
         let paused = changes.filter { $0.entity.kind == .session }.count
         let samples = changes.filter { $0.entity.kind != .session }
         let added = samples.filter { $0.previousRevision == nil }.count
         let restored = samples.count - added
-        guard added + restored + removed + paused > 0 else {
+        guard added + restored + removed + paused + removedJobs > 0 else {
             return Phrase(
                 past: "The demo already matched its original \(contents).",
                 imperative: "The demo already matches its original \(contents)."
@@ -300,7 +399,9 @@ struct OperationPlanner: Sendable {
                 .filter { $0.1 > 0 }
                 .map { "\($0.0) \($0.1)" }
             let sessions = paused > 0 ? ["\(verbs.3) \(counted(paused, "session"))"] : []
-            return (counts + sessions).joined(separator: ", ")
+            // Jobs are counted apart from samples, as sessions are (LAB-032).
+            let jobs = removedJobs > 0 ? ["\(verbs.2) \(counted(removedJobs, "job"))"] : []
+            return (counts + sessions + jobs).joined(separator: ", ")
         }
         return Phrase(
             past: "Reset the demo to its original \(contents): \(tally(("added", "restored", "removed", "paused"))).",
@@ -391,6 +492,19 @@ struct OperationPlanner: Sendable {
 
     private func allSessions() async throws(OperationError) -> [LabSession] {
         do { return try await store.sessions() } catch { throw .storeFailure(.readFailed) }
+    }
+
+    private func job(_ id: JobID) async throws(OperationError) -> LabJob? {
+        do { return try await store.job(id) } catch { throw .storeFailure(.readFailed) }
+    }
+
+    private func allJobs() async throws(OperationError) -> [LabJob] {
+        do { return try await store.jobs() } catch { throw .storeFailure(.readFailed) }
+    }
+
+    private func requireJob(_ id: JobID) async throws(OperationError) -> LabJob {
+        guard let job = try await job(id) else { throw .notFound(.job(id)) }
+        return job
     }
 
     private func requireCollection(_ id: CollectionID) async throws(OperationError) -> LabCollection {

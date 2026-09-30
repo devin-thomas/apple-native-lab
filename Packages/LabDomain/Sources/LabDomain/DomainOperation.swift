@@ -119,6 +119,13 @@ public enum DomainOperation: Hashable, Sendable, Codable {
     /// revision the caller last saw, or `nil` when it saw a session that was never started. Not
     /// destructive: pausing hides nothing, and the undo is the opposite change.
     case setSession(id: SessionID, expected: Revision?, running: Bool)
+    /// Records a new job, running, with none of its work done yet (LAB-032 Render That Survives).
+    /// Not destructive and not undoable: stopping a job is a transition, not an inverse.
+    case startJob(draft: JobDraft)
+    /// Moves a job one step through its lifecycle (`JobTransition`) at the revision the caller
+    /// last saw. Not destructive: cancelling or failing a job removes nothing from view. Never
+    /// undoable, because a job's effects are work and files that a receipt cannot take back.
+    case updateJob(id: JobID, expected: Revision, transition: JobTransition)
 
     public var kind: OperationKind {
         switch self {
@@ -132,6 +139,8 @@ public enum DomainOperation: Hashable, Sendable, Codable {
         case .restoreItem: .restoreItem
         case .resetDemo: .resetDemo
         case .setSession: .setSession
+        case .startJob: .startJob
+        case .updateJob: .updateJob
         }
     }
 
@@ -147,6 +156,10 @@ public enum DomainOperation: Hashable, Sendable, Codable {
             .item(id)
         case .setSession(let id, _, _):
             .session(id)
+        case .startJob(let draft):
+            .job(draft.id)
+        case .updateJob(let id, _, _):
+            .job(id)
         case .resetDemo:
             nil
         }
@@ -156,13 +169,15 @@ public enum DomainOperation: Hashable, Sendable, Codable {
     /// For a session, `nil` means the caller saw a session that was never started.
     public var expectedRevision: Revision? {
         switch self {
-        case .createCollection, .createItem, .resetDemo:
+        case .createCollection, .createItem, .resetDemo, .startJob:
             nil
         case .updateCollection(_, let expected, _), .archiveCollection(_, let expected),
              .restoreCollection(_, let expected), .updateItem(_, let expected, _),
              .archiveItem(_, let expected), .restoreItem(_, let expected):
             expected
         case .setSession(_, let expected, _):
+            expected
+        case .updateJob(_, let expected, _):
             expected
         }
     }
@@ -174,7 +189,7 @@ public enum DomainOperation: Hashable, Sendable, Codable {
     /// unchanged.
     public func rebased(onto revision: Revision) -> DomainOperation {
         switch self {
-        case .createCollection, .createItem, .resetDemo: self
+        case .createCollection, .createItem, .resetDemo, .startJob: self
         case .updateCollection(let id, _, let title): .updateCollection(id: id, expected: revision, title: title)
         case .archiveCollection(let id, _): .archiveCollection(id: id, expected: revision)
         case .restoreCollection(let id, _): .restoreCollection(id: id, expected: revision)
@@ -182,6 +197,7 @@ public enum DomainOperation: Hashable, Sendable, Codable {
         case .archiveItem(let id, _): .archiveItem(id: id, expected: revision)
         case .restoreItem(let id, _): .restoreItem(id: id, expected: revision)
         case .setSession(let id, _, let running): .setSession(id: id, expected: revision, running: running)
+        case .updateJob(let id, _, let transition): .updateJob(id: id, expected: revision, transition: transition)
         }
     }
 }
@@ -198,13 +214,16 @@ public enum OperationKind: String, Hashable, Sendable, Codable, CaseIterable {
     case restoreItem = "restore-item"
     case resetDemo = "reset-demo"
     case setSession = "set-session"
+    case startJob = "start-job"
+    case updateJob = "update-job"
 
     /// Whether the operation removes something from normal view. Destructive commits need their
     /// own permission, which no model tool can hold (ADR-007).
     public var isDestructive: Bool {
         switch self {
         case .archiveCollection, .archiveItem, .resetDemo: true
-        case .createCollection, .updateCollection, .restoreCollection, .createItem, .updateItem, .restoreItem, .setSession:
+        case .createCollection, .updateCollection, .restoreCollection, .createItem, .updateItem, .restoreItem, .setSession,
+             .startJob, .updateJob:
             false
         }
     }

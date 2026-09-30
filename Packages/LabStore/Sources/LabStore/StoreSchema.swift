@@ -16,6 +16,7 @@ enum StoreSchema {
         Migration(version: 1, sql: version1),
         Migration(version: 2, sql: version2),
         Migration(version: 3, sql: version3),
+        Migration(version: 4, sql: version4),
     ]
 
     static var currentVersion: Int { migrations[migrations.count - 1].version }
@@ -108,5 +109,40 @@ enum StoreSchema {
             namespace TEXT NOT NULL DEFAULT 'demo' CHECK (namespace = 'demo'),
             extras TEXT NOT NULL DEFAULT '{}' CHECK (json_valid(extras))
         ) STRICT;
+        """
+
+    /// Version 4: jobs (LAB-032 Render That Survives).
+    ///
+    /// A job is finite work a person started: its kind, title, phase, durable progress, and a
+    /// revision. `detail` holds the phase with its payload (why it stopped, how it failed, or what
+    /// it published) as JSON, and `phase` repeats the phase's name so the store can check it. A job
+    /// keeps its namespace, and a user job is never deleted. Nothing earlier changes.
+    static let version4 = """
+        CREATE TABLE jobs (
+            id TEXT PRIMARY KEY NOT NULL CHECK (length(id) = 36),
+            kind TEXT NOT NULL CHECK (length(kind) BETWEEN 1 AND 40),
+            title TEXT NOT NULL,
+            phase TEXT NOT NULL CHECK (phase IN ('running', 'interrupted', 'succeeded', 'failed', 'cancelled')),
+            detail TEXT NOT NULL CHECK (json_valid(detail)),
+            completed_units INTEGER NOT NULL CHECK (completed_units >= 0),
+            total_units INTEGER CHECK (total_units IS NULL OR (total_units >= 1 AND completed_units <= total_units)),
+            revision INTEGER NOT NULL CHECK (revision >= 1),
+            namespace TEXT NOT NULL CHECK (namespace IN ('user', 'demo')),
+            extras TEXT NOT NULL DEFAULT '{}' CHECK (json_valid(extras))
+        ) STRICT;
+
+        CREATE INDEX jobs_by_kind ON jobs (kind);
+
+        CREATE TRIGGER jobs_keep_their_namespace BEFORE UPDATE OF namespace ON jobs
+        WHEN NEW.namespace IS NOT OLD.namespace
+        BEGIN SELECT RAISE(ABORT, 'lab-namespace: an entity never changes namespace'); END;
+
+        CREATE TRIGGER jobs_keep_their_kind BEFORE UPDATE OF kind ON jobs
+        WHEN NEW.kind IS NOT OLD.kind
+        BEGIN SELECT RAISE(ABORT, 'lab-job: a job never changes kind'); END;
+
+        CREATE TRIGGER user_jobs_are_never_deleted BEFORE DELETE ON jobs
+        WHEN OLD.namespace = 'user'
+        BEGIN SELECT RAISE(ABORT, 'lab-namespace: user data is never deleted'); END;
         """
 }

@@ -109,6 +109,7 @@ final class SQLiteDatabase {
 enum SQLiteValue {
     case integer(Int)
     case text(String)
+    case null
 }
 
 /// A prepared statement. It is finalized when released.
@@ -131,6 +132,7 @@ final class SQLiteStatement {
             let status = switch value {
             case .integer(let number): sqlite3_bind_int64(statement, index, Int64(number))
             case .text(let text): sqlite3_bind_text(statement, index, text, -1, Self.transient)
+            case .null: sqlite3_bind_null(statement, index)
             }
             guard status == SQLITE_OK else { throw database.error(status) }
         }

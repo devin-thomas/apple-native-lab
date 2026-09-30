@@ -53,6 +53,8 @@ public enum GrantTarget: Hashable, Sendable {
             true
         case (.entity(.session), .setSession):
             true
+        case (.entity(.job), .startJob), (.entity(.job), .updateJob):
+            true
         default: false
         }
     }

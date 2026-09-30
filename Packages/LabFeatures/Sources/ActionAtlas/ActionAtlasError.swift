@@ -74,6 +74,9 @@ public enum ActionAtlasError: Error, Hashable, Sendable {
         case .emptyChanges: "Give a new title, a new note, or both. Nothing was changed."
         case .resultLimitOutOfRange(let allowed): "The result limit must be between \(allowed.lowerBound) and \(allowed.upperBound)."
         case .unsupportedSchemaVersion: "This request uses a format this build does not read. Nothing was changed."
+        // Job values (LAB-032) never come from an Action Atlas action; listed for completeness.
+        case .progressOutOfRange, .invalidSlug, .textLength, .unsafeFileName, .invalidDigest, .negativeByteCount:
+            "A job value is not valid. Nothing was changed."
         }
     }
 
@@ -111,6 +114,7 @@ public enum ActionAtlasError: Error, Hashable, Sendable {
         case .collectionArchived: "That collection is archived. Restore it or choose another. Nothing was changed."
         case .demoCollection: "Demo collections hold only the samples. Choose one of your own collections. Nothing was changed."
         case .noChanges: "Nothing would change: the new values match the current ones."
+        case .jobFinished, .jobPhase, .jobProgress: "That job cannot take this step now. Nothing was changed."
         }
     }
 }

@@ -14,11 +14,25 @@ public enum ValidationError: Error, Hashable, Sendable {
     case emptyChanges
     case resultLimitOutOfRange(allowed: ClosedRange<Int>)
     case unsupportedSchemaVersion(Int)
+    /// A job's progress is negative, beyond its total, or its total is not positive (LAB-032).
+    case progressOutOfRange
+    /// A job field that must be a lowercase slug is not one.
+    case invalidSlug(in: Field)
+    /// A job field is empty or longer than its limit.
+    case textLength(in: Field)
+    /// A job output names a path, not one file.
+    case unsafeFileName
+    /// A job output's digest is not 64 lowercase hexadecimal characters.
+    case invalidDigest
+    case negativeByteCount
 
     public enum Field: String, Hashable, Sendable, Codable {
         case title
         case note
         case searchText
+        case failureCode
+        case failureMessage
+        case outputSummary
     }
 }
 

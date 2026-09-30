@@ -186,10 +186,10 @@ enum ReleasedVersion1 {
 
     @Test func aFileFromANewerBuildIsRefusedAndLeftUnchanged() async throws {
         let directory = try TemporaryDirectory()
-        try ReleasedVersion1.makeFile(at: directory.storeURL, userVersion: 4)
+        try ReleasedVersion1.makeFile(at: directory.storeURL, userVersion: 5)
         let bytes = try Data(contentsOf: directory.storeURL)
 
-        await #expect(throws: StoreError.newerSchema(found: 4, supported: 3)) {
+        await #expect(throws: StoreError.newerSchema(found: 5, supported: 4)) {
             try await SQLiteOperationStore(url: directory.storeURL)
         }
         #expect(try Data(contentsOf: directory.storeURL) == bytes)
@@ -216,7 +216,7 @@ enum ReleasedVersion1 {
         #expect(try await store.collections().isEmpty)
 
         let raw = try SQLiteDatabase(url: directory.storeURL)
-        #expect(try raw.integer("PRAGMA user_version") == 3)
+        #expect(try raw.integer("PRAGMA user_version") == 4)
         #expect(try raw.integer("PRAGMA application_id") == 0x4C41_4253)
         #expect(try raw.strings("PRAGMA journal_mode") == ["wal"])
     }

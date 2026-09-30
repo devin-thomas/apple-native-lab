@@ -55,6 +55,10 @@ public enum ReadTarget: Hashable, Sendable {
     case items(ItemFilter)
     case session(SessionID)
     case receipt(RequestID)
+    /// One job (LAB-032).
+    case job(JobID)
+    /// Every job of one kind, or of every kind when `nil`.
+    case jobs(JobKind?)
 }
 
 /// One attempt to use the domain, as presented to the authorization policy.

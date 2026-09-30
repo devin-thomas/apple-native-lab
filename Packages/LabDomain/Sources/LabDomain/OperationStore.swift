@@ -13,12 +13,14 @@
 ///    Otherwise, if any precondition does not hold, write nothing and return
 ///    `.preconditionFailed`. Otherwise upsert every collection, then every item, then every
 ///    session in the commit, remove every entity in `commit.removals` in the order given, record
-///    `commit.receipt` under `commit.requestID`, and return `.applied`.
+///    `commit.receipt` under `commit.requestID`, and return `.applied`. Jobs are upserted after
+///    sessions.
 /// 3. A recorded receipt is never changed or replaced. Request IDs are unique.
 /// 4. Reads return the last applied state. `collections()` and `items(in:)` return archived
 ///    entities too, in any order.
 /// 5. Namespaces are fixed. An upsert never changes a stored entity's namespace, an item always
-///    has its collection's namespace, a session is always `demo`, and a removal only ever deletes
+///    has its collection's namespace, a session is always `demo`, a job keeps the namespace it was
+///    created in, and a removal only ever deletes
 ///    a `demo` entity. A store
 ///    throws rather than break one of these rules, so a planning mistake cannot reach user data.
 ///    Rule 1 covers that throw too: nothing from the commit is written.
@@ -38,6 +40,10 @@ public protocol OperationStore: Sendable {
     func session(_ id: SessionID) async throws -> LabSession?
     /// Every stored session, in any order.
     func sessions() async throws -> [LabSession]
+    /// A stored job, or `nil` (LAB-032).
+    func job(_ id: JobID) async throws -> LabJob?
+    /// Every stored job, in any order.
+    func jobs() async throws -> [LabJob]
     func apply(_ commit: AuthorizedCommit) async throws -> CommitOutcome
 }
 
@@ -59,8 +65,10 @@ public struct AuthorizedCommit: Sendable {
     public let items: [LabItem]
     /// Sessions to upsert (LAB-004). Always in the demo namespace.
     public let sessions: [LabSession]
-    /// Entities to delete, items before collections. Only Reset Demo removes anything, only demo
-    /// entities, and every removal is also pinned by a precondition.
+    /// Jobs to upsert (LAB-032).
+    public let jobs: [LabJob]
+    /// Entities to delete, items before collections, then jobs. Only Reset Demo removes anything,
+    /// only demo entities, and every removal is also pinned by a precondition.
     public let removals: [EntityReference]
 
     init(
@@ -69,6 +77,7 @@ public struct AuthorizedCommit: Sendable {
         collections: [LabCollection],
         items: [LabItem],
         sessions: [LabSession] = [],
+        jobs: [LabJob] = [],
         removals: [EntityReference]
     ) {
         self.receipt = receipt
@@ -76,6 +85,7 @@ public struct AuthorizedCommit: Sendable {
         self.collections = collections
         self.items = items
         self.sessions = sessions
+        self.jobs = jobs
         self.removals = removals
     }
 

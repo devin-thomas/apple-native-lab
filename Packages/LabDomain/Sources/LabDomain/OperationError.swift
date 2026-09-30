@@ -25,6 +25,12 @@ public enum RuleViolation: Hashable, Sendable {
     case demoCollection(CollectionID)
     /// The update would leave every field as it is.
     case noChanges(EntityReference)
+    /// The job has finished; a finished job never changes again (LAB-032).
+    case jobFinished(JobID)
+    /// The transition needs the job in another phase, such as resuming a job that is running.
+    case jobPhase(JobID, current: JobPhase.Name)
+    /// A checkpoint would move progress backwards or past the job's total.
+    case jobProgress(JobID)
 }
 
 /// A store problem, without the underlying detail, which may contain paths or content.

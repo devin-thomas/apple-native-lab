@@ -72,6 +72,7 @@ public actor OperationService {
                 collections: plan.collections,
                 items: plan.items,
                 sessions: plan.sessions,
+                jobs: plan.jobs,
                 removals: plan.removals
             )
             let outcome: CommitOutcome
@@ -139,6 +140,21 @@ public actor OperationService {
     public func findSession(_ id: SessionID, as actor: ActorScope) async throws(OperationError) -> LabSession? {
         try authorize(.read(.session(id)), for: actor)
         return try await read { try await $0.session(id) }
+    }
+
+    /// A job's current state (LAB-032). A job that was never started is not found.
+    public func findJob(_ id: JobID, as actor: ActorScope) async throws(OperationError) -> LabJob {
+        try authorize(.read(.job(id)), for: actor)
+        guard let job = try await read({ try await $0.job(id) }) else { throw .notFound(.job(id)) }
+        return job
+    }
+
+    /// Every job of one kind, or of every kind when `kind` is `nil`, in no particular order.
+    public func findJobs(kind: JobKind?, as actor: ActorScope) async throws(OperationError) -> [LabJob] {
+        try authorize(.read(.jobs(kind)), for: actor)
+        let jobs = try await read { try await $0.jobs() }
+        guard let kind else { return jobs }
+        return jobs.filter { $0.jobKind == kind }
     }
 
     /// The receipt recorded for a request, or `nil` if that request was never admitted.

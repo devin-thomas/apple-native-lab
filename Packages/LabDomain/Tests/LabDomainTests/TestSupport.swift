@@ -94,6 +94,8 @@ actor SpyStore: OperationStore {
     func receipt(for requestID: RequestID) async throws -> ActionReceipt? { try await inner.receipt(for: requestID) }
     func session(_ id: SessionID) async throws -> LabSession? { try await inner.session(id) }
     func sessions() async throws -> [LabSession] { try await inner.sessions() }
+    func job(_ id: JobID) async throws -> LabJob? { try await inner.job(id) }
+    func jobs() async throws -> [LabJob] { try await inner.jobs() }
 
     func apply(_ commit: AuthorizedCommit) async throws -> CommitOutcome {
         if let hook = beforeNextCommit {
