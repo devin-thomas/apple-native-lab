@@ -114,7 +114,7 @@ struct LiveSpeechEvidenceTests {
         }
         let scriptHash = ContentDigest.sha256(try Data(contentsOf: Repository.fixture(.sampleScript))).hex
         let record = try EvidenceRecord(
-            subject: "LAB-013-A",
+            subject: "LAB-013",
             check: "Speech Timeline's on-device path: SpeechAnalyzer and SpeechTranscriber transcribed a clip this device's speech synthesizer spoke from the sample script, through SpeechTimelineFlow, with provisional text kept apart from finalized segments",
             date: started,
             provenance: BuildProvenance(
