@@ -631,6 +631,8 @@ Use in this plan: Widget and Control configuration reference.
 
 Implementation evidence required: actual SDK symbol/availability, permissions or entitlement, and a named compile/device result.
 
+Installed SDK check (2026-09-30, Xcode 27.0 with the iOS 27.0 SDK): the widget, Control, reload, and privacy symbols Surface Deck uses, with their declared availability, are in the [installed SDK ledger](VERIFICATION_BOUNDARIES.md#widgets-controls-and-where-their-intents-run-lab-004). They were compiled for iOS and run in the iOS 27.0 simulator, not on a device: the App Group they need cannot be signed by a free Personal Team.
+
 ## S60
 
 **NSUserActivity** — reference

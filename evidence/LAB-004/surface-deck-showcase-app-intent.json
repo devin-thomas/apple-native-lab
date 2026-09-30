@@ -1,0 +1,46 @@
+{
+  "check" : "Surface Deck showcase replayed twice from a clean SQLite store as the App Intent adapter (no intent type ran); both replays share one fingerprint and end in the app-UI replay's state",
+  "date" : "2026-09-30T21:49:19Z",
+  "execution" : {
+    "path" : "fixture"
+  },
+  "inputs" : [
+    "script:surface-deck@sha256:647a27810121556ed66cb22ae90d2c7ad1717bbdd0ab2e18fd91656c8ff232e5",
+    "seed:surface-deck@sha256:d132b2dc787cea268736ac6a4ac4acc1f582b430bbb1a30f59dff2d02201041d"
+  ],
+  "limitations" : [
+    "Fixture path: the replay drives OperationService on original fixtures. It proves the domain contract on this build, not a device, a system surface, an entry point other than the runner's adapter, or a UI.",
+    "The widget, the Controls, and the App Intents: the replay submits each change to OperationService as the adapter it is composed with, and never runs an intent type, WidgetKit, or the snapshot file.",
+    "A stale toggle: the runner counts a conflict receipt as a step that did not pass, so a stale surface's conflict is proved by the SurfaceDeck package and Mac hosted qualification tests instead.",
+    "The snapshot, its redaction, and its stale indicator: the replay writes no snapshot and draws no surface.",
+    "Host views and the receipt list: the replay renders nothing.",
+    "Physical devices and the iOS, watchOS, and tvOS simulators: the replay runs in the package test process on the Mac."
+  ],
+  "outcome" : {
+    "detail" : "9 of 9 steps passed. Replay fingerprint sha256:661ee8e667dfad943ec2a34bfdcefb8ae87ecaa3ae4a79022e160af532df6b13. Adapter app-intent; store sqlite (schema 3, temporary file); timebase swift-continuous-clock.",
+    "result" : "passed"
+  },
+  "provenance" : {
+    "appVersion" : "unknown",
+    "buildNumber" : "unknown",
+    "buildProfile" : "unknown",
+    "minimumOS" : "unknown",
+    "sdkName" : "macosx27.0",
+    "sourceRevision" : "4467f62",
+    "xcodeBuild" : "27A266a",
+    "xcodeVersion" : "27.0"
+  },
+  "schemaVersion" : 1,
+  "steps" : [
+    "approve-reset: The person confirms Reset Demo.",
+    "reset: Reset Demo creates the 12 original samples. There is no session yet: it has never been started.",
+    "start-session: Start the session, as the deck's Start Session or a toggle that showed a never-started session does. It is created, running, at revision 1.",
+    "pause-session: Pause the session from the revision a surface showed, 1. It is paused at revision 2.",
+    "undo-pause: Undo the pause with the operation its receipt recorded. The session runs again at revision 3.",
+    "find-swatches: List the Pigment swatches collection by title: the session's changes touched no sample.",
+    "approve-reset-again: The person confirms Reset Demo a second time.",
+    "reset-again: Reset Demo pauses the running session at its next revision, 4, and removes nothing.",
+    "start-after-reset: Start the session from the paused state the reset left, revision 4. It runs at revision 5."
+  ],
+  "subject" : "LAB-004"
+}

@@ -60,6 +60,8 @@ These support the manual passes and never replace them. The last run is in the C
 | Access as a Superpower in the running Mac app (LAB-035) | The accessibility API and System Events against a Debug build under a separate bundle prefix | Each way of finishing the task, from ⌘5 to the receipt and its undo, and the catalog page's Open button. The chart group's `AXAudiograph` attribute holds the chart's title, summary, axes, and values | VoiceOver speech, Audio Graph playback, Full Keyboard Access |
 | Access as a Superpower on iPhone (LAB-035) | A UI-test harness in a throwaway copy, iOS Simulator, at the default settings and at the largest accessibility text size with Increase Contrast | The journey by accessibility label, from the catalog page's Open button through practice data, a Restore button, the result, the receipt, and its pinned Undo. Each bar's label and value. Xcode's accessibility audit results per screen | A physical iPhone, VoiceOver, Voice Control, the custom actions and rotor on iOS |
 | Action Atlas on iPhone (LAB-001) | A UI-test harness in a throwaway copy, iOS Simulator, at the default and largest accessibility text sizes | The Action Atlas journey works by accessibility label, from the Actions tab to a receipt's pinned Undo. Xcode's accessibility audit results are recorded per screen, and whether each form's action is on screen at the largest size | A physical iPhone, VoiceOver, Voice Control |
+| Surface Deck through the accessibility API (LAB-004) | `SurfaceDeckAccessibilityTests` in `script/test.sh` | The state card reads "Demo session, Paused" or "Running", and the toggle names what it does, with a hint, and works through the accessibility press action under every display override. Each of the 5 previews is one element that says it is a preview drawn by Native Lab, and its value is the state, never the private line, even with details shown. Show Details on Widgets is a named switch, off by default. A receipt row reads its status, and its Undo is found by name and works. View › Surface Deck has ⌘7. | VoiceOver speech, Voice Control, Full Keyboard Access, the system settings, or the system-drawn widget and Controls |
+| Surface Deck widget, Controls, and deck on iPhone (LAB-004) | A UI-test harness in a throwaway project, iOS Simulator, at the default and largest accessibility text sizes | The widget's and the Controls' elements and values as SpringBoard exposes them. The deck opened by the Open Surface Deck Control, with Xcode's accessibility audit at both sizes and whether the deck's toggle is on screen at the largest size | A physical iPhone, VoiceOver, Voice Control, a Lock Screen widget |
 
 ## Manual passes
 
@@ -185,6 +187,36 @@ What to check in the Access as a Superpower flows, beyond the core list:
 - **Largest text size (iPhone).** Each bar puts its count under its name, the Open button is on screen without scrolling, and every Restore button can be reached.
 - **Grayscale and Differentiate Without Color.** Filled squares against dashed outlines, the counts, and the word "Most" carry the answer without color.
 
+| ID | Experiment | Flow | Done when |
+|---|---|---|---|
+| D1 | [LAB-004](../experiments/LAB-004-surface-deck.md) Surface Deck | Open the deck (Mac: the sidebar, ⌘7, or the Open button on its catalog page; iPhone: the Open button on its catalog page, or the Open Surface Deck Control) | The state reads "Demo session, Paused" or "Running", then the toggle names what it does. From the Control, focus lands in the sheet and Done is reachable |
+| D2 | LAB-004 | Start the session, then undo it from the receipt | The result is heard, the receipt reads its status, and Undo says what it undoes |
+| D3 | LAB-004 | The Demo Session widget on the Home Screen, and its toggle | The session and its state are read once, "Details hidden" or "May be out of date" is read, and the toggle reads its state and works |
+| D4 | LAB-004 | The Demo Session and Open Surface Deck Controls, in Control Center | Each reads its name and value, the toggle changes the session, and Open Surface Deck opens the deck |
+| D5 | LAB-004 | Show Details on Widgets, then the previews | The switch reads its state, and each preview says it is a preview and never speaks the private line |
+
+A widget and a Control exist only in the iPhone build that uses an App Group, which the lab's signing team cannot install on a device, so D3 and D4 are `blocked` on iPhone. The Mac has no widget or Control, so they are `n/a` there.
+
+| Pass | Device | D1 | D2 | D3 | D4 | D5 |
+|---|---|---|---|---|---|---|
+| VoiceOver | Mac | not-run | not-run | n/a | n/a | not-run |
+| VoiceOver | iPhone | not-run | not-run | blocked | blocked | not-run |
+| Voice Control | Mac | not-run | not-run | n/a | n/a | not-run |
+| Voice Control | iPhone | not-run | not-run | blocked | blocked | not-run |
+| Full Keyboard Access | Mac | not-run | not-run | n/a | n/a | not-run |
+| Full Keyboard Access (hardware keyboard) | iPhone | not-run | not-run | blocked | blocked | not-run |
+| Largest accessibility text size | iPhone | not-run | not-run | blocked | blocked | not-run |
+| Increase Contrast | Mac, iPhone | not-run | not-run | blocked | blocked | not-run |
+| Reduce Motion | Mac, iPhone | not-run | not-run | blocked | blocked | not-run |
+| Reduce Transparency | Mac, iPhone | not-run | not-run | blocked | blocked | not-run |
+| Differentiate Without Color, grayscale | Mac, iPhone | not-run | not-run | blocked | blocked | not-run |
+
+What to check in the Surface Deck flows, beyond the core list:
+
+- **VoiceOver.** After Start or Pause, the deck posts the outcome's sentence; record what is spoken. On the widget, record whether the state symbol is read as a word before the name (finding 1 below). From the Open Surface Deck Control, record where focus lands in the sheet.
+- **Voice Control.** "Tap Start Session", "Tap Undo Start Session", and "Tap Show Details on Widgets" work. On the Mac, record whether ⌘Return in the deck is enough, or a menu command is wanted (finding 3 below).
+- **Largest text size (iPhone).** The deck's toggle stays on screen without scrolling, and the widget's text does not truncate mid-word.
+
 ## Known gaps
 
 - **Mac announcements are posted but not yet heard.** Since the integration of CORE-010, `LabAnnouncement.post()` uses AppKit's `announcementRequested` notification on the Mac (the product policy allows AppKit for that). No person has yet confirmed that VoiceOver speaks them; that stays a manual row.
@@ -251,3 +283,26 @@ The Action Atlas screens were reviewed against the rules above with automated ch
 | 2 | 2 | The restore has no menu command of its own. On the Mac its keyboard path is Return in the list. The list is the window's results stop, so the path needs no keyboard navigation. The selected sample's Restore Sample button, the context menu, and the bars' actions restore too. | `AccessSuperpowerListColumn` in `Apps/Mac/Window/AccessSuperpowerColumns.swift` | static review | This is the same question as Action Atlas finding 4. A Lab-menu command would be one more case in `LabCommands`; it was held back to keep the shared hook to one case. The Full Keyboard Access pass decides. |
 | 3 | 8, 9 | At the default text size the audit reported 13 issues on the experiment page, 15 on the task page, and 16 on the receipt. Contrast "nearly passed" or failed on secondary text: section headers, the chart key, and sample notes. Dynamic Type was flagged "partially supported" on the chart's collection names, counts, "Most", and key, and 1 unnamed text was clipped. In the first run, the bordered Restore buttons' tinted titles and the bordered Open button failed contrast, so both are now prominent. In the second run the Restore buttons were not flagged, and the Open button's contrast "nearly passed". | iPhone task page | simulator audit | Secondary text follows the triage of the core audit findings above. The chart's text uses text styles and grows. At the largest size the audit flags none of it, as with Action Atlas finding 6. The large-text pass confirms. |
 | 4 | 6 | At the largest accessibility size with Increase Contrast, the audit reported 2 issues on the experiment page, 1 on the task page, and 2 on the receipt. Contrast failed on text that had scrolled under a translucent bar ("12 demo samples: …" under the tab bar). The capped pinned buttons were flagged as partially supporting Dynamic Type. The Open button is on screen and hittable, but its lower part sits under the pinned Read the Specification bar. | Experiment page, task page, receipt | simulator audit and screenshots | Content under bars and the capped pinned bar follow the core triage. For visual design and the host views' owner: decide whether an implemented experiment's page pins its Open button instead of Read the Specification. |
+
+## Surface Deck review (LAB-004-B)
+
+[LAB-004](../experiments/LAB-004-surface-deck.md) shows one demo session, running or paused, in a widget, two Controls, and the app's deck. The deck and its previews are the fallback on every host. The review below was made with automated checks, a simulator harness, and by reading the code. No manual pass was run: every row for D1 to D5 in the [experiment flows](#manual-passes) is `not-run`, or `blocked` where the widget and Controls cannot be installed.
+
+**Automated results**
+
+| Check | Path | Result |
+|---|---|---|
+| `SurfaceDeckAccessibilityTests` (Mac hosted tests, in `script/test.sh`) | hosted test, macOS 27.0 | passed: 5 tests, 10 cases, covering the state card and toggle under all 6 display overrides, the 5 previews, Show Details on Widgets, the receipt and its Undo, and ⌘7 |
+| `SurfaceDeckQualificationTests`, the locked rendering (package, in `script/test.sh`) | fixture | passed: the medium and Lock Screen layouts, drawn with the privacy redaction and read back by text recognition, lose the "Changed from" line and keep the state readable. The small layout never draws it. |
+| The widget and Controls as SpringBoard exposes them | simulator, iPhone 17 Pro, iOS 27.0, created for this ticket; a UI-test harness in a throwaway project that is not committed | The widget exposes its state symbol as an image labeled "Pause" while paused, then "Demo session", "Demo session, Paused.", "Details hidden", "As of" and a time, and a switch labeled "Running" with value 0 or 1. Before the app first ran, it read "Demo session not available. Open Native Lab to show it." with no switch. The Demo Session Control reads "Demo session" with the value "Paused", "Running", or, before the app first ran, "Open Native Lab". The Open Surface Deck Control reads "Surface Deck". |
+| The deck opened by the Open Surface Deck Control | same harness | passed: the sheet's title, Done, and toggle were found by label. At the largest accessibility text size, the Pause Session button was on screen and hittable without scrolling. |
+| Xcode's accessibility audit on the deck | same harness, default size and the largest accessibility size | issues recorded as finding 4 |
+
+**Findings.** These stay open until fixed or closed by the manual pass. Each names the rule it concerns.
+
+| # | Rule | Finding | Where | Found by | Triage |
+|---|---|---|---|---|---|
+| 1 | 5 | On the Home Screen widget, the state symbol is its own element, labeled "Pause" while the session is paused, and it comes before "Demo session" and "Demo session, Paused.". A VoiceOver user may hear the session's name twice and a word that sounds like an action. | The header `Label` in `SessionWidgetView`, `Packages/LabFeatures/Sources/SurfaceDeck/SessionSurfaceViews.swift` | simulator harness, accessibility tree | For the widget's owner: hide the symbol from accessibility, or combine the header and the state line into one element, and keep the toggle separate. The VoiceOver pass confirms once the widget can be installed on a device. |
+| 2 | 5 | The deck's revision line reads the middle dot: its accessibility label is "Demo session · revision 2", and "Demo session · never started" before the first start. | `SessionStateCard.revisionText` in `Apps/Shared/SurfaceDeck/SurfaceDeckViews.swift` | simulator audit (the element's label), static review | Join the spoken parts with a comma, as Action Atlas finding 1 asks. |
+| 3 | 2 | On the Mac, Start and Pause answer ⌘Return while the deck shows, but have no menu command. The deck itself has View › Surface Deck (⌘7). | `SessionToggleButton` in `SurfaceDeckViews.swift` | static review | The same question as Action Atlas finding 4 and Access as a Superpower finding 2. The Full Keyboard Access pass decides. |
+| 4 | 8, 9 | At the default text size the audit reported 13 issues on the deck as the Control opened it, and 25 with the deck scrolled to its previews. Contrast "nearly passed" or failed on secondary text: section headers and footers, the revision line, the receipt's time and status, and the previews' captions and text. Dynamic Type was "partially unsupported" on the Receipts header, the empty-receipts sentence, the receipt's summary, Undo Start Session, and the sheet's Done button. Text was clipped on Undo Start Session and on one unnamed element, and 2 "potentially inaccessible text" issues had no element. At the largest size the audit reported 2 issues, both on Done: Dynamic Type and contrast. | iPhone deck | simulator audit | Secondary text and content under the translucent bar follow the core triage. The previews draw on a tertiary fill, which may explain the failed contrast there; confirm in the Increase Contrast pass. Done is the system's sheet button. |

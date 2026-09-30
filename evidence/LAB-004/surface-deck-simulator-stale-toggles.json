@@ -1,0 +1,49 @@
+{
+  "check" : "Stale widget and Control toggles in the iOS simulator: a tap on a surface that shows an older revision changes nothing, records a conflict receipt, and the surface redraws to the current state",
+  "date" : "2026-09-30T21:10:57Z",
+  "execution" : {
+    "path" : "simulator",
+    "simulator" : {
+      "deviceClass" : "iPhone 17 Pro",
+      "osVersion" : "27.0 (24A434)",
+      "platform" : "iOS"
+    }
+  },
+  "inputs" : [
+    "app-bundle:NativeLabSurfaces.app@sha256-of-file-hashes:e7b30cc2b8f801b7fe444c064d5c5ec348df81d40d6a57140b45c2846a1f9337",
+    "seed:app-bundle@sha256:d132b2dc787cea268736ac6a4ac4acc1f582b430bbb1a30f59dff2d02201041d"
+  ],
+  "limitations" : [
+    "The stale state was made by writing an older snapshot and reinstalling, not by a refresh the system declined. A declined WidgetKit budget and the hour until the stale mark were not observed; that criterion rests on the fixture tests.",
+    "The widget's toggle can respond to a tap before the intent runs; sampled every half second, no change was seen on the widget after tap 5.",
+    "Simulator path: an iPhone 17 Pro simulator on the iOS 27.0 runtime, created for this ticket and deleted afterwards. It supports implemented at most, and says nothing about a device.",
+    "A physical iPhone was not used. The widget, the Controls, and the App Group snapshot are blocked on the owner's iPhone: the free Personal Team cannot sign App Groups, so LabPhone-Surfaces cannot be installed there.",
+    "The harness was a UI-test target in a throwaway project outside the repository. It drove SpringBoard and the app by bundle identifier and never built or installed the app."
+  ],
+  "outcome" : {
+    "detail" : "All four stale taps were refused and changed nothing. Each launched the app in the background and left an App Intent receipt with status conflict: Not applied because the demo session changed: expected revision 1, found 2. (taps 1 and 2) and expected revision 2, found 4. (taps 4 and 5). The session stayed paused at revision 2, then at revision 4, and the app rewrote the snapshot after each tap. The widget redrew from Running to Paused 4 seconds after tap 1, and the Control read Paused after tap 2. After tap 4, the Control first showed Running, its own immediate response to the tap, then returned to Paused 4.8 seconds later and still read Paused when Control Center was opened again. After tap 5 the widget kept reading Paused with its toggle off. The two real changes in step 3 each committed once. No crash report came from this simulator's lab processes.",
+    "result" : "passed"
+  },
+  "provenance" : {
+    "appVersion" : "0.1.0",
+    "buildNumber" : "1",
+    "buildProfile" : "SystemSurfaces",
+    "minimumOS" : "26.0",
+    "sdkName" : "iphonesimulator27.0",
+    "sourceRevision" : "4467f62",
+    "xcodeBuild" : "27A266a",
+    "xcodeVersion" : "27.0"
+  },
+  "schemaVersion" : 1,
+  "steps" : [
+    "The same build, installed as in the clean-install record; the store held the session paused at revision 2",
+    "To make the surfaces stale: the app was terminated, an older snapshot was written into the App Group file, and the same build was installed over the app, which kept its data and made WidgetKit reload the widget and the Control",
+    "1. Snapshot Running at revision 1; the widget showed Running; a tap on its toggle",
+    "2. Snapshot Running at revision 1; the Control showed Running; a tap on it",
+    "3. The Demo Session Control started and then paused the session (revisions 3 and 4)",
+    "4. Snapshot Paused at revision 2, the same state at an older revision; a tap on the Control, which offers Start",
+    "5. Snapshot Paused at revision 2; a tap on the widget's toggle, which offers Start",
+    "After each tap: the store's receipts and session and the snapshot file were read read-only, and the surface was read through the accessibility tree for up to 20 to 60 seconds"
+  ],
+  "subject" : "LAB-004"
+}
