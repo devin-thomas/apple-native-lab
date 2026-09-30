@@ -12,6 +12,8 @@ let package = Package(
         .library(name: "ShareIngress", targets: ["ShareIngress"]),
         .library(name: "PortableObjects", targets: ["PortableObjects"]),
         .library(name: "SurfaceDeck", targets: ["SurfaceDeck"]),
+        .library(name: "ScreeningRoom", targets: ["ScreeningRoom"]),
+        .library(name: "ScreeningRoomPlayback", targets: ["ScreeningRoomPlayback"]),
     ],
     dependencies: [
         .package(path: "../LabSupport"),
@@ -106,6 +108,29 @@ let package = Package(
         .testTarget(
             name: "SurfaceDeckTests",
             dependencies: ["SurfaceDeck", .product(name: "LabDomain", package: "LabDomain")]
+        ),
+        // LAB-031 Native Screening Room: the clips, the playback state, commands, signals, receipts,
+        // the resume point, and the link a companion controller uses. Foundation and LabDomain only,
+        // so it compiles on every host and its rules are tested without a player.
+        .target(
+            name: "ScreeningRoom",
+            dependencies: [.product(name: "LabDomain", package: "LabDomain")]
+        ),
+        .testTarget(
+            name: "ScreeningRoomTests",
+            dependencies: ["ScreeningRoom", .product(name: "LabDomain", package: "LabDomain")]
+        ),
+        // LAB-031: the AVFoundation, AVKit, and MediaPlayer adapters, the shared screening model,
+        // the player views, and the original fixture clips. Linked by the Mac, iPhone, and Apple TV
+        // hosts; the Watch host does not link it.
+        .target(
+            name: "ScreeningRoomPlayback",
+            dependencies: ["ScreeningRoom", .product(name: "LabDomain", package: "LabDomain")],
+            resources: [.copy("Resources/Clips")]
+        ),
+        .testTarget(
+            name: "ScreeningRoomPlaybackTests",
+            dependencies: ["ScreeningRoomPlayback", "ScreeningRoom", .product(name: "LabDomain", package: "LabDomain")]
         ),
     ]
 )
