@@ -72,6 +72,7 @@ public actor OperationService {
                 collections: plan.collections,
                 items: plan.items,
                 sessions: plan.sessions,
+                anchors: plan.anchors,
                 removals: plan.removals
             )
             let outcome: CommitOutcome
@@ -139,6 +140,13 @@ public actor OperationService {
     public func findSession(_ id: SessionID, as actor: ActorScope) async throws(OperationError) -> LabSession? {
         try authorize(.read(.session(id)), for: actor)
         return try await read { try await $0.session(id) }
+    }
+
+    /// Every lab-owned anchor, ordered by title and then by ID (LAB-023 Tabletop Reality).
+    public func findAnchors(as actor: ActorScope) async throws(OperationError) -> [LabAnchor] {
+        try authorize(.read(.anchors), for: actor)
+        let anchors = try await read { try await $0.anchors() }
+        return anchors.sorted { ($0.title.value, $0.id.rawValue.uuidString) < ($1.title.value, $1.id.rawValue.uuidString) }
     }
 
     /// The receipt recorded for a request, or `nil` if that request was never admitted.

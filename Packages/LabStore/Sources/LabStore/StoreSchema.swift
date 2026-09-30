@@ -16,6 +16,7 @@ enum StoreSchema {
         Migration(version: 1, sql: version1),
         Migration(version: 2, sql: version2),
         Migration(version: 3, sql: version3),
+        Migration(version: 4, sql: version4),
     ]
 
     static var currentVersion: Int { migrations[migrations.count - 1].version }
@@ -104,6 +105,27 @@ enum StoreSchema {
         CREATE TABLE sessions (
             id TEXT PRIMARY KEY NOT NULL CHECK (length(id) = 36),
             is_running INTEGER NOT NULL CHECK (is_running IN (0, 1)),
+            revision INTEGER NOT NULL CHECK (revision >= 1),
+            namespace TEXT NOT NULL DEFAULT 'demo' CHECK (namespace = 'demo'),
+            extras TEXT NOT NULL DEFAULT '{}' CHECK (json_valid(extras))
+        ) STRICT;
+        """
+
+    /// Version 4: lab-owned anchors (LAB-023 Tabletop Reality).
+    ///
+    /// An anchor is a fixture key, a title, and a pose in whole millimeters and degrees in its
+    /// scene's own frame. It is lab state, so its namespace is always `demo`: Reset Demo removes
+    /// every anchor and never touches user data. No column holds world coordinates, camera images,
+    /// or mapping data. Nothing earlier changes.
+    static let version4 = """
+        CREATE TABLE anchors (
+            id TEXT PRIMARY KEY NOT NULL CHECK (length(id) = 36),
+            fixture TEXT NOT NULL CHECK (length(fixture) BETWEEN 1 AND 40),
+            title TEXT NOT NULL,
+            x_mm INTEGER NOT NULL CHECK (x_mm BETWEEN -5000 AND 5000),
+            y_mm INTEGER NOT NULL CHECK (y_mm BETWEEN -5000 AND 5000),
+            z_mm INTEGER NOT NULL CHECK (z_mm BETWEEN -5000 AND 5000),
+            yaw_degrees INTEGER NOT NULL CHECK (yaw_degrees BETWEEN 0 AND 359),
             revision INTEGER NOT NULL CHECK (revision >= 1),
             namespace TEXT NOT NULL DEFAULT 'demo' CHECK (namespace = 'demo'),
             extras TEXT NOT NULL DEFAULT '{}' CHECK (json_valid(extras))

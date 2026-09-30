@@ -101,7 +101,8 @@ public struct ItemChanges: Hashable, Sendable, Codable {
 ///
 /// An operation on an existing entity carries the revision the caller last saw. The type makes it
 /// required, so no mutation can silently overwrite a newer state. Archiving is the domain's
-/// reversible removal. The only deletion is Reset Demo's, and it reaches demo samples only.
+/// reversible removal. Deletion reaches demo entities only: Reset Demo's, and the removal of a
+/// lab-owned anchor, whose undo places it again.
 public enum DomainOperation: Hashable, Sendable, Codable {
     case createCollection(draft: CollectionDraft)
     case updateCollection(id: CollectionID, expected: Revision, title: EntityTitle)
@@ -119,6 +120,14 @@ public enum DomainOperation: Hashable, Sendable, Codable {
     /// revision the caller last saw, or `nil` when it saw a session that was never started. Not
     /// destructive: pausing hides nothing, and the undo is the opposite change.
     case setSession(id: SessionID, expected: Revision?, running: Bool)
+    /// Places a lab-owned anchor in a spatial scene (LAB-023 Tabletop Reality). Not destructive;
+    /// the undo removes it.
+    case placeAnchor(draft: AnchorDraft)
+    /// Moves or turns a lab-owned anchor to `pose`. Not destructive; the undo moves it back.
+    case moveAnchor(id: AnchorID, expected: Revision, pose: AnchorPose)
+    /// Removes a lab-owned anchor. Destructive, so it needs a grant (ADR-013); the undo places the
+    /// same anchor again where it was.
+    case removeAnchor(id: AnchorID, expected: Revision)
 
     public var kind: OperationKind {
         switch self {
@@ -132,6 +141,9 @@ public enum DomainOperation: Hashable, Sendable, Codable {
         case .restoreItem: .restoreItem
         case .resetDemo: .resetDemo
         case .setSession: .setSession
+        case .placeAnchor: .placeAnchor
+        case .moveAnchor: .moveAnchor
+        case .removeAnchor: .removeAnchor
         }
     }
 
@@ -147,6 +159,10 @@ public enum DomainOperation: Hashable, Sendable, Codable {
             .item(id)
         case .setSession(let id, _, _):
             .session(id)
+        case .placeAnchor(let draft):
+            .anchor(draft.id)
+        case .moveAnchor(let id, _, _), .removeAnchor(let id, _):
+            .anchor(id)
         case .resetDemo:
             nil
         }
@@ -156,13 +172,15 @@ public enum DomainOperation: Hashable, Sendable, Codable {
     /// For a session, `nil` means the caller saw a session that was never started.
     public var expectedRevision: Revision? {
         switch self {
-        case .createCollection, .createItem, .resetDemo:
+        case .createCollection, .createItem, .resetDemo, .placeAnchor:
             nil
         case .updateCollection(_, let expected, _), .archiveCollection(_, let expected),
              .restoreCollection(_, let expected), .updateItem(_, let expected, _),
              .archiveItem(_, let expected), .restoreItem(_, let expected):
             expected
         case .setSession(_, let expected, _):
+            expected
+        case .moveAnchor(_, let expected, _), .removeAnchor(_, let expected):
             expected
         }
     }
@@ -174,7 +192,7 @@ public enum DomainOperation: Hashable, Sendable, Codable {
     /// unchanged.
     public func rebased(onto revision: Revision) -> DomainOperation {
         switch self {
-        case .createCollection, .createItem, .resetDemo: self
+        case .createCollection, .createItem, .resetDemo, .placeAnchor: self
         case .updateCollection(let id, _, let title): .updateCollection(id: id, expected: revision, title: title)
         case .archiveCollection(let id, _): .archiveCollection(id: id, expected: revision)
         case .restoreCollection(let id, _): .restoreCollection(id: id, expected: revision)
@@ -182,6 +200,8 @@ public enum DomainOperation: Hashable, Sendable, Codable {
         case .archiveItem(let id, _): .archiveItem(id: id, expected: revision)
         case .restoreItem(let id, _): .restoreItem(id: id, expected: revision)
         case .setSession(let id, _, let running): .setSession(id: id, expected: revision, running: running)
+        case .moveAnchor(let id, _, let pose): .moveAnchor(id: id, expected: revision, pose: pose)
+        case .removeAnchor(let id, _): .removeAnchor(id: id, expected: revision)
         }
     }
 }
@@ -198,13 +218,17 @@ public enum OperationKind: String, Hashable, Sendable, Codable, CaseIterable {
     case restoreItem = "restore-item"
     case resetDemo = "reset-demo"
     case setSession = "set-session"
+    case placeAnchor = "place-anchor"
+    case moveAnchor = "move-anchor"
+    case removeAnchor = "remove-anchor"
 
     /// Whether the operation removes something from normal view. Destructive commits need their
     /// own permission, which no model tool can hold (ADR-007).
     public var isDestructive: Bool {
         switch self {
-        case .archiveCollection, .archiveItem, .resetDemo: true
-        case .createCollection, .updateCollection, .restoreCollection, .createItem, .updateItem, .restoreItem, .setSession:
+        case .archiveCollection, .archiveItem, .resetDemo, .removeAnchor: true
+        case .createCollection, .updateCollection, .restoreCollection, .createItem, .updateItem, .restoreItem, .setSession,
+             .placeAnchor, .moveAnchor:
             false
         }
     }

@@ -54,6 +54,8 @@ public enum ReadTarget: Hashable, Sendable {
     case item(ItemID)
     case items(ItemFilter)
     case session(SessionID)
+    /// Every lab-owned anchor (LAB-023).
+    case anchors
     case receipt(RequestID)
 }
 

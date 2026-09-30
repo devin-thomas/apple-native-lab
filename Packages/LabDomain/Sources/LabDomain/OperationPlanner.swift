@@ -6,6 +6,7 @@ struct OperationPlan: Sendable {
     var collections: [LabCollection] = []
     var items: [LabItem] = []
     var sessions: [LabSession] = []
+    var anchors: [LabAnchor] = []
     var removals: [EntityReference] = []
     var undo: DomainOperation?
     var phrase: Phrase
@@ -150,7 +151,63 @@ struct OperationPlanner: Sendable {
 
         case .setSession(let id, let expected, let running):
             return try await setSession(id, expected: expected, running: running)
+
+        case .placeAnchor(let draft):
+            return try await placeAnchor(draft)
+
+        case .moveAnchor(let id, let expected, let pose):
+            return try await moveAnchor(id, expected: expected, to: pose)
+
+        case .removeAnchor(let id, let expected):
+            return try await removeAnchor(id, expected: expected)
         }
+    }
+
+    // MARK: Anchors (LAB-023 Tabletop Reality)
+
+    /// Plans placing a new lab-owned anchor. It is created in the demo namespace at revision 1,
+    /// and its undo removes it at that revision.
+    private func placeAnchor(_ draft: AnchorDraft) async throws(OperationError) -> OperationPlan {
+        let reference = EntityReference.anchor(draft.id)
+        guard try await anchor(draft.id) == nil else { throw .ruleViolation(.alreadyExists(reference)) }
+        let created = LabAnchor(id: draft.id, fixture: draft.fixture, title: draft.title, pose: draft.pose)
+        return OperationPlan(
+            changes: [EntityChange(entity: reference, previousRevision: nil, newRevision: created.revision)],
+            preconditions: [RevisionPrecondition(entity: reference, expected: nil)],
+            anchors: [created],
+            undo: .removeAnchor(id: created.id, expected: created.revision),
+            phrase: Phrase("Placed", "Place", "“\(draft.title)”")
+        )
+    }
+
+    /// Plans moving or turning an anchor. A caller that saw an older revision gets a conflict
+    /// receipt, so a stale nudge never lands on a pose the person did not see.
+    private func moveAnchor(_ id: AnchorID, expected: Revision, to pose: AnchorPose) async throws(OperationError) -> OperationPlan {
+        let current = try await requireAnchor(id)
+        if let conflict = conflict(current.reference, current.title, current.revision, expected) { return conflict }
+        guard current.pose != pose else { throw .ruleViolation(.noChanges(current.reference)) }
+        let updated = current.revised(pose: pose)
+        let (past, imperative) = pose.differsOnlyInYaw(from: current.pose) ? ("Turned", "Turn") : ("Moved", "Move")
+        return OperationPlan(
+            changes: [EntityChange(entity: current.reference, previousRevision: current.revision, newRevision: updated.revision)],
+            preconditions: [RevisionPrecondition(entity: current.reference, expected: current.revision)],
+            anchors: [updated],
+            undo: .moveAnchor(id: id, expected: updated.revision, pose: current.pose),
+            phrase: Phrase(past, imperative, "“\(current.title)”")
+        )
+    }
+
+    /// Plans removing an anchor. The anchor is lab-owned, so the store deletes it; the undo places
+    /// the same anchor, with the same ID, fixture, title, and pose, again.
+    private func removeAnchor(_ id: AnchorID, expected: Revision) async throws(OperationError) -> OperationPlan {
+        let current = try await requireAnchor(id)
+        if let conflict = conflict(current.reference, current.title, current.revision, expected) { return conflict }
+        return OperationPlan(
+            preconditions: [RevisionPrecondition(entity: current.reference, expected: current.revision)],
+            removals: [current.reference],
+            undo: .placeAnchor(draft: current.draft),
+            phrase: Phrase("Removed", "Remove", "“\(current.title)”")
+        )
     }
 
     // MARK: Sessions (LAB-004 Surface Deck)
@@ -274,7 +331,14 @@ struct OperationPlanner: Sendable {
             plan.changes.append(EntityChange(entity: session.reference, previousRevision: session.revision, newRevision: paused.revision))
         }
 
-        plan.phrase = resetPhrase(seed, changes: plan.changes, removed: plan.removals.count)
+        // Anchors are lab-owned placements outside the seed (LAB-023). A reset removes every one.
+        let anchors = try await allAnchors().sorted { $0.id.rawValue.uuidString < $1.id.rawValue.uuidString }
+        for anchor in anchors {
+            plan.preconditions.append(RevisionPrecondition(entity: anchor.reference, expected: anchor.revision))
+            plan.removals.append(anchor.reference)
+        }
+
+        plan.phrase = resetPhrase(seed, changes: plan.changes, removed: plan.removals.count - anchors.count, anchors: anchors.count)
         return plan
     }
 
@@ -282,29 +346,31 @@ struct OperationPlanner: Sendable {
         lhs.0.rawID.uuidString < rhs.0.rawID.uuidString
     }
 
-    private func resetPhrase(_ seed: DemoSeed, changes: [EntityChange], removed: Int) -> Phrase {
+    private func resetPhrase(_ seed: DemoSeed, changes: [EntityChange], removed: Int, anchors: Int) -> Phrase {
         let contents = "\(counted(seed.collections.count, "collection")) and \(counted(seed.items.count, "item"))"
         // A reset only ever pauses a session, so session changes are counted apart from samples.
         let paused = changes.filter { $0.entity.kind == .session }.count
         let samples = changes.filter { $0.entity.kind != .session }
         let added = samples.filter { $0.previousRevision == nil }.count
         let restored = samples.count - added
-        guard added + restored + removed + paused > 0 else {
+        guard added + restored + removed + paused + anchors > 0 else {
             return Phrase(
                 past: "The demo already matched its original \(contents).",
                 imperative: "The demo already matches its original \(contents)."
             )
         }
-        func tally(_ verbs: (String, String, String, String)) -> String {
+        func tally(_ verbs: (String, String, String, String, String)) -> String {
             let counts = [(verbs.0, added), (verbs.1, restored), (verbs.2, removed)]
                 .filter { $0.1 > 0 }
                 .map { "\($0.0) \($0.1)" }
             let sessions = paused > 0 ? ["\(verbs.3) \(counted(paused, "session"))"] : []
-            return (counts + sessions).joined(separator: ", ")
+            // Placed anchors are counted apart from samples too: they are placements, not samples.
+            let placed = anchors > 0 ? ["\(verbs.4) \(counted(anchors, "placed object"))"] : []
+            return (counts + sessions + placed).joined(separator: ", ")
         }
         return Phrase(
-            past: "Reset the demo to its original \(contents): \(tally(("added", "restored", "removed", "paused"))).",
-            imperative: "Reset the demo to its original \(contents): \(tally(("add", "restore", "remove", "pause")))."
+            past: "Reset the demo to its original \(contents): \(tally(("added", "restored", "removed", "paused", "cleared"))).",
+            imperative: "Reset the demo to its original \(contents): \(tally(("add", "restore", "remove", "pause", "clear")))."
         )
     }
 
@@ -391,6 +457,19 @@ struct OperationPlanner: Sendable {
 
     private func allSessions() async throws(OperationError) -> [LabSession] {
         do { return try await store.sessions() } catch { throw .storeFailure(.readFailed) }
+    }
+
+    private func anchor(_ id: AnchorID) async throws(OperationError) -> LabAnchor? {
+        do { return try await store.anchor(id) } catch { throw .storeFailure(.readFailed) }
+    }
+
+    private func allAnchors() async throws(OperationError) -> [LabAnchor] {
+        do { return try await store.anchors() } catch { throw .storeFailure(.readFailed) }
+    }
+
+    private func requireAnchor(_ id: AnchorID) async throws(OperationError) -> LabAnchor {
+        guard let anchor = try await anchor(id) else { throw .notFound(.anchor(id)) }
+        return anchor
     }
 
     private func requireCollection(_ id: CollectionID) async throws(OperationError) -> LabCollection {

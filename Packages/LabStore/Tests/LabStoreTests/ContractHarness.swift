@@ -34,6 +34,8 @@ actor ContractStore: OperationStore {
     func receipt(for requestID: RequestID) async throws -> ActionReceipt? { try await inner.receipt(for: requestID) }
     func session(_ id: SessionID) async throws -> LabSession? { try await inner.session(id) }
     func sessions() async throws -> [LabSession] { try await inner.sessions() }
+    func anchor(_ id: AnchorID) async throws -> LabAnchor? { try await inner.anchor(id) }
+    func anchors() async throws -> [LabAnchor] { try await inner.anchors() }
 
     func apply(_ commit: AuthorizedCommit) async throws -> CommitOutcome {
         if let hook = beforeNextCommit {
