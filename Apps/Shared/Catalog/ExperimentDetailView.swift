@@ -7,6 +7,25 @@ import SwiftUI
 /// it. No experiment has a module yet, so the primary action is reading its specification and the
 /// route says so plainly.
 struct ExperimentDetailView: View {
+    /// What this build actually contains for an experiment in each state. Kept to what the
+    /// evidence supports: "implemented" never claims a physical device.
+    static func buildSummary(for state: ImplementationState) -> String {
+        switch state {
+        case .specified:
+            "In this build: the specification only. The experiment is registered with its state and fallback, but no module runs it yet."
+        case .spiked:
+            "In this build: an exploratory spike. It shows the mechanism, not a finished feature."
+        case .implemented:
+            "In this build: a working module runs this experiment. It is proven on the Mac or in the simulator; any physical-device proof is recorded separately in its evidence."
+        case .deviceVerified:
+            "In this build: a working module, verified on a physical device with recorded evidence."
+        case .releaseReady:
+            "In this build: a working module that passed its device, accessibility, and privacy checks."
+        case .blocked:
+            "In this build: the live adapter is blocked. Its fallback is how to use it today."
+        }
+    }
+
     let experiment: RegisteredExperiment
 
     var body: some View {
@@ -25,7 +44,7 @@ struct ExperimentDetailView: View {
                     Text(experiment.fallback)
                 }
                 DetailSection(title: "How this works", symbol: "gearshape.2") {
-                    Text("In this build: the specification only. The experiment is registered with its state and fallback, but no module runs it yet.")
+                    Text(Self.buildSummary(for: experiment.state))
                 }
                 DetailSection(title: "Runs on", symbol: "laptopcomputer.and.iphone") {
                     Text(experiment.hosts)
