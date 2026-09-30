@@ -17,6 +17,8 @@ Use in this plan: Typed actions and entities; OS entry points.
 
 Implementation evidence required: actual SDK symbol/availability, permissions or entitlement, and a named compile/device result.
 
+Installed SDK check (2026-09-29, Xcode 27.0 with the macOS and iOS 27.0 SDKs): the confirmation, disambiguation, `supportedModes`, and `AppIntentsPackage` symbols Action Atlas uses, with their declared availability, are in the [installed SDK ledger](VERIFICATION_BOUNDARIES.md#installed-sdk-ledger). They were compiled for macOS and iOS and run in the iOS simulator's Shortcuts app, not on a device.
+
 ## S02
 
 **Siri and App Schemas, WWDC26** — reviewed
@@ -37,6 +39,8 @@ Use in this plan: Up to ten curated App Shortcuts; distinguish the larger action
 
 Implementation evidence required: actual SDK symbol/availability, permissions or entitlement, and a named compile/device result.
 
+Installed SDK check (2026-09-29): `AppShortcutsProvider` is in the installed SDK, but no curated App Shortcut is declared yet ([installed SDK ledger](VERIFICATION_BOUNDARIES.md#installed-sdk-ledger)).
+
 ## S04
 
 **Shortcuts, WWDC26** — reviewed
@@ -56,6 +60,8 @@ Source: [AppIntentsTesting, WWDC26](https://developer.apple.com/videos/play/wwdc
 Use in this plan: Integration tests run through system infrastructure; same signing team requirement.
 
 Implementation evidence required: actual SDK symbol/availability, permissions or entitlement, and a named compile/device result.
+
+Installed SDK check (2026-09-29): Xcode 27.0 ships `AppIntentsTesting` as a test-only framework for every platform, available from the 27.0 OS releases. No system-path test has run: this source says it needs the app's signing team, and no test target is set up for it ([installed SDK ledger](VERIFICATION_BOUNDARIES.md#installed-sdk-ledger)).
 
 ## S06
 

@@ -1,0 +1,48 @@
+{
+  "check" : "Action Atlas in-app action browser (app-UI adapter) on a physical iPhone, run by the owner; the App Intent adapter was not exercised",
+  "date" : "2026-09-30T00:17:00Z",
+  "execution" : {
+    "device" : {
+      "deviceClass" : "iPhone17,1 (iPhone 16 Pro)",
+      "osVersion" : "27.0 (24A5430a)",
+      "platform" : "iOS",
+      "profileExpiry" : "2026-10-06T18:59:53Z"
+    },
+    "path" : "physical"
+  },
+  "inputs" : [
+    "seed:app-bundle@sha256:d132b2dc787cea268736ac6a4ac4acc1f582b430bbb1a30f59dff2d02201041d",
+    "device-store-copy:Lab.sqlite@sha256:2e96884c16791c7d4bde90a6db2c9da33c2a2aab3e52088adc148c368552a423",
+    "device-store-copy:Lab.sqlite-wal@sha256:c9260d7dde90bafeb8566a68f816417e534aa4a5514c69b2d3b34dcce5ab9fc0",
+    "device-store-copy:Lab.sqlite-shm@sha256:53bcb2a9fac5289e80ccab23033f6e9e42010d8f2fe539a6a0531be16a11aab0"
+  ],
+  "limitations" : [
+    "Owner-performed manual run, with no screen recording.",
+    "Corroborated by the receipts in a read-only copy of the device's store. The copy holds text the owner typed, so it is kept private and never committed; this record carries only aggregates and file hashes.",
+    "Find Lab Items, Get Lab Item, and Export Lab Item leave no receipt: their results are owner-reported only.",
+    "The App Intent adapter was not exercised on the device: the store holds no app-intent receipt. Shortcuts and Siri on the device are not-run, so this record proves the in-app path only and the experiment stays implemented.",
+    "Provenance was read from the Info.plist of the e4fe012 iPhone build the integrator installed; the bundle on the device was not read back. The profile expiry comes from that build's embedded profile."
+  ],
+  "outcome" : {
+    "detail" : "The owner reports that every in-app action button worked. The device's store corroborates the changes: 6 receipts, all committed and all through the app-ui adapter, for Reset Demo (the first-run seed), Create Collection, Create Item, Update Item, Archive Item, and Restore Item; 5 of them offer an undo. The store holds 3 demo collections and 12 demo items, and 1 collection and 1 item of the person's own. Find, Get, and Export are reads that leave no receipt, so they are owner-reported only.",
+    "result" : "passed"
+  },
+  "provenance" : {
+    "appVersion" : "0.1.0",
+    "buildNumber" : "1",
+    "buildProfile" : "CoreLocal",
+    "minimumOS" : "26.0",
+    "sdkName" : "iphoneos27.0",
+    "sourceRevision" : "e4fe012",
+    "xcodeBuild" : "27A266a",
+    "xcodeVersion" : "27.0"
+  },
+  "schemaVersion" : 1,
+  "steps" : [
+    "The integrator installed build e4fe012 (Debug, CoreLocal) on the iPhone with Personal Team signing.",
+    "The owner opened the Actions tab and ran the in-app actions from the action browser.",
+    "The integrator copied the app's store read-only: xcrun devicectl device copy from --domain-type appDataContainer. The copy stays private.",
+    "The copy's receipts and namespace counts were read as aggregates only."
+  ],
+  "subject" : "LAB-001"
+}

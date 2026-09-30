@@ -55,6 +55,8 @@ These support the manual passes and never replace them. The last run is in the C
 | Running Mac app | The accessibility API and System Events key presses against `script/build_and_run.sh` | Tab order from the search field, and Escape from the inspector and from Reset Demo. The shortcuts do what their menus say, and the labels and groups are in the live tree. | VoiceOver speech; Full Keyboard Access |
 | iPhone journey and audit | A UI-test harness in a throwaway copy, iOS Simulator, at the default and largest accessibility text sizes and with Increase Contrast | The core flows work by accessibility label, the primary actions (including Undo) can be tapped without scrolling, and Xcode's accessibility audit results are recorded per screen | A physical iPhone, VoiceOver, Voice Control |
 | Mac accessibility audit | Not run | | It needs a Mac UI-test run, and turning on UI automation on this Mac asks for authentication |
+| Action Atlas screens through the accessibility API (LAB-001) | `ActionAtlasAccessibilityTests` in `script/test.sh` | Each action row is one element that reads its Shortcuts title, then what it does. In all 8 forms, every text field, picker, and switch is named by its visible label, and the form has exactly one button, named for what it does, disabled until its input is complete. Find Items runs through its button under every display override, and each result is one element led by the item's title. Create Collection, typed into its named field and pressed through its button, commits as the app UI, shows its result in words, and leaves a receipt row that reads "Status: Committed". An open finding is held as a known issue, so the test fails when it is fixed. | VoiceOver speech, Voice Control, Full Keyboard Access, or the system settings |
+| Action Atlas on iPhone (LAB-001) | A UI-test harness in a throwaway copy, iOS Simulator, at the default and largest accessibility text sizes | The Action Atlas journey works by accessibility label, from the Actions tab to a receipt's pinned Undo. Xcode's accessibility audit results are recorded per screen, and whether each form's action is on screen at the largest size | A physical iPhone, VoiceOver, Voice Control |
 
 ## Manual passes
 
@@ -115,6 +117,39 @@ Each pass covers the core flows below on the named device. All of them are `not-
 
 Record each pass in [EVIDENCE_TEMPLATE](EVIDENCE_TEMPLATE.md) form, and list the ticket, the source revision, and each flow's result.
 
+**Experiment flows**
+
+Each qualification ticket adds its experiment's flows here. They use the same passes and devices as the core flows, and all of them are `not-run` until a person performs them.
+
+| ID | Experiment | Flow | Done when |
+|---|---|---|---|
+| A1 | [LAB-001](../experiments/LAB-001-action-atlas.md) Action Atlas | Open Action Atlas (Mac: sidebar or ⌘4; iPhone: Actions tab) and browse the actions | Each action reads its Shortcuts title, then what it does |
+| A2 | LAB-001 | Create a collection, then an item in it | Each field reads its label, the button reads what it does, the result reads each field in words, and the receipt row reads its status |
+| A3 | LAB-001 | Find items | The count is read, and each item reads title, collection, status, and note, separated by commas |
+| A4 | LAB-001 | Archive an item, open its receipt, and undo | The result and the receipt are heard or focused, and Undo is reachable and says what it did |
+| A5 | LAB-001 | Update an item that changed after it was picked | The "Not applied" sentence is read, and the receipt says nothing changed |
+
+| Pass | Device | A1 | A2 | A3 | A4 | A5 |
+|---|---|---|---|---|---|---|
+| VoiceOver | Mac | not-run | not-run | not-run | not-run | not-run |
+| VoiceOver | iPhone | not-run | not-run | not-run | not-run | not-run |
+| Voice Control | Mac | not-run | not-run | not-run | not-run | not-run |
+| Voice Control | iPhone | not-run | not-run | not-run | not-run | not-run |
+| Full Keyboard Access | Mac | not-run | not-run | not-run | not-run | not-run |
+| Full Keyboard Access (hardware keyboard) | iPhone | not-run | not-run | not-run | not-run | not-run |
+| Largest accessibility text size | iPhone | not-run | not-run | not-run | not-run | not-run |
+| Increase Contrast | Mac, iPhone | not-run | not-run | not-run | not-run | not-run |
+| Reduce Motion | Mac, iPhone | not-run | not-run | not-run | not-run | not-run |
+| Reduce Transparency | Mac, iPhone | not-run | not-run | not-run | not-run | not-run |
+| Differentiate Without Color, grayscale | Mac, iPhone | not-run | not-run | not-run | not-run | not-run |
+
+What to check in the Action Atlas flows, beyond the core list:
+
+- **VoiceOver.** After each change in a form, listen for an announcement of the receipt; today none is posted (see the findings below). On the Mac the receipt also opens in the inspector, so confirm where focus goes.
+- **Voice Control.** "Tap Create Collection", "Tap Archive Item", and "Tap Undo" work, and every form field can be named by its label.
+- **Full Keyboard Access (Mac).** Return runs the form's action. Tab reaches each field and the button, then the receipt row.
+- **Largest text size (iPhone).** Each form's action button can be reached, and whether it is on screen without scrolling is recorded (see the findings below).
+
 ## Known gaps
 
 - **Mac announcements are posted but not yet heard.** Since the integration of CORE-010, `LabAnnouncement.post()` uses AppKit's `announcementRequested` notification on the Mac (the product policy allows AppKit for that). No person has yet confirmed that VoiceOver speaks them; that stays a manual row.
@@ -134,3 +169,27 @@ Xcode's accessibility audit ran on the iPhone 17e simulator (iOS 27.0) at the de
 | Contrast failed or text clipped on content under the tab bar, the navigation bar, or the pinned action bar | Catalog, collection, receipt, Readiness | That content had scrolled beneath a translucent bar when the audit ran. It reads normally once scrolled into view. Confirm in the Increase Contrast and Reduce Transparency passes. |
 | Dynamic Type partially unsupported on Read the Specification, Archive Sample, and Undo | Pinned action bar | By design, the pinned bar grows to accessibility size 2 and then holds, like a toolbar, and the Large Content Viewer shows the label at full size. At the largest size these are the only app controls flagged. The default-size run also flags some form row labels and the Readiness summary sentence, but the largest-size run doesn't flag them. Confirm the Large Content Viewer in the large-text pass. |
 | Dynamic Type or text flagged in the Reset Demo alert | Alert | The system alert. The app supplies only its title, message, and button titles. |
+
+## Action Atlas review (LAB-001-B)
+
+The Action Atlas screens were reviewed against the rules above with automated checks and by reading the code. No manual pass was run: every row in the [experiment flows](#manual-passes) matrix is `not-run`.
+
+**Automated results**
+
+| Check | Path | Result |
+|---|---|---|
+| `ActionAtlasAccessibilityTests` (Mac hosted tests, in `script/test.sh`) | hosted test, macOS 27.0 | passed: action rows, named controls in all 8 forms, Find Items under every display override, and Create Collection end to end. One known issue, finding 1. |
+| iPhone journey by accessibility label | simulator, iPhone 17, iOS 27.0, a UI-test harness in a throwaway copy that is not committed | passed: the Actions tab, then Create Lab Collection, Create Lab Item, Find Lab Items, Archive Lab Item, the receipt, and its pinned Undo, each reached and pressed by its label |
+| Xcode's accessibility audit on each of those screens | same harness, default text size and the largest accessibility size | issues recorded as findings 5 and 6 |
+| Form actions at the largest accessibility text size | same harness | failed for rule 6: finding 3 |
+
+**Findings.** These stay open until fixed or closed by the manual pass. Each names the rule it concerns.
+
+| # | Rule | Finding | Where | Found by | Triage |
+|---|---|---|---|---|---|
+| 1 | 5 | A found item's row reads the middle dot between its collection and "Demo sample", for example "Amber swatch, Pigment swatches · Demo sample, Warm yellow-brown…". The same joined text names items in the forms' item pickers. | `AtlasItemChoice.detail` and `label` in `Apps/Shared/ActionAtlas/AtlasRun.swift` | accessibility API (`foundItemRowsReadWithCommasNotMiddleDots`, a known issue) | Join the spoken parts with commas. The test fails once this is fixed, so the review is updated with it. |
+| 2 | 4 | The forms post no announcement after a change. On the Mac, the receipt also opens in the inspector, away from the form. | `Apps/Shared/ActionAtlas/AtlasActionForms.swift` | static review | Post `LabAnnouncement.outcome(of:in:)` after each change that leaves a receipt, as the collection browser and the receipt's Undo do. |
+| 3 | 6 | At the largest accessibility text size on iPhone, no form's action button is on screen without scrolling. Create Collection, Find Items, Archive Item, and Export Item were checked; each can be reached by scrolling. | `AtlasRunButton` in `AtlasActionForms.swift` | simulator harness | Pin the form's action in a `PinnedActionBar` on iPhone, as a receipt pins Undo. |
+| 4 | 2 | On the Mac, each form's action is the window's default button, so Return runs it, but it has no menu command. | Mac forms | static review | The Full Keyboard Access pass decides whether Return is enough. |
+| 5 | 3 | On iPhone, the Find Items text field has no label, so VoiceOver and Voice Control get only its placeholder, "Any text". On the Mac the same field is titled "Text". | `FindItemsForm` in `AtlasActionForms.swift` | simulator harness | Give the field an explicit label. |
+| 6 | 8, 9 | At the default text size, the final harness run's audit reported 75 issues across 6 screens. Contrast "nearly passed" (31) or failed (10) on secondary text: row summaries, section headers, receipt times and summaries, and entity lines. Dynamic Type was partially supported (28) or unsupported (2, on unnamed elements in the Archive form) on form row labels and the pinned Undo. Text was clipped (4), including the Find form's "Any collection" picker value. At the largest size, the action list and the Create Lab Collection form had 1 issue each: contrast on an unnamed element. | iPhone screens | simulator audit | Secondary text and content under bars: the same triage as the core audit findings above. The pinned Undo holds at accessibility size 2 by design. Confirm the clipping and the unsupported elements in the large-text pass. |

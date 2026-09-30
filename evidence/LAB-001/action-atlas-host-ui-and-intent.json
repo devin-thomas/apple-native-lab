@@ -1,0 +1,50 @@
+{
+  "check" : "Action Atlas showcase interaction in the Mac host: the action browser's path and the App Intent types leave identical persisted state",
+  "date" : "2026-09-29T23:50:07Z",
+  "execution" : {
+    "path" : "fixture"
+  },
+  "inputs" : [
+    "seed:app-bundle@sha256:d132b2dc787cea268736ac6a4ac4acc1f582b430bbb1a30f59dff2d02201041d",
+    "requests:create-collection=BD1CF7CD-9082-4135-BDE0-48953A92C51B,create-item=1F8B4B32-F4DB-4B83-B38B-E71A907BF8B8,update-item=ECA3A07F-3857-4B7A-B775-B2735070424F,update-sample=C41C9EC0-EC7E-4E21-A794-CF0A0D718C9E,archive-item=034ACB7C-C530-4EE1-9648-32B2B29392D7,undo-archive=112ECEA7-CE96-4666-A8B2-598D2181C139"
+  ],
+  "limitations" : [
+    "Fixture path: hosted tests in the sandboxed Mac app on the development Mac, on fresh stores seeded from the bundled demo seed. It supports implemented at most.",
+    "The intents ran through run(with:), the call their perform() makes after the system's dialogs. Shortcuts, Siri, Spotlight, and the system's confirmation and disambiguation dialogs did not run; a stand-in approved the one confirmation.",
+    "Operation IDs, and the receipts of the Reset Demos, whose request IDs the host makes at random, are left out of the receipt comparison by design; the second Reset Demo is compared by its changes and summary.",
+    "No physical iPhone or iPad and no iOS simulator ran in this check."
+  ],
+  "outcome" : {
+    "detail" : "All 69 comparisons matched. Both stores hold the same 4 collections and 13 items, field for field. The 6 Action Atlas receipts match in operation, status, changes, removals, summary, and undo, and each names its entry point: app-ui for the action browser's path, app-intent for the intent types. Every one of the 8 reads returned the expected items from both entry points. The second Reset Demo restored only the renamed sample and left the person's collection and item alone.",
+    "result" : "passed"
+  },
+  "provenance" : {
+    "appVersion" : "0.1.0",
+    "buildNumber" : "1",
+    "buildProfile" : "CoreLocal",
+    "minimumOS" : "26.0",
+    "sdkName" : "macosx27.0",
+    "sourceRevision" : "6b1ba97",
+    "xcodeBuild" : "27A266a",
+    "xcodeVersion" : "27.0"
+  },
+  "schemaVersion" : 1,
+  "steps" : [
+    "xcodebuild -scheme LabMac-Core -only-testing:LabMacTests/ActionAtlasHostEvidenceTests test",
+    "Each entry point on a fresh SQLite store in the app container, seeded by the host's first run (Reset Demo)",
+    "create-collection: Create Lab Collection “Field notes”",
+    "create-item: Create Lab Item “Graphite stick” (note “Soft, 6B.”) in it",
+    "find-graphite: Find Lab Items “graphite”",
+    "find-swatches: Find Lab Items in Pigment swatches",
+    "update-item: Update Lab Item note to “Soft, 6B. Smudges easily.”",
+    "update-sample: Update Lab Item “Amber swatch” title to “Amber swatch, matte”",
+    "find-renamed: Find Lab Items “SWATCH, MATTE”",
+    "archive-item: Archive Lab Item “Graphite stick”, confirmed",
+    "find-after-archive, find-archived: Find Lab Items “graphite” without and with archived items",
+    "undo-archive: the archive receipt's undo, run as Restore Lab Item",
+    "find-after-undo: Find Lab Items “graphite”",
+    "reset-again: Reset Demo from the app",
+    "find-after-reset: Find Lab Items “swatch, matte”; find-yours-after-reset: Find Lab Items “smudges” in Field notes"
+  ],
+  "subject" : "LAB-001"
+}

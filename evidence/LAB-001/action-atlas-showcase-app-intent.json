@@ -1,0 +1,56 @@
+{
+  "check" : "Action Atlas showcase replayed twice from a clean SQLite store as the App Intent adapter (no intent type ran); both replays share one fingerprint and end in the app-UI replay's state",
+  "date" : "2026-09-29T23:50:16Z",
+  "execution" : {
+    "path" : "fixture"
+  },
+  "inputs" : [
+    "script:action-atlas@sha256:cbe679435aa2e77f26a509da71d24e2be3a8893a8cf707316da0e8192290a8a9",
+    "seed:action-atlas@sha256:d132b2dc787cea268736ac6a4ac4acc1f582b430bbb1a30f59dff2d02201041d"
+  ],
+  "limitations" : [
+    "Fixture path: the replay drives OperationService on original fixtures. It proves the domain contract on this build, not a device, a system surface, an entry point other than the runner's adapter, or a UI.",
+    "The App Intents and the in-app action browser: the replay submits each change to OperationService as the adapter it is composed with, and never runs an intent type or the Action Atlas action library.",
+    "The system's confirmation and disambiguation dialogs: an approve step stands in for the person's confirmation.",
+    "Host views and the receipt inspector: the replay renders nothing.",
+    "Imported user data: the person's collection and item here are created by operations, not adopted from staging.",
+    "Shortcuts, Siri, physical devices, and the iOS, watchOS, and tvOS simulators: the replay runs in the package test process on the Mac."
+  ],
+  "outcome" : {
+    "detail" : "19 of 19 steps passed. Replay fingerprint sha256:ecfafb33cc1609091eb116a61c901788750d1b17e9be8ecc69498648adc2ac9f. Adapter app-intent; store sqlite (schema 2, temporary file); timebase swift-continuous-clock.",
+    "result" : "passed"
+  },
+  "provenance" : {
+    "appVersion" : "unknown",
+    "buildNumber" : "unknown",
+    "buildProfile" : "unknown",
+    "minimumOS" : "unknown",
+    "sdkName" : "macosx27.0",
+    "sourceRevision" : "6b1ba97",
+    "xcodeBuild" : "27A266a",
+    "xcodeVersion" : "27.0"
+  },
+  "schemaVersion" : 1,
+  "steps" : [
+    "approve-reset: The person confirms Reset Demo.",
+    "reset: Reset Demo creates the 12 original samples: 3 collections and 12 items in the demo namespace.",
+    "create-collection: Create one of the person's own collections, with the ID Create Lab Collection derives from this request ID.",
+    "create-item: Create an item in that collection, with the ID Create Lab Item derives from this request ID.",
+    "find-graphite: Find the new item by text.",
+    "find-swatches: List the Pigment swatches demo collection, ordered by title.",
+    "update-item: Rewrite the new item's note at revision 1.",
+    "update-sample: Rename the amber demo sample at revision 1. It stays in the demo namespace.",
+    "find-renamed: Find the renamed sample by its new title, ignoring case.",
+    "approve-archive: The person confirms archiving the new item.",
+    "archive-item: Archive the new item at revision 2.",
+    "find-after-archive: The archived item no longer appears in a search.",
+    "find-archived: It is still there when archived items are included: archiving deletes nothing.",
+    "undo-archive: Undo the archive with the operation its receipt recorded.",
+    "find-after-undo: The restored item appears in a search again.",
+    "approve-reset-again: The person confirms Reset Demo a second time.",
+    "reset-again: Reset Demo restores the renamed sample and leaves the person's own collection and item alone.",
+    "find-after-reset: The sample's edit is gone: it has its seed title again.",
+    "find-yours-after-reset: The person's item is untouched, note and all."
+  ],
+  "subject" : "LAB-001"
+}
