@@ -1,0 +1,48 @@
+{
+  "check" : "Access as a Superpower in the running Mac app, read and driven across processes through the accessibility API: the bars, their Restore actions, the Archived Samples rotor, and the chart's AXAudiograph attribute, then each way of finishing the task that needs no key press",
+  "date" : "2026-09-30T20:50:47Z",
+  "execution" : {
+    "path" : "fixture"
+  },
+  "inputs" : [
+    "seed:app-bundle@sha256:d132b2dc787cea268736ac6a4ac4acc1f582b430bbb1a30f59dff2d02201041d",
+    "practice:AF451890-CA80-4DE9-B18B-4007066C9177,D279FB0E-642E-463A-B3DA-299442A1C7CB,C6468C0B-4BF6-48E8-AE5D-F5FC7A041097,9B97BF2F-4D0B-4197-9CA8-36489DF40455,C8E1904C-E8DC-40A0-93D3-53F6C0FFF95D,6933AC83-9E61-4264-8EB8-0535B3C5E0F8",
+    "app:NativeLab.app Debug, LabSourceRevision fd8523e, built for the hosted tests under a separate bundle prefix"
+  ],
+  "limitations" : [
+    "Fixture path: an automated client on the development Mac, on the app's own store under a separate bundle prefix, with the practice data from Fixtures/access/archive-chart.json. It supports implemented at most.",
+    "The accessibility API stands in for VoiceOver and Voice Control. It read what an assistive client receives across processes, but nothing was spoken or heard, no Audio Graph was played, and no person used an assistive technology. VoiceOver was not turned on.",
+    "No key press or pointer event was sent, so the app stayed in the background. The keyboard path (Command-5, Tab, arrow keys, Return, Option-Command-L, Option-Command-Z) was not exercised here: the View menu's Access as a Superpower item carries Command-5 but is disabled while the app has no key window, as its window commands are. The keyboard path is covered by the hosted tests, which deliver key presses to the list in the test process.",
+    "The experiment was reached by selecting its sidebar row through the accessibility API, as VoiceOver's select does; the catalog page's Open button was not pressed in this run.",
+    "No physical iPhone or iPad and no iOS simulator ran in this check."
+  ],
+  "outcome" : {
+    "detail" : "Every step passed. After Set Up Practice (Task: To Do, 12 demo samples: 6 archived, 6 not archived), the three bars read Pigment swatches \"2 of 4 samples archived\", Mineral specimens \"3 of 4 samples archived, the most\", and Paper stock \"1 of 4 samples archived\" as their value descriptions, with custom actions in title order: Restore Cobalt swatch, Restore Ochre swatch; Restore Banded agate slice, Restore Obsidian flake, Restore Quartz point; Restore Tracing vellum. The list carried one custom rotor, Archived Samples. The chart group's AXAudiograph attribute held the title \"Archived samples by collection\", the summary sentence, a categorical Collection axis (Pigment swatches, Mineral specimens, Paper stock), a numeric Archived samples axis from 0 to 4 with gridlines 0 to 4, content direction 2, and one series with the values 2, 3, and 1 and their value descriptions. The bar's Restore Quartz point action, then the inspector's \"Undo: Archive Item “Quartz point”\" button, gave Task: Done with \"Task done: Mineral specimens had the most archived samples (3).\", then Task: To Do. The Audio Graph data's highest value named Mineral specimens (3), and that bar's Restore Obsidian flake action gave Task: Done, undone the same way. A list row's Restore Tracing vellum action gave \"Task not done: Paper stock had 1 archived sample, and Mineral specimens had the most (3).\" Selecting the Quartz point row showed a Restore Quartz point button whose Voice Control names were Restore Sample, Restore Quartz point, and Restore; pressing it gave Task: Done. Reset Practice restored the 4 practice samples still archived and returned the page to Task: Nothing Archived.",
+    "result" : "passed"
+  },
+  "provenance" : {
+    "appVersion" : "0.1.0",
+    "buildNumber" : "1",
+    "buildProfile" : "CoreLocal",
+    "minimumOS" : "26.0",
+    "sdkName" : "macosx27.0",
+    "sourceRevision" : "fd8523e",
+    "xcodeBuild" : "27A266a",
+    "xcodeVersion" : "27.0"
+  },
+  "schemaVersion" : 1,
+  "steps" : [
+    "Build: xcodebuild -scheme LabMac-Core -destination 'platform=macOS' test, with a worktree-local Config/Local.xcconfig giving the build its own bundle prefix",
+    "open -g -n NativeLab.app, so the app starts in the background, then find its PID by the exact executable path",
+    "A small accessibility-API client (AXUIElement, not committed) against that PID: set AXSelected on the Access as a Superpower sidebar row",
+    "AXPress Set Up Practice; wait for Task: To Do and \"Archived 6 practice samples. Each has its own receipt.\"",
+    "Read each bar's label, AXValueDescription, and custom action names; read every AXCustomRotors attribute; read the chart group's AXAudiograph attribute",
+    "voiceover-action: perform the Mineral specimens bar's Restore Quartz point action; wait for Task: Done and the result sentence; AXPress the inspector's Undo; wait for Task: To Do",
+    "audio-graph-data: take the category of the highest AXAudiograph value, perform that bar's Restore Obsidian flake action; wait for Task: Done; AXPress the inspector's Undo",
+    "list-row-miss: perform the Tracing vellum row's Restore Tracing vellum action; read the result sentence and the summary",
+    "visible-button: set AXSelected on the Quartz point row, read the Restore Quartz point button's AXUserInputLabels, AXPress it; wait for Task: Done",
+    "AXPress Reset Practice; wait for Task: Nothing Archived",
+    "Quit: SIGTERM to that PID only"
+  ],
+  "subject" : "LAB-035"
+}

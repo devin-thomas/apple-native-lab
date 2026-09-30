@@ -1,0 +1,77 @@
+{
+  "check" : "Access as a Superpower showcase replayed twice from a clean SQLite store as the app-UI adapter; both replays share one fingerprint",
+  "date" : "2026-09-30T20:31:54Z",
+  "execution" : {
+    "path" : "fixture"
+  },
+  "inputs" : [
+    "script:access-superpower@sha256:71846dc12310a01bd126be1f703a29fbed2bcf83f3bfbab317d14fa2ab71a455",
+    "seed:access-superpower@sha256:d132b2dc787cea268736ac6a4ac4acc1f582b430bbb1a30f59dff2d02201041d"
+  ],
+  "limitations" : [
+    "Fixture path: the replay drives OperationService on original fixtures. It proves the domain contract on this build, not a device, a system surface, an entry point other than the runner's adapter, or a UI.",
+    "The chart, VoiceOver, Voice Control, Full Keyboard Access, and the Audio Graph: the replay submits the task's operations to OperationService as the app UI and renders nothing, so it proves the task's data contract, not any way of reaching it.",
+    "The AccessSuperpower module's choices: the replay states each operation in full. AccessSuperpowerShowcaseReplayTests in Packages/LabFeatures checks that the module builds exactly these operations and judges the task as the step descriptions say.",
+    "Imported user data: the person's collection and item here are created by operations, not adopted from staging.",
+    "Physical devices and the iOS, watchOS, and tvOS simulators: the replay runs in the package test process on the Mac."
+  ],
+  "outcome" : {
+    "detail" : "41 of 41 steps passed. Replay fingerprint sha256:6c8bcd362021c7aea6ffba0aaf0f8d324b815a4520a0123f64c0634b9e997459. Adapter app-ui; store sqlite (schema 3, temporary file); timebase swift-continuous-clock.",
+    "result" : "passed"
+  },
+  "provenance" : {
+    "appVersion" : "unknown",
+    "buildNumber" : "unknown",
+    "buildProfile" : "unknown",
+    "minimumOS" : "unknown",
+    "sdkName" : "macosx27.0",
+    "sourceRevision" : "fd8523e",
+    "xcodeBuild" : "27A266a",
+    "xcodeVersion" : "27.0"
+  },
+  "schemaVersion" : 1,
+  "steps" : [
+    "approve-reset: The person confirms Reset Demo.",
+    "reset: Reset Demo creates the 12 original samples, 3 collections of 4, in the demo namespace. Nothing is archived, so the task has no answer yet.",
+    "find-minerals-first: All 4 mineral specimens are active: a first run archives nothing.",
+    "approve-practice-quartz: The person presses Set Up Practice, which approves archiving Quartz point.",
+    "practice-quartz: Set Up Practice, 1 of 6: archive Quartz point (Mineral specimens) at revision 1.",
+    "approve-practice-agate: Set Up Practice approves archiving Banded agate slice.",
+    "practice-agate: Set Up Practice, 2 of 6: archive Banded agate slice (Mineral specimens).",
+    "approve-practice-obsidian: Set Up Practice approves archiving Obsidian flake.",
+    "practice-obsidian: Set Up Practice, 3 of 6: archive Obsidian flake (Mineral specimens).",
+    "approve-practice-cobalt: Set Up Practice approves archiving Cobalt swatch.",
+    "practice-cobalt: Set Up Practice, 4 of 6: archive Cobalt swatch (Pigment swatches).",
+    "approve-practice-ochre: Set Up Practice approves archiving Ochre swatch.",
+    "practice-ochre: Set Up Practice, 5 of 6: archive Ochre swatch (Pigment swatches).",
+    "approve-practice-vellum: Set Up Practice approves archiving Tracing vellum.",
+    "practice-vellum: Set Up Practice, 6 of 6: archive Tracing vellum (Paper stock).",
+    "find-pigments-active: The first bar: Pigment swatches has 2 of 4 archived, so only Amber swatch and Verdigris swatch are active.",
+    "find-minerals-active: The middle bar: Mineral specimens has 3 of 4 archived, the most. Only Pyrite cube is active.",
+    "find-paper-active: The last bar: Paper stock has 1 of 4 archived.",
+    "find-minerals-with-archived: Archiving deletes nothing: with archived samples included, all 4 mineral specimens are there.",
+    "restore-quartz: The task's one operation: restore Quartz point from Mineral specimens, the collection with the most, at the revision the chart showed. The task is done.",
+    "find-minerals-after-restore: Quartz point is active again.",
+    "approve-undo-restore: The person presses the receipt's Undo, which approves archiving Quartz point again.",
+    "undo-restore: Undo the restore with the operation its receipt recorded. The task is to do again.",
+    "find-minerals-after-undo: Quartz point is archived again, so Mineral specimens has the most once more.",
+    "restore-vellum: A miss: restore Tracing vellum from Paper stock, which had 1 archived sample. It is a real change with a receipt, but the task is not done.",
+    "find-paper-after-miss: Every paper stock sample is active.",
+    "create-collection: Create one of the person's own collections. The task counts only demo collections, so it never enters the chart.",
+    "create-item: Create an item in that collection.",
+    "approve-archive-yours: The person confirms archiving their own item.",
+    "archive-yours: Archive the person's own item at revision 1.",
+    "approve-archive-amber: The person confirms archiving a demo sample that is not in the practice set.",
+    "archive-amber: Archive Amber swatch at revision 1.",
+    "reset-practice-quartz: Reset Practice, 1 of 5: restore Quartz point, archived again by the undo.",
+    "reset-practice-agate: Reset Practice, 2 of 5: restore Banded agate slice.",
+    "reset-practice-obsidian: Reset Practice, 3 of 5: restore Obsidian flake.",
+    "reset-practice-cobalt: Reset Practice, 4 of 5: restore Cobalt swatch.",
+    "reset-practice-ochre: Reset Practice, 5 of 5: restore Ochre swatch. Tracing vellum was already restored, so it is not touched.",
+    "find-pigments-after-reset: Reset Practice left Amber swatch archived: it is not a practice sample.",
+    "find-minerals-after-reset: Every mineral specimen is active again.",
+    "find-yours-after-reset: The person's item is still archived: Reset Practice did not touch it.",
+    "find-yours-with-archived: It is there when archived items are included, unchanged."
+  ],
+  "subject" : "LAB-035"
+}
