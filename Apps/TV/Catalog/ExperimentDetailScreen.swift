@@ -1,5 +1,6 @@
 import LabCatalog
 import LabSupport
+import LocalConstellation
 import SwiftUI
 
 /// One experiment's record: what it shows, its state, its fallback, and where its sources live.
@@ -14,6 +15,8 @@ struct ExperimentDetailScreen: View {
         VStack(alignment: .leading, spacing: 32) {
             header
                 .padding(.horizontal, 80)
+            ConstellationTVLaunch(experiment: experiment)
+                .padding(.horizontal, 80)
             ScrollView {
                 LazyVGrid(columns: [GridItem(.flexible(), spacing: 40, alignment: .top),
                                     GridItem(.flexible(), spacing: 40, alignment: .top)],
@@ -27,7 +30,7 @@ struct ExperimentDetailScreen: View {
                     FocusCard(identifier: "detail.this-device") {
                         VStack(alignment: .leading, spacing: 12) {
                             CardHeading(title: "On this Apple TV")
-                            SymbolLabel(title: "Unavailable here", systemImage: "tv.slash")
+                            SymbolLabel(title: hasModule ? "Runs here" : "Unavailable here", systemImage: hasModule ? "tv" : "tv.slash")
                                 .font(.headline)
                             Text(thisDeviceNote)
                         }
@@ -95,8 +98,14 @@ struct ExperimentDetailScreen: View {
         .accessibilityIdentifier("detail.header")
     }
 
+    /// Whether this build carries a module for the experiment on Apple TV (LAB-019 so far).
+    private var hasModule: Bool { experiment.id == LocalConstellation.experimentID }
+
     /// Why nothing runs here, in the terms of this experiment's declared hosts.
     private var thisDeviceNote: String {
+        if hasModule {
+            return "This Apple TV is the display: it joins a conductor on the local network, or runs the whole show as a simulation. Its state describes the lab as a whole, not this Apple TV."
+        }
         let hosts = experiment.hosts
         let namesTelevision = hosts.localizedCaseInsensitiveContains("Apple TV")
             || hosts.localizedCaseInsensitiveContains("tvOS")

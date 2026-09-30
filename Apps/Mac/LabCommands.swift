@@ -1,4 +1,5 @@
 import LabCatalog
+import LocalConstellation
 import SurfaceDeck
 import SwiftUI
 
@@ -43,6 +44,9 @@ struct LabCommands: Commands {
                 .disabled(window == nil)
             Button("Portable Objects") { window?.destination = .portableObjects }
                 .keyboardShortcut("8", modifiers: .command)
+                .disabled(window == nil)
+            Button(LocalConstellation.title) { window?.destination = .localConstellation }
+                .keyboardShortcut("9", modifiers: .command)
                 .disabled(window == nil)
         }
 

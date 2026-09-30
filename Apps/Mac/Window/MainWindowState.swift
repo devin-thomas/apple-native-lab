@@ -1,6 +1,7 @@
 import LabCatalog
 import LabDomain
 import LabSupport
+import LocalConstellation
 import Observation
 import ShareIngress
 import SurfaceDeck
@@ -22,6 +23,8 @@ enum SidebarDestination: Hashable {
     case portableObjects
     /// LAB-004: the demo session, its receipts, and the widget and Control previews.
     case surfaceDeck
+    /// LAB-019: a conductor, a controller, and a display, simulated here or live on the network.
+    case localConstellation
     case catalog(CatalogScope)
 
     var title: String {
@@ -33,6 +36,7 @@ enum SidebarDestination: Hashable {
         case .shareInbox: "Share Inbox"
         case .portableObjects: "Portable Objects"
         case .surfaceDeck: SurfaceDeck.title
+        case .localConstellation: LocalConstellation.title
         case .catalog(let scope): scope.title
         }
     }
@@ -47,6 +51,7 @@ enum SidebarDestination: Hashable {
         case .shareInbox: "share-inbox"
         case .portableObjects: "portable-objects"
         case .surfaceDeck: "surface-deck"
+        case .localConstellation: "local-constellation"
         case .catalog(.all): "all"
         case .catalog(.milestone(let milestone)): "milestone:\(milestone.rawValue)"
         case .catalog(.category(let category)): "category:\(category)"
@@ -64,6 +69,7 @@ enum SidebarDestination: Hashable {
         case ("share-inbox", nil): self = .shareInbox
         case ("portable-objects", nil): self = .portableObjects
         case ("surface-deck", nil): self = .surfaceDeck
+        case ("local-constellation", nil): self = .localConstellation
         case ("all", nil): self = .catalog(.all)
         case ("milestone", let raw?): guard let milestone = Milestone(rawValue: raw) else { return nil }
             self = .catalog(.milestone(milestone))
