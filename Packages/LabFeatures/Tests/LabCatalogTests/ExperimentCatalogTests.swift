@@ -35,7 +35,7 @@ import Testing
         #expect(catalog.experiments.first { $0.id == "LAB-001" }?.state == .implemented)
         #expect(catalog.experiments.first { $0.id == "LAB-010" }?.state == .implemented)
         #expect(catalog.experiments.first { $0.id == "LAB-035" }?.state == .implemented)
-        #expect(catalog.progress(for: .m1) == (live: 2, total: 6))
+        #expect(catalog.progress(for: .m1) == (live: 3, total: 6))
     }
 
     @Test func searchMatchesTitlesAndAPIs() {
