@@ -419,6 +419,13 @@ enum Rendered {
         let request = VNRecognizeTextRequest()
         request.recognitionLevel = .accurate
         request.usesLanguageCorrection = false
+        // On the CPU: while other builds loaded the Mac, the Neural Engine once refused to load the
+        // recognizer (`e5rtError` 13), which failed these tests for a reason outside the view.
+        for (stage, devices) in try request.supportedComputeStageDevices {
+            if let cpu = devices.first(where: { if case .cpu = $0 { true } else { false } }) {
+                request.setComputeDevice(cpu, for: stage)
+            }
+        }
         try VNImageRequestHandler(cgImage: image).perform([request])
         return (request.results ?? [])
             .compactMap { $0.topCandidates(1).first?.string }
