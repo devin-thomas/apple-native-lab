@@ -1,0 +1,45 @@
+{
+  "check" : "Access as a Superpower in the Mac host: each way of finishing the task ends in the same restore, receipt, announcement, and persisted state",
+  "date" : "2026-09-30T20:31:30Z",
+  "execution" : {
+    "path" : "fixture"
+  },
+  "inputs" : [
+    "seed:app-bundle@sha256:d132b2dc787cea268736ac6a4ac4acc1f582b430bbb1a30f59dff2d02201041d",
+    "practice:AF451890-CA80-4DE9-B18B-4007066C9177,D279FB0E-642E-463A-B3DA-299442A1C7CB,C6468C0B-4BF6-48E8-AE5D-F5FC7A041097,9B97BF2F-4D0B-4197-9CA8-36489DF40455,C8E1904C-E8DC-40A0-93D3-53F6C0FFF95D,6933AC83-9E61-4264-8EB8-0535B3C5E0F8",
+    "restore:AF451890-CA80-4DE9-B18B-4007066C9177"
+  ],
+  "limitations" : [
+    "Fixture path: hosted tests in the sandboxed Mac app on the development Mac, on fresh stores seeded from the bundled demo seed. It supports implemented at most.",
+    "Automated structure only. The accessibility API stands in for VoiceOver and Voice Control: nothing was spoken or heard, no Audio Graph was played, and no person used an assistive technology.",
+    "The keyboard presses were delivered to the window by AppKit in the test process, not typed on a hardware keyboard, and Full Keyboard Access was off.",
+    "The selection for the visible control was set as a click sets it; no pointer event was sent.",
+    "The fallback page is the iPhone layout rendered on the Mac. No physical iPhone or iPad and no iOS simulator ran in this check."
+  ],
+  "outcome" : {
+    "detail" : "All 60 comparisons matched. Each of the 5 ways restored Quartz point from Mineral specimens at revision 2 as the app UI, with the receipt \"Restored item “Quartz point”.\" offering an archive at revision 3, and the announcement \"Restored item “Quartz point”. Undo is available. Task done: Mineral specimens had the most archived samples (3).\" The task read Done after each, as the session's status and as \"Task: Done\" and the result sentence in the accessibility tree, and To Do after each undo. The 12 demo items were identical across the 5 stores. The chart descriptor's title, summary, categorical axis, and values 2, 3, and 1 named Mineral specimens as the highest, and the page without it still finished the task from its summary and list.",
+    "result" : "passed"
+  },
+  "provenance" : {
+    "appVersion" : "0.1.0",
+    "buildNumber" : "1",
+    "buildProfile" : "CoreLocal",
+    "minimumOS" : "26.0",
+    "sdkName" : "macosx27.0",
+    "sourceRevision" : "fd8523e",
+    "xcodeBuild" : "27A266a",
+    "xcodeVersion" : "27.0"
+  },
+  "schemaVersion" : 1,
+  "steps" : [
+    "xcodebuild -scheme LabMac-Core -only-testing:LabMacTests/AccessSuperpowerHostEvidenceTests test",
+    "Each way on its own fresh SQLite store in the app container, seeded by the host's first run, then Set Up Practice through the task session: 6 archives, one receipt each",
+    "visible-button: select Quartz point in the list as a click does, then press the detail column's Restore Sample button through the accessibility API",
+    "voiceover-action: read the chart's bars, take the one whose value ends \"the most\", and perform its \"Restore Quartz point\" custom action",
+    "keyboard: give the list focus, then Down five times and Return, as AppKit delivers key presses; nothing is selected or pressed by the test",
+    "audio-graph-data: read the chart group's AXChartDescriptor, take the category of its highest value, and perform that bar's \"Restore Quartz point\" action",
+    "fallback: the iPhone page with no chart descriptor; read the summary's answer, then press \"Restore Quartz point\" in the list",
+    "After each way: read the receipt, the combined announcement, the task status, and every demo item from the store; then the receipt's undo, and the task status again"
+  ],
+  "subject" : "LAB-035"
+}

@@ -11,7 +11,13 @@ import SwiftUI
 /// window columns instead (`Apps/Mac/Window/AccessSuperpowerColumns.swift`).
 struct AccessSuperpowerPage: View {
     @Environment(LabLibrary.self) private var library
-    @State private var session = AccessTaskSession()
+    @State private var session: AccessTaskSession
+
+    /// - Parameter session: A new session for the page by default. The Mac hosted tests pass one
+    ///   they can read, so every way of finishing the task is judged by the same session.
+    init(session: AccessTaskSession = AccessTaskSession()) {
+        _session = State(initialValue: session)
+    }
 
     var body: some View {
         let tally = AccessTaskSession.tally(library)

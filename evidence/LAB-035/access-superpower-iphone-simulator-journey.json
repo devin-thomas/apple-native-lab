@@ -1,0 +1,50 @@
+{
+  "check" : "Access as a Superpower on iPhone in the iOS Simulator: the journey by accessibility label from the catalog to the receipt's Undo and Reset Practice, with Xcode's accessibility audit on each screen, at the largest accessibility text size with Increase Contrast and at the default settings",
+  "date" : "2026-09-30T20:56:30Z",
+  "execution" : {
+    "path" : "simulator",
+    "simulator" : {
+      "deviceClass" : "iPhone 17",
+      "osVersion" : "27.0",
+      "platform" : "iOS"
+    }
+  },
+  "inputs" : [
+    "seed:app-bundle@sha256:d132b2dc787cea268736ac6a4ac4acc1f582b430bbb1a30f59dff2d02201041d",
+    "practice:AF451890-CA80-4DE9-B18B-4007066C9177,D279FB0E-642E-463A-B3DA-299442A1C7CB,C6468C0B-4BF6-48E8-AE5D-F5FC7A041097,9B97BF2F-4D0B-4197-9CA8-36489DF40455,C8E1904C-E8DC-40A0-93D3-53F6C0FFF95D,6933AC83-9E61-4264-8EB8-0535B3C5E0F8",
+    "restore:AF451890-CA80-4DE9-B18B-4007066C9177"
+  ],
+  "limitations" : [
+    "Simulator path: the iOS 27.0 simulator (24A434) on the development Mac. It supports implemented at most, and says nothing about a physical iPhone or iPad.",
+    "The UI-test harness is in a throwaway copy of fd8523e whose only changes are a UI-test target and its scheme entry; it is not committed, so the run cannot be repeated from the repository.",
+    "XCUITest drives the page by accessibility label and value, as VoiceOver and Voice Control find elements, but nothing was spoken, VoiceOver was off, and no Audio Graph was played. A UI test cannot list the bars' custom actions, the rotor, or the chart descriptor on iOS, so none of those was read here.",
+    "Xcode's accessibility audit is automated. Its issues were recorded and triaged, not failed on, and an audit result is never a manual pass.",
+    "The simulator's text size and Increase Contrast were set with simctl for the first pass and restored afterwards; Reduce Motion, Reduce Transparency, and grayscale were not set.",
+    "Full Keyboard Access with a hardware keyboard was not exercised."
+  ],
+  "outcome" : {
+    "detail" : "Both passes passed, from a fresh install each time. At both settings the catalog row read \"Access as a Superpower, State: Implemented, LAB-035, M1, Accessibility\" and the experiment page's Open Access as a Superpower button was hittable without scrolling. The task page opened at Task: Nothing Archived; Set Up Practice gave Task: To Do; the bars read Pigment swatches \"2 of 4 samples archived\", Mineral specimens \"3 of 4 samples archived, the most\", and Paper stock \"1 of 4 samples archived\", and the summary began \"Mineral specimens has the most archived samples: 3 of 4.\" Restore Quartz point gave Task: Done and \"Task done: Mineral specimens had the most archived samples (3).\" The receipt row read \"Restore Item, <time>, Status: Committed, Restored item “Quartz point”.\" and the receipt's \"Undo: Archive Item “Quartz point”\" was hittable without scrolling; it showed \"Undone: Archived item “Quartz point”.\" and returned the page to Task: To Do. Reset Practice returned it to Task: Nothing Archived. Audit issues, largest text with Increase Contrast: experiment page 2 (1 contrast, 1 Dynamic Type), task page 1 (contrast), receipt 2 (1 Dynamic Type, 1 text clipped). Default settings: experiment page 12 (11 contrast, 1 Dynamic Type), task page 20 (6 contrast, 9 Dynamic Type, 5 text clipped), receipt 16 (11 contrast, 4 Dynamic Type, 1 text clipped).",
+    "result" : "passed"
+  },
+  "provenance" : {
+    "appVersion" : "0.1.0",
+    "buildNumber" : "1",
+    "buildProfile" : "CoreLocal",
+    "minimumOS" : "26.0",
+    "sdkName" : "iphonesimulator27.0",
+    "sourceRevision" : "fd8523e",
+    "xcodeBuild" : "27A266a",
+    "xcodeVersion" : "27.0"
+  },
+  "schemaVersion" : 1,
+  "steps" : [
+    "A throwaway copy of the branch at fd8523e with a UI-test target added in project.yml, regenerated with xcodegen",
+    "An iPhone 17 simulator (iOS 27.0) created for this ticket; the status bar fixed at 9:41 with xcrun simctl status_bar override",
+    "xcrun simctl ui <device> content_size accessibility-extra-extra-extra-large; xcrun simctl ui <device> increase_contrast enabled",
+    "Before each pass: xcrun simctl uninstall <device> <app>, so each starts from a fresh install and the first-run demo seed",
+    "xcodebuild -scheme LabPhone-Core -destination 'platform=iOS Simulator,id=<device>' test LAB_SOURCE_REVISION=fd8523e",
+    "The test: Catalog tab, the Access as a Superpower row, performAccessibilityAudit, Open Access as a Superpower, Set Up Practice, read the three bars and the summary, performAccessibilityAudit, Restore Quartz point, the result, the receipt row, performAccessibilityAudit, the receipt's Undo, back, Reset Practice",
+    "xcrun simctl ui <device> content_size large; xcrun simctl ui <device> increase_contrast disabled; then the same test at the default settings"
+  ],
+  "subject" : "LAB-035"
+}

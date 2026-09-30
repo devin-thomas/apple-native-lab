@@ -331,6 +331,8 @@ Use in this plan: Chart semantics can expose audible data representations.
 
 Implementation evidence required: actual SDK symbol/availability, permissions or entitlement, and a named compile/device result.
 
+Installed SDK check (2026-09-30, Xcode 27.0 with the macOS and iOS 27.0 SDKs): `AXChartDescriptor` and its axis, series, and point types, and SwiftUI's `accessibilityChartDescriptor(_:)`, with their declared availability, are in the [installed SDK ledger](VERIFICATION_BOUNDARIES.md#installed-sdk-ledger). Access as a Superpower compiles them for macOS and iOS. The running Mac app exposes the descriptor as its chart's Audio Graph data, but nobody has played the Audio Graph on any device.
+
 ## S30
 
 **Accessibility APIs** — reviewed
@@ -340,6 +342,8 @@ Source: [Accessibility APIs](https://developer.apple.com/documentation/accessibi
 Use in this plan: Assistive technologies and accessibility metadata.
 
 Implementation evidence required: actual SDK symbol/availability, permissions or entitlement, and a named compile/device result.
+
+Installed SDK check (2026-09-30): the custom actions, rotor, and input labels Access as a Superpower uses are in the [installed SDK ledger](VERIFICATION_BOUNDARIES.md#installed-sdk-ledger). On the Mac they were read and performed through the accessibility API from another process, not by VoiceOver or Voice Control.
 
 ## S31
 
