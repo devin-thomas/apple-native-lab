@@ -1,0 +1,51 @@
+{
+  "check" : "Choose Files in the sandboxed Mac app's Share Inbox, driven through the Accessibility API by process ID: the open panel appears, and the chosen files wait for review in order with their origins",
+  "date" : "2026-09-30T20:57:45Z",
+  "execution" : {
+    "device" : {
+      "deviceClass" : "Mac17,14 (Mac Studio, M5 Max)",
+      "osVersion" : "27.0 (26A425)",
+      "platform" : "macOS"
+    },
+    "path" : "physical"
+  },
+  "inputs" : [
+    "intake:gull-count.txt@sha256:519a31e50be11abd40d3d7d4fe24b45d1f56b91ca4c460acd03773db7106d44d",
+    "intake:harbor-sketch.png@sha256:17bff0bcc591edc7902f7febe162bce437dfed6fb8cdcd2c68ab17c12a1b2c6d",
+    "intake:tide-clip.mov@sha256:4e25ebdc06c326bab2d1a739af417e90538266c33d47ddc9d001c67ee5223d4d"
+  ],
+  "limitations" : [
+    "An agent drove the run through the Accessibility API and posted key events; no person used a pointer, and VoiceOver was not running.",
+    "It proves the Mac host's file-picker fallback on this Mac only. LAB-007's declared surfaces are iPhone and iPad with a share extension, which this run does not touch, so the experiment stays implemented.",
+    "Only files were chosen, and this build cannot add files to a collection, so no receipt was made. Adding pasted text and links is proven by the hosted tests.",
+    "The files came from a local folder; no iCloud Drive or other file provider was used, so no download was waited on or cancelled.",
+    "The pasteboard was not used, and drag and drop onto the inbox was not run.",
+    "The container's inbox already held two file imports from an earlier session's run under the same bundle prefix; they were left as they were and are not part of this record."
+  ],
+  "outcome" : {
+    "detail" : "The open panel appeared each time Choose Files… was pressed, and Open imported the selection. The first Open staged gull-count.txt: the inbox read “1 item is waiting for review.” and listed “gull-count.txt, File, File picker, …, Can't be added in this version”. The second Open, of the three fixture files, read “2 items are waiting for review, 1 was already waiting.”: gull-count.txt was a duplicate and kept its first origin, and harbor-sketch.png and tide-clip.mov were listed as File picker, 2 of 3 and 3 of 3. The movie's review screen read Came through: File picker; Position: 3 of 3 shared together; Declared type: com.apple.quicktime-movie; Adds as: App UI; and “Files are checked and kept for review, but this version can’t add files to a collection yet.” An earlier Open in the same run, of a mistaken selection of 19 entries in a scratch folder, refused the 8 folders by position as not ordinary files and staged the 11 files at their positions; those imports were removed at once, and no name or content from them is recorded.",
+    "result" : "passed"
+  },
+  "provenance" : {
+    "appVersion" : "0.1.0",
+    "buildNumber" : "1",
+    "buildProfile" : "CoreLocal",
+    "minimumOS" : "26.0",
+    "sdkName" : "macosx27.0",
+    "sourceRevision" : "074eaaa",
+    "xcodeBuild" : "27A266a",
+    "xcodeVersion" : "27.0"
+  },
+  "schemaVersion" : 1,
+  "steps" : [
+    "xcodebuild -scheme LabMac-Core -configuration Debug build at 074eaaa, under a separate bundle prefix set in an ignored Config/Local.xcconfig, so the app used its own container; codesign showed com.apple.security.app-sandbox and com.apple.security.files.user-selected.read-write",
+    "open -n on the built app; its process ID taken from its exact executable path; every later action addressed that process ID",
+    "View › Share Inbox, pressed as a menu item through the Accessibility API",
+    "Choose Files… pressed through the Accessibility API; the open panel appeared as a sheet on the window",
+    "In the panel: Go to Folder (⌘⇧G, posted only while that process was frontmost), its path field set through the Accessibility API to a copy of intake/gull-count.txt in a scratch folder outside the repository, Return, then Open pressed",
+    "Choose Files… again: Go to Folder to the copy of intake/harbor-sketch.png in the same folder, ⌘A to select that folder's three files (intake/gull-count.txt, intake/harbor-sketch.png, intake/tide-clip.mov), then Open",
+    "The movie's row selected through the Accessibility API and its review screen read",
+    "Each test import removed with Remove from Inbox and its confirmation; only the launched process was stopped"
+  ],
+  "subject" : "LAB-007"
+}

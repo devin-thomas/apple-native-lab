@@ -248,3 +248,112 @@ enum ShareIngressShowcase {
         #expect(record.outcome.detail.contains("Adapter app-ui"))
     }
 }
+
+/// A run of LAB-007 observed in a simulator through a UI-test harness, as the harness recorded it.
+///
+/// The facts are read from a file kept outside the repository, the provenance from the Info.plist
+/// of the app the harness installed, and `EvidenceRecord` validates the result, so the record
+/// carries no simulator identifier. A simulator record supports `implemented` at most.
+struct SimulatorRunFacts: Codable {
+    /// The record's file name in the export, without `.json`.
+    let name: String
+    let subject: String
+    let check: String
+    let observedAt: Date
+    let platform: String
+    let deviceClass: String
+    let osVersion: String
+    let buildInfoPlist: String
+    let inputs: [String]
+    let steps: [String]
+    let result: RunResult
+    let observed: String
+    let limitations: [String]
+
+    static func load(_ url: URL) throws -> SimulatorRunFacts {
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        return try decoder.decode(SimulatorRunFacts.self, from: Data(contentsOf: url))
+    }
+
+    func record() throws -> EvidenceRecord {
+        let info = try #require(NSDictionary(contentsOf: URL(filePath: buildInfoPlist)) as? [String: Any], "the build's Info.plist")
+        guard let platform = LabPlatform(rawValue: platform) else { throw EvidenceError.unknownPlatform(platform) }
+        return try EvidenceRecord(
+            subject: subject,
+            check: check,
+            date: observedAt,
+            provenance: BuildProvenance(infoDictionary: info),
+            execution: .simulator(SimulatedDevice(platform: platform, deviceClass: deviceClass, osVersion: osVersion)),
+            inputs: inputs,
+            steps: steps,
+            outcome: RunOutcome(result, detail: observed),
+            limitations: limitations
+        )
+    }
+
+    var exportPath: String { "records/\(name).json" }
+}
+
+@Suite struct ShareIngressSimulatorEvidence {
+    private func facts(plist: URL, result: RunResult = .passed) -> SimulatorRunFacts {
+        SimulatorRunFacts(
+            name: "simulator-run", subject: "LAB-007", check: "A share in the simulator", observedAt: fixedDate,
+            platform: "iOS", deviceClass: "iPhone 17 Pro", osVersion: "27.0 (24A434)", buildInfoPlist: plist.path(percentEncoded: false),
+            inputs: ["intake:harbor-sketch.png@sha256:00"], steps: ["Share it."], result: result, observed: "Observed.",
+            limitations: ["Simulator only."]
+        )
+    }
+
+    private func infoPlist(in folder: TemporaryFolder) throws -> URL {
+        let info: [String: Any] = [
+            "LabSourceRevision": "0000000", "DTSDKName": "iphonesimulator27.0", "DTXcode": "2700", "DTXcodeBuild": "27A266a",
+            "CFBundleShortVersionString": "0.1.0", "CFBundleVersion": "1", "LabBuildProfile": "SystemSurfaces", "MinimumOSVersion": "26.0",
+        ]
+        let data = try PropertyListSerialization.data(fromPropertyList: info, format: .xml, options: 0)
+        return try folder.write(data, to: "Info.plist")
+    }
+
+    /// The generator: a simulator record keeps its path, supports `implemented` at most, and is
+    /// never device proof; a public fixture run needs no override to leave.
+    @Test func aSimulatorRunIsNeverDeviceProof() throws {
+        let folder = try TemporaryFolder()
+        let record = try facts(plist: try infoPlist(in: folder)).record()
+        #expect(record.path == .simulator)
+        #expect(record.supportedState == .implemented)
+        #expect(record.provenance.buildProfile == "SystemSurfaces")
+        #expect(throws: PromotionError.notPhysical(.simulator)) { try DeviceProof(record) }
+        let preview = try EvidenceExporter(now: { fixedDate }).preview(EvidenceExportRequest(
+            title: "LAB-007", artifacts: [try .record(record, at: "records/simulator-run.json", tier: .publicFixture)],
+            provenance: record.provenance
+        ))
+        #expect(preview.refused.isEmpty && preview.result == .passed)
+    }
+
+    /// Writes an observed simulator run's record through the review. Runs only when both are named:
+    ///
+    ///     LAB_007_SIMULATOR_RUN_FACTS=<facts.json> LAB_DEMO_EVIDENCE_DIR=<folder> \
+    ///     swift test --package-path Packages/LabDemo --filter ShareIngressSimulatorEvidence
+    ///
+    /// Keep the facts and the export outside the repository, and copy the exported record into
+    /// `evidence/LAB-007/`.
+    @Test(.enabled(if: ProcessInfo.processInfo.environment["LAB_007_SIMULATOR_RUN_FACTS"] != nil))
+    func theObservedRunExportsThroughTheReview() throws {
+        let environment = ProcessInfo.processInfo.environment
+        let facts = try SimulatorRunFacts.load(URL(filePath: try #require(environment["LAB_007_SIMULATOR_RUN_FACTS"])))
+        let folder = URL(filePath: try #require(environment["LAB_DEMO_EVIDENCE_DIR"]), directoryHint: .isDirectory)
+        let record = try facts.record()
+        try #require(record.subject == "LAB-007")
+        try #require(record.provenance.sourceRevision != "unknown" && record.provenance.xcodeBuild != "unknown")
+        let preview = try EvidenceExporter().preview(EvidenceExportRequest(
+            title: "LAB-007 run in the iOS simulator",
+            artifacts: [try .record(record, at: facts.exportPath, tier: .publicFixture)],
+            untested: ["A physical iPhone or iPad: no device was used."],
+            provenance: record.provenance
+        ))
+        try #require(preview.refused.isEmpty)
+        let written = try preview.write(into: folder, folderName: "\(facts.name)-export")
+        let stored = try JSONDecoder().decode(EvidenceRecord.self, from: Data(contentsOf: written.appending(path: facts.exportPath)))
+        #expect(stored == record)
+    }
+}

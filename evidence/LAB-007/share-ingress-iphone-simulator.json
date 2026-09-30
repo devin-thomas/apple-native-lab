@@ -1,0 +1,53 @@
+{
+  "check" : "Share Ingress on an iPhone simulator through the system's own controls: the Paste button, the document picker, and the share sheet from Photos into the share extension, then review, Add, and the receipt",
+  "date" : "2026-09-30T21:26:56Z",
+  "execution" : {
+    "path" : "simulator",
+    "simulator" : {
+      "deviceClass" : "iPhone 17 Pro",
+      "osVersion" : "27.0 (24A434)",
+      "platform" : "iOS"
+    }
+  },
+  "inputs" : [
+    "intake:harbor-walk.txt@sha256:d93ff24e7447895e7688d18f44975d095b94ff6d5a72f6aeaa66cd800d244547",
+    "intake:gull-count.txt@sha256:519a31e50be11abd40d3d7d4fe24b45d1f56b91ca4c460acd03773db7106d44d",
+    "intake:harbor-sketch.png@sha256:17bff0bcc591edc7902f7febe162bce437dfed6fb8cdcd2c68ab17c12a1b2c6d",
+    "intake:tide-clip.mov@sha256:4e25ebdc06c326bab2d1a739af417e90538266c33d47ddc9d001c67ee5223d4d"
+  ],
+  "limitations" : [
+    "Simulator path: an iPhone 17 Pro simulator on iOS 27.0, not a device. It supports implemented at most.",
+    "The share extension and App Group staging on a physical iPhone did not run: a free Personal Team cannot sign App Groups.",
+    "The simulator signs the App Group with no team, which a device build cannot do.",
+    "The harness, not a person, tapped the controls, and put the note on the simulator's pasteboard. No VoiceOver, Voice Control, or large text pass was run.",
+    "Only an image and a movie were shared; a shared link or text was not added from the share sheet in this run (LAB-007-A added a Safari link that way in the simulator).",
+    "No iCloud Drive or iCloud Photos download ran, so no cloud download was cancelled.",
+    "The share sheet and Photos are the system's; their screens are not kept."
+  ],
+  "outcome" : {
+    "detail" : "The Import tab read “Share sheet: on.” The Paste button staged the note, “1 item is waiting for review.”, listed as “Harbor walk, Text, Paste”. On its review screen New Collection… and Add to Collection committed it: the receipt read Create Item, Committed, “Created item “Harbor walk” in “Field notes”.”, Entry point App UI, with an Archive undo. Choose Files… picked gull-count.txt from On My iPhone, listed as “gull-count.txt, File, File picker”. From Photos, the image and the movie shared to Native Lab showed “2 items are waiting for review.” in the extension, with “Item 1 is waiting for review.” and “Item 2 is waiting for review.”. The host then listed “harbor-sketch.PNG, File, Share sheet, 1 of 2” and “tide-clip.MOV, File, Share sheet, 2 of 2”. The movie's review screen read Came through: Share sheet; Position: 2 of 2 shared together; Declared type: com.apple.quicktime-movie; Adds as: Share extension; and that files cannot be added yet. The audits reported 13 issues on the Import tab, 13 on the text review screen, and 10 on the file review screen: Dynamic Type partially unsupported on section footers and form rows, contrast nearly passed on section headers and footers, contrast failed on one footer, and the Choose Files… label clipped.",
+    "result" : "passed"
+  },
+  "provenance" : {
+    "appVersion" : "0.1.0",
+    "buildNumber" : "1",
+    "buildProfile" : "SystemSurfaces",
+    "minimumOS" : "26.0",
+    "sdkName" : "iphonesimulator27.0",
+    "sourceRevision" : "074eaaa",
+    "xcodeBuild" : "27A266a",
+    "xcodeVersion" : "27.0"
+  },
+  "schemaVersion" : 1,
+  "steps" : [
+    "A new simulator named for LAB-007-B (iPhone 17 Pro, iOS 27.0), erased, with the status bar set to 9:41; intake/gull-count.txt copied into On My iPhone, and intake/harbor-sketch.png and intake/tide-clip.mov added to Photos with simctl addmedia",
+    "The LabPhone-Surfaces scheme (SystemSurfaces: the host variant and its share extension) at 074eaaa under a separate bundle prefix, with a UI-test target added in a throwaway copy that is not committed; xcodebuild test on that simulator",
+    "Import tab: the share sheet status; the harness put the note's text on the simulator's pasteboard; the Paste button",
+    "The pasted row, its review screen, New Collection… (Field notes), Add to Collection, and the receipt",
+    "Choose Files…, Browse, On My iPhone, gull-count.txt",
+    "Photos: Select, the image, then the movie, Share, Native Lab in the share sheet, the extension's summary, Done",
+    "The Import tab again, and the shared movie's review screen",
+    "Xcode's accessibility audit on the Import tab, a text import's review screen, and a file import's review screen, at the default text size"
+  ],
+  "subject" : "LAB-007"
+}
