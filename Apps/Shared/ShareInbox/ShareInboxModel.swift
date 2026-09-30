@@ -96,12 +96,16 @@ final class ShareInboxModel {
     ///   - bundle: Its `LabAppGroupIdentifier` Info.plist key, present only in a SystemSurfaces
     ///     build, names the App Group folder the share extension writes.
     ///   - sharedRoot: A share-extension folder to read instead of the bundle's App Group, for tests.
+    ///   - canChooseFiles: Whether this build can show the file picker; read from the running
+    ///     build's entitlements unless a test states it.
     init(
         bundle: Bundle = .main,
         locateHost: @escaping @Sendable () throws -> URL = ShareInboxLocation.hostRoot,
-        sharedRoot override: URL? = nil
+        sharedRoot override: URL? = nil,
+        canChooseFiles: Bool = ShareInboxModel.fileSelectionAllowed()
     ) {
         self.locateHost = locateHost
+        self.canChooseFiles = canChooseFiles
         if let override {
             shareSheet = .available
             sharedRoot = override
@@ -118,9 +122,11 @@ final class ShareInboxModel {
     }
 
     /// Whether this build can show the file picker. A sandboxed Mac app may show an open panel
-    /// only with the user-selected file read entitlement, and the CoreLocal Mac host carries only
-    /// the App Sandbox; AppKit then refuses the panel. iPhone and iPad need no entitlement.
-    let canChooseFiles: Bool = ShareInboxModel.fileSelectionAllowed()
+    /// only with a user-selected file entitlement, read-only or read-write; without one, AppKit
+    /// refuses the panel, so Choose Files is disabled with its reason. The CoreLocal Mac host has
+    /// carried `com.apple.security.files.user-selected.read-write` since LAB-008-A, so Choose Files
+    /// is on there. iPhone and iPad need no entitlement.
+    let canChooseFiles: Bool
 
     static func fileSelectionAllowed(_ source: some CapabilitySource = LiveCapabilitySource()) -> Bool {
         #if os(macOS)
