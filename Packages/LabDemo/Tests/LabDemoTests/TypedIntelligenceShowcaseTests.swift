@@ -213,6 +213,7 @@ enum TypedIntelligenceShowcase {
             xcodeBuild: environment["LAB_XCODE_BUILD"] ?? "unknown"
         )
         var extraArtifacts: [ExportArtifact] = []
+        var extraResults: [RunResult] = []
         let extraPaths = (environment["LAB_EXTRA_EVIDENCE_RECORDS"] ?? "").split(separator: ",").map(String.init)
         for path in extraPaths {
             let url = URL(filePath: path)
@@ -220,6 +221,7 @@ enum TypedIntelligenceShowcase {
             try #require(record.subject == "LAB-010")
             try #require(record.provenance.sourceRevision == provenance.sourceRevision, "one source revision per export")
             extraArtifacts.append(try .record(record, at: "records/\(url.lastPathComponent)", tier: .publicFixture))
+            extraResults.append(record.result)
         }
 
         let script = try TypedIntelligenceShowcase.script()
@@ -252,12 +254,19 @@ enum TypedIntelligenceShowcase {
             ],
             provenance: provenance
         ))
-        #expect(preview.result == .passed)
+        // A record made elsewhere keeps its own result: a failed live run is exported and reviewed
+        // like any other, and the summary leads with it.
+        let expected = RunResult.combining([.passed] + extraResults)
+        #expect(preview.result == expected)
         #expect(preview.refused.isEmpty)
         #expect(preview.reviews.count == 5 + extraArtifacts.count)
         #expect(preview.reviews.allSatisfy { $0.tier == .publicFixture && $0.decision == .approved })
         let records = 1 + extraArtifacts.count
-        #expect(preview.summaryText.hasPrefix("Passed: 2 demo runs and \(records) evidence \(records == 1 ? "record" : "records") exported; every one passed."))
+        let notPassed = extraResults.filter { $0 != .passed }.count
+        #expect(preview.summaryText.hasPrefix(
+            "\(expected.title): 2 demo runs and \(records) evidence \(records == 1 ? "record" : "records") exported; "
+                + (notPassed == 0 ? "every one passed." : "\(notPassed) did not pass.")
+        ))
 
         let temporary = try TemporaryFolder()
         let written = try preview.write(into: keep ?? temporary.url, folderName: "lab-010-typed-intelligence-showcase")
