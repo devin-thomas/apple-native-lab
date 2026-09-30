@@ -28,7 +28,6 @@ enum Journey {
     static let archiveRequest = RequestID(rawValue: UUID(uuidString: "79998709-4D82-411B-AE3E-4769B3CFA065")!)
     static let restoreRequest = RequestID(rawValue: UUID(uuidString: "7CAA28A8-03A7-44D1-98F5-53F798C9A06D")!)
     static let startRequest = RequestID(rawValue: UUID(uuidString: "47E2CDBA-EA7F-42BC-8A60-D126490D7A77")!)
-    static let pauseRequest = RequestID(rawValue: UUID(uuidString: "6775BB1C-871C-4106-8116-F2471178BFA8")!)
     /// A second lab's own collection, for importing the exported object there.
     static let imports = CollectionID(rawValue: UUID(uuidString: "102DC40B-57B2-4BB6-9D2E-64F71E2421B5")!)
     static let importsTitle = "Imports"

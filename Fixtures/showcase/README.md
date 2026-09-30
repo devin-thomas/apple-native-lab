@@ -136,6 +136,27 @@ A stale toggle is not in the script. The runner counts a conflict receipt as a s
 
 The request IDs were generated once at random for this fixture. Never change or reuse one.
 
+## `first-journey/`
+
+The [CORE-012](../../tickets/CORE-012.md) first six-lab journey on one shared object, from a clean store, for the M1 qualification and [showcase 01](../../showcases/01-the-app-that-meets-you-halfway.md). Its `seed.json` is a byte-for-byte copy of the app's demo seed; `FirstJourneyShowcaseTests` in `Packages/LabDemo` fails if the two differ. The shared object is [`Fixtures/intelligence/intelligence-injected-note.txt`](../intelligence/README.md), the note whose instructions must stay data; its practice samples are the six that [`Fixtures/access/archive-chart.json`](../access/README.md) lists.
+
+| Step | What it does |
+|---|---|
+| `approve-reset`, `reset` | The person confirms Reset Demo, the host's first run: the 3 collections and 12 items of the seed. |
+| `create-collection`, `approve-add`, `add-object`, `find-override` | LAB-007: New Collection… creates Field notes, and the person's Add commits the pasted note there as one item, its first line the title. A search for the note's injected word finds only the object. |
+| `apply-review`, `find-fray` | LAB-010: the reviewed proposal from the object's text, one added line on the kraft card. The sample parser drafts it and the manual editor writes the same change. |
+| `rename-object`, `approve-archive`, `archive-object`, `find-after-archive`, `restore-object`, `find-wear-note` | LAB-001: rename the object, archive it with the person's confirmation, and restore it. |
+| `start-session`, `pause-session`, `resume-session` | LAB-004: start, pause, and resume the demo session. |
+| `approve-practice-*`, `practice-*`, `restore-quartz`, `find-yours-during-task` | LAB-035: Set Up Practice's six archives, then the task's restore of Quartz point. The task counts demo collections only. |
+| `approve-reset-again`, `reset-again`, `find-fray-after-reset`, `find-yours-after-reset` | Reset Demo puts back the kraft card, the practice samples, and the session, and leaves the object and Field notes as the person left them. |
+
+The object's item ID and the Add's request ID are not chosen: `ImportAdopter` derives them from the note's digest and the collection's ID. The collection, the Add, the rename, the archive, the restore, and the session's start use the request IDs `FirstJourneyTests` fixes; the other request IDs were generated once at random for this fixture. Never change or reuse one.
+
+The journey is run two ways:
+
+- by `Packages/LabDemo` as evidence, on SQLite, composed as the app-UI adapter;
+- by `FirstJourneyTests` in `Packages/LabFeatures` through the six modules themselves, from the paste or the share to the export: `theShowcaseScriptIsExactlyTheJourneysChanges` checks that the journey commits exactly this script's operations, in order. There the rename, the archive, the pause, and the resume are App Intents, and every entry point is read after every step.
+
 ## Script format
 
 `script.json` (`format: "native-lab-demo-script"`, `formatVersion: 1`) names its seed, a file in the same folder in the demo seed format that `Fixtures/demo/seed.json` uses. `DemoScript(folder:)` loads both:

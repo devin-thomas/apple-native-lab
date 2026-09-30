@@ -124,6 +124,32 @@ import TypedIntelligence
         #expect(await coreLocal.inbox.snapshot().entries.isEmpty)
     }
 
+    /// The showcase script (`Fixtures/showcase/first-journey/`) that `Packages/LabDemo` replays on
+    /// SQLite as evidence is exactly this journey's changes: after its first Reset Demo, which
+    /// `JourneyLab.seeded()` also makes, every change step is the operation the journey committed,
+    /// in order, under the same request ID wherever the journey fixes one. LabFeatures does not
+    /// depend on LabDemo, so the script is read as plain JSON; a step kind this test does not map
+    /// fails it.
+    @Test func theShowcaseScriptIsExactlyTheJourneysChanges() async throws {
+        let lab = try await JourneyLab.seeded()
+        let outcome = try await Self.run(on: lab, route: .pastedWithSurfaces)
+        let steps = try ShowcaseScript.changes(seed: lab.seed)
+        try #require(steps.first?.operation == .resetDemo(seed: lab.seed))
+        let scripted = steps.dropFirst()
+        #expect(scripted.count == outcome.receipts.count)
+        for (step, receipt) in zip(scripted, outcome.receipts) {
+            #expect(receipt.admitted.operation == step.operation, "\(step.id)")
+        }
+        let fixed = [
+            Journey.createFieldNotes, Journey.addRequest, Journey.renameRequest, Journey.archiveRequest,
+            Journey.restoreRequest, Journey.startRequest,
+        ]
+        let journeyRequests = Set(outcome.receipts.map(\.requestID))
+        for request in fixed {
+            #expect(journeyRequests.contains(request) && scripted.contains { $0.request == request }, "\(request)")
+        }
+    }
+
     /// Nothing the journey runs can reach a network or a cloud model: no URL loading, sockets,
     /// CloudKit, Private Cloud Compute, or web view in the six modules, the domain, staging, and
     /// store packages, or the host folders that present the journey. The on-device model is the
@@ -491,5 +517,62 @@ import TypedIntelligence
             && document.note == .text(stored.note.value) && document.revision == stored.revision.rawValue
         #expect(documentMatches, "\(step): .anlab document", sourceLocation: sourceLocation)
         return stored
+    }
+}
+
+/// The change steps of `Fixtures/showcase/first-journey/script.json`, as domain operations.
+enum ShowcaseScript {
+    struct Change {
+        let id: String
+        let request: RequestID
+        let operation: DomainOperation
+    }
+
+    static func changes(seed: DemoSeed) throws -> [Change] {
+        struct Unmapped: Error { let step: String }
+        let url = JourneyFixtures.root.appending(path: "Fixtures/showcase/first-journey/script.json")
+        let object = try #require(try JSONSerialization.jsonObject(with: Data(contentsOf: url)) as? [String: Any])
+        let steps = try #require(object["steps"] as? [[String: Any]])
+        func uuid(_ value: Any?) throws -> UUID { try #require((value as? String).flatMap(UUID.init(uuidString:))) }
+        func revision(_ value: Any?) throws -> Revision { try #require((value as? Int).flatMap(Revision.init(rawValue:))) }
+        var changes: [Change] = []
+        for step in steps where step["find"] == nil && step["approve"] == nil {
+            let id = try #require(step["id"] as? String)
+            let operation: DomainOperation
+            if step["resetDemo"] != nil {
+                operation = .resetDemo(seed: seed)
+            } else if let body = step["createCollection"] as? [String: Any] {
+                operation = .createCollection(draft: CollectionDraft(
+                    id: CollectionID(rawValue: try uuid(body["id"])), title: try EntityTitle(try #require(body["title"] as? String))
+                ))
+            } else if let body = step["createItem"] as? [String: Any] {
+                operation = .createItem(draft: ItemDraft(
+                    id: ItemID(rawValue: try uuid(body["id"])), in: CollectionID(rawValue: try uuid(body["collection"])),
+                    title: try EntityTitle(try #require(body["title"] as? String)), note: try ItemNote(try #require(body["note"] as? String))
+                ))
+            } else if let body = step["updateItem"] as? [String: Any] {
+                operation = .updateItem(
+                    id: ItemID(rawValue: try uuid(body["id"])), expected: try revision(body["expected"]),
+                    changes: try ItemChanges(
+                        title: try (body["title"] as? String).map { try EntityTitle($0) },
+                        note: try (body["note"] as? String).map { try ItemNote($0) }
+                    )
+                )
+            } else if let body = step["archiveItem"] as? [String: Any] {
+                operation = .archiveItem(id: ItemID(rawValue: try uuid(body["id"])), expected: try revision(body["expected"]))
+            } else if let body = step["restoreItem"] as? [String: Any] {
+                operation = .restoreItem(id: ItemID(rawValue: try uuid(body["id"])), expected: try revision(body["expected"]))
+            } else if let body = step["setSession"] as? [String: Any] {
+                operation = .setSession(
+                    id: SessionID(rawValue: try uuid(body["id"])),
+                    expected: try body["expected"].map { try revision($0) },
+                    running: try #require(body["running"] as? Bool)
+                )
+            } else {
+                throw Unmapped(step: id)
+            }
+            changes.append(Change(id: id, request: RequestID(rawValue: try uuid(step["request"])), operation: operation))
+        }
+        return changes
     }
 }
