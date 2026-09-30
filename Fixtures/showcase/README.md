@@ -56,6 +56,8 @@ The script is used two ways:
 - by `Packages/LabDemo` as evidence, composed as the app-UI adapter, the adapter a person's Apply commits as. The same tests replay it as the model-tool adapter, which can change nothing, and with a stale revision and a cancellation;
 - by `TypedIntelligenceQualificationTests` in `Packages/LabFeatures`, which drafts both notes through the real flow and checks that the approvals are exactly the script's two edits.
 
+The LAB-010 evidence export carries this replay beside the records of the live model runs and the model-unavailable run, so every record passes the same rights review. The [walkthrough](../../docs/walkthroughs/LAB-010-typed-local-intelligence.md) says which result came from where.
+
 The request IDs were generated once at random for this fixture. Never change or reuse one.
 
 ## Script format

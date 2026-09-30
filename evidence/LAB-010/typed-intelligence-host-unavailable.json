@@ -1,0 +1,45 @@
+{
+  "check" : "Typed Local Intelligence's model-unavailable path in the Mac app, with a fake device for each gate the probe can find closed: the gate is named, the model is not offered, and the sample parser and the manual editor both complete the change",
+  "date" : "2026-09-30T20:46:05Z",
+  "execution" : {
+    "path" : "fixture"
+  },
+  "inputs" : [
+    "note:intelligence-ambiguous-note@sha256:86ecae7623d604f22613834ded5c021958c4b2a9b2cb064a54d158c9aa58d8ae",
+    "note:intelligence-injected-note@sha256:3c698a5d914355d243288491422b45bdaf9d8bf3b5ec8b2229a2c70554070019",
+    "seed:app-bundle@sha256:d132b2dc787cea268736ac6a4ac4acc1f582b430bbb1a30f59dff2d02201041d",
+    "fake-device:device not eligible",
+    "fake-device:Apple Intelligence off",
+    "fake-device:model not ready",
+    "fake-device:language not supported"
+  ],
+  "limitations" : [
+    "Fixture path: the model's availability was faked. This Mac and the iOS 27.0 simulator both report the model available, so no real device with the model unavailable was used. This is not device proof of the unavailable path.",
+    "Hosted tests in the sandboxed Mac app on the development Mac, on fresh stores. The iPhone screens were not driven.",
+    "Accessibility presses stand in for a person. No VoiceOver, Voice Control, or Full Keyboard Access pass was made.",
+    "The manual editor was driven through the workbench, not by choosing the sample in the rendered picker."
+  ],
+  "outcome" : {
+    "detail" : "All 64 checks passed for the 4 closed gates. Each time the view named the gate in the probe's own words and offered the non-model paths; the model button was disabled; both non-model buttons were enabled with the hint \"Not a model\". The sample parser's draft was labeled \"Sample parser (not a model)\" and was applied by accessibility presses alone as one edit to the kraft card with an app-ui receipt. Asking the workbench for the model started nothing, and the manual editor's edit was applied with an app-ui receipt and stored.",
+    "result" : "passed"
+  },
+  "provenance" : {
+    "appVersion" : "0.1.0",
+    "buildNumber" : "1",
+    "buildProfile" : "CoreLocal",
+    "minimumOS" : "26.0",
+    "sdkName" : "macosx27.0",
+    "sourceRevision" : "c2917d2",
+    "xcodeBuild" : "27A266a",
+    "xcodeVersion" : "27.0"
+  },
+  "schemaVersion" : 1,
+  "steps" : [
+    "xcodebuild -scheme LabMac-Core -only-testing:LabMacTests/TypedIntelligenceHostEvidenceTests test",
+    "For each fake device: SystemLanguageModel availability .deviceNotEligible; .appleIntelligenceNotEnabled; .modelNotReady; and .available with the locale unsupported",
+    "Render TypedIntelligenceView for the note with injected instructions on a fresh SQLite store the host's first run seeds, and read its accessibility tree",
+    "Press Draft with the Sample Parser, then Apply Change, through the accessibility press action",
+    "On another fresh store, through IntelligenceWorkbench for the same note: ask for the model, then Write It Myself, choose the kraft card, add a line, and apply"
+  ],
+  "subject" : "LAB-010"
+}
