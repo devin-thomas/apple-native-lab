@@ -83,12 +83,17 @@ import Testing
     }
 
     /// Command shortcuts only: AppKit adds its own globe-key items (dictation, emoji) to Edit.
+    /// A failure names each colliding item, its menu, and whether it is hidden or an alternate.
     @Test func noTwoCommandShortcutsCollide() {
-        let shortcuts = Self.menuItems(NSApp.mainMenu)
+        let items = Self.menuItems(NSApp.mainMenu)
             .filter { !$0.keyEquivalent.isEmpty && $0.keyEquivalentModifierMask.contains(.command) }
-            .map { "\($0.keyEquivalentModifierMask.intersection(.deviceIndependentFlagsMask).rawValue)-\($0.keyEquivalent.lowercased())" }
-        let repeated = Dictionary(grouping: shortcuts, by: \.self).filter { $0.value.count > 1 }.keys
-        #expect(repeated.isEmpty, "shortcuts used twice: \(repeated.sorted())")
+        let byShortcut = Dictionary(grouping: items) {
+            "\($0.keyEquivalentModifierMask.intersection(.deviceIndependentFlagsMask).rawValue)-\($0.keyEquivalent.lowercased())"
+        }
+        let repeated = byShortcut.filter { $0.value.count > 1 }.mapValues { items in
+            items.map { "\($0.title) in \($0.menu?.title ?? "no menu")\($0.isHidden ? ", hidden" : "")\($0.isAlternate ? ", alternate" : "")" }
+        }
+        #expect(repeated.isEmpty, "shortcuts used twice: \(repeated.sorted { $0.key < $1.key })")
     }
 
     /// Every item, after letting each menu fill itself in as it does when it opens.

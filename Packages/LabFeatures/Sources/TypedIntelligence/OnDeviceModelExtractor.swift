@@ -182,7 +182,13 @@ enum ModelPrompt {
         """
 
     /// Greedy sampling, so the same note and samples give the same draft on the same model.
+    /// The 27-generation SDKs renamed the initializer's `sampling:` label; 26-family SDKs have only
+    /// `sampling:`, and the 27 SDKs deprecate it.
+    #if compiler(>=6.4)
     static let options = GenerationOptions(samplingMode: .greedy, maximumResponseTokens: 512)
+    #else
+    static let options = GenerationOptions(sampling: .greedy, maximumResponseTokens: 512)
+    #endif
 
     static func prompt(note: SourceNote, candidates: [SampleCandidate]) -> String {
         let titles = candidates.map { "- \($0.title)" }.joined(separator: "\n")
