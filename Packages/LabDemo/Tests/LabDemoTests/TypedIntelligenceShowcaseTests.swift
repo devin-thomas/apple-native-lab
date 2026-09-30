@@ -189,9 +189,11 @@ enum TypedIntelligenceShowcase {
 ///     swift test --package-path Packages/LabDemo --filter TypedIntelligenceShowcaseEvidence
 ///
 /// `LAB_EXTRA_EVIDENCE_RECORDS=<file>,<file>` adds records made elsewhere, so they pass the same
-/// review: the hosted Mac test `TypedIntelligenceHostEvidenceTests` (exported from its result
-/// bundle) and `LiveModelEvidenceTests` in `Packages/LabFeatures`. Each must decode as an
-/// `EvidenceRecord` for LAB-010 from the same source revision. It keeps its file name.
+/// review: the hosted Mac tests `TypedIntelligenceHostEvidenceTests` and
+/// `TypedIntelligenceLiveHostEvidenceTests` (exported from their result bundles), and
+/// `LiveModelEvidenceTests` in `Packages/LabFeatures`, on the Mac and in the iOS simulator. Each
+/// must decode as an `EvidenceRecord` for LAB-010 from the same source revision. It keeps its file
+/// name.
 ///
 /// Keep the export outside `evidence/`, and copy its `records/*.json` into `evidence/LAB-010/`.
 @Suite struct TypedIntelligenceShowcaseEvidence {
@@ -245,6 +247,8 @@ enum TypedIntelligenceShowcase {
             untested: [
                 "The on-device model on a physical iPhone or iPad: no device was used.",
                 "A device where the model is really unavailable: the Mac and the iOS simulator both report it available.",
+                "The iPhone app's Typed Intelligence screens: not driven in the simulator or on a device.",
+                "A person's review, and VoiceOver, Voice Control, and Full Keyboard Access passes.",
             ],
             provenance: provenance
         ))
