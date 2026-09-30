@@ -1,0 +1,60 @@
+{
+  "check" : "Portable Objects through the Mac app's file dialogs (Export… and Import from File…) on the development Mac, driven through the Accessibility API: a document the iPhone simulator exported imports under its stable ID and exports byte-identical, reimports change nothing, and six hostile files are refused",
+  "date" : "2026-09-30T20:50:00Z",
+  "execution" : {
+    "device" : {
+      "deviceClass" : "Mac17,14 (Apple M5 Max)",
+      "osVersion" : "27.0 (26A425)",
+      "platform" : "macOS"
+    },
+    "path" : "physical"
+  },
+  "inputs" : [
+    "from-iphone-simulator:first simulator export (S0)@sha256:4dfbd2a9e9199fd8a87d19e709e0661df3e1125e1443057bbe51da5c0fa04a4f",
+    "from-simulator:second simulator export (S1)@sha256:4dfbd2a9e9199fd8a87d19e709e0661df3e1125e1443057bbe51da5c0fa04a4f",
+    "sample:app-bundle@sha256:4dfbd2a9e9199fd8a87d19e709e0661df3e1125e1443057bbe51da5c0fa04a4f",
+    "seed:app-bundle@sha256:d132b2dc787cea268736ac6a4ac4acc1f582b430bbb1a30f59dff2d02201041d",
+    "malformed:Fixtures/LAB-008/malformed.anlab@sha256:7bf6318001b67eeb4b279a29f6acaabc1c4f3867462501b0b9a0f9a7e6ab3e6e",
+    "oversized:generated, 2097191 bytes@sha256:e420bb60f4723e930a11f94f2179c41ed9d4003225b198b41684302eb2410b9c",
+    "traversal:Fixtures/LAB-008/traversal-attachment.anlab@sha256:49905ccd9317ff9c381533953a7735e20d82e4783e76a6ba52c830ffa7cf591a",
+    "newer-schema:Fixtures/LAB-008/newer-schema.anlab@sha256:dc9953b9acd1708c00acd71d93a5f2655799edd651d6bc14ee40310fc3bd69b3",
+    "authority-field:Fixtures/LAB-008/authority-field.anlab@sha256:5398ae828de2c263aa4e3e1e6102030ae4a95caf8c04ef74f59b6e1f315677b4",
+    "duplicate-keys:Fixtures/LAB-008/duplicate-keys.anlab@sha256:8ea8ceff326adfd8f74b0a51c39b90de785c011d28d9549b04776e9daa60ef90"
+  ],
+  "limitations" : [
+    "Physical path for the Mac's file-dialog adapter only: the real app, AppKit's save and open panels, and the app's own container on the development Mac.",
+    "Driven through the Accessibility API by a test agent, not by a person. No pointer or keyboard event was posted.",
+    "No drag ran in this check: not between windows, and not to Finder, TextEdit, or another app. A person's drag has not been run. LAB-008-A's synthetic drag to Finder wrote no file.",
+    "Share… was not used.",
+    "A Debug build under a ticket-only bundle prefix, signed to run locally; not the installed app and not a Release build.",
+    "The other side of the round trip ran in the iOS simulator. No physical iPhone or iPad took part."
+  ],
+  "outcome" : {
+    "detail" : "Passed. S0 (682 bytes, SHA-256 4dfbd2a9…) reviewed “New to this lab” and imported as one committed Create Item receipt through the app UI, under the stable ID F1586771-0F15-4044-A372-5F9BC9968FDB. Export… saved “Glaze test · 釉薬 · crème · 🧪.anlab” (M1), 682 bytes, SHA-256 4dfbd2a9…, byte-identical to S0 and the bundled sample. S0 again, the bundled sample, and M1 each reviewed “Already in this lab”. The six hostile files were each refused with a sentence and no review opened: “The document is not valid JSON, so it was refused.”; “The document is larger than 2 MB, the most a lab object can be.”; “Attachment 1 has a path that points outside the object (it contains “..”), so the object was refused.”; “This object was saved in schema version 2 by a newer version of the lab; this version reads version 1.”; “This object carries a field that claims permissions or file access. Objects are data only, so it was refused.”; and “The document names the same field twice, so it was refused.” Each ended “Nothing was imported.” The simulator's re-export S1 reviewed “Already in this lab”, and a second Export… (M2) was byte-identical again. Afterwards the store held 12 demo items, 1 item of the person's own under the stable ID, and 3 committed app-UI receipts (the first-run Reset Demo, Create Collection, and Create Item), and every staging folder was empty.",
+    "result" : "passed"
+  },
+  "provenance" : {
+    "appVersion" : "0.1.0",
+    "buildNumber" : "1",
+    "buildProfile" : "CoreLocal",
+    "minimumOS" : "26.0",
+    "sdkName" : "macosx27.0",
+    "sourceRevision" : "6a59e44",
+    "xcodeBuild" : "27A266a",
+    "xcodeVersion" : "27.0"
+  },
+  "schemaVersion" : 1,
+  "steps" : [
+    "A Debug build of LabMac-Core with LAB_BUNDLE_PREFIX=org.example.lab008b, so the app ran in a container of its own, launched in the background with open -g",
+    "Before: a copy of that container's store held only the first-run demo seed: 12 demo items and 1 receipt",
+    "The app's NSNavLastRootDirectory preference pointed its file dialogs at a temporary folder outside the repository",
+    "Action Atlas: Create Lab Collection “Imports”",
+    "Portable Objects: Import from File…, the simulator's first export (S0), Open; the review; Import",
+    "The object: Export…, then the save panel's Export with the suggested name (M1)",
+    "Import from File… with S0 again, Import Sample Object, and Import from File… with M1: each reviewed, then Close",
+    "Import from File… with each hostile file in turn: malformed, oversized, traversal-attachment, newer-schema, authority-field, duplicate-keys",
+    "After the simulator's second run: Import from File… with its export (S1), Close; Export… again (M2)",
+    "After: the store and the staging folders read from copies; the app stopped by its process ID"
+  ],
+  "subject" : "LAB-008"
+}
