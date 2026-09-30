@@ -425,7 +425,7 @@
       "title": "Tabletop Reality",
       "category": "Spatial",
       "milestone": "M3",
-      "state": "specified",
+      "state": "implemented",
       "dependsOn": [
         "LAB-001"
       ],
