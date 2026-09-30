@@ -37,6 +37,9 @@ struct LabCommands: Commands {
             Button("Share Inbox") { window?.destination = .shareInbox }
                 .keyboardShortcut("6", modifiers: .command)
                 .disabled(window == nil)
+            Button("Portable Objects") { window?.destination = .portableObjects }
+                .keyboardShortcut("8", modifiers: .command)
+                .disabled(window == nil)
         }
 
         CommandGroup(replacing: .textEditing) {

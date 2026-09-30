@@ -37,7 +37,13 @@ public actor InMemoryOperationStore: OperationStore {
             collectionsByID[collection.id] = collection
         }
         for item in commit.items {
-            itemsByID[item.id] = item
+            // Like the SQLite store, a new item takes its extras and an existing one keeps its own.
+            itemsByID[item.id] = itemsByID[item.id].map { stored in
+                LabItem(
+                    id: item.id, collectionID: item.collectionID, title: item.title, note: item.note,
+                    isArchived: item.isArchived, revision: item.revision, namespace: item.namespace, extras: stored.extras
+                )
+            } ?? item
         }
         for removal in commit.removals {
             switch removal {

@@ -58,6 +58,8 @@ link         SystemSurfaces ios  FoundationModels    # host variant: on-device l
 link         SystemSurfaces ios  NearbyInteraction   # host variant: Ultra Wideband capabilities, as LabPhone
 link         SystemSurfaces ios  Speech              # host variant: speech recognition status, as LabPhone
 entitlement  SystemSurfaces ios  com.apple.security.application-groups   # share inbox folder the extension writes and the host variant reads; a device needs a paid team
+# CoreLocal: Portable Objects (LAB-008). CoreFoundation is covered by the base line above.
+entitlement  CoreLocal  macos    com.apple.security.files.user-selected.read-write   # Import and Export file dialogs (the declared fallback); the sandbox shows no panel without it
 
 # Companions: the Watch host's capability status probes (CORE-004)
 link         Companions watchos  AVFAudio            # record permission and audio input

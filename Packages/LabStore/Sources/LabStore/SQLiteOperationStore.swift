@@ -156,16 +156,18 @@ public actor SQLiteOperationStore: OperationStore {
         try change(item.reference) {
             try database.run(
                 """
-                INSERT INTO items (id, collection_id, title, note, is_archived, revision, namespace)
-                VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)
+                INSERT INTO items (id, collection_id, title, note, is_archived, revision, namespace, extras)
+                VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)
                 ON CONFLICT (id) DO UPDATE SET collection_id = excluded.collection_id, title = excluded.title,
                     note = excluded.note, is_archived = excluded.is_archived, revision = excluded.revision,
                     namespace = excluded.namespace
                 """,
+                // A new row takes the item's extras. An existing row keeps its own: the update
+                // above never names `extras`, so the store never rewrites them.
                 [
                     .text(item.id.rawValue.uuidString), .text(item.collectionID.rawValue.uuidString),
                     .text(item.title.value), .text(item.note.value), .integer(item.isArchived ? 1 : 0),
-                    .integer(item.revision.rawValue), .text(item.namespace.rawValue),
+                    .integer(item.revision.rawValue), .text(item.namespace.rawValue), .text(item.extras.json),
                 ]
             )
         }
@@ -227,7 +229,7 @@ public actor SQLiteOperationStore: OperationStore {
     // MARK: Rows
 
     private static let collectionColumns = "id, title, is_archived, revision, namespace"
-    private static let itemColumns = "id, collection_id, title, note, is_archived, revision, namespace"
+    private static let itemColumns = "id, collection_id, title, note, is_archived, revision, namespace, extras"
 
     private static func collection(_ row: SQLiteStatement) -> LabCollection? {
         guard let id = row.text(0).flatMap(UUID.init(uuidString:)),
@@ -246,11 +248,12 @@ public actor SQLiteOperationStore: OperationStore {
               let title = row.text(2).flatMap({ try? EntityTitle($0) }),
               let note = row.text(3).flatMap({ try? ItemNote($0) }),
               let revision = Revision(rawValue: row.integer(5)),
-              let namespace = row.text(6).flatMap(DataNamespace.init(rawValue:))
+              let namespace = row.text(6).flatMap(DataNamespace.init(rawValue:)),
+              let extras = row.text(7).flatMap({ try? ItemExtras(json: $0) })
         else { return nil }
         return LabItem(
             id: ItemID(rawValue: id), collectionID: CollectionID(rawValue: collectionID), title: title, note: note,
-            isArchived: row.integer(4) != 0, revision: revision, namespace: namespace
+            isArchived: row.integer(4) != 0, revision: revision, namespace: namespace, extras: extras
         )
     }
 

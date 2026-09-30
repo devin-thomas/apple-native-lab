@@ -38,6 +38,7 @@ struct ExperimentDetailView: View {
                     .fixedSize(horizontal: false, vertical: true)
                 stateNote
                 TypedIntelligenceEntry(experiment: experiment)
+                ExperimentModuleAction(experimentID: experiment.id)
                 #if os(macOS)
                 SpecificationAction(link: experiment.specification)
                 #endif

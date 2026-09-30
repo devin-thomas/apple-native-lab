@@ -141,6 +141,12 @@ struct LabDataService: Sendable {
         try await service.propose(operation, as: actor)
     }
 
+    /// The receipt recorded for a request, or `nil` (LAB-008 Portable Objects: an import retry
+    /// returns its recorded receipt instead of planning again).
+    func receipt(for requestID: RequestID, as actor: ActorScope) async throws(OperationError) -> ActionReceipt? {
+        try await service.findReceipt(for: requestID, as: actor)
+    }
+
     /// Every collection, each read through the service as `actor`.
     ///
     /// The service has no read that lists collections, so the store is asked for identifiers only,

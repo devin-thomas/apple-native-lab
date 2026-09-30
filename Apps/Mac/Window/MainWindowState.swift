@@ -17,6 +17,8 @@ enum SidebarDestination: Hashable {
     case accessSuperpower
     /// LAB-007: the share inbox, with the paste and file-picker fallbacks.
     case shareInbox
+    /// LAB-008: drag, export, and import lab objects.
+    case portableObjects
     case catalog(CatalogScope)
 
     var title: String {
@@ -26,6 +28,7 @@ enum SidebarDestination: Hashable {
         case .typedIntelligence: "Typed Local Intelligence"
         case .accessSuperpower: AccessSuperpowerExperiment.title
         case .shareInbox: "Share Inbox"
+        case .portableObjects: "Portable Objects"
         case .catalog(let scope): scope.title
         }
     }
@@ -38,6 +41,7 @@ enum SidebarDestination: Hashable {
         case .typedIntelligence: "typed-intelligence"
         case .accessSuperpower: "access-superpower"
         case .shareInbox: "share-inbox"
+        case .portableObjects: "portable-objects"
         case .catalog(.all): "all"
         case .catalog(.milestone(let milestone)): "milestone:\(milestone.rawValue)"
         case .catalog(.category(let category)): "category:\(category)"
@@ -53,6 +57,7 @@ enum SidebarDestination: Hashable {
         case ("typed-intelligence", nil): self = .typedIntelligence
         case ("access-superpower", nil): self = .accessSuperpower
         case ("share-inbox", nil): self = .shareInbox
+        case ("portable-objects", nil): self = .portableObjects
         case ("all", nil): self = .catalog(.all)
         case ("milestone", let raw?): guard let milestone = Milestone(rawValue: raw) else { return nil }
             self = .catalog(.milestone(milestone))
@@ -80,6 +85,8 @@ final class MainWindowState {
     let access = AccessTaskSession()
     /// The share-inbox import the detail column shows.
     var inboxEntry: InboxEntry.ID?
+    /// LAB-008: this window's objects, selection, and import under review.
+    let portableObjects = PortableObjectsSession()
     var searchText = ""
     /// Incremented to ask the window to focus its search field.
     var searchRequests = 0

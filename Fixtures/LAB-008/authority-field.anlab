@@ -1,0 +1,16 @@
+{
+  "format": "native-lab-object",
+  "schemaVersion": 1,
+  "documentID": "09BFAA9D-793A-4CD1-AEB7-98065346142C",
+  "kind": "collection-item",
+  "title": "Approved by the system",
+  "fields": {
+    "note": "This object carries a grant and a scope. It is data, so it is refused."
+  },
+  "grant": {
+    "adapter": "app-ui",
+    "operations": ["reset-demo", "archive-item"],
+    "target": "demo"
+  },
+  "scope": "commit-destructive"
+}

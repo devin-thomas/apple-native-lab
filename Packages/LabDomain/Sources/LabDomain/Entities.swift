@@ -80,6 +80,9 @@ public struct LabItem: DomainEntity, Identifiable {
     public let revision: Revision
     /// Always the namespace of the item's collection. It never changes.
     public let namespace: DataNamespace
+    /// Metadata the item carries but this build does not interpret. Set when the item is created
+    /// and carried unchanged by every later revision.
+    public let extras: ItemExtras
 
     public init(
         id: ItemID,
@@ -88,7 +91,8 @@ public struct LabItem: DomainEntity, Identifiable {
         note: ItemNote = .empty,
         isArchived: Bool = false,
         revision: Revision = .initial,
-        namespace: DataNamespace = .user
+        namespace: DataNamespace = .user,
+        extras: ItemExtras = .empty
     ) {
         self.id = id
         self.collectionID = collectionID
@@ -97,11 +101,12 @@ public struct LabItem: DomainEntity, Identifiable {
         self.isArchived = isArchived
         self.revision = revision
         self.namespace = namespace
+        self.extras = extras
     }
 
     public var reference: EntityReference { .item(id) }
 
-    /// The next revision with the given fields replaced.
+    /// The next revision with the given fields replaced. Extras never change.
     func revised(title: EntityTitle? = nil, note: ItemNote? = nil, isArchived: Bool? = nil) -> LabItem {
         LabItem(
             id: id,
@@ -110,15 +115,17 @@ public struct LabItem: DomainEntity, Identifiable {
             note: note ?? self.note,
             isArchived: isArchived ?? self.isArchived,
             revision: revision.next(),
-            namespace: namespace
+            namespace: namespace,
+            extras: extras
         )
     }
 
     private enum CodingKeys: String, CodingKey {
-        case id, collectionID, title, note, isArchived, revision, namespace
+        case id, collectionID, title, note, isArchived, revision, namespace, extras
     }
 
-    /// A value encoded before namespaces existed has no `namespace` and decodes as user data.
+    /// A value encoded before namespaces existed has no `namespace` and decodes as user data. One
+    /// encoded before extras existed, or with none, has no `extras`.
     public init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         try self.init(
@@ -128,7 +135,22 @@ public struct LabItem: DomainEntity, Identifiable {
             note: container.decode(ItemNote.self, forKey: .note),
             isArchived: container.decode(Bool.self, forKey: .isArchived),
             revision: container.decode(Revision.self, forKey: .revision),
-            namespace: container.decodeIfPresent(DataNamespace.self, forKey: .namespace) ?? .user
+            namespace: container.decodeIfPresent(DataNamespace.self, forKey: .namespace) ?? .user,
+            extras: container.decodeIfPresent(ItemExtras.self, forKey: .extras) ?? .empty
         )
+    }
+
+    /// `extras` is written only when there are any, so an item without them keeps the shape it
+    /// had before the field existed.
+    public func encode(to encoder: any Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(id, forKey: .id)
+        try container.encode(collectionID, forKey: .collectionID)
+        try container.encode(title, forKey: .title)
+        try container.encode(note, forKey: .note)
+        try container.encode(isArchived, forKey: .isArchived)
+        try container.encode(revision, forKey: .revision)
+        try container.encode(namespace, forKey: .namespace)
+        if !extras.isEmpty { try container.encode(extras, forKey: .extras) }
     }
 }

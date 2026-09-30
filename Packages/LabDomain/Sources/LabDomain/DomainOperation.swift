@@ -16,12 +16,48 @@ public struct ItemDraft: Hashable, Sendable, Codable {
     public let collectionID: CollectionID
     public let title: EntityTitle
     public let note: ItemNote
+    /// Metadata the new item keeps without this build interpreting it, such as the fields of an
+    /// imported document that an item has no place for.
+    public let extras: ItemExtras
 
-    public init(id: ItemID = ItemID(), in collectionID: CollectionID, title: EntityTitle, note: ItemNote = .empty) {
+    public init(
+        id: ItemID = ItemID(),
+        in collectionID: CollectionID,
+        title: EntityTitle,
+        note: ItemNote = .empty,
+        extras: ItemExtras = .empty
+    ) {
         self.id = id
         self.collectionID = collectionID
         self.title = title
         self.note = note
+        self.extras = extras
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case id, collectionID, title, note, extras
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        try self.init(
+            id: container.decode(ItemID.self, forKey: .id),
+            in: container.decode(CollectionID.self, forKey: .collectionID),
+            title: container.decode(EntityTitle.self, forKey: .title),
+            note: container.decode(ItemNote.self, forKey: .note),
+            extras: container.decodeIfPresent(ItemExtras.self, forKey: .extras) ?? .empty
+        )
+    }
+
+    /// `extras` is written only when there are any, so every receipt for a draft without them
+    /// keeps the shape CORE-002 recorded.
+    public func encode(to encoder: any Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(id, forKey: .id)
+        try container.encode(collectionID, forKey: .collectionID)
+        try container.encode(title, forKey: .title)
+        try container.encode(note, forKey: .note)
+        if !extras.isEmpty { try container.encode(extras, forKey: .extras) }
     }
 }
 

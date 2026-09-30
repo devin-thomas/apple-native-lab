@@ -30,14 +30,12 @@ import Testing
         // Update this expectation only when a spec's state changes with evidence behind it.
         // LAB-001 is implemented: its fallback ran on the Mac and in the iOS simulator (LAB-001-A).
         // Implemented: LAB-001 (Mac and simulator; in-app path on a physical iPhone), LAB-007 (paste and
-        // file-picker fallback on the Mac and simulator; share extension in the simulator), LAB-010 (model on
-        // the development Mac and simulator, fallback on both), LAB-035 (four paths on the Mac and simulator).
-        #expect(catalog.experiments.filter { $0.state != .specified }.map(\.id) == ["LAB-001", "LAB-007", "LAB-010", "LAB-035"])
-        #expect(catalog.experiments.first { $0.id == "LAB-001" }?.state == .implemented)
-        #expect(catalog.experiments.first { $0.id == "LAB-007" }?.state == .implemented)
-        #expect(catalog.experiments.first { $0.id == "LAB-010" }?.state == .implemented)
-        #expect(catalog.experiments.first { $0.id == "LAB-035" }?.state == .implemented)
-        #expect(catalog.progress(for: .m1) == (live: 4, total: 6))
+        // file-picker fallback on the Mac and simulator; share extension in the simulator), LAB-008 (drag,
+        // export, and import on the Mac; Files round trip in the simulator), LAB-010 (model on the development
+        // Mac and simulator, fallback on both), LAB-035 (four paths on the Mac and simulator).
+        #expect(catalog.experiments.filter { $0.state != .specified }.map(\.id) == ["LAB-001", "LAB-007", "LAB-008", "LAB-010", "LAB-035"])
+        #expect(catalog.experiments.filter { $0.state == .implemented }.count == 5)
+        #expect(catalog.progress(for: .m1) == (live: 5, total: 6))
     }
 
     @Test func searchMatchesTitlesAndAPIs() {

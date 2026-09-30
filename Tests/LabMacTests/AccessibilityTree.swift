@@ -85,6 +85,9 @@ final class HostedView {
 
     func close() { window.close() }
 
+    /// The hosting view, the root of the accessibility tree.
+    var root: NSObject { host }
+
     /// Every element in tree order, the order VoiceOver reads them.
     func tree() async throws -> [AccessibilityNode] {
         host.layoutSubtreeIfNeeded()

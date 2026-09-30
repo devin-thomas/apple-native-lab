@@ -1,0 +1,20 @@
+{
+  "format": "native-lab-object",
+  "schemaVersion": 1,
+  "documentID": "C4C12097-60B1-4FF8-B68F-A74C5BF80590",
+  "kind": "collection-item",
+  "revision": 1,
+  "title": "Harmless-looking swatch",
+  "fields": {
+    "note": "Its attachment path climbs out of the object's folder."
+  },
+  "attachments": [
+    {
+      "byteCount": 17,
+      "mediaType": "text/plain",
+      "path": "assets/../../../Library/Preferences/secrets.plist",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+    }
+  ],
+  "extras": {}
+}

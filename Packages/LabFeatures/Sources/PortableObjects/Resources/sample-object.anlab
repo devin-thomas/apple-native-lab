@@ -1,0 +1,32 @@
+{
+  "format": "native-lab-object",
+  "schemaVersion": 1,
+  "documentID": "F1586771-0F15-4044-A372-5F9BC9968FDB",
+  "kind": "collection-item",
+  "revision": 1,
+  "title": "Glaze test · 釉薬 · crème · 🧪",
+  "fields": {
+    "firing": null,
+    "glazeCone": 6,
+    "note": ""
+  },
+  "provenance": {
+    "origin": "bundled-fixture",
+    "sourceID": "portable-sample-01"
+  },
+  "attachments": [],
+  "extras": {
+    "empty": "",
+    "flag": false,
+    "surface": {
+      "finish": "satin",
+      "gloss": 0.0
+    },
+    "tags": [
+      "original",
+      "fixture"
+    ],
+    "zero": 0
+  },
+  "x-lab-note": "A field this version does not know. Importing and exporting keep it."
+}

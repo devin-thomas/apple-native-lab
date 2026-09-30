@@ -81,6 +81,9 @@ targets:
       # LAB-007 Share Ingress Station: the share inbox and its paste and file-picker fallbacks.
       - package: LabFeatures
         product: ShareIngress
+      # LAB-008 Portable Objects: the .anlab document, its Transferable representations, and staged imports.
+      - package: LabFeatures
+        product: PortableObjects
     info:
       path: Apps/Mac/Info.plist
       properties:
@@ -92,11 +95,22 @@ targets:
         LabSourceRevision: $(LAB_SOURCE_REVISION)
         LabBuildProfile: $(LAB_BUILD_PROFILE)
         LabDistributionLane: $(LAB_DISTRIBUTION_LANE)
-    # The only entitlement in the project. Capability entitlements join the executable that uses them.
+        # LAB-008: the lab object type, named from the bundle prefix. Code reads the key, never the prefix.
+        LabObjectTypeIdentifier: $(LAB_BUNDLE_PREFIX).nativelab.object
+        UTExportedTypeDeclarations:
+          - UTTypeIdentifier: $(LAB_BUNDLE_PREFIX).nativelab.object
+            UTTypeDescription: Native Lab Object
+            UTTypeConformsTo: [public.json]
+            UTTypeTagSpecification:
+              public.filename-extension: [anlab]
+    # The project's only entitlements. Capability entitlements join the executable that uses them.
     entitlements:
       path: Apps/Mac/LabMac.entitlements
       properties:
         com.apple.security.app-sandbox: true
+        # LAB-008: the Import and Export file dialogs, the declared fallback. Without it the sandbox
+        # refuses to show the open and save panels. Access covers only the file a person picks.
+        com.apple.security.files.user-selected.read-write: true
     settings:
       base:
         PRODUCT_NAME: NativeLab
@@ -150,6 +164,9 @@ targets:
       # LAB-007 Share Ingress Station: the share inbox and its paste and file-picker fallbacks.
       - package: LabFeatures
         product: ShareIngress
+      # LAB-008 Portable Objects: the .anlab document, its Transferable representations, and staged imports.
+      - package: LabFeatures
+        product: PortableObjects
     info:
       path: Apps/Phone/Info.plist
       properties:
@@ -159,6 +176,14 @@ targets:
         LabSourceRevision: $(LAB_SOURCE_REVISION)
         LabBuildProfile: $(LAB_BUILD_PROFILE)
         LabDistributionLane: $(LAB_DISTRIBUTION_LANE)
+        # LAB-008: the lab object type, named from the bundle prefix. Code reads the key, never the prefix.
+        LabObjectTypeIdentifier: $(LAB_BUNDLE_PREFIX).nativelab.object
+        UTExportedTypeDeclarations:
+          - UTTypeIdentifier: $(LAB_BUNDLE_PREFIX).nativelab.object
+            UTTypeDescription: Native Lab Object
+            UTTypeConformsTo: [public.json]
+            UTTypeTagSpecification:
+              public.filename-extension: [anlab]
         UILaunchScreen: {}
         UIApplicationSceneManifest:
           UIApplicationSupportsMultipleScenes: true
@@ -223,6 +248,8 @@ targets:
         product: TypedIntelligence
       - package: LabFeatures
         product: AccessSuperpower
+      - package: LabFeatures
+        product: PortableObjects
       - target: ShareExtension
         embed: true
     info:

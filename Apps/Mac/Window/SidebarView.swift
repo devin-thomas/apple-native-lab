@@ -32,6 +32,9 @@ struct SidebarView: View {
                 Label("Share Inbox", systemImage: "tray.and.arrow.down")
                     .tag(SidebarDestination.shareInbox)
                     .accessibilityHint("Pasted and chosen files waiting for review")
+                Label("Portable Objects", systemImage: "shippingbox")
+                    .tag(SidebarDestination.portableObjects)
+                    .accessibilityHint("Drag, export, and import lab objects")
             }
             Section("Experiments") {
                 row(.all, symbol: "square.grid.2x2")

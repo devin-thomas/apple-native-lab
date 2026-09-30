@@ -24,6 +24,8 @@
 	<string>$(LAB_BUILD_PROFILE)</string>
 	<key>LabDistributionLane</key>
 	<string>$(LAB_DISTRIBUTION_LANE)</string>
+	<key>LabObjectTypeIdentifier</key>
+	<string>$(LAB_BUNDLE_PREFIX).nativelab.object</string>
 	<key>LabSourceRevision</key>
 	<string>$(LAB_SOURCE_REVISION)</string>
 	<key>UIApplicationSceneManifest</key>
@@ -45,6 +47,26 @@
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	<key>UTExportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.json</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Native Lab Object</string>
+			<key>UTTypeIdentifier</key>
+			<string>$(LAB_BUNDLE_PREFIX).nativelab.object</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>anlab</string>
+				</array>
+			</dict>
+		</dict>
 	</array>
 </dict>
 </plist>

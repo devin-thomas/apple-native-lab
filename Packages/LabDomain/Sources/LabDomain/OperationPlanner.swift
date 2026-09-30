@@ -89,7 +89,9 @@ struct OperationPlanner: Sendable {
             let parent = try await requireCollection(draft.collectionID)
             guard parent.namespace == .user else { throw .ruleViolation(.demoCollection(parent.id)) }
             guard !parent.isArchived else { throw .ruleViolation(.collectionArchived(parent.id)) }
-            let created = LabItem(id: draft.id, collectionID: parent.id, title: draft.title, note: draft.note)
+            let created = LabItem(
+                id: draft.id, collectionID: parent.id, title: draft.title, note: draft.note, extras: draft.extras
+            )
             return OperationPlan(
                 changes: [EntityChange(entity: reference, previousRevision: nil, newRevision: created.revision)],
                 // The parent is read, not written; pinning it stops a concurrent archive slipping in.
@@ -188,7 +190,9 @@ struct OperationPlanner: Sendable {
             }
             let restored = LabItem(
                 id: draft.id, collectionID: draft.collectionID, title: draft.title, note: draft.note,
-                revision: current?.revision.next() ?? .initial, namespace: .demo
+                revision: current?.revision.next() ?? .initial, namespace: .demo,
+                // Extras are never rewritten, by a reset either; the store keeps them in place too.
+                extras: current?.extras ?? .empty
             )
             plan.items.append(restored)
             plan.changes.append(EntityChange(entity: reference, previousRevision: current?.revision, newRevision: restored.revision))

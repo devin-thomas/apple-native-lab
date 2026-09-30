@@ -1,0 +1,8 @@
+{
+  "format": "native-lab-object",
+  "schemaVersion": 2,
+  "documentID": "98D1900B-346C-4D54-A1B4-F73EAF41534C",
+  "kind": "collection-item",
+  "title": "From a future version",
+  "requiredFeatures": ["attachments-v2"]
+}

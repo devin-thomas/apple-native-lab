@@ -10,6 +10,7 @@ let package = Package(
         .library(name: "TypedIntelligence", targets: ["TypedIntelligence"]),
         .library(name: "AccessSuperpower", targets: ["AccessSuperpower"]),
         .library(name: "ShareIngress", targets: ["ShareIngress"]),
+        .library(name: "PortableObjects", targets: ["PortableObjects"]),
     ],
     dependencies: [
         .package(path: "../LabSupport"),
@@ -78,6 +79,19 @@ let package = Package(
                 .product(name: "LabDomain", package: "LabDomain"),
                 .product(name: "LabStaging", package: "LabStaging"),
             ]
+        // LAB-008 Portable Objects: the `.anlab` document, its Transferable representations, and
+        // imports that stage (LabStaging), validate, and commit through OperationService.
+        .target(
+            name: "PortableObjects",
+            dependencies: [
+                .product(name: "LabDomain", package: "LabDomain"),
+                .product(name: "LabStaging", package: "LabStaging"),
+            ],
+            resources: [.copy("Resources/sample-object.anlab")]
+        ),
+        .testTarget(
+            name: "PortableObjectsTests",
+            dependencies: ["PortableObjects", .product(name: "LabDomain", package: "LabDomain")]
         ),
     ]
 )

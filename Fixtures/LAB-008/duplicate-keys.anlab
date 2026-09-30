@@ -1,0 +1,8 @@
+{
+  "format": "native-lab-object",
+  "schemaVersion": 1,
+  "documentID": "D088E411-804F-47CF-92C2-845D7D11AB31",
+  "kind": "collection-item",
+  "title": "The title a reviewer sees",
+  "title": "The title a last-value-wins decoder keeps"
+}

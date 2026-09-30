@@ -60,6 +60,7 @@ struct MainWindow: View {
         .focusedSceneValue(\.mainWindow, window)
         // Views in the window, such as an experiment page's Open button, change its destination (LAB-010, LAB-035).
         .environment(window)
+        .environment(\.openPortableObjects, OpenPortableObjectsAction(window: ObjectIdentifier(window)) { window.destination = .portableObjects })
         .onChange(of: window.searchRequests) { focusedPane = .search }
         .onChange(of: window.destination) { old, new in
             if (old == .collection) != (new == .collection) { window.searchText = "" }
@@ -87,6 +88,8 @@ struct MainWindow: View {
             AccessSuperpowerListColumn(window: window, session: window.access)
         case .shareInbox:
             ShareInboxListColumn(window: window)
+        case .portableObjects:
+            PortableObjectsListColumn(window: window)
         case .catalog(let scope):
             if let registry = model.registry {
                 CatalogListColumn(registry: registry, scope: scope, window: window)
@@ -111,6 +114,8 @@ struct MainWindow: View {
             AccessSuperpowerDetailColumn(window: window, session: window.access)
         case .shareInbox:
             ShareInboxDetailColumn(window: window)
+        case .portableObjects:
+            PortableObjectsDetailColumn(window: window)
         case .catalog:
             if let registry = model.registry {
                 CatalogDetailColumn(registry: registry, experimentID: window.experimentID)
@@ -134,6 +139,7 @@ struct MainWindow: View {
         case .typedIntelligence: "Search notes"
         case .accessSuperpower: "Search archived samples"
         case .shareInbox: "Search the inbox"
+        case .portableObjects: "Search objects"
         default: "Search experiments"
         }
     }
