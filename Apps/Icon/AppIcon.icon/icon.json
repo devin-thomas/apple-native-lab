@@ -1,0 +1,52 @@
+{
+  "fill": {
+    "solid": "srgb:0.02400,0.03100,0.05100,1.00000"
+  },
+  "groups": [
+    {
+      "layers": [
+        {
+          "glass": true,
+          "image-name": "liquid.svg",
+          "name": "liquid"
+        },
+        {
+          "glass": true,
+          "image-name": "flask.svg",
+          "name": "flask"
+        }
+      ],
+      "shadow": {
+        "kind": "layer-color",
+        "opacity": 0.5
+      },
+      "translucency": {
+        "enabled": true,
+        "value": 0.35
+      }
+    },
+    {
+      "layers": [
+        {
+          "glass": true,
+          "image-name": "gear.svg",
+          "name": "gear"
+        }
+      ],
+      "shadow": {
+        "kind": "layer-color",
+        "opacity": 0.5
+      },
+      "translucency": {
+        "enabled": true,
+        "value": 0.35
+      }
+    }
+  ],
+  "supported-platforms": {
+    "circles": [
+      "watchOS"
+    ],
+    "squares": "shared"
+  }
+}

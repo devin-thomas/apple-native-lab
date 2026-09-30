@@ -54,6 +54,7 @@ targets:
     sources:
       - Apps/Shared
       - Apps/Mac
+      - Apps/Icon
       # The demo seed, bundled as data. Reset Demo commits it through the operation service.
       - path: Fixtures/demo/seed.json
         buildPhase: resources
@@ -86,6 +87,7 @@ targets:
       base:
         PRODUCT_NAME: NativeLab
         PRODUCT_BUNDLE_IDENTIFIER: $(LAB_BUNDLE_PREFIX).nativelab
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         DEVELOPMENT_TEAM: $(LAB_MAC_DEVELOPMENT_TEAM)
         ENABLE_HARDENED_RUNTIME: YES
         # Store lane only: merge purpose strings for the frameworks this host links
@@ -107,6 +109,7 @@ targets:
     sources:
       - Apps/Shared
       - Apps/Phone
+      - Apps/Icon
       # The demo seed, bundled as data. Reset Demo commits it through the operation service.
       - path: Fixtures/demo/seed.json
         buildPhase: resources
@@ -144,6 +147,7 @@ targets:
       base:
         PRODUCT_NAME: NativeLab
         PRODUCT_BUNDLE_IDENTIFIER: $(LAB_BUNDLE_PREFIX).nativelab
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         TARGETED_DEVICE_FAMILY: "1,2"
         SUPPORTS_MACCATALYST: NO
         SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD: NO
@@ -167,6 +171,7 @@ targets:
       Release: Config/Profiles/Companions.xcconfig
     sources:
       - Apps/Watch
+      - Apps/Icon
     dependencies:
       - package: LabSupport
       - package: LabFeatures
@@ -186,6 +191,7 @@ targets:
     settings:
       base:
         PRODUCT_NAME: NativeLabWatch
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         PRODUCT_BUNDLE_IDENTIFIER: $(LAB_BUNDLE_PREFIX).nativelab.watchkitapp
         # Store lane only: merge purpose strings for the frameworks this host links
         # (Config/PurposeStrings.xcconfig). Source builds keep the Info.plist above unchanged.

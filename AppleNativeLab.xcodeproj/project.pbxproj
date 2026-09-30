@@ -134,6 +134,16 @@
 			path = Mac;
 			sourceTree = "<group>";
 		};
+		E3BE00E555188C2418B856DE /* Icon */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			explicitFileTypes = {
+			};
+			explicitFolders = (
+			);
+			name = Icon;
+			path = Icon;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -233,6 +243,7 @@
 		BC360D0928B2D8A28BD1222B /* Apps */ = {
 			isa = PBXGroup;
 			children = (
+				E3BE00E555188C2418B856DE /* Icon */,
 				BC45C5612288986FABA16102 /* Mac */,
 				9576516F60AB8234B4B453C7 /* Phone */,
 				65F6373E1295B61369B3F59D /* Shared */,
@@ -285,6 +296,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
+				E3BE00E555188C2418B856DE /* Icon */,
 				457B03284C6A2A38C27BE874 /* Watch */,
 			);
 			name = LabWatch;
@@ -309,6 +321,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
+				E3BE00E555188C2418B856DE /* Icon */,
 				BC45C5612288986FABA16102 /* Mac */,
 				65F6373E1295B61369B3F59D /* Shared */,
 			);
@@ -337,6 +350,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
+				E3BE00E555188C2418B856DE /* Icon */,
 				9576516F60AB8234B4B453C7 /* Phone */,
 				65F6373E1295B61369B3F59D /* Shared */,
 			);
