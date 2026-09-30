@@ -139,3 +139,5 @@ LAB-004's spec now claims `implemented`. The deck ran on the Mac and in the iOS 
 - The launch action crashed the app in four early simulator runs, on a missing environment object in the presented deck. After the library was passed into the sheet, 6 runs from a clean install passed. Which build the last crashing run used is uncertain, so LAB-004-B should repeat the launch action from a clean install.
 
 **Next dependency-ready ticket:** LAB-004-B (qualification). It needs this ticket, and CORE-007, CORE-009, and CORE-010, all done.
+
+**Integration (2026-09-30):** merged after LAB-008-A. The SQLite store keeps both LAB-008's item `extras` column and this branch's `sessions` table (schema version 3). Surface Deck keeps Command-7 and Portable Objects Command-8. The `LabPhoneSurfaces` host variant had lost its PortableObjects dependency to a duplicated `product:` key during successive merges; it is restored, the share extension's own ShareIngress dependency is kept, and the variant now bundles the intelligence fixture notes like `LabPhone`. With this merge all six M1 experiments are implemented.

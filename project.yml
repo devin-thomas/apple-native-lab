@@ -261,6 +261,8 @@ targets:
         product: AccessSuperpower
       - package: LabFeatures
         product: PortableObjects
+      # LAB-004 Surface Deck: the deck, its intents, and the snapshot writer, as LabPhone.
+      - package: LabFeatures
         product: SurfaceDeck
       - target: ShareExtension
         embed: true

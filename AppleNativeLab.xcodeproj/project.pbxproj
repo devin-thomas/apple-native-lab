@@ -36,7 +36,7 @@
 		5CDF75C467BB20F773986DD1 /* PortableObjects in Frameworks */ = {isa = PBXBuildFile; productRef = 4E31A68F4912B6784D878C4C /* PortableObjects */; };
 		61C2EFB9489E9A7476A1E7A0 /* LabDomain in Frameworks */ = {isa = PBXBuildFile; productRef = C8548B319C70F000CAD5D26E /* LabDomain */; };
 		682570876F660883019716DB /* seed.json in Resources */ = {isa = PBXBuildFile; fileRef = 4C5126791B7E1A1A049AE090 /* seed.json */; };
-		6DE4F776CBFE16A956072B91 /* SurfaceDeck in Frameworks */ = {isa = PBXBuildFile; productRef = 3CF19F7CC72BE703FC6929AD /* SurfaceDeck */; };
+		6DE4F776CBFE16A956072B91 /* PortableObjects in Frameworks */ = {isa = PBXBuildFile; productRef = 5138B46379EB0CDA5C7A520B /* PortableObjects */; };
 		6F93A9AD463D59BB11A8A5EC /* LabDomain in Frameworks */ = {isa = PBXBuildFile; productRef = CACF77BD90DF68CDE4C515EA /* LabDomain */; };
 		72DC9866A6C7DE5D6279D72F /* intelligence-injected-note.txt in Resources */ = {isa = PBXBuildFile; fileRef = D89DA08F5504526396A194FA /* intelligence-injected-note.txt */; };
 		778984D260ECA5DC69A502E1 /* LabStore in Frameworks */ = {isa = PBXBuildFile; productRef = F26F0DA29E5E4B99D5E4143F /* LabStore */; };
@@ -51,6 +51,7 @@
 		B55D587C861F0C54393A2BD7 /* LabDomain in Frameworks */ = {isa = PBXBuildFile; productRef = A6A3022C8795348044F49723 /* LabDomain */; };
 		B888B057D5B4B13CA4C86B32 /* LabSupport in Frameworks */ = {isa = PBXBuildFile; productRef = F44C6435C9B6A97B75C33F44 /* LabSupport */; };
 		C5C7E15597C124FFA87914F4 /* LabStore in Frameworks */ = {isa = PBXBuildFile; productRef = 6CF6B1898735341A74FB3DA4 /* LabStore */; };
+		CB80ACDC68FE94D0F8CD2D18 /* SurfaceDeck in Frameworks */ = {isa = PBXBuildFile; productRef = 3CF19F7CC72BE703FC6929AD /* SurfaceDeck */; };
 		DC14139A63BD575B5A92D755 /* LabCatalog in Frameworks */ = {isa = PBXBuildFile; productRef = D848D3397291632E552B77A2 /* LabCatalog */; };
 		E10047C202637983EF3886EE /* TypedIntelligence in Frameworks */ = {isa = PBXBuildFile; productRef = FA764C388624F65B1FE0AC12 /* TypedIntelligence */; };
 		E70BDD2C02F2994CBB681ED7 /* SurfaceDeck in Frameworks */ = {isa = PBXBuildFile; productRef = C00FE8FBC35881E832DADD27 /* SurfaceDeck */; };
@@ -279,7 +280,8 @@
 				1ABEE97B7C7ACB1EAF41ABC4 /* ShareIngress in Frameworks */,
 				5971E4B6D5596414791531A0 /* TypedIntelligence in Frameworks */,
 				89E214F72A8F8E59C59B440C /* AccessSuperpower in Frameworks */,
-				6DE4F776CBFE16A956072B91 /* SurfaceDeck in Frameworks */,
+				6DE4F776CBFE16A956072B91 /* PortableObjects in Frameworks */,
+				CB80ACDC68FE94D0F8CD2D18 /* SurfaceDeck in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -508,6 +510,7 @@
 				A7B30E9CC74D5DACCC486C60 /* ShareIngress */,
 				76F28CA76CDDB3E1BD522DA9 /* TypedIntelligence */,
 				CC0630EDCCDE6FC7F7BF2FBC /* AccessSuperpower */,
+				5138B46379EB0CDA5C7A520B /* PortableObjects */,
 				3CF19F7CC72BE703FC6929AD /* SurfaceDeck */,
 			);
 			productName = LabPhoneSurfaces;
@@ -1434,6 +1437,10 @@
 			productName = SurfaceDeck;
 		};
 		4E31A68F4912B6784D878C4C /* PortableObjects */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PortableObjects;
+		};
+		5138B46379EB0CDA5C7A520B /* PortableObjects */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = PortableObjects;
 		};
