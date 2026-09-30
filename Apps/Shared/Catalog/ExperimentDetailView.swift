@@ -17,6 +17,7 @@ struct ExperimentDetailView: View {
                     .font(.title3)
                     .fixedSize(horizontal: false, vertical: true)
                 stateNote
+                TypedIntelligenceEntry(experiment: experiment)
                 #if os(macOS)
                 SpecificationAction(link: experiment.specification)
                 #endif

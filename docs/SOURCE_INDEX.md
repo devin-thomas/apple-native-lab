@@ -73,6 +73,30 @@ Use in this plan: New model modalities, provider abstraction, tools, profiles, a
 
 Implementation evidence required: actual SDK symbol/availability, permissions or entitlement, and a named compile/device result.
 
+Installed SDK check (2026-09-29, Xcode 27.0 (27A266a), from the macOS 27.0 SDK's `FoundationModels.swiftinterface`, for LAB-010-A). Availability is the SDK's declaration. Every symbol below is unavailable on tvOS. No entitlement is needed: the model ran inside the sandboxed Mac app, whose only entitlement is App Sandbox.
+
+| Symbol LAB-010 uses | Installed signature | Declared availability |
+|---|---|---|
+| `SystemLanguageModel` | `final class SystemLanguageModel: Sendable`; `static var default`; `var availability: Availability`, which is `.available` or `.unavailable(UnavailableReason)` with `.deviceNotEligible`, `.appleIntelligenceNotEnabled`, and `.modelNotReady`; `func supportsLocale(_ locale: Locale = Locale.current) -> Bool` | iOS, macOS, visionOS 26.0; watchOS unavailable |
+| `SystemLanguageModel.variant` | `var variant: Variant`, with `displayName`; `.core3` and `.coreAdvanced3` | iOS, macOS, visionOS 27.0; read under `#if compiler(>=6.4)` for evidence only |
+| `LanguageModelSession` | `convenience init(model: SystemLanguageModel = .default, tools: [any Tool] = [], instructions: String? = nil)`. The `model: some LanguageModel` initializers are 27.0 and not used. | iOS, macOS, visionOS 26.0; watchOS 27.0 |
+| Guided generation | `respond(to: String, schema: GenerationSchema, includeSchemaInPrompt: Bool = true, options: GenerationOptions) async throws -> Response<GeneratedContent>`, then `Generable.init(_: GeneratedContent)`. `respond(to:generating:includeSchemaInPrompt:options:)` is the static-schema form. 27.0 adds overloads that take `contextOptions:` and `metadata:`, and `streamResponse`; neither is used. | 26.0, as above |
+| `@Generable`, `@Guide` | `@Generable(description:)`; `@Guide(description:_:)` with `GenerationGuide` values `.anyOf([String])`, `.maximumCount(_:)`, `.count(_:)`, and `.element(_:)` | 26.0, as above |
+| Runtime schema | `GenerationSchema(type:description:properties:)` with `GenerationSchema.Property(name:description:type:guides:)`, which narrows the sample title to the offered titles | 26.0, as above |
+| `GeneratedContent` | `init(json: String) throws` and `var isComplete: Bool`. Cut-off JSON parses, so `isComplete` is required. | 26.0, as above |
+| `Tool` | `protocol Tool<Arguments, Output>: Sendable` with `name`, `description`, `parameters: GenerationSchema`, and `@concurrent func call(arguments: Arguments) async throws -> Output`. `Arguments` must be `@Generable`; a `String` argument is marked unavailable. | iOS, macOS, visionOS 26.0; watchOS 27.0 |
+| `GenerationOptions` | `init(samplingMode:temperature:maximumResponseTokens:)`, back-deployed to 26.0; `SamplingMode.greedy`. `toolCallingMode` is 27.0 and not used. | 26.0 |
+| Errors | `LanguageModelSession.GenerationError` is 26.0 and deprecated in 27.0. Its 27.0 replacements are `LanguageModelError`, `SystemLanguageModel.Error`, `GeneratedContent.ParsingError`, and `LanguageModelSession.Error`. Both families are mapped by type and case. | 26.0 and 27.0 |
+
+Demonstrated on the development Mac (Apple M5 Max, macOS 27.0, en_US):
+
+- The model's state: `availability` was `.available`, `supportsLocale()` was true, `variant.displayName` was "AFM 3 Core Advanced", and `contextSize` was 8192.
+- The live draft ran in a `swift test` process and inside the sandboxed Mac app.
+- The iOS 27.0 simulator on this Mac also reported the model available and ran it.
+- No physical iPhone was used.
+
+Uncertain: which variant and availability other devices report, and the 26-family SDK compile. The output also differs between processes on the same Mac: see the [LAB-010-A](../tickets/LAB-010-A.md) record.
+
 ## S07
 
 **Private Cloud Compute eligibility** — reviewed
@@ -82,6 +106,8 @@ Source: [Private Cloud Compute eligibility](https://developer.apple.com/private-
 Use in this plan: Small Business Program, download threshold, entitlement, and permitted distribution gates.
 
 Implementation evidence required: actual SDK symbol/availability, permissions or entitlement, and a named compile/device result.
+
+Installed SDK check (2026-09-29): the 27.0 SDKs declare `PrivateCloudComputeLanguageModel` for iOS, macOS, visionOS, and watchOS 27.0, with `availability`, `quotaUsage`, and network, quota, and service errors. No lab code references it; a LAB-010 test fails if Typed Local Intelligence ever does. The route remains `blocked` until each gate above is shown.
 
 ## S08
 
@@ -102,6 +128,8 @@ Source: [Apple Intelligence hardware and availability](https://support.apple.com
 Use in this plan: Runtime, language, region, and hardware eligibility must be checked.
 
 Implementation evidence required: actual SDK symbol/availability, permissions or entitlement, and a named compile/device result.
+
+Installed SDK check (2026-09-29): LAB-010 reads eligibility at run time, through the CORE-004 probe and again for every request. It reads `SystemLanguageModel.default.availability` and `supportsLocale(_:)`, never the device name ([S06](#s06)).
 
 ## S10
 

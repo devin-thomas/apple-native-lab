@@ -110,6 +110,12 @@ struct LabDataService: Sendable {
         try await service.findItems(filter, as: actor)
     }
 
+    /// Validates an operation as `actor` without committing or recording anything (LAB-010 Typed
+    /// Local Intelligence proposes as the model-tool adapter, which can never commit).
+    func propose(_ operation: DomainOperation, as actor: ActorScope) async throws(OperationError) -> OperationProposal {
+        try await service.propose(operation, as: actor)
+    }
+
     /// Every collection, each read through the service as `actor`.
     ///
     /// The service has no read that lists collections, so the store is asked for identifiers only,

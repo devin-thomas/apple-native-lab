@@ -23,6 +23,9 @@ struct SidebarView: View {
                 Label("Action Atlas", systemImage: "bolt.horizontal")
                     .tag(SidebarDestination.actionAtlas)
                     .accessibilityHint("Every lab action, the same ones Shortcuts offers")
+                Label("Typed Local Intelligence", systemImage: "text.badge.checkmark")
+                    .tag(SidebarDestination.typedIntelligence)
+                    .accessibilityHint("Turn a note into a proposal you review before anything changes")
             }
             Section("Experiments") {
                 row(.all, symbol: "square.grid.2x2")

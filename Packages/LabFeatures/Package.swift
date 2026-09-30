@@ -7,6 +7,7 @@ let package = Package(
     products: [
         .library(name: "LabCatalog", targets: ["LabCatalog"]),
         .library(name: "ActionAtlas", targets: ["ActionAtlas"]),
+        .library(name: "TypedIntelligence", targets: ["TypedIntelligence"]),
     ],
     dependencies: [
         .package(path: "../LabSupport"),
@@ -28,6 +29,24 @@ let package = Package(
         .testTarget(
             name: "ActionAtlasTests",
             dependencies: ["ActionAtlas", .product(name: "LabDomain", package: "LabDomain")]
+        ),
+        // LAB-010 Typed Local Intelligence: typed proposals from the on-device model or the
+        // non-model sample parser, validated and proposed as the model-tool adapter, committed only
+        // after a person approves. FoundationModels is imported on iOS and macOS only.
+        .target(
+            name: "TypedIntelligence",
+            dependencies: [
+                .product(name: "LabDomain", package: "LabDomain"),
+                .product(name: "LabSupport", package: "LabSupport"),
+            ]
+        ),
+        .testTarget(
+            name: "TypedIntelligenceTests",
+            dependencies: [
+                "TypedIntelligence",
+                .product(name: "LabDomain", package: "LabDomain"),
+                .product(name: "LabSupport", package: "LabSupport"),
+            ]
         ),
     ]
 )

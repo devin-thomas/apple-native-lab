@@ -186,7 +186,7 @@
       "title": "Typed Local Intelligence",
       "category": "Intelligence",
       "milestone": "M1",
-      "state": "specified",
+      "state": "implemented",
       "dependsOn": [
         "LAB-001"
       ],

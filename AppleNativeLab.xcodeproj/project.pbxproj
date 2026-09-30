@@ -17,12 +17,18 @@
 		3801D1772B69CAE4CA93FDFE /* LabSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 23ACA699398C10114E0D39E7 /* LabSupport */; };
 		45673BBE0F16F89FAE113021 /* LabCatalog in Frameworks */ = {isa = PBXBuildFile; productRef = 0A608BA2376945AD3E608486 /* LabCatalog */; };
 		46B8492EDC6B52F10B6794B1 /* LabCatalog in Frameworks */ = {isa = PBXBuildFile; productRef = 2A29DD32F90A05982B97C0F3 /* LabCatalog */; };
+		4D1936E1C7A89558B10E01F3 /* intelligence-ambiguous-note.txt in Resources */ = {isa = PBXBuildFile; fileRef = AE4F4AB8C2CC86E0A0AF350A /* intelligence-ambiguous-note.txt */; };
 		4E60DC2D92BC7C909C4D6C56 /* LabCatalog in Frameworks */ = {isa = PBXBuildFile; productRef = 21367E5C42D7E02E6E77C8AB /* LabCatalog */; };
+		5B74398A19EB86C3087BDEED /* TypedIntelligence in Frameworks */ = {isa = PBXBuildFile; productRef = 872A3526A3C216A5301B05D2 /* TypedIntelligence */; };
 		682570876F660883019716DB /* seed.json in Resources */ = {isa = PBXBuildFile; fileRef = 4C5126791B7E1A1A049AE090 /* seed.json */; };
+		7FB3F8343A67C0DA7E22236A /* intelligence-injected-note.txt in Resources */ = {isa = PBXBuildFile; fileRef = D89DA08F5504526396A194FA /* intelligence-injected-note.txt */; };
+		7FCD81C07A37C7401F6D675C /* intelligence-ambiguous-note.txt in Resources */ = {isa = PBXBuildFile; fileRef = AE4F4AB8C2CC86E0A0AF350A /* intelligence-ambiguous-note.txt */; };
+		811E4F2E9F9F36796576B37D /* intelligence-injected-note.txt in Resources */ = {isa = PBXBuildFile; fileRef = D89DA08F5504526396A194FA /* intelligence-injected-note.txt */; };
 		96EA540221683FF1A975546B /* LabSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 9429B9706DB8D93A799FDA9F /* LabSupport */; };
 		AEB17B224B9BD1CF6EE2746E /* LabDomain in Frameworks */ = {isa = PBXBuildFile; productRef = F41E96699628F4302D6E6EE4 /* LabDomain */; };
 		C5C7E15597C124FFA87914F4 /* LabStore in Frameworks */ = {isa = PBXBuildFile; productRef = 6CF6B1898735341A74FB3DA4 /* LabStore */; };
 		DC14139A63BD575B5A92D755 /* LabCatalog in Frameworks */ = {isa = PBXBuildFile; productRef = D848D3397291632E552B77A2 /* LabCatalog */; };
+		E10047C202637983EF3886EE /* TypedIntelligence in Frameworks */ = {isa = PBXBuildFile; productRef = FA764C388624F65B1FE0AC12 /* TypedIntelligence */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,7 +52,9 @@
 		700897A06A459DF913708DC1 /* Base.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Base.xcconfig; sourceTree = "<group>"; };
 		748764B9E84663B58F1DA899 /* LabSupport */ = {isa = PBXFileReference; lastKnownFileType = folder; name = LabSupport; path = Packages/LabSupport; sourceTree = SOURCE_ROOT; };
 		807AD4AFA0A11FF4B4881588 /* LabDomain */ = {isa = PBXFileReference; lastKnownFileType = folder; name = LabDomain; path = Packages/LabDomain; sourceTree = SOURCE_ROOT; };
+		AE4F4AB8C2CC86E0A0AF350A /* intelligence-ambiguous-note.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "intelligence-ambiguous-note.txt"; sourceTree = "<group>"; };
 		BB95D963471D52C06FB3FA80 /* Companions.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Companions.xcconfig; sourceTree = "<group>"; };
+		D89DA08F5504526396A194FA /* intelligence-injected-note.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "intelligence-injected-note.txt"; sourceTree = "<group>"; };
 		EA18A3C1245AEABF4BE3110A /* CoreLocal.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = CoreLocal.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -174,6 +182,7 @@
 				154C21111E02462DD0A59BE0 /* LabStore in Frameworks */,
 				4E60DC2D92BC7C909C4D6C56 /* LabCatalog in Frameworks */,
 				049D235E474520D658AD3AD3 /* ActionAtlas in Frameworks */,
+				5B74398A19EB86C3087BDEED /* TypedIntelligence in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -186,6 +195,7 @@
 				C5C7E15597C124FFA87914F4 /* LabStore in Frameworks */,
 				DC14139A63BD575B5A92D755 /* LabCatalog in Frameworks */,
 				21F31C50AAC169B20AE2CF15 /* ActionAtlas in Frameworks */,
+				E10047C202637983EF3886EE /* TypedIntelligence in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -221,6 +231,15 @@
 				B2A2700360051188212A7089 /* Tests */,
 				FD0B64B856F1F062EC2B6D9F /* Products */,
 			);
+			sourceTree = "<group>";
+		};
+		AD25533149B8D79DB1F4D785 /* intelligence */ = {
+			isa = PBXGroup;
+			children = (
+				AE4F4AB8C2CC86E0A0AF350A /* intelligence-ambiguous-note.txt */,
+				D89DA08F5504526396A194FA /* intelligence-injected-note.txt */,
+			);
+			path = intelligence;
 			sourceTree = "<group>";
 		};
 		B2A2700360051188212A7089 /* Tests */ = {
@@ -265,6 +284,7 @@
 			isa = PBXGroup;
 			children = (
 				13F496D456E3A6FB0A6EB3F1 /* demo */,
+				AD25533149B8D79DB1F4D785 /* intelligence */,
 			);
 			path = Fixtures;
 			sourceTree = "<group>";
@@ -332,6 +352,7 @@
 				6CF6B1898735341A74FB3DA4 /* LabStore */,
 				D848D3397291632E552B77A2 /* LabCatalog */,
 				7EC14A55645358F739F46AC7 /* ActionAtlas */,
+				FA764C388624F65B1FE0AC12 /* TypedIntelligence */,
 			);
 			productName = LabMac;
 			productReference = 2F62DB7E020E6BFDAC86BD42 /* LabMac.app */;
@@ -361,6 +382,7 @@
 				6E71D4CE7F5EFA213F132511 /* LabStore */,
 				21367E5C42D7E02E6E77C8AB /* LabCatalog */,
 				D681B15E8F4FC00BCB2862EE /* ActionAtlas */,
+				872A3526A3C216A5301B05D2 /* TypedIntelligence */,
 			);
 			productName = LabPhone;
 			productReference = 28C2C1B8B040DD0D06AF070E /* LabPhone.app */;
@@ -458,6 +480,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7FCD81C07A37C7401F6D675C /* intelligence-ambiguous-note.txt in Resources */,
+				811E4F2E9F9F36796576B37D /* intelligence-injected-note.txt in Resources */,
 				1C7CA3174A557512B2CC9E55 /* seed.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -466,6 +490,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4D1936E1C7A89558B10E01F3 /* intelligence-ambiguous-note.txt in Resources */,
+				7FB3F8343A67C0DA7E22236A /* intelligence-injected-note.txt in Resources */,
 				682570876F660883019716DB /* seed.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -936,6 +962,10 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = ActionAtlas;
 		};
+		872A3526A3C216A5301B05D2 /* TypedIntelligence */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = TypedIntelligence;
+		};
 		9429B9706DB8D93A799FDA9F /* LabSupport */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = LabSupport;
@@ -955,6 +985,10 @@
 		F41E96699628F4302D6E6EE4 /* LabDomain */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = LabDomain;
+		};
+		FA764C388624F65B1FE0AC12 /* TypedIntelligence */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = TypedIntelligence;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

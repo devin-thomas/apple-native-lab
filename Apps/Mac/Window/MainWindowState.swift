@@ -3,18 +3,22 @@ import LabDomain
 import LabSupport
 import Observation
 import SwiftUI
+import TypedIntelligence
 
 /// What the sidebar selects: the lab's own data, or a slice of the experiment catalog.
 enum SidebarDestination: Hashable {
     case collection
     /// LAB-001: every Action Atlas action, runnable without Siri or Shortcuts.
     case actionAtlas
+    /// LAB-010: typed proposals from a note, reviewed before anything changes.
+    case typedIntelligence
     case catalog(CatalogScope)
 
     var title: String {
         switch self {
         case .collection: "Lab Collection"
         case .actionAtlas: "Action Atlas"
+        case .typedIntelligence: "Typed Local Intelligence"
         case .catalog(let scope): scope.title
         }
     }
@@ -24,6 +28,7 @@ enum SidebarDestination: Hashable {
         switch self {
         case .collection: "collection"
         case .actionAtlas: "action-atlas"
+        case .typedIntelligence: "typed-intelligence"
         case .catalog(.all): "all"
         case .catalog(.milestone(let milestone)): "milestone:\(milestone.rawValue)"
         case .catalog(.category(let category)): "category:\(category)"
@@ -36,6 +41,7 @@ enum SidebarDestination: Hashable {
         switch (parts.first, parts.count == 2 ? parts[1] : nil) {
         case ("collection", nil): self = .collection
         case ("action-atlas", nil): self = .actionAtlas
+        case ("typed-intelligence", nil): self = .typedIntelligence
         case ("all", nil): self = .catalog(.all)
         case ("milestone", let raw?): guard let milestone = Milestone(rawValue: raw) else { return nil }
             self = .catalog(.milestone(milestone))
@@ -57,6 +63,8 @@ final class MainWindowState {
     var itemID: ItemID?
     /// The Action Atlas action whose form the detail column shows.
     var atlasAction: AtlasAction?
+    /// The Typed Local Intelligence note whose workbench the detail column shows.
+    var intelligenceNote: IntelligenceFixture?
     var searchText = ""
     /// Incremented to ask the window to focus its search field.
     var searchRequests = 0

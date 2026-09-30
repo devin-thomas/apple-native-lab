@@ -58,6 +58,11 @@ targets:
       # The demo seed, bundled as data. Reset Demo commits it through the operation service.
       - path: Fixtures/demo/seed.json
         buildPhase: resources
+      # LAB-010 Typed Local Intelligence: the original fixture notes, bundled as data.
+      - path: Fixtures/intelligence/intelligence-ambiguous-note.txt
+        buildPhase: resources
+      - path: Fixtures/intelligence/intelligence-injected-note.txt
+        buildPhase: resources
     dependencies:
       - package: LabSupport
       - package: LabDomain
@@ -67,6 +72,9 @@ targets:
       # LAB-001 Action Atlas: App Intents from a package target; their metadata is extracted into the app.
       - package: LabFeatures
         product: ActionAtlas
+      # LAB-010 Typed Local Intelligence: typed proposals, the sample parser, and the Foundation Models extractor.
+      - package: LabFeatures
+        product: TypedIntelligence
     info:
       path: Apps/Mac/Info.plist
       properties:
@@ -113,6 +121,11 @@ targets:
       # The demo seed, bundled as data. Reset Demo commits it through the operation service.
       - path: Fixtures/demo/seed.json
         buildPhase: resources
+      # LAB-010 Typed Local Intelligence: the original fixture notes, bundled as data.
+      - path: Fixtures/intelligence/intelligence-ambiguous-note.txt
+        buildPhase: resources
+      - path: Fixtures/intelligence/intelligence-injected-note.txt
+        buildPhase: resources
     dependencies:
       - package: LabSupport
       - package: LabDomain
@@ -122,6 +135,9 @@ targets:
       # LAB-001 Action Atlas: App Intents from a package target; their metadata is extracted into the app.
       - package: LabFeatures
         product: ActionAtlas
+      # LAB-010 Typed Local Intelligence: typed proposals, the sample parser, and the Foundation Models extractor.
+      - package: LabFeatures
+        product: TypedIntelligence
     info:
       path: Apps/Phone/Info.plist
       properties:
