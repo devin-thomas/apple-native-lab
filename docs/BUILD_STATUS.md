@@ -2,7 +2,7 @@
 
 This is the recorded build evidence for the lab. Update it from real runs only. A row describes what was run, not what the specification intends.
 
-Last updated: 2026-09-29 (M0 complete; LAB-001 qualified; LAB-007-A, LAB-010-A, LAB-035-A; app icon; first physical-device evidence).
+Last updated: 2026-09-29 (M0 complete; LAB-001 qualified; LAB-007-A, LAB-008-A, LAB-010-A, LAB-035-A; app icon; first physical-device evidence).
 Last updated: 2026-09-29 (M0 complete; LAB-001-A and LAB-001-B; app icon; first physical-device evidence; LAB-007-A).
 Last updated: 2026-09-29 (M0 complete; LAB-001-A and LAB-001-B; app icon; first physical-device evidence; LAB-008-A).
 
@@ -227,7 +227,7 @@ Bundle identifiers derive from `LAB_BUNDLE_PREFIX` (default `org.example`), and 
 | Xcode build and tests on the compatibility Mac itself | Its Xcode 26.6 license has not been accepted. The 26-family level is already proven in CI with the same Xcode build (17F113), and its packages compile there with Swift 6.2.3. |
 | Physical Watch install | No physical watchOS destination was available. See [DEVICE_SETUP](DEVICE_SETUP.md). |
 | iPad, Apple TV | No device available for this project. |
-| Device verification of any experiment | LAB-001 Action Atlas's in-app path is verified on a physical iPhone (`evidence/LAB-001/action-atlas-iphone-in-app.json`); its Shortcuts path only in the simulator, so it stays `implemented`. LAB-007 Share Ingress Station (fallback; share extension in the simulator, device blocked by Personal Team signing), LAB-010 Typed Local Intelligence, and LAB-035 Access as a Superpower are `implemented` on the Mac and in the simulator. The other 44 remain `specified`. |
+| Device verification of any experiment | LAB-001 Action Atlas's in-app path is verified on a physical iPhone (`evidence/LAB-001/action-atlas-iphone-in-app.json`); its Shortcuts path only in the simulator, so it stays `implemented`. LAB-007 Share Ingress Station (fallback; extension in the simulator, device blocked by Personal Team signing), LAB-008 Portable Objects, LAB-010 Typed Local Intelligence, and LAB-035 Access as a Superpower are `implemented` on the Mac and in the simulator. The other 43 remain `specified`. |
 | Device verification of any experiment | LAB-001 Action Atlas's in-app path is verified on a physical iPhone (`evidence/LAB-001/action-atlas-iphone-in-app.json`); its Shortcuts path is verified only in the simulator, so the experiment stays `implemented`. LAB-007 Share Ingress Station is `implemented` from Mac and simulator runs; its share extension on a device is blocked, because a free Personal Team cannot sign App Groups. The other 46 remain `specified`. |
 | Device verification of any experiment | LAB-001 Action Atlas's in-app path is verified on a physical iPhone (`evidence/LAB-001/action-atlas-iphone-in-app.json`); its Shortcuts path is verified only in the simulator, so the experiment stays `implemented`. LAB-008 Portable Objects is `implemented` from Mac and simulator runs only. The other 46 remain `specified`. |
 

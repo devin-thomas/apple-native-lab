@@ -59,7 +59,9 @@ import UniformTypeIdentifiers
         #expect(UTType.labObject.identifier == declared)
         #expect(UTType.labObject.conforms(to: .json))
         #expect(UTType.labObject.preferredFilenameExtension == "anlab")
-        #expect(UTType(filenameExtension: "anlab") == .labObject)
+        // Other builds on the same Mac (another bundle prefix) may also register `.anlab`, so check that
+        // this app's type is among the registered ones rather than the only one.
+        #expect(UTType.types(tag: "anlab", tagClass: .filenameExtension, conformingTo: nil).contains(.labObject))
     }
 
     // MARK: Import through the host

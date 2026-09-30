@@ -79,6 +79,7 @@ let package = Package(
                 .product(name: "LabDomain", package: "LabDomain"),
                 .product(name: "LabStaging", package: "LabStaging"),
             ]
+        ),
         // LAB-008 Portable Objects: the `.anlab` document, its Transferable representations, and
         // imports that stage (LabStaging), validate, and commit through OperationService.
         .target(

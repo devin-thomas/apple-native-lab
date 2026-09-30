@@ -118,3 +118,5 @@ LAB-008's spec now claims `implemented`. Its drag between Mac windows and its fa
 - VoiceOver, Voice Control, and Full Keyboard Access passes.
 - `.anlabpack` and attachment storage; there is no attachment entity.
 - A 26-SDK compile.
+
+**Integration (2026-09-29):** merged after LAB-007-A, LAB-010-A, and LAB-035-A. Portable Objects moved to Command-8 (Command-5 and Command-6 were taken; Command-7 is reserved for Surface Deck). The base `link * * CoreFoundation` policy line already covers LabStaging, so this branch's CoreLocal CoreFoundation lines were dropped; its file-dialog entitlement stays. The `LabPhoneSurfaces` host variant links PortableObjects. The declared-type host test now checks that the app's type is among those registered for `.anlab`, because other builds on the same Mac can register the extension too.
