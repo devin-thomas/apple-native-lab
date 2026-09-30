@@ -12,6 +12,7 @@ let package = Package(
         .library(name: "ShareIngress", targets: ["ShareIngress"]),
         .library(name: "PortableObjects", targets: ["PortableObjects"]),
         .library(name: "SurfaceDeck", targets: ["SurfaceDeck"]),
+        .library(name: "SpeechTimeline", targets: ["SpeechTimeline"]),
     ],
     dependencies: [
         .package(path: "../LabSupport"),
@@ -106,6 +107,25 @@ let package = Package(
         .testTarget(
             name: "SurfaceDeckTests",
             dependencies: ["SurfaceDeck", .product(name: "LabDomain", package: "LabDomain")]
+        ),
+        // LAB-013 Speech Timeline: the timeline of provisional and finalized segments, caption
+        // import and export, the save operation, the recording gate over LabSupport's permission
+        // stager, and the on-device adapters. Speech and AVFoundation are imported on iOS and
+        // macOS only; nothing here holds the store.
+        .target(
+            name: "SpeechTimeline",
+            dependencies: [
+                .product(name: "LabDomain", package: "LabDomain"),
+                .product(name: "LabSupport", package: "LabSupport"),
+            ]
+        ),
+        .testTarget(
+            name: "SpeechTimelineTests",
+            dependencies: [
+                "SpeechTimeline",
+                .product(name: "LabDomain", package: "LabDomain"),
+                .product(name: "LabSupport", package: "LabSupport"),
+            ]
         ),
     ]
 )

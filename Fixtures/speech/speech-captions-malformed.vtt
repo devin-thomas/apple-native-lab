@@ -1,0 +1,9 @@
+WEBVTT
+
+1
+00:00:02.000 --> 00:00:01.000
+This cue ends before it starts.
+
+2
+0:3.5 --> 00:04.000
+This cue's start time is not a WebVTT timestamp.
