@@ -136,6 +136,15 @@ jobs:
           -destination 'generic/platform=watchOS Simulator'
           -derivedDataPath "$LAB_DERIVED" CODE_SIGNING_ALLOWED=NO LAB_SOURCE_REVISION="$LAB_SOURCE_REVISION" build
 
+      # A generic simulator build needs the tvOS SDK only, not a simulator runtime or a device.
+      - name: Apple TV host builds for the simulator (LabTV, unsigned)
+        if: ${{ !cancelled() && env.LAB_XCODE_READY == 'true' }}
+        run: >-
+          python3 script/validate/ci.py run xcodebuild:LabTV:build --
+          xcodebuild -project AppleNativeLab.xcodeproj -scheme LabTV
+          -destination 'generic/platform=tvOS Simulator'
+          -derivedDataPath "$LAB_DERIVED" CODE_SIGNING_ALLOWED=NO LAB_SOURCE_REVISION="$LAB_SOURCE_REVISION" build
+
       - name: Feature level built (ADR-009)
         if: ${{ !cancelled() && env.LAB_XCODE_READY == 'true' }}
         run: >-
@@ -143,12 +152,13 @@ jobs:
           LabMac-Core=platform=macOS
           'LabPhone-Core=generic/platform=iOS Simulator'
           'LabWatch=generic/platform=watchOS Simulator'
+          'LabTV=generic/platform=tvOS Simulator'
           -- -derivedDataPath "$LAB_DERIVED"
 
       - name: 26-family compatibility compile (ADR-009)
         if: ${{ !cancelled() && env.LAB_XCODE_READY == 'true' }}
         run: |
-          schemes=(LabMac-Core LabPhone-Core LabWatch)
+          schemes=(LabMac-Core LabPhone-Core LabWatch LabTV)
           if [[ -z "${LAB_COMPAT_DEVELOPER_DIR:-}" ]]; then
             for scheme in "${schemes[@]}"; do
               python3 script/validate/ci.py record "compat-26:$scheme" not-run "No separate 26 SDK compile: $LAB_COMPAT_REASON."
@@ -168,9 +178,13 @@ jobs:
           python3 script/validate/ci.py run compat-26:LabWatch -- \
             xcodebuild -project AppleNativeLab.xcodeproj -scheme LabWatch -destination 'generic/platform=watchOS Simulator' \
             -derivedDataPath "$derived" CODE_SIGNING_ALLOWED=NO build || status=1
+          python3 script/validate/ci.py run compat-26:LabTV -- \
+            xcodebuild -project AppleNativeLab.xcodeproj -scheme LabTV -destination 'generic/platform=tvOS Simulator' \
+            -derivedDataPath "$derived" CODE_SIGNING_ALLOWED=NO build || status=1
           python3 script/validate/ci.py feature-level --check-prefix compat-26: \
             LabMac-Core=platform=macOS 'LabPhone-Core=generic/platform=iOS Simulator' \
-            'LabWatch=generic/platform=watchOS Simulator' -- -derivedDataPath "$derived" || status=1
+            'LabWatch=generic/platform=watchOS Simulator' 'LabTV=generic/platform=tvOS Simulator' \
+            -- -derivedDataPath "$derived" || status=1
           exit "$status"
 
       - name: Record what CI never runs
@@ -190,8 +204,8 @@ jobs:
             validate:state-vocabulary validate:catalog validate:evidence-records validate:workflow-policy
             validator-self-tests
             swift-test:LabSupport swift-test:LabDomain swift-test:LabStore swift-test:LabStaging swift-test:LabDemo swift-test:LabFeatures
-            xcodebuild:LabMac-Core:test xcodebuild:LabPhone-Core:build xcodebuild:LabWatch:build
-            feature-level:LabMac-Core feature-level:LabPhone-Core feature-level:LabWatch
+            xcodebuild:LabMac-Core:test xcodebuild:LabPhone-Core:build xcodebuild:LabWatch:build xcodebuild:LabTV:build
+            feature-level:LabMac-Core feature-level:LabPhone-Core feature-level:LabWatch feature-level:LabTV
           OPTIONAL: >-
             compat-26:* device-qualification signed-builds
         run: |

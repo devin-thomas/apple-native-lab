@@ -17,6 +17,7 @@ link         *          *        CoreFoundation      # base under Foundation: UR
 link         *          *        SwiftUI             # host interface
 link         *          ios      UIKit               # linked by SwiftUI apps on iOS
 link         *          watchos  UIKit               # linked by SwiftUI apps on watchOS
+link         *          tvos     UIKit               # linked by SwiftUI apps on tvOS
 
 # CoreLocal: capability status probes in LabSupport (CORE-004); none of them prompts
 link         CoreLocal  macos    AVFoundation        # camera and microphone status
@@ -73,6 +74,10 @@ link         SystemSurfaces ios  _AppIntents_SwiftUI # the widget's Toggle(isOn:
 link         Companions watchos  AVFAudio            # record permission and audio input
 link         Companions watchos  CoreBluetooth       # Bluetooth authorization status
 link         Companions watchos  NearbyInteraction   # Ultra Wideband device capabilities
+
+# Companions: the Apple TV host (CORE-013). It links LabSupport and LabCatalog only, and declares no
+# entitlement: no `entitlement` line names tvOS, so any entitlement fails the manifest.
+link         Companions tvos     CoreBluetooth       # Bluetooth authorization status (CBManager.authorization); no manager is created
 
 # SDK modules that exist but do not provide the lab's API on these platforms (CORE-004 notes)
 unsupported  macos      ARKit                        # the macOS SDK's ARKit has no ARWorldTrackingConfiguration

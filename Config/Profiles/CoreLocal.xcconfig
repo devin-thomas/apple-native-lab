@@ -2,7 +2,8 @@
 // persistence, and local-only experiments (docs/BUILD_AND_DISTRIBUTION.md).
 //
 // A target joins this profile by attaching this file in project.yml (`configFiles`).
-// Attached today: LabMac, LabMacTests, LabPhone (schemes LabMac-Core and LabPhone-Core).
+// Attached today: LabMac, LabMacTests, LabPhone, LabPhoneTests (schemes LabMac-Core and
+// LabPhone-Core).
 //
 // Rules: CoreLocal builds with no team for the Mac and the simulators, and with any team,
 // including a free Personal Team, for a device. No CoreLocal target may embed or depend on a

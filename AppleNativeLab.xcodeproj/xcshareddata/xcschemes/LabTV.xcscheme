@@ -15,9 +15,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "A1ACB82DE30AFBBFB5948C2B"
-               BuildableName = "LabPhone.app"
-               BlueprintName = "LabPhone"
+               BlueprintIdentifier = "40740F5CACD13A555B13F284"
+               BuildableName = "LabTV.app"
+               BlueprintName = "LabTV"
                ReferencedContainer = "container:AppleNativeLab.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -29,9 +29,23 @@
             buildForAnalyzing = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "DAB1558585D4EF19DCFCCB76"
-               BuildableName = "LabPhoneTests.xctest"
-               BlueprintName = "LabPhoneTests"
+               BlueprintIdentifier = "A838D237C540A385D3BD03F8"
+               BuildableName = "LabTVTests.xctest"
+               BlueprintName = "LabTVTests"
+               ReferencedContainer = "container:AppleNativeLab.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "3F69BD46CE1F1F4256E1B96F"
+               BuildableName = "LabTVUITests.xctest"
+               BlueprintName = "LabTVUITests"
                ReferencedContainer = "container:AppleNativeLab.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -42,13 +56,14 @@
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES"
-      onlyGenerateCoverageForSpecifiedTargets = "NO">
+      onlyGenerateCoverageForSpecifiedTargets = "NO"
+      systemAttachmentLifetime = "keepNever">
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "A1ACB82DE30AFBBFB5948C2B"
-            BuildableName = "LabPhone.app"
-            BlueprintName = "LabPhone"
+            BlueprintIdentifier = "40740F5CACD13A555B13F284"
+            BuildableName = "LabTV.app"
+            BlueprintName = "LabTV"
             ReferencedContainer = "container:AppleNativeLab.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -58,10 +73,43 @@
             parallelizable = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "DAB1558585D4EF19DCFCCB76"
-               BuildableName = "LabPhoneTests.xctest"
-               BlueprintName = "LabPhoneTests"
+               BlueprintIdentifier = "A838D237C540A385D3BD03F8"
+               BuildableName = "LabTVTests.xctest"
+               BlueprintName = "LabTVTests"
                ReferencedContainer = "container:AppleNativeLab.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "3F69BD46CE1F1F4256E1B96F"
+               BuildableName = "LabTVUITests.xctest"
+               BlueprintName = "LabTVUITests"
+               ReferencedContainer = "container:AppleNativeLab.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "LabSupportTests"
+               BuildableName = "LabSupportTests"
+               BlueprintName = "LabSupportTests"
+               ReferencedContainer = "container:Packages/LabSupport">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "LabCatalogTests"
+               BuildableName = "LabCatalogTests"
+               BlueprintName = "LabCatalogTests"
+               ReferencedContainer = "container:Packages/LabFeatures">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -82,9 +130,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "A1ACB82DE30AFBBFB5948C2B"
-            BuildableName = "LabPhone.app"
-            BlueprintName = "LabPhone"
+            BlueprintIdentifier = "40740F5CACD13A555B13F284"
+            BuildableName = "LabTV.app"
+            BlueprintName = "LabTV"
             ReferencedContainer = "container:AppleNativeLab.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -101,9 +149,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "A1ACB82DE30AFBBFB5948C2B"
-            BuildableName = "LabPhone.app"
-            BlueprintName = "LabPhone"
+            BlueprintIdentifier = "40740F5CACD13A555B13F284"
+            BuildableName = "LabTV.app"
+            BlueprintName = "LabTV"
             ReferencedContainer = "container:AppleNativeLab.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

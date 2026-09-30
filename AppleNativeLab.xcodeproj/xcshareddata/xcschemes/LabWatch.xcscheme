@@ -21,6 +21,20 @@
                ReferencedContainer = "container:AppleNativeLab.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "1FBA003F84404FFE7E8CEA6D"
+               BuildableName = "LabWatchTests.xctest"
+               BlueprintName = "LabWatchTests"
+               ReferencedContainer = "container:AppleNativeLab.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
@@ -39,7 +53,42 @@
          </BuildableReference>
       </MacroExpansion>
       <Testables>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "1FBA003F84404FFE7E8CEA6D"
+               BuildableName = "LabWatchTests.xctest"
+               BlueprintName = "LabWatchTests"
+               ReferencedContainer = "container:AppleNativeLab.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "LabSupportTests"
+               BuildableName = "LabSupportTests"
+               BlueprintName = "LabSupportTests"
+               ReferencedContainer = "container:Packages/LabSupport">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "LabCatalogTests"
+               BuildableName = "LabCatalogTests"
+               BlueprintName = "LabCatalogTests"
+               ReferencedContainer = "container:Packages/LabFeatures">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
+      <CommandLineArguments>
+      </CommandLineArguments>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
