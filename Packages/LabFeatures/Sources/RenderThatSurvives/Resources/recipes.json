@@ -1,0 +1,26 @@
+{
+  "recipes": [
+    {
+      "id": "short-bars",
+      "title": "Short color bars",
+      "width": 160,
+      "height": 90,
+      "framesPerSecond": 24,
+      "frameCount": 48,
+      "framesPerSegment": 12,
+      "pacing": "as-fast-as-possible",
+      "bitRate": 300000
+    },
+    {
+      "id": "long-bars",
+      "title": "Long color bars, real time",
+      "width": 320,
+      "height": 180,
+      "framesPerSecond": 24,
+      "frameCount": 576,
+      "framesPerSegment": 72,
+      "pacing": "real-time",
+      "bitRate": 500000
+    }
+  ]
+}
