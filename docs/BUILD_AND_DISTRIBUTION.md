@@ -12,7 +12,7 @@ The installed Xcode build, Swift compiler, SDK versions, deployment floor, and e
 |---|---|---|---|---|
 | CoreLocal | Mac/iPhone host, original fixtures, local persistence, manual/fallback experiments, eligible local inference | `Config/Profiles/CoreLocal.xcconfig` | `LabMac-Core`, `LabPhone-Core` | None for the Mac and simulators; any team, including a free Personal Team, for a device |
 | SystemSurfaces | Share/widget/Control extensions, App Group staging, App Intents metadata and integration tests | `Config/Profiles/SystemSurfaces.xcconfig` | `LabPhone-Surfaces` | Own paid team for on-device App Group staging; simulator builds need none |
-| Companions | Separate Watch and TV hosts plus LAN/Watch relay | `Config/Profiles/Companions.xcconfig` | `LabWatch` | Physical devices for real transport/camera evidence |
+| Companions | Separate Watch and TV hosts plus LAN/Watch relay | `Config/Profiles/Companions.xcconfig` | `LabWatch`, `LabTV` | Physical devices for real transport/camera evidence |
 | CloudOptional | CloudKit, optional PCC/provider adapters | `Config/Profiles/CloudOptional.xcconfig` | none yet | Own paid team with iCloud, own container, explicit account/entitlement/route configuration |
 | FrontierOptional | File Provider, App Clip, Wallet signer integration, CarPlay/PTT/Screen Time/accessory spikes | `Config/Profiles/FrontierOptional.xcconfig` | none yet | Per-feature setup and managed approval where required |
 
@@ -33,19 +33,31 @@ xcodebuild arguments from script/    LAB_SOURCE_REVISION, and LAB_DISTRIBUTION_L
 
 1. **Every target attaches exactly one profile file** through `configFiles` in `project.yml`. Its `LAB_BUILD_PROFILE` becomes the `LabBuildProfile` Info.plist key, which the Readiness screen shows and the release manifest checks. The profile file sits above `Config/Local.xcconfig`, so a local override cannot relabel a target.
 2. **A profile without targets is still real configuration.** Its file names the profile, its external setup, and a Swift compilation condition (`LAB_PROFILE_CORE_LOCAL`, `LAB_PROFILE_SYSTEM_SURFACES`, `LAB_PROFILE_COMPANIONS`, `LAB_PROFILE_CLOUD_OPTIONAL`, `LAB_PROFILE_FRONTIER_OPTIONAL`). The release manifest lists it as skipped, with the reason. A new target joins a profile by attaching that file and getting its own scheme. Do not create empty placeholder targets.
-3. **CoreLocal depends on nothing optional.** No CoreLocal target embeds or depends on a target from another profile, references the App Group, Keychain group, or CloudKit identifiers, or declares an entitlement other than the Mac App Sandbox. SystemSurfaces extensions are embedded by a separate SystemSurfaces host variant with its own scheme (for example `LabPhone-Surfaces`), so `LabPhone-Core` never needs App Group provisioning or extra App IDs. The Watch host installs directly to the Watch rather than being embedded in the iPhone app.
+3. **CoreLocal depends on nothing optional.** No CoreLocal target embeds or depends on a target from another profile, references the App Group, Keychain group, or CloudKit identifiers, or declares an entitlement other than the Mac App Sandbox. SystemSurfaces extensions are embedded by a separate SystemSurfaces host variant with its own scheme (for example `LabPhone-Surfaces`), so `LabPhone-Core` never needs App Group provisioning or extra App IDs. The Watch and Apple TV hosts install directly to their devices rather than being embedded in the iPhone app.
 4. **Entitlements stay with their executable.** Each executable or extension target declares its own `.entitlements` file in `project.yml`. Today the only one is `Apps/Mac/LabMac.entitlements`, which holds the App Sandbox. [`Config/ProductPolicy.txt`](../Config/ProductPolicy.txt) lists the entitlements and frameworks each profile may use on each platform; the release manifest fails a product that goes beyond it.
 5. **Packages do not see these settings.** `Packages/*` build with their own settings, so neither the profile conditions nor `LAB_SDK_27` reach package code. Code that differs by profile lives in the app or extension sources, or behind a protocol the host injects.
 
 ## Project and run entry points
 
-The committed `AppleNativeLab.xcodeproj` is generated from `project.yml` by `script/generate_project.sh` (XcodeGen), so a clean checkout builds without XcodeGen. Sources are synchronized folders; regenerate only when targets, settings, packages, or schemes change, and review the diff. Current schemes are listed in [BUILD_STATUS](BUILD_STATUS.md). Proposed names for later hosts are `LabPhone-Surfaces` and `LabTV`.
+The committed `AppleNativeLab.xcodeproj` is generated from `project.yml` by `script/generate_project.sh` (XcodeGen), so a clean checkout builds without XcodeGen. Sources are synchronized folders; regenerate only when targets, settings, packages, or schemes change, and review the diff. Current schemes and what they were verified with are listed in [BUILD_STATUS](BUILD_STATUS.md).
+
+Every host has a scheme whose test action runs a smoke test inside that host: the catalog is in the bundle, the build records its provenance, and the readiness probes run without a prompt. `script/test.sh` runs each one, on the Mac or in a simulator it creates for the run.
+
+| Scheme | Host | Profile | Test action |
+|---|---|---|---|
+| `LabMac-Core` | Mac | CoreLocal | `LabMacTests`, hosted in the Mac app |
+| `LabPhone-Core` | iPhone and iPad | CoreLocal | `LabPhoneTests`, hosted smoke tests |
+| `LabPhone-Surfaces` | iPhone variant with the share, widget, and Control extensions | SystemSurfaces | none yet |
+| `LabWatch` | Apple Watch | Companions | `LabWatchTests`, hosted smoke tests; the `LabSupport` and `LabCatalog` package tests on watchOS |
+| `LabTV` | Apple TV (tvOS 26.0 floor) | Companions | `LabTVTests`, hosted smoke tests; `LabTVUITests`, the host driven with the remote alone; the `LabSupport` and `LabCatalog` package tests on tvOS |
+
+The Apple TV host links only `LabSupport` and `LabCatalog`, which compile FoundationModels and Speech out of tvOS, and declares no entitlement. Its icon and Top Shelf images are a layered tvOS brand asset (`Apps/TV/Assets.xcassets`) that `script/make_app_icon.py` draws from the same geometry as `Apps/Icon/AppIcon.icon`, because an Icon Composer document does not compile for tvOS with Xcode 27.0.
 
 | Script | Purpose |
 |---|---|
 | `script/build_and_run.sh` | Builds `LabMac-Core`, stops only the known lab process (`NativeLab`), and opens the real `.app` bundle |
-| `script/test.sh` | Every automated check that needs no device, signing team, or network, ending with a Source-lane release manifest |
-| `script/install_mac.sh`, `install_phone.sh`, `install_watch.sh` | Install routes. The device scripts list destinations first and take a device ID as data |
+| `script/test.sh` | Every automated check that needs no device, signing team, or network: package tests, each host's smoke tests on macOS and in iOS, watchOS, and tvOS simulators it creates and deletes (`script/simulator.py`), and finally a Source-lane release manifest |
+| `script/install_mac.sh`, `install_phone.sh`, `install_watch.sh`, `install_tv.sh` | Install routes. The device scripts list destinations first and take a device ID as data |
 | `script/build_manifest.py` | Builds the selected profiles and writes the release manifest ([below](#release-manifest)) |
 | `script/toolchain_report.sh` | Prints the installed toolchain for BUILD_STATUS |
 
@@ -58,12 +70,14 @@ Tracked files hold neutral defaults, and `Config/Local.xcconfig` (ignored; start
 | Setting | Tracked default | Used by |
 |---|---|---|
 | `LAB_BUNDLE_PREFIX` | `org.example` | Every bundle identifier |
-| `DEVELOPMENT_TEAM` | empty | iPhone, iPad, and Watch device builds |
+| `DEVELOPMENT_TEAM` | empty | iPhone, iPad, Watch, and Apple TV device builds |
 | `LAB_MAC_DEVELOPMENT_TEAM` | empty, so the Mac host signs to run locally | The Mac host |
 | `LAB_APP_GROUP_IDENTIFIER` | `group.$(LAB_BUNDLE_PREFIX).nativelab` | SystemSurfaces App Group entitlement |
 | `LAB_KEYCHAIN_GROUP` | `$(LAB_BUNDLE_PREFIX).nativelab.shared` | `keychain-access-groups`, written as `$(AppIdentifierPrefix)$(LAB_KEYCHAIN_GROUP)` |
 | `LAB_CLOUDKIT_CONTAINER_IDENTIFIER` | `iCloud.$(LAB_BUNDLE_PREFIX).nativelab` | CloudOptional container entitlement |
 | `LAB_DISTRIBUTION_LANE` | `Source` | Whether hosts declare purpose strings ([below](#purpose-strings-and-the-store-lane)) |
+
+The Mac, iPhone, and Apple TV hosts share one bundle identifier, `$(LAB_BUNDLE_PREFIX).nativelab`, as one app across platforms, so the Apple TV host needs no App ID beyond the iPhone host's. Hosts on different platforms never meet on one device; the Watch host keeps its own `.watchkitapp` identifier.
 
 The shared identifiers derive from `LAB_BUNDLE_PREFIX`, so setting your own prefix gives you your own App Group and container, and no maintainer-owned container is assumed. Set one directly only to reuse an identifier you already registered. A target that needs an identifier at run time declares an Info.plist key with the setting as its value (for example `LabAppGroupIdentifier: $(LAB_APP_GROUP_IDENTIFIER)`), so Swift code never hard-codes one. Before the first Mac target uses an App Group, confirm the identifier form macOS expects against the installed SDK.
 
@@ -79,7 +93,7 @@ An optional App Store/TestFlight distribution can make advanced features conveni
 
 ### Purpose strings and the Store lane
 
-The hosts link AVFoundation, CoreBluetooth, FoundationModels, and Speech (the iPhone also ARKit and NearbyInteraction; the Watch AVFAudio, CoreBluetooth, and NearbyInteraction) only to read capability status for the Readiness screen, without prompting. App Store processing can flag a binary that references these privacy-sensitive APIs without the matching purpose strings.
+The hosts link AVFoundation, CoreBluetooth, FoundationModels, and Speech (the iPhone also ARKit and NearbyInteraction; the Watch AVFAudio, CoreBluetooth, and NearbyInteraction; the Apple TV CoreBluetooth alone) only to read capability status for the Readiness screen, without prompting. App Store processing can flag a binary that references these privacy-sensitive APIs without the matching purpose strings.
 
 **Decision (CORE-008):** the distribution lane decides, per build, whether hosts declare purpose strings.
 
@@ -88,7 +102,7 @@ The hosts link AVFoundation, CoreBluetooth, FoundationModels, and Speech (the iP
 
 The probes are not compiled out of store builds. That would need a LabSupport source change and a switch that package code cannot receive from an xcconfig file, and store builds would lose the Readiness screen.
 
-How it works: each host sets `GENERATE_INFOPLIST_FILE = $(LAB_DECLARES_PURPOSE_STRINGS)` with `INFOPLIST_KEY_NS…UsageDescription` settings. The lane resolves that to `NO` for Source, so the Info.plist is exactly the tracked file, and to `YES` for Store, so Xcode merges the purpose strings into it. Store-lane generation also applies Xcode's generated defaults, observed with Xcode 27.0: on the Mac `CFBundleName` becomes the product name `NativeLab` instead of `Native Lab`; iOS adds `LSRequiresIPhoneOS`; watchOS adds an unused `MinimumOSVersion~ipad`. Review them before the first upload.
+How it works: each host sets `GENERATE_INFOPLIST_FILE = $(LAB_DECLARES_PURPOSE_STRINGS)` with `INFOPLIST_KEY_NS…UsageDescription` settings. The lane resolves that to `NO` for Source, so the Info.plist is exactly the tracked file, and to `YES` for Store, so Xcode merges the purpose strings into it. Store-lane generation also applies Xcode's generated defaults, observed with Xcode 27.0: on the Mac `CFBundleName` becomes the product name `NativeLab` instead of `Native Lab`; iOS and tvOS add `LSRequiresIPhoneOS`; watchOS adds an unused `MinimumOSVersion~ipad`. Review them before the first upload.
 
 `script/build_manifest.py --lane Store` fails any product that links a framework named in a `purpose` line of `Config/ProductPolicy.txt` without the matching Info.plist key, so a Source build is caught before it reaches App Store processing.
 
@@ -102,7 +116,7 @@ script/build_manifest.py --profile CoreLocal       # only CoreLocal; the rest ar
 script/build_manifest.py --lane Store              # Store lane: purpose strings required
 ```
 
-The script reads the profiles from `Config/Profiles/`, assigns each scheme to the profile its application targets attach, and builds every scheme of each selected profile in Release from a fresh `build/manifest/DerivedData`: the Mac for `platform=macOS`, iOS and watchOS for their generic simulators. It writes `build/manifest/manifest.json` (ignored by Git) and one log per scheme, and exits non-zero if any selected profile failed.
+The script reads the profiles from `Config/Profiles/`, assigns each scheme to the profile its application targets attach, and builds every scheme of each selected profile in Release from a fresh `build/manifest/DerivedData`: the Mac for `platform=macOS`, iOS, watchOS, and tvOS for their generic simulators. It writes `build/manifest/manifest.json` (ignored by Git) and one log per scheme, and exits non-zero if any selected profile failed.
 
 The manifest records the source revision (and whether the tree was dirty), the Xcode, Swift, and host versions, the lane, and whether a local configuration was present. For each profile it records `built`, `failed`, or `skipped` with the reason. For each built scheme it records the exact `xcodebuild` command and, from the product itself, the SDK, Xcode build, minimum OS, profile, lane, revision, architectures, executable hash, linked frameworks and libraries, declared and signed entitlement keys, signature kind, purpose strings, and embedded bundles. A profile is `built` only if every one of its schemes built and every product passed these checks:
 

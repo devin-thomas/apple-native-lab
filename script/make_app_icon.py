@@ -1,24 +1,46 @@
 #!/usr/bin/env python3
-"""Generate the lab's app icon as an Icon Composer document (Apps/Icon/AppIcon.icon).
+"""Generate the lab's app icon from one geometry, for every platform.
 
 The mark is a gear (the system and its automation) around a laboratory flask (the lab), in one
-electric-blue accent on a cool black field. Layers are vector SVG on a 1024-point canvas, so
-Xcode renders every size, shape (squares and Watch circles), and appearance (default, dark,
-clear, tinted) from one source. Rerun after changing the geometry:
+electric-blue accent on a cool black field. It is written twice from the same paths:
+
+- Apps/Icon/AppIcon.icon, an Icon Composer document for the Mac, iPhone, and Watch hosts. Layers
+  are vector SVG on a 1024-point canvas, so Xcode renders every size, shape (squares and Watch
+  circles), and appearance (default, dark, clear, tinted) from one source.
+- Apps/TV/Assets.xcassets/AppIcon.brandassets, the Apple TV host's layered icon and Top Shelf
+  images. Icon Composer documents do not compile for tvOS (actool looks for an "App Icon & Top
+  Shelf Image" brand assets collection instead), so the same paths are placed on the 5:3 icon and
+  the wide Top Shelf canvases as SVG, which the asset catalog keeps as vectors. The icon has three
+  layers for the focus parallax: the field at the back, the gear, and the flask in front.
+
+Rerun after changing the geometry, and commit both outputs:
     python3 script/make_app_icon.py
 """
 import json
 import math
+import shutil
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 ICON = ROOT / "Apps/Icon/AppIcon.icon"
 ASSETS = ICON / "Assets"
+TV_CATALOG = ROOT / "Apps/TV/Assets.xcassets"
+TV_BRAND = TV_CATALOG / "AppIcon.brandassets"
 
 CENTER = 512.0
 BLUE = "#2F80FF"        # electric blue: the accent the house design guide reserves for action
 BLUE_LIGHT = "#6FA8FF"  # the same hue, lighter, for the liquid
 BACKGROUND = (0.024, 0.031, 0.051)  # cool black
+
+# tvOS canvases in points (width, height), and how much of the 1024-point artwork's height each
+# shows. A taller view leaves the mark smaller, inside the area the focus effect never crops.
+TV_ICON = (400, 240)            # the Home Screen icon, rendered at 1x and 2x
+TV_ICON_STORE = (1280, 768)     # the App Store icon
+TV_TOP_SHELF = (1920, 720)      # the Top Shelf image
+TV_TOP_SHELF_WIDE = (2320, 720)  # the wide Top Shelf image
+TV_ICON_VIEW_HEIGHT = 1160.0
+TV_TOP_SHELF_VIEW_HEIGHT = 1400.0
+CATALOG_INFO = {"author": "xcode", "version": 1}
 
 
 def point(angle_deg: float, radius: float) -> tuple[float, float]:
@@ -104,24 +126,113 @@ def svg(body: str) -> str:
     )
 
 
-def main() -> None:
-    ASSETS.mkdir(parents=True, exist_ok=True)
-    gear = svg(
+# The mark's elements, shared by every output. Each is indented for an SVG body.
+
+def gear_element() -> str:
+    return (
         f'  <path d="{gear_path()}" fill="{BLUE}" fill-rule="evenodd" '
         f'stroke="{BLUE}" stroke-width="18" stroke-linejoin="round"/>'
     )
-    flask = svg(
+
+
+def flask_element() -> str:
+    return (
         f'  <path d="{flask_outline_path()}" fill="none" stroke="{BLUE}" stroke-width="30" '
         'stroke-linecap="round" stroke-linejoin="round"/>'
     )
-    liquid = svg(
+
+
+def liquid_elements() -> str:
+    return (
         f'  <path d="{liquid_path()}" fill="{BLUE_LIGHT}"/>\n'
         f'  <circle cx="{CENTER + 20}" cy="{500}" r="12" fill="{BLUE_LIGHT}"/>\n'
         f'  <circle cx="{CENTER - 16}" cy="{470}" r="8" fill="{BLUE_LIGHT}"/>'
     )
-    (ASSETS / "gear.svg").write_text(gear)
-    (ASSETS / "flask.svg").write_text(flask)
-    (ASSETS / "liquid.svg").write_text(liquid)
+
+
+def background_hex() -> str:
+    return "#" + "".join(f"{round(channel * 255):02X}" for channel in BACKGROUND)
+
+
+# MARK: - tvOS
+
+def tv_svg(size: tuple[int, int], view_height: float, body: str) -> str:
+    """The 1024-point artwork centered on a canvas of `size` points, showing `view_height` of it."""
+    width, height = size
+    view_width = view_height * width / height
+    x, y = CENTER - view_width / 2, CENTER - view_height / 2
+    return (
+        f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" '
+        f'viewBox="{x:.2f} {y:.2f} {view_width:.2f} {view_height:.2f}">\n{body}\n</svg>\n'
+    )
+
+
+def tv_field(size: tuple[int, int], view_height: float) -> str:
+    """The opaque cool-black field, filling the whole canvas."""
+    width, height = size
+    view_width = view_height * width / height
+    x, y = CENTER - view_width / 2, CENTER - view_height / 2
+    return f'  <rect x="{x:.2f}" y="{y:.2f}" width="{view_width:.2f}" height="{view_height:.2f}" fill="{background_hex()}"/>'
+
+
+def write_json(folder: Path, document: dict) -> None:
+    folder.mkdir(parents=True, exist_ok=True)
+    (folder / "Contents.json").write_text(json.dumps(document, indent=2) + "\n")
+
+
+def write_vector_imageset(folder: Path, filename: str, contents: str) -> None:
+    write_json(folder, {
+        "images": [{"filename": filename, "idiom": "tv"}],
+        "info": CATALOG_INFO,
+        "properties": {"preserves-vector-representation": True},
+    })
+    (folder / filename).write_text(contents)
+
+
+def write_tv_icon_stack(folder: Path, size: tuple[int, int]) -> None:
+    """A layered tvOS icon: back to front, the field, the gear, and the flask with its liquid."""
+    layers = [
+        ("Front", "flask", flask_element() + "\n" + liquid_elements()),
+        ("Middle", "gear", gear_element()),
+        ("Back", "field", tv_field(size, TV_ICON_VIEW_HEIGHT)),
+    ]
+    write_json(folder, {"info": CATALOG_INFO, "layers": [{"filename": f"{name}.imagestacklayer"} for name, _, _ in layers]})
+    for name, image, body in layers:
+        layer = folder / f"{name}.imagestacklayer"
+        write_json(layer, {"info": CATALOG_INFO})
+        write_vector_imageset(layer / "Content.imageset", f"{image}.svg", tv_svg(size, TV_ICON_VIEW_HEIGHT, body))
+
+
+def write_tv_brand_assets() -> None:
+    """Apps/TV/Assets.xcassets: the App Icon and Top Shelf Image brand assets, named AppIcon."""
+    shutil.rmtree(TV_CATALOG, ignore_errors=True)
+    write_json(TV_CATALOG, {"info": CATALOG_INFO})
+    write_json(TV_BRAND, {
+        "assets": [
+            {"filename": "App Icon - App Store.imagestack", "idiom": "tv", "role": "primary-app-icon",
+             "size": "{}x{}".format(*TV_ICON_STORE)},
+            {"filename": "App Icon.imagestack", "idiom": "tv", "role": "primary-app-icon",
+             "size": "{}x{}".format(*TV_ICON)},
+            {"filename": "Top Shelf Image Wide.imageset", "idiom": "tv", "role": "top-shelf-image-wide",
+             "size": "{}x{}".format(*TV_TOP_SHELF_WIDE)},
+            {"filename": "Top Shelf Image.imageset", "idiom": "tv", "role": "top-shelf-image",
+             "size": "{}x{}".format(*TV_TOP_SHELF)},
+        ],
+        "info": CATALOG_INFO,
+    })
+    write_tv_icon_stack(TV_BRAND / "App Icon.imagestack", TV_ICON)
+    write_tv_icon_stack(TV_BRAND / "App Icon - App Store.imagestack", TV_ICON_STORE)
+    mark = gear_element() + "\n" + flask_element() + "\n" + liquid_elements()
+    for folder, size in (("Top Shelf Image.imageset", TV_TOP_SHELF), ("Top Shelf Image Wide.imageset", TV_TOP_SHELF_WIDE)):
+        body = tv_field(size, TV_TOP_SHELF_VIEW_HEIGHT) + "\n" + mark
+        write_vector_imageset(TV_BRAND / folder, "top-shelf.svg", tv_svg(size, TV_TOP_SHELF_VIEW_HEIGHT, body))
+
+
+def main() -> None:
+    ASSETS.mkdir(parents=True, exist_ok=True)
+    (ASSETS / "gear.svg").write_text(svg(gear_element()))
+    (ASSETS / "flask.svg").write_text(svg(flask_element()))
+    (ASSETS / "liquid.svg").write_text(svg(liquid_elements()))
 
     r, g, b = BACKGROUND
     document = {
@@ -145,6 +256,8 @@ def main() -> None:
     }
     (ICON / "icon.json").write_text(json.dumps(document, indent=2) + "\n")
     print(f"wrote {ICON.relative_to(ROOT)}")
+    write_tv_brand_assets()
+    print(f"wrote {TV_BRAND.relative_to(ROOT)}")
 
 
 if __name__ == "__main__":
