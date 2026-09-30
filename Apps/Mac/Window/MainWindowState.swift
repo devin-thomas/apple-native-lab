@@ -5,6 +5,7 @@ import Observation
 import ShareIngress
 import SurfaceDeck
 import SwiftUI
+import TabletopReality
 import TypedIntelligence
 
 /// What the sidebar selects: the lab's own data, or a slice of the experiment catalog.
@@ -22,6 +23,8 @@ enum SidebarDestination: Hashable {
     case portableObjects
     /// LAB-004: the demo session, its receipts, and the widget and Control previews.
     case surfaceDeck
+    /// LAB-023: the virtual table, its object list, and the tracking gate.
+    case tabletopReality
     case catalog(CatalogScope)
 
     var title: String {
@@ -33,6 +36,7 @@ enum SidebarDestination: Hashable {
         case .shareInbox: "Share Inbox"
         case .portableObjects: "Portable Objects"
         case .surfaceDeck: SurfaceDeck.title
+        case .tabletopReality: TabletopExperiment.title
         case .catalog(let scope): scope.title
         }
     }
@@ -47,6 +51,7 @@ enum SidebarDestination: Hashable {
         case .shareInbox: "share-inbox"
         case .portableObjects: "portable-objects"
         case .surfaceDeck: "surface-deck"
+        case .tabletopReality: "tabletop-reality"
         case .catalog(.all): "all"
         case .catalog(.milestone(let milestone)): "milestone:\(milestone.rawValue)"
         case .catalog(.category(let category)): "category:\(category)"
@@ -64,6 +69,7 @@ enum SidebarDestination: Hashable {
         case ("share-inbox", nil): self = .shareInbox
         case ("portable-objects", nil): self = .portableObjects
         case ("surface-deck", nil): self = .surfaceDeck
+        case ("tabletop-reality", nil): self = .tabletopReality
         case ("all", nil): self = .catalog(.all)
         case ("milestone", let raw?): guard let milestone = Milestone(rawValue: raw) else { return nil }
             self = .catalog(.milestone(milestone))
@@ -93,6 +99,8 @@ final class MainWindowState {
     var inboxEntry: InboxEntry.ID?
     /// LAB-008: this window's objects, selection, and import under review.
     let portableObjects = PortableObjectsSession()
+    /// LAB-023: this window's table, selection, and tracking.
+    let tabletop = TabletopSession()
     var searchText = ""
     /// Incremented to ask the window to focus its search field.
     var searchRequests = 0

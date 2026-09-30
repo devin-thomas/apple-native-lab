@@ -154,8 +154,10 @@ public enum TabletopRoute: Hashable, Sendable {
 /// Clear Table and Set Out Starter Scene each make several commits, one receipt per object, so a
 /// failure or a cancellation leaves every finished commit recorded and the rest unmade.
 public enum SequentialRun {
+    /// Runs on the caller's actor, so a main-actor host passes a main-actor commit.
     public static func perform(
         _ operations: [DomainOperation],
+        isolation: isolated (any Actor)? = #isolation,
         commit: (DomainOperation) async throws(TabletopError) -> ActionReceipt
     ) async throws(TabletopError) -> [ActionReceipt] {
         var receipts: [ActionReceipt] = []

@@ -111,6 +111,9 @@ extension OperationKind {
         case .restoreItem: "Restore Item"
         case .resetDemo: "Reset Demo"
         case .setSession: "Set Session"
+        case .placeAnchor: "Place Object"
+        case .moveAnchor: "Move Object"
+        case .removeAnchor: "Remove Object"
         }
     }
 }
@@ -140,6 +143,7 @@ extension EntityKind {
         case .collection: "Collection"
         case .item: "Item"
         case .session: "Session"
+        case .anchor: "Placed Object"
         }
     }
 }

@@ -1,6 +1,7 @@
 import LabCatalog
 import SurfaceDeck
 import SwiftUI
+import TabletopReality
 
 /// Menu bar commands for the essential actions, each with a keyboard shortcut. Window-specific
 /// commands act on the frontmost main window and are disabled when none is in front.
@@ -43,6 +44,9 @@ struct LabCommands: Commands {
                 .disabled(window == nil)
             Button("Portable Objects") { window?.destination = .portableObjects }
                 .keyboardShortcut("8", modifiers: .command)
+                .disabled(window == nil)
+            Button(TabletopExperiment.title) { window?.destination = .tabletopReality }
+                .keyboardShortcut("9", modifiers: .command)
                 .disabled(window == nil)
         }
 

@@ -94,6 +94,8 @@ struct MainWindow: View {
             PortableObjectsListColumn(window: window)
         case .surfaceDeck:
             SurfaceDeckListColumn(window: window)
+        case .tabletopReality:
+            TabletopListColumn(window: window, session: window.tabletop)
         case .catalog(let scope):
             if let registry = model.registry {
                 CatalogListColumn(registry: registry, scope: scope, window: window)
@@ -122,6 +124,8 @@ struct MainWindow: View {
             PortableObjectsDetailColumn(window: window)
         case .surfaceDeck:
             SurfaceDeckDetailColumn()
+        case .tabletopReality:
+            TabletopDetailColumn(session: window.tabletop)
         case .catalog:
             if let registry = model.registry {
                 CatalogDetailColumn(registry: registry, experimentID: window.experimentID)
@@ -146,6 +150,7 @@ struct MainWindow: View {
         case .accessSuperpower: "Search archived samples"
         case .shareInbox: "Search the inbox"
         case .portableObjects: "Search objects"
+        case .tabletopReality: "Search the table"
         default: "Search experiments"
         }
     }
