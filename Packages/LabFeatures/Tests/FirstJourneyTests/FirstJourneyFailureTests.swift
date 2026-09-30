@@ -1,5 +1,6 @@
 import AccessSuperpower
 import ActionAtlas
+import FirstJourney
 import Foundation
 import LabDomain
 import LabSupport

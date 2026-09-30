@@ -1,4 +1,5 @@
 import AccessSuperpower
+import FirstJourney
 import ActionAtlas
 import Foundation
 import LabDomain
@@ -10,46 +11,9 @@ import Synchronization
 import TypedIntelligence
 import UniformTypeIdentifiers
 
-/// The fixed inputs of the first six-lab journey (CORE-012). The showcase script in
-/// `Fixtures/showcase/first-journey/` uses the same values.
-///
-/// The shared object is the note `Fixtures/intelligence/intelligence-injected-note.txt`, shared or
-/// pasted into the lab and added to one of the person's own collections. Its item ID is not chosen:
-/// `ImportAdopter` derives it from the note's digest and the collection's ID.
-enum Journey {
-    static let fieldNotes = CollectionID(rawValue: UUID(uuidString: "06D9663A-9835-44CE-B9E9-C048717D597A")!)
-    static let fieldNotesTitle = "Field notes"
-    static let createFieldNotes = RequestID(rawValue: UUID(uuidString: "D5760E58-4EC8-4E59-A698-E5C7DEEB5D51")!)
-    /// The item ID and request ID `ImportAdopter` derives for the shared note in Field notes.
-    static let object = ItemID(rawValue: UUID(uuidString: "C784FB5A-4D9A-8895-9AE7-9418D700541D")!)
-    static let addRequest = RequestID(rawValue: UUID(uuidString: "960A425D-9DD8-8548-B632-09DCEB54741D")!)
-
-    static let renameRequest = RequestID(rawValue: UUID(uuidString: "A25537FF-F169-4DEA-A193-3E5E5ADBCD33")!)
-    static let archiveRequest = RequestID(rawValue: UUID(uuidString: "79998709-4D82-411B-AE3E-4769B3CFA065")!)
-    static let restoreRequest = RequestID(rawValue: UUID(uuidString: "7CAA28A8-03A7-44D1-98F5-53F798C9A06D")!)
-    static let startRequest = RequestID(rawValue: UUID(uuidString: "47E2CDBA-EA7F-42BC-8A60-D126490D7A77")!)
-    /// A second lab's own collection, for importing the exported object there.
-    static let imports = CollectionID(rawValue: UUID(uuidString: "102DC40B-57B2-4BB6-9D2E-64F71E2421B5")!)
-    static let importsTitle = "Imports"
-
-    static let renamedTitle = "Kraft card wear note"
-    /// The shared note's first line, which adoption makes the object's title.
-    static let firstLine = "Kraft card: corners fray after a week in the drawer. Still takes pencil well."
-
-    // Demo samples from Fixtures/demo/seed.json.
-    static let kraft = ItemID(rawValue: UUID(uuidString: "6E2CED9D-B946-4188-8417-2E85C6A7268C")!)
-    static let quartz = ItemID(rawValue: UUID(uuidString: "AF451890-CA80-4DE9-B18B-4007066C9177")!)
-    static let minerals = CollectionID(rawValue: UUID(uuidString: "A222A032-267A-4208-B1F9-F55D739D3C24")!)
-    static let papers = CollectionID(rawValue: UUID(uuidString: "E7EEE9BB-FA3B-41F1-805E-41BDB71B44A3")!)
-    static let kraftSeedNote = "Brown and stiff. Takes pencil well."
-    /// What the sample parser, or a person in the manual editor, adds to the kraft card: the
-    /// shared note's first paragraph only.
-    static let kraftNoteAfterReview = kraftSeedNote + "\n" + firstLine
-
-    /// SHA-256 of the object's `.anlab` export at the end of the journey (revision 4). Every path
-    /// that runs the journey, in any store and on any platform, must export exactly these bytes.
-    static let exportSHA256 = "fa5f337a8ca37e5529ce343022afaf92db98a5a367b9212fe7090d37efd406ea"
-
+/// The adapters the journey acts as, with every permission, as the hosts compose them. The
+/// grant ledger, not these scopes, decides what a destructive change may do.
+extension Journey {
     static let appUI = ActorScope(adapter: .appUI, grants: Set(Permission.allCases))
     static let appIntent = ActorScope(adapter: .appIntent, grants: Set(Permission.allCases))
 }
