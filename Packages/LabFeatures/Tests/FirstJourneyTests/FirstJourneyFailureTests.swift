@@ -66,6 +66,37 @@ import TypedIntelligence
         #expect(try await lab.item(Journey.object) == object)
     }
 
+    /// The model was offered but failed while drafting, for each way a request can fail after the
+    /// probe passed. Each failure names itself in a sentence that says what to do next, proposes
+    /// and stores nothing, and the manual editor still completes the review.
+    @Test(arguments: [
+        ExtractionFailure.modelUnavailable(.modelNotReady), .malformedOutput, .refused, .unsupportedLanguage,
+        .contextTooLarge, .busy, .timedOut(limit: .seconds(30)), .other,
+    ])
+    func aModelThatFailsWhileDraftingLeavesTheManualEditor(failure: ExtractionFailure) async throws {
+        let (lab, object) = try await Self.labWithSharedObject()
+        let flow = lab.intelligence
+        let candidates = try await flow.candidates()
+        let source = try SourceNote(object.note.value)
+        let drafted = await flow.draft(source, with: FailingModel(failure: failure), candidates: candidates)
+        guard case .failure(let reported) = drafted else {
+            Issue.record("a failed model proposed something")
+            return
+        }
+        #expect(reported == failure)
+        #expect(!reported.message.isEmpty && reported.message.hasSuffix("."))
+        #expect(try await lab.item(Journey.kraft).revision == .initial)
+
+        let reviewable = await flow.revise(
+            ProposalFields(target: .item(Journey.kraft), newTitle: "Kraft card", addedNote: Journey.firstLine),
+            source: .manualEditor, note: source, candidates: candidates
+        )
+        let receipt = try await flow.commit(try reviewable.approve())
+        #expect(receipt.status == .committed && receipt.admitted.adapter == .appUI)
+        #expect(try await lab.item(Journey.kraft).note.value == Journey.kraftNoteAfterReview)
+        #expect(try await lab.item(Journey.object) == object)
+    }
+
     // MARK: Permission denied
 
     /// Every entry point that may not change the shared object is refused by its ceiling or its
@@ -162,7 +193,7 @@ import TypedIntelligence
     /// added: LAB-007-B's recorded known issue, whose sentence advises sharing again.
     @Test func theSameNoteSharedAfterItWasPastedIsNotStoredTwice() async throws {
         let (lab, object) = try await Self.labWithSharedObject()
-        _ = await lab.share([NSItemProvider(object: try JourneyFixtures.sharedNote() as NSString)])
+        _ = try await lab.share([NSItemProvider(object: try JourneyFixtures.sharedNote() as NSString)])
         let shared = try #require(await lab.waiting().first)
         #expect(shared.source == .shareExtension)
         do {
@@ -385,6 +416,16 @@ import TypedIntelligence
         #expect(SessionSnapshot.decode(Data("{\"format\":\"something-else\"}".utf8)) == nil)
         #expect(try await lab.item(Journey.object) == object)
         #expect(try await lab.service.findSession(SurfaceDeck.sessionID, as: Journey.appUI) == nil)
+    }
+}
+
+/// The on-device model, offered, failing a request as given.
+struct FailingModel: NoteExtractor {
+    let source = ProposalSource.onDeviceModel
+    let failure: ExtractionFailure
+
+    func extract(_ request: ExtractionRequest) async throws(ExtractionFailure) -> ExtractionDraft {
+        throw failure
     }
 }
 

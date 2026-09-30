@@ -10,8 +10,8 @@ import Synchronization
 import TypedIntelligence
 import UniformTypeIdentifiers
 
-/// The fixed inputs of the first six-lab journey (CORE-012). The Mac and iPhone hosted tests and
-/// the showcase script in `Fixtures/showcase/first-journey/` use the same values.
+/// The fixed inputs of the first six-lab journey (CORE-012). The showcase script in
+/// `Fixtures/showcase/first-journey/` uses the same values.
 ///
 /// The shared object is the note `Fixtures/intelligence/intelligence-injected-note.txt`, shared or
 /// pasted into the lab and added to one of the person's own collections. Its item ID is not chosen:
@@ -114,26 +114,27 @@ final class JourneyLab: @unchecked Sendable {
     let service: OperationService
     /// The host's own folder: paste, the file picker, and drop.
     let host: IngressArea
-    /// The share extension's folder, as a SystemSurfaces host reads its App Group.
-    let shared: IngressArea
+    /// The share extension's folder, as a SystemSurfaces host reads its App Group. A CoreLocal
+    /// host has no share extension and no App Group, so it has none.
+    let shared: IngressArea?
     let inbox: ShareInbox
     let seed: DemoSeed
 
-    init() throws {
+    init(shareExtension: Bool = true) throws {
         folder = FileManager.default.temporaryDirectory.appending(path: "FirstJourneyTests-\(UUID().uuidString)")
         try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
         service = OperationService(store: store, policy: GrantAuthorizationPolicy(ledger: ledger))
         host = try IngressArea(source: .host, root: folder.appending(path: "host"))
-        shared = try IngressArea(source: .shareExtension, root: folder.appending(path: "group"))
-        inbox = ShareInbox(areas: [host, shared])
+        shared = shareExtension ? try IngressArea(source: .shareExtension, root: folder.appending(path: "group")) : nil
+        inbox = ShareInbox(areas: [host] + (shared.map { [$0] } ?? []))
         seed = try JourneyFixtures.demoSeed()
     }
 
     deinit { try? FileManager.default.removeItem(at: folder) }
 
     /// A lab after the host's first run: the demo seeded through Reset Demo.
-    static func seeded() async throws -> JourneyLab {
-        let lab = try JourneyLab()
+    static func seeded(shareExtension: Bool = true) async throws -> JourneyLab {
+        let lab = try JourneyLab(shareExtension: shareExtension)
         _ = try await lab.confirm(.resetDemo(seed: lab.seed))
         return lab
     }
@@ -168,8 +169,10 @@ final class JourneyLab: @unchecked Sendable {
     }
 
     /// What the share extension does with a share: stage into its own folder, never the store.
-    func share(_ providers: [NSItemProvider]) async -> IntakeReport {
-        await IngressStation(area: shared).receive(ItemProviderAttachment.attachments(from: providers), via: .shareExtension)
+    func share(_ providers: [NSItemProvider]) async throws -> IntakeReport {
+        struct NoShareExtension: Error {}
+        guard let shared else { throw NoShareExtension() }
+        return await IngressStation(area: shared).receive(ItemProviderAttachment.attachments(from: providers), via: .shareExtension)
     }
 
     func waiting() async -> [InboxEntry] { await inbox.snapshot().entries }
