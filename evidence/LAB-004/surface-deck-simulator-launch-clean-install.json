@@ -1,0 +1,55 @@
+{
+  "check" : "Surface Deck from clean installs of one build in the iOS simulator: the Open Surface Deck Control brings the app forward with the deck from a fresh install, from the background, and from a terminated app, and the widget's toggle, the Demo Session Control, a tap on the widget, and a plain launch each start the app without a crash",
+  "date" : "2026-09-30T21:42:51Z",
+  "execution" : {
+    "path" : "simulator",
+    "simulator" : {
+      "deviceClass" : "iPhone 17 Pro",
+      "osVersion" : "27.0 (24A434)",
+      "platform" : "iOS"
+    }
+  },
+  "inputs" : [
+    "app-bundle:NativeLabSurfaces.app@sha256-of-file-hashes:e7b30cc2b8f801b7fe444c064d5c5ec348df81d40d6a57140b45c2846a1f9337",
+    "seed:app-bundle@sha256:d132b2dc787cea268736ac6a4ac4acc1f582b430bbb1a30f59dff2d02201041d"
+  ],
+  "limitations" : [
+    "The pre-fix source of the LAB-004-A crash is not in the history, so that exact crash was not rebuilt. The controls show that the check detects a missing environment object; which of the two changes cured the original crash is not established.",
+    "The app's intents were run by the system from Control Center and the Home Screen widget. Shortcuts, Siri, the Action button, and the Lock Screen were not used.",
+    "Launch count and timing only: no performance claim is made.",
+    "Simulator path: an iPhone 17 Pro simulator on the iOS 27.0 runtime, created for this ticket and deleted afterwards. It supports implemented at most, and says nothing about a device.",
+    "A physical iPhone was not used. The widget, the Controls, and the App Group snapshot are blocked on the owner's iPhone: the free Personal Team cannot sign App Groups, so LabPhone-Surfaces cannot be installed there.",
+    "The harness was a UI-test target in a throwaway project outside the repository. It drove SpringBoard and the app by bundle identifier and never built or installed the app."
+  ],
+  "outcome" : {
+    "detail" : "Three clean-install cycles of build 4467f62, whose installed bundle matched the build every time: 21 launches, 9 of them through Open Surface Deck (3 the first launch after an install), with no crash report from this simulator's lab processes. Each Open Surface Deck launch showed the deck sheet with its title, Done, and toggle, and it was still showing 4 seconds later. Done returned to the tabs. The widget's toggle started the session and the Control paused it, each with the app launched in the background and never brought forward. In every cycle each committed as App Intent with a receipt, Started the demo session. at revision 1 and Paused the demo session. at revision 2, and in cycles 2 and 3 the widget and the Control were seen to redraw. A tap on the widget and a plain launch each opened the tabs. In the first cycle, the harness's own check failed twice: its application query reported notRunning for an app the system launched in the background, while the store showed both changes committed. The check was changed to the process list and the store, and cycles 2 and 3 passed every step. Controls: without the sheet's explicit library, both Open Surface Deck launches still showed the deck and the plain launch opened the tabs, with no crash, because the presenter sits inside the library's environment. With the presenter moved outside it, every launch crashed (3 of 3, each with a crash report of a missing environment object in SwiftUI's environment lookup) and the harness failed each one, so the check sees this crash.",
+    "result" : "passed"
+  },
+  "provenance" : {
+    "appVersion" : "0.1.0",
+    "buildNumber" : "1",
+    "buildProfile" : "SystemSurfaces",
+    "minimumOS" : "26.0",
+    "sdkName" : "iphonesimulator27.0",
+    "sourceRevision" : "4467f62",
+    "xcodeBuild" : "27A266a",
+    "xcodeVersion" : "27.0"
+  },
+  "schemaVersion" : 1,
+  "steps" : [
+    "xcodebuild -scheme LabPhone-Surfaces -configuration Debug clean build, into a new derived-data folder, LAB_SOURCE_REVISION=4467f62, under a bundle prefix of this ticket's own",
+    "The simulator was erased before the first cycle. Each later cycle began with simctl uninstall, a check that the app and its App Group container were gone, then simctl install of the same build",
+    "After each install the installed bundle's fingerprint (SHA-256 over every file's path and SHA-256, signatures left out) was compared with the build's, and the data container held no file but the system's launch snapshots",
+    "The harness added the Open Surface Deck and Demo Session Controls in Control Center and the small widget on the Home Screen",
+    "1. Open Surface Deck Control before the app had ever run; the deck sheet, then Done",
+    "2. The app sent to the background with the Home button, then Open Surface Deck",
+    "3. The app terminated, then Open Surface Deck",
+    "4. The app terminated, then the widget's toggle",
+    "5. The app terminated, then the Demo Session Control",
+    "6. The app terminated, then a tap on the widget's title",
+    "7. The app terminated, then a plain launch",
+    "After each step: the app's process was looked up, its store and snapshot were read with sqlite3 read-only, and crash reports from this simulator were counted",
+    "Controls: two builds of the same source in a copy outside the repository, each run through a clean install and launches 1, 3, and 7"
+  ],
+  "subject" : "LAB-004"
+}

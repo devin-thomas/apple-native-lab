@@ -1,0 +1,45 @@
+{
+  "check" : "Surface Deck in the Mac host: a stale widget toggle reconciles, the snapshot is redacted by default, a declined refresh shows the stale mark, and Reset Demo leaves imported data alone",
+  "date" : "2026-09-30T21:49:06Z",
+  "execution" : {
+    "path" : "fixture"
+  },
+  "inputs" : [
+    "seed:app-bundle@sha256:d132b2dc787cea268736ac6a4ac4acc1f582b430bbb1a30f59dff2d02201041d",
+    "session:9B54BD13-C217-4447-BF24-6664727C367A"
+  ],
+  "limitations" : [
+    "Fixture path: hosted tests in the sandboxed Mac app on the development Mac, on a fresh store seeded from the bundled demo seed. It supports implemented at most.",
+    "The widget extension, WidgetKit, and Control Center did not run. The widget is stood in for by reading the snapshot file into SessionTimeline, as the extension's timeline provider does, and a declined refresh by keeping the older timeline. The Mac has no widget or Control.",
+    "The intents ran through run(with:), the call their perform() makes. No system surface invoked them.",
+    "The locked-device redaction is not observed here: the snapshot's contents and the spoken summary are. The SurfaceDeck package tests read the redacted rendering, and no locked device was used.",
+    "No physical iPhone or iPad and no iOS simulator ran in this check."
+  ],
+  "outcome" : {
+    "detail" : "All 25 checks held. After a declined reload, the widget read Running, current, at 30 minutes and \"May be out of date\" at 90 minutes. The tap was recorded as \"Not applied because the demo session changed: expected revision 1, found 2.\"; the store stayed paused at revision 2 and the redrawn widget showed Paused. The snapshot held only the state, revision, and write time until details were turned on, and again after they were turned off. Reset Demo paused the session at revision 4, changed nothing else, left the person's collection and imported item as they were, and a Control drawn before it conflicted.",
+    "result" : "passed"
+  },
+  "provenance" : {
+    "appVersion" : "0.1.0",
+    "buildNumber" : "1",
+    "buildProfile" : "CoreLocal",
+    "minimumOS" : "26.0",
+    "sdkName" : "macosx27.0",
+    "sourceRevision" : "4467f62",
+    "xcodeBuild" : "27A266a",
+    "xcodeVersion" : "27.0"
+  },
+  "schemaVersion" : 1,
+  "steps" : [
+    "xcodebuild -scheme LabMac-Core -only-testing:LabMacTests/SurfaceDeckHostEvidenceTests test",
+    "A fresh SQLite store in the app container, seeded by the host's first run; the snapshot in a temporary App Group folder; a fresh defaults suite",
+    "The deck starts the session, and the widget draws a timeline from the snapshot file",
+    "The deck pauses the session; the reload it asks for is declined, so the widget keeps its timeline",
+    "The widget's stale entry is read at 30 and 90 minutes, and its toggle runs as an App Intent",
+    "The widget redraws from the file and its toggle starts the session",
+    "Show Details on Widgets is turned on, then off",
+    "A collection is created in the app and an item is adopted into it through a second connection as the share extension",
+    "Reset Demo, then a Control toggle drawn before it"
+  ],
+  "subject" : "LAB-004"
+}
