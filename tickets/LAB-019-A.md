@@ -4,7 +4,7 @@ title: "Implement Local Constellation"
 status: "planned"
 milestone: "M2"
 kind: "implementation"
-depends_on: ["CORE-003", "CORE-004", "CORE-005", "CORE-006", "CORE-008", "LAB-001-B"]
+depends_on: ["CORE-003", "CORE-004", "CORE-005", "CORE-006", "CORE-008", "CORE-013", "LAB-001-B"]
 ---
 
 # LAB-019-A — Implement Local Constellation

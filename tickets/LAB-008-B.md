@@ -1,7 +1,7 @@
 ---
 id: "LAB-008-B"
 title: "Qualify and document Portable Objects"
-status: "planned"
+status: "in-progress"
 milestone: "M1"
 kind: "qualification"
 depends_on: ["LAB-008-A", "CORE-007", "CORE-009", "CORE-010"]

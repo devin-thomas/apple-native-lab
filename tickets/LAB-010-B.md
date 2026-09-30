@@ -1,7 +1,7 @@
 ---
 id: "LAB-010-B"
 title: "Qualify and document Typed Local Intelligence"
-status: "planned"
+status: "in-progress"
 milestone: "M1"
 kind: "qualification"
 depends_on: ["LAB-010-A", "CORE-007", "CORE-009", "CORE-010"]

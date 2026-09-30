@@ -4,7 +4,7 @@ title: "Implement Television Stage"
 status: "planned"
 milestone: "M3"
 kind: "implementation"
-depends_on: ["CORE-003", "CORE-004", "CORE-005", "CORE-006", "CORE-008", "LAB-019-B", "LAB-031-B"]
+depends_on: ["CORE-003", "CORE-004", "CORE-005", "CORE-006", "CORE-008", "CORE-013", "LAB-019-B", "LAB-031-B"]
 ---
 
 # LAB-034-A — Implement Television Stage

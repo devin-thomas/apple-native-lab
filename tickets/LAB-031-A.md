@@ -4,7 +4,7 @@ title: "Implement Native Screening Room"
 status: "planned"
 milestone: "M2"
 kind: "implementation"
-depends_on: ["CORE-003", "CORE-004", "CORE-005", "CORE-006", "CORE-008", "LAB-008-B"]
+depends_on: ["CORE-003", "CORE-004", "CORE-005", "CORE-006", "CORE-008", "CORE-013", "LAB-008-B"]
 ---
 
 # LAB-031-A — Implement Native Screening Room

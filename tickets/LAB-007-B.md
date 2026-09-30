@@ -1,7 +1,7 @@
 ---
 id: "LAB-007-B"
 title: "Qualify and document Share Ingress Station"
-status: "planned"
+status: "in-progress"
 milestone: "M1"
 kind: "qualification"
 depends_on: ["LAB-007-A", "CORE-007", "CORE-009", "CORE-010"]

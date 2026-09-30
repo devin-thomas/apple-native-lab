@@ -1,7 +1,7 @@
 ---
 id: "LAB-004-B"
 title: "Qualify and document Surface Deck"
-status: "planned"
+status: "in-progress"
 milestone: "M1"
 kind: "qualification"
 depends_on: ["LAB-004-A", "CORE-007", "CORE-009", "CORE-010"]
