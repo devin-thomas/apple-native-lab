@@ -12,6 +12,9 @@ let package = Package(
         .library(name: "ShareIngress", targets: ["ShareIngress"]),
         .library(name: "PortableObjects", targets: ["PortableObjects"]),
         .library(name: "SurfaceDeck", targets: ["SurfaceDeck"]),
+        // CORE-012: the journey's fixed values only. A product so that Xcode gives the journey's
+        // tests a scheme, as every module's scheme holds its own tests. No host links it.
+        .library(name: "FirstJourney", targets: ["FirstJourney"]),
     ],
     dependencies: [
         .package(path: "../LabSupport"),
@@ -106,6 +109,21 @@ let package = Package(
         .testTarget(
             name: "SurfaceDeckTests",
             dependencies: ["SurfaceDeck", .product(name: "LabDomain", package: "LabDomain")]
+        ),
+        // CORE-012: the first six-lab journey across every M1 module over one OperationService.
+        // `FirstJourney` holds only the journey's fixed values; no host links it.
+        .target(
+            name: "FirstJourney",
+            dependencies: [.product(name: "LabDomain", package: "LabDomain")]
+        ),
+        .testTarget(
+            name: "FirstJourneyTests",
+            dependencies: [
+                "FirstJourney", "ActionAtlas", "SurfaceDeck", "ShareIngress", "PortableObjects", "TypedIntelligence", "AccessSuperpower",
+                .product(name: "LabDomain", package: "LabDomain"),
+                .product(name: "LabStaging", package: "LabStaging"),
+                .product(name: "LabSupport", package: "LabSupport"),
+            ]
         ),
     ]
 )

@@ -1,0 +1,72 @@
+{
+  "check" : "First six-lab journey showcase replayed twice from a clean SQLite store as the app-UI adapter: the shared object added, a reviewed proposal applied, the object renamed, archived, and restored, the session changed, the accessible task finished, and Reset Demo leaving the object alone; both replays share one fingerprint",
+  "date" : "2026-09-30T22:51:16Z",
+  "execution" : {
+    "path" : "fixture"
+  },
+  "inputs" : [
+    "script:first-journey@sha256:40c1e96586a6c4ade915a9942f56b3696ba1f008a9028df7aa588db77a3f1fa3",
+    "seed:first-journey@sha256:d132b2dc787cea268736ac6a4ac4acc1f582b430bbb1a30f59dff2d02201041d"
+  ],
+  "limitations" : [
+    "Fixture path: the replay drives OperationService on original fixtures. It proves the domain contract on this build, not a device, a system surface, an entry point other than the runner's adapter, or a UI.",
+    "The intake and the review: the replay starts at the commits. Pasting and sharing the note, the staging inbox, the sample parser's draft, and the manual editor are exercised by FirstJourneyTests in Packages/LabFeatures, which commits exactly these operations.",
+    "App Intents, Shortcuts, the widget, and the Control: the runner is composed as the app UI. FirstJourneyTests commits the rename, the archive, and the session's pause and resume as App Intents, and checks every entry point reads the same object.",
+    "The .anlab export and import (LAB-008) are reads and a review, not changes, so they are not in the script; FirstJourneyTests exports the object byte-for-byte at every step.",
+    "Host views and the receipt inspector: the replay renders nothing.",
+    "Physical devices and the iOS, watchOS, and tvOS simulators: the replay runs in the package test process on the Mac."
+  ],
+  "outcome" : {
+    "detail" : "35 of 35 steps passed. Replay fingerprint sha256:b5ef22e3a5be640b9e51c32681082afa806033a28566307ca5e977d8f3b69238. Adapter app-ui; store sqlite (schema 3, temporary file); timebase swift-continuous-clock.",
+    "result" : "passed"
+  },
+  "provenance" : {
+    "appVersion" : "unknown",
+    "buildNumber" : "unknown",
+    "buildProfile" : "unknown",
+    "minimumOS" : "unknown",
+    "sdkName" : "macosx27.0",
+    "sourceRevision" : "d7b386a",
+    "xcodeBuild" : "27A266a",
+    "xcodeVersion" : "27.0"
+  },
+  "schemaVersion" : 1,
+  "steps" : [
+    "approve-reset: The person confirms Reset Demo, the host's first run.",
+    "reset: Reset Demo creates the 12 original samples: 3 collections and 12 items in the demo namespace.",
+    "create-collection: LAB-007: New Collection… on the review screen creates Field notes, one of the person's own collections. A demo collection cannot take an import.",
+    "approve-add: LAB-007: the person's Add on the pasted note: a grant for exactly one new item in Field notes.",
+    "add-object: LAB-007: add the pasted note, the journey's shared object. Its first line becomes the title and the whole text the note; the item and request IDs are the ones its content and the collection derive. Its instructions are data.",
+    "find-override: The injected instructions are only text in the object: nothing else holds them.",
+    "apply-review: LAB-010: the reviewed proposal from the object's text, approved as the sample parser drafts it and as the manual editor writes it: one added line on the kraft card, from the note's first paragraph only. The object itself cannot be a target.",
+    "find-fray: LAB-001: a search finds the kraft card and the object.",
+    "rename-object: LAB-001: rename the object at revision 1, as Update Lab Item does.",
+    "approve-archive: LAB-001: the person confirms archiving the object.",
+    "archive-object: LAB-001: archive the object at revision 2, as Archive Lab Item does after its confirmation.",
+    "find-after-archive: An archived object leaves the default search.",
+    "restore-object: LAB-001: restore the object at revision 3 from the action browser.",
+    "find-wear-note: The object is back in Field notes under its new title.",
+    "start-session: LAB-004: start the demo session from the deck. It is created, running, at revision 1.",
+    "pause-session: LAB-004: pause it from the revision a surface showed, 1: the Control, or Shortcuts in CoreLocal.",
+    "resume-session: LAB-004: resume it from revision 2, as Shortcuts does. A toggle still showing revision 1 would be a conflict, which the replay does not include.",
+    "approve-practice-quartz: LAB-035: Set Up Practice asks for its archive of the quartz sample.",
+    "practice-quartz: LAB-035: Set Up Practice archives the quartz sample, with its own receipt.",
+    "approve-practice-agate: LAB-035: Set Up Practice asks for its archive of the agate sample.",
+    "practice-agate: LAB-035: Set Up Practice archives the agate sample, with its own receipt.",
+    "approve-practice-obsidian: LAB-035: Set Up Practice asks for its archive of the obsidian sample.",
+    "practice-obsidian: LAB-035: Set Up Practice archives the obsidian sample, with its own receipt.",
+    "approve-practice-cobalt: LAB-035: Set Up Practice asks for its archive of the cobalt sample.",
+    "practice-cobalt: LAB-035: Set Up Practice archives the cobalt sample, with its own receipt.",
+    "approve-practice-ochre: LAB-035: Set Up Practice asks for its archive of the ochre sample.",
+    "practice-ochre: LAB-035: Set Up Practice archives the ochre sample, with its own receipt.",
+    "approve-practice-vellum: LAB-035: Set Up Practice asks for its archive of the vellum sample.",
+    "practice-vellum: LAB-035: Set Up Practice archives the vellum sample, with its own receipt.",
+    "restore-quartz: LAB-035: the task's one operation: restore Quartz point from Mineral specimens, the collection with the most archived samples.",
+    "find-yours-during-task: The task counts demo collections only; the object is untouched.",
+    "approve-reset-again: The person confirms Reset Demo again.",
+    "reset-again: Reset Demo returns the kraft card and the five practice samples still archived to the seed and pauses the session. The object and Field notes are the person's own, so it leaves them alone.",
+    "find-fray-after-reset: The kraft card's added line is gone; the object still holds the note.",
+    "find-yours-after-reset: The object is still in Field notes, renamed, as the person left it."
+  ],
+  "subject" : "CORE-012"
+}
