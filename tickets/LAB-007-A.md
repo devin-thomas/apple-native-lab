@@ -135,3 +135,5 @@ LAB-007's spec now claims `implemented`, because the fallback ran on the Mac and
 - Two SystemSurfaces builds with the same `LAB_BUNDLE_PREFIX` share one App Group, so a simulator holds one share inbox per prefix.
 
 **Next dependency-ready ticket:** LAB-007-B (qualification). It needs this ticket, and CORE-007, CORE-009, and CORE-010, all done.
+
+**Integration (2026-09-29):** merged alongside LAB-010-A and LAB-035-A. LAB-035-A already used ⌘5, so Share Inbox moved to ⌘6 (the evidence above was gathered with ⌘5 on this branch). The `LabPhoneSurfaces` host variant gained the TypedIntelligence and AccessSuperpower products and the Accessibility policy line, since it compiles LabPhone's sources.
