@@ -38,6 +38,26 @@ The same script is replayed three ways:
 
 The request IDs were generated once at random for this fixture. Never change or reuse one.
 
+## `typed-intelligence/`
+
+The [LAB-010](../../experiments/LAB-010-typed-local-intelligence.md) fixture interaction, from a clean store, for the LAB-010-B qualification. Its `seed.json` is a byte-for-byte copy of the app's demo seed, like `action-atlas/`'s. Its two edits are the sample parser's drafts of the original notes in [`Fixtures/intelligence/`](../intelligence/README.md), approved unedited. A replay cannot run a model, so the model's drafts are recorded separately and never replayed.
+
+| Step | What it does |
+|---|---|
+| `approve-reset`, `reset` | The person confirms Reset Demo, which creates the 3 collections and 12 items of the seed in the demo namespace. |
+| `find-blue` | Search for "blue", the word the lookup tool is given for "the blue one": the cobalt and the verdigris swatches. |
+| `apply-cobalt`, `find-bleeds` | Apply the parser's draft of the ambiguous note: rename the cobalt swatch to the note's quoted title, "Cobalt (bleeds)", and add the note on a new line. Then find it by its new title. |
+| `undo-cobalt`, `find-after-undo` | Submit the undo recorded in the change's receipt, and the rename and the added text are gone. |
+| `apply-kraft`, `find-fray`, `find-override` | Apply the parser's draft of the note with injected instructions: one added line on the kraft card, from the note's first paragraph only. A search for "override", archived items included, finds nothing. |
+| `approve-reset-again`, `reset-again`, `find-after-reset` | A second Reset Demo restores the kraft card, the only sample still different from the seed. |
+
+The script is used two ways:
+
+- by `Packages/LabDemo` as evidence, composed as the app-UI adapter, the adapter a person's Apply commits as. The same tests replay it as the model-tool adapter, which can change nothing, and with a stale revision and a cancellation;
+- by `TypedIntelligenceQualificationTests` in `Packages/LabFeatures`, which drafts both notes through the real flow and checks that the approvals are exactly the script's two edits.
+
+The request IDs were generated once at random for this fixture. Never change or reuse one.
+
 ## Script format
 
 `script.json` (`format: "native-lab-demo-script"`, `formatVersion: 1`) names its seed, a file in the same folder in the demo seed format that `Fixtures/demo/seed.json` uses. `DemoScript(folder:)` loads both:
