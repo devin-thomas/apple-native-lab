@@ -66,6 +66,11 @@ targets:
         buildPhase: resources
       - path: Fixtures/intelligence/intelligence-injected-note.txt
         buildPhase: resources
+      # LAB-013 Speech Timeline: the sample script the device speaks, and its caption fixture.
+      - path: Fixtures/speech/speech-sample-script.txt
+        buildPhase: resources
+      - path: Fixtures/speech/speech-sample-captions.vtt
+        buildPhase: resources
     dependencies:
       - package: LabSupport
       - package: LabDomain
@@ -90,6 +95,9 @@ targets:
       # LAB-004 Surface Deck: the demo session's deck, its intents, and the in-app widget previews.
       - package: LabFeatures
         product: SurfaceDeck
+      # LAB-013 Speech Timeline: the timeline, caption import and export, the save operation, and the on-device adapters.
+      - package: LabFeatures
+        product: SpeechTimeline
     info:
       path: Apps/Mac/Info.plist
       properties:
@@ -152,6 +160,11 @@ targets:
         buildPhase: resources
       - path: Fixtures/intelligence/intelligence-injected-note.txt
         buildPhase: resources
+      # LAB-013 Speech Timeline: the sample script the device speaks, and its caption fixture.
+      - path: Fixtures/speech/speech-sample-script.txt
+        buildPhase: resources
+      - path: Fixtures/speech/speech-sample-captions.vtt
+        buildPhase: resources
     dependencies:
       - package: LabSupport
       - package: LabDomain
@@ -176,6 +189,9 @@ targets:
       # LAB-004 Surface Deck: the demo session's deck, its intents, and the in-app widget previews.
       - package: LabFeatures
         product: SurfaceDeck
+      # LAB-013 Speech Timeline: the timeline, caption import and export, the save operation, and the on-device adapters.
+      - package: LabFeatures
+        product: SpeechTimeline
     info:
       path: Apps/Phone/Info.plist
       properties:
@@ -248,6 +264,11 @@ targets:
         buildPhase: resources
       - path: Fixtures/intelligence/intelligence-injected-note.txt
         buildPhase: resources
+      # LAB-013 Speech Timeline: the sample script the device speaks, and its caption fixture.
+      - path: Fixtures/speech/speech-sample-script.txt
+        buildPhase: resources
+      - path: Fixtures/speech/speech-sample-captions.vtt
+        buildPhase: resources
     dependencies:
       - package: LabSupport
       - package: LabDomain
@@ -267,6 +288,9 @@ targets:
       # LAB-004 Surface Deck: the deck, its intents, and the snapshot writer, as LabPhone.
       - package: LabFeatures
         product: SurfaceDeck
+      # LAB-013 Speech Timeline: the timeline, caption import and export, the save operation, and the on-device adapters.
+      - package: LabFeatures
+        product: SpeechTimeline
       - target: ShareExtension
         embed: true
       # LAB-004: the widget and Control extension, embedded only in this SystemSurfaces variant.

@@ -39,6 +39,9 @@ struct SidebarView: View {
                 Label(SurfaceDeck.title, systemImage: SurfaceDeck.symbol)
                     .tag(SidebarDestination.surfaceDeck)
                     .accessibilityHint("The demo session, its receipts, and previews of its widget and Control")
+                Label("Speech Timeline", systemImage: "waveform.and.magnifyingglass")
+                    .tag(SidebarDestination.speechTimeline)
+                    .accessibilityHint("Transcribe on this device and scrub the text against its audio")
             }
             Section("Experiments") {
                 row(.all, symbol: "square.grid.2x2")
