@@ -251,3 +251,32 @@ The Action Atlas screens were reviewed against the rules above with automated ch
 | 2 | 2 | The restore has no menu command of its own. On the Mac its keyboard path is Return in the list. The list is the window's results stop, so the path needs no keyboard navigation. The selected sample's Restore Sample button, the context menu, and the bars' actions restore too. | `AccessSuperpowerListColumn` in `Apps/Mac/Window/AccessSuperpowerColumns.swift` | static review | This is the same question as Action Atlas finding 4. A Lab-menu command would be one more case in `LabCommands`; it was held back to keep the shared hook to one case. The Full Keyboard Access pass decides. |
 | 3 | 8, 9 | At the default text size the audit reported 13 issues on the experiment page, 15 on the task page, and 16 on the receipt. Contrast "nearly passed" or failed on secondary text: section headers, the chart key, and sample notes. Dynamic Type was flagged "partially supported" on the chart's collection names, counts, "Most", and key, and 1 unnamed text was clipped. In the first run, the bordered Restore buttons' tinted titles and the bordered Open button failed contrast, so both are now prominent. In the second run the Restore buttons were not flagged, and the Open button's contrast "nearly passed". | iPhone task page | simulator audit | Secondary text follows the triage of the core audit findings above. The chart's text uses text styles and grows. At the largest size the audit flags none of it, as with Action Atlas finding 6. The large-text pass confirms. |
 | 4 | 6 | At the largest accessibility size with Increase Contrast, the audit reported 2 issues on the experiment page, 1 on the task page, and 2 on the receipt. Contrast failed on text that had scrolled under a translucent bar ("12 demo samples: …" under the tab bar). The capped pinned buttons were flagged as partially supporting Dynamic Type. The Open button is on screen and hittable, but its lower part sits under the pinned Read the Specification bar. | Experiment page, task page, receipt | simulator audit and screenshots | Content under bars and the capped pinned bar follow the core triage. For visual design and the host views' owner: decide whether an implemented experiment's page pins its Open button instead of Read the Specification. |
+
+## Typed Local Intelligence review (LAB-010-B)
+
+The [LAB-010](../experiments/LAB-010-typed-local-intelligence.md) screens were reviewed against the rules above with automated checks and by reading `Apps/Shared/Intelligence/`. No manual pass was run, and no iPhone screen was checked. The experiment has no rows in the [manual passes](#manual-passes) matrix yet. Its flows are: pick a note; draft with each of the three sources; review and edit; apply; open the receipt; Reset Demo.
+
+What the code already does for these rules:
+
+- Every draft's source is a `StatusDescriptor` badge, and the model's availability is one too (rule 1).
+- Each issue's icon is hidden from assistive technology. Its label starts "Must fix:" or "Check:", so the meaning never rests on red or orange (rule 1).
+- Each draft button has a hint, and the two non-model buttons say "Not a model".
+- Apply posts the receipt's `LabAnnouncement` (rule 4).
+
+**Automated results**
+
+| Check | Path | Result |
+|---|---|---|
+| `TypedIntelligenceViewTests` (Mac hosted tests, in `script/test.sh`) | hosted test, macOS 27.0 | passed. With Apple Intelligence faked off, the view reads the gate sentence, the model button is disabled, and the parser's draft is applied through accessibility presses alone. |
+| `TypedIntelligenceHostEvidenceTests` (Mac hosted tests) | hosted test, macOS 27.0, fake devices | passed: 64 checks across the 4 ways the model can be unavailable. In each, both non-model buttons carry the hint "Not a model", the draft's badge reads "Sample parser (not a model)", and the change is applied through accessibility presses. |
+| The model path through accessibility presses | accessibility API, a throwaway hosted harness that is not committed, macOS 27.0, live model | passed for both notes: "Draft with the On-Device Model", pressed through the accessibility press action, reached an enabled "Apply Change" |
+| iPhone screens, Xcode's accessibility audit | not run | The iPhone screens were not driven |
+
+**Findings.** These stay open until fixed or closed by the manual pass. Each names the rule it concerns.
+
+| # | Rule | Finding | Where | Found by | Triage |
+|---|---|---|---|---|---|
+| 1 | 4 | A finished draft posts no announcement, and neither does a failed one. The proposal appears below the draft buttons, and a failure shows as a problem row above the proposal. A VoiceOver user who pressed a draft button hears nothing. In the simulator a model draft took up to 29 seconds. | `IntelligenceWorkbench.draft(with:)` and `TypedIntelligenceView` in `Apps/Shared/Intelligence/` | static review | For the experiment's owner: when a draft reaches review, post an announcement naming its source and sample. When a draft fails, post its message. |
+| 2 | 2 | The Mac has no menu command for Typed Local Intelligence. ⌘1 to ⌘8 now go to other destinations, and LAB-010-A added none, to avoid clashing with parallel branches. The draft buttons and Apply have no menu command either, and Apply is not the default button. All of them are reachable from the sidebar or the catalog page's Open button, then with keyboard navigation or VoiceOver. | `LabCommands` in `Apps/Mac/`; `TypedIntelligenceView` | static review | This is the same question as Action Atlas finding 4. The Full Keyboard Access pass decides. For the host views' owner: consider a View-menu command, and making Apply the default action while a proposal can be applied. |
+| 3 | 6 | On iPhone, Apply Change is the last control of a long form, after the proposal, the checks, the evidence, and the diff. It is not pinned, so at large text sizes it will be off screen until the person scrolls. | `ProposalSections` in `TypedIntelligenceView.swift` | static review; not measured | Pin Apply in a `PinnedActionBar` on iPhone, as a receipt pins Undo. The large-text pass measures it. |
+| 4 | 5 | The Change rows are selectable text, and they change as the person edits the proposal. Access as a Superpower finding 1 saw selectable text on the Mac keep reporting its old value after a change. | `DiffRow` in `TypedIntelligenceView.swift` | static review; not observed here | Confirm in the Mac VoiceOver pass. If it reproduces, apply the same fix as that finding. |

@@ -1,0 +1,50 @@
+{
+  "check" : "Typed Local Intelligence showcase replayed twice from a clean SQLite store as the app-UI adapter: the sample parser's reviewed drafts of both notes, an undo, and Reset Demo; both replays share one fingerprint",
+  "date" : "2026-09-30T20:48:55Z",
+  "execution" : {
+    "path" : "fixture"
+  },
+  "inputs" : [
+    "script:typed-intelligence@sha256:db22381504e88d313d1c3fcaebdd9962f14ee8c08bc02f551b328091c657bd51",
+    "seed:typed-intelligence@sha256:d132b2dc787cea268736ac6a4ac4acc1f582b430bbb1a30f59dff2d02201041d"
+  ],
+  "limitations" : [
+    "Fixture path: the replay drives OperationService on original fixtures. It proves the domain contract on this build, not a device, a system surface, an entry point other than the runner's adapter, or a UI.",
+    "The on-device model: the replay carries the sample parser's deterministic drafts, never a model's. Model runs are recorded separately and are not replayable.",
+    "Drafting, validation, and review: the replay submits the approved changes as fixed operations. TypedIntelligenceQualificationTests in Packages/LabFeatures checks that the real flow drafts exactly these changes from the notes.",
+    "The model-tool adapter's reads and proposals: the runner reads and commits as the app UI.",
+    "Host views, the receipt inspector, and accessibility: the replay renders nothing.",
+    "Physical devices and the iOS, watchOS, and tvOS simulators: the replay runs in the package test process on the Mac."
+  ],
+  "outcome" : {
+    "detail" : "13 of 13 steps passed. Replay fingerprint sha256:cefb1ab4a25f22aee431ac15315124074c432914b50abe7cbdadac93878b7900. Adapter app-ui; store sqlite (schema 3, temporary file); timebase swift-continuous-clock.",
+    "result" : "passed"
+  },
+  "provenance" : {
+    "appVersion" : "unknown",
+    "buildNumber" : "unknown",
+    "buildProfile" : "unknown",
+    "minimumOS" : "unknown",
+    "sdkName" : "macosx27.0",
+    "sourceRevision" : "c2917d2",
+    "xcodeBuild" : "27A266a",
+    "xcodeVersion" : "27.0"
+  },
+  "schemaVersion" : 1,
+  "steps" : [
+    "approve-reset: The person confirms Reset Demo.",
+    "reset: Reset Demo creates the 12 original samples: 3 collections and 12 items in the demo namespace.",
+    "find-blue: Search for \"blue\", the word the lookup tool is given for \"the blue one\": the cobalt and the verdigris swatches, which the ambiguous note could both mean.",
+    "apply-cobalt: Apply the sample parser's draft of the ambiguous note, approved unedited: rename the cobalt swatch to the note's quoted title and add the note's text on a new line, at revision 1.",
+    "find-bleeds: Find the renamed sample by its new title.",
+    "undo-cobalt: Undo the change with the operation its receipt recorded.",
+    "find-after-undo: The rename and the added text are gone.",
+    "apply-kraft: Apply the sample parser's draft of the note with injected instructions, approved unedited: one added line on the kraft card, from the note's first paragraph only.",
+    "find-fray: Find the kraft card by the added line.",
+    "find-override: Nothing from the injected text reached a sample, archived or not.",
+    "approve-reset-again: The person confirms Reset Demo a second time.",
+    "reset-again: Reset Demo restores the kraft card. The cobalt swatch already has its seed title and note after the undo.",
+    "find-after-reset: The kraft card's added line is gone."
+  ],
+  "subject" : "LAB-010"
+}

@@ -1,0 +1,101 @@
+{
+  "format": "native-lab-demo-script",
+  "formatVersion": 1,
+  "id": "typed-intelligence",
+  "subject": "LAB-010",
+  "title": "Apply the sample parser's reviewed drafts of both notes, undo one, and reset the demo",
+  "dataTier": "public-fixture",
+  "provenance": "Original synthetic script written for this project's LAB-010 qualification replay and distributed under its MIT License. Its seed is a byte-for-byte copy of the app's demo seed, Fixtures/demo/seed.json. Its two edits are the sample parser's drafts of the original notes in Fixtures/intelligence/, unedited.",
+  "seed": "seed.json",
+  "untested": [
+    "The on-device model: the replay carries the sample parser's deterministic drafts, never a model's. Model runs are recorded separately and are not replayable.",
+    "Drafting, validation, and review: the replay submits the approved changes as fixed operations. TypedIntelligenceQualificationTests in Packages/LabFeatures checks that the real flow drafts exactly these changes from the notes.",
+    "The model-tool adapter's reads and proposals: the runner reads and commits as the app UI.",
+    "Host views, the receipt inspector, and accessibility: the replay renders nothing.",
+    "Physical devices and the iOS, watchOS, and tvOS simulators: the replay runs in the package test process on the Mac."
+  ],
+  "steps": [
+    {
+      "id": "approve-reset",
+      "approve": "reset",
+      "description": "The person confirms Reset Demo."
+    },
+    {
+      "id": "reset",
+      "request": "43492352-5D9E-40EF-948D-58AC05CFECB9",
+      "resetDemo": {},
+      "description": "Reset Demo creates the 12 original samples: 3 collections and 12 items in the demo namespace."
+    },
+    {
+      "id": "find-blue",
+      "find": {
+        "text": "blue",
+        "expect": ["9B97BF2F-4D0B-4197-9CA8-36489DF40455", "3A1711A8-E1DB-489E-8321-414266A8DF49"]
+      },
+      "description": "Search for \"blue\", the word the lookup tool is given for \"the blue one\": the cobalt and the verdigris swatches, which the ambiguous note could both mean."
+    },
+    {
+      "id": "apply-cobalt",
+      "request": "89A99571-AF9C-4B91-8C52-4088FA1DEEE7",
+      "updateItem": {
+        "id": "9B97BF2F-4D0B-4197-9CA8-36489DF40455",
+        "expected": 1,
+        "title": "Cobalt (bleeds)",
+        "note": "Deep cool blue. Pairs with the amber swatch.\nstudio, tues. the blue one bled through the vellum again and stayed tacky for hours. rename it so I stop grabbing it for washes, maybe \"cobalt (bleeds)\"? or was it the verdigris. keep the bit about the amber pairing."
+      },
+      "description": "Apply the sample parser's draft of the ambiguous note, approved unedited: rename the cobalt swatch to the note's quoted title and add the note's text on a new line, at revision 1."
+    },
+    {
+      "id": "find-bleeds",
+      "find": { "text": "bleeds", "expect": ["9B97BF2F-4D0B-4197-9CA8-36489DF40455"] },
+      "description": "Find the renamed sample by its new title."
+    },
+    {
+      "id": "undo-cobalt",
+      "request": "A016CB8D-E42E-49DC-9501-10ED06AA3C90",
+      "undo": "apply-cobalt",
+      "description": "Undo the change with the operation its receipt recorded."
+    },
+    {
+      "id": "find-after-undo",
+      "find": { "text": "bleeds", "expect": [] },
+      "description": "The rename and the added text are gone."
+    },
+    {
+      "id": "apply-kraft",
+      "request": "68DE3BCE-7CF0-4152-95F3-D401C237A527",
+      "updateItem": {
+        "id": "6E2CED9D-B946-4188-8417-2E85C6A7268C",
+        "expected": 1,
+        "note": "Brown and stiff. Takes pencil well.\nKraft card: corners fray after a week in the drawer. Still takes pencil well."
+      },
+      "description": "Apply the sample parser's draft of the note with injected instructions, approved unedited: one added line on the kraft card, from the note's first paragraph only."
+    },
+    {
+      "id": "find-fray",
+      "find": { "text": "fray", "expect": ["6E2CED9D-B946-4188-8417-2E85C6A7268C"] },
+      "description": "Find the kraft card by the added line."
+    },
+    {
+      "id": "find-override",
+      "find": { "text": "override", "includeArchived": true, "expect": [] },
+      "description": "Nothing from the injected text reached a sample, archived or not."
+    },
+    {
+      "id": "approve-reset-again",
+      "approve": "reset-again",
+      "description": "The person confirms Reset Demo a second time."
+    },
+    {
+      "id": "reset-again",
+      "request": "2E74449F-3DC1-4C8E-8FE7-4E83884FBE18",
+      "resetDemo": {},
+      "description": "Reset Demo restores the kraft card. The cobalt swatch already has its seed title and note after the undo."
+    },
+    {
+      "id": "find-after-reset",
+      "find": { "text": "fray", "expect": [] },
+      "description": "The kraft card's added line is gone."
+    }
+  ]
+}
