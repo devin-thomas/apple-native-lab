@@ -1,0 +1,52 @@
+{
+  "check" : "Share Ingress showcase interaction in the Mac host, from the intake to the receipt: the paste and file-picker fallback and the share extension's folder commit the same additions, each receipt naming its adapter",
+  "date" : "2026-09-30T20:59:16Z",
+  "execution" : {
+    "path" : "fixture"
+  },
+  "inputs" : [
+    "seed:app-bundle@sha256:d132b2dc787cea268736ac6a4ac4acc1f582b430bbb1a30f59dff2d02201041d",
+    "script:share-ingress@sha256:f5e2398d33ecf437fddc67734dccd5f75100327c566b19e79814db26975e83b7",
+    "intake:harbor-walk.txt@sha256:d93ff24e7447895e7688d18f44975d095b94ff6d5a72f6aeaa66cd800d244547",
+    "intake:gull-count.txt@sha256:519a31e50be11abd40d3d7d4fe24b45d1f56b91ca4c460acd03773db7106d44d",
+    "intake:harbor-sketch.png@sha256:17bff0bcc591edc7902f7febe162bce437dfed6fb8cdcd2c68ab17c12a1b2c6d",
+    "intake:tide-clip.mov@sha256:4e25ebdc06c326bab2d1a739af417e90538266c33d47ddc9d001c67ee5223d4d",
+    "link:https://example.org/tide-tables",
+    "hostile:malformed-utf8.txt@sha256:80b5562c06e70515421de913ec6d513df52b4d4ef2ac6015b846fcb18641c9bb"
+  ],
+  "limitations" : [
+    "Fixture path: hosted tests in the sandboxed Mac app on the development Mac, on fresh stores seeded from the bundled demo seed. It supports implemented at most.",
+    "No share sheet ran. The Mac build has no share extension; its side was played by IngressStation, the code the iOS extension runs, on a folder the host reads as it reads the App Group folder.",
+    "The paste and the file picker were driven through ShareInboxModel, not the Paste button, the pasteboard, or the open panel. The open panel is covered by a separate manual run.",
+    "Files, images, and movies stage and wait; this build cannot add them to a collection.",
+    "No physical iPhone or iPad and no iOS simulator ran in this check."
+  ],
+  "outcome" : {
+    "detail" : "All 37 comparisons matched. Both hostile items were refused by position and kept nothing. The fallback staged the note and the link as Paste and the text file as File picker; the share staged the link, the note, the image, and the movie as Share sheet, positions 1 to 4 of 4. In both runs the two Adds committed exactly the showcase's createItem operations under its request IDs, the receipts naming App UI for the fallback and Share extension for the extension's folder. Adding the same note again returned the first receipt, listed once. Reset Demo restored only the archived sample. Both stores hold the same 4 collections and 14 items, field for field; the two imports are at revision 1. Only the files still wait.",
+    "result" : "passed"
+  },
+  "provenance" : {
+    "appVersion" : "0.1.0",
+    "buildNumber" : "1",
+    "buildProfile" : "CoreLocal",
+    "minimumOS" : "26.0",
+    "sdkName" : "macosx27.0",
+    "sourceRevision" : "074eaaa",
+    "xcodeBuild" : "27A266a",
+    "xcodeVersion" : "27.0"
+  },
+  "schemaVersion" : 1,
+  "steps" : [
+    "xcodebuild -scheme LabMac-Core -only-testing:LabMacTests/ShareIngressHostEvidenceTests test",
+    "Each run on a fresh SQLite store in the app container, seeded by the host's first run (Reset Demo), with fresh inbox folders",
+    "Refusal: ill-formed UTF-8 text and a link with a password, in one paste (fallback run) or one share (extension run)",
+    "Fallback run: ShareInboxModel.paste of intake/harbor-walk.txt, then of the link, then importFiles of intake/gull-count.txt, each a second apart",
+    "Extension run: IngressStation on the share extension's folder receives one extension item holding the link, the note, intake/harbor-sketch.png, and intake/tide-clip.mov; the inbox reads that folder",
+    "create-collection: Field notes, with the showcase's collection ID, through LabLibrary.submit as New Collection… does",
+    "add-note, add-link: ShareInboxModel.add into Field notes, which issues the one-item grant and commits through LabLibrary.adoptImport",
+    "The same note again, then Add: expected to return the first receipt",
+    "Archive one demo sample, then Reset Demo from the app",
+    "Read both SQLite stores and compare"
+  ],
+  "subject" : "LAB-007"
+}

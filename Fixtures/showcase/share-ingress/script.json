@@ -1,0 +1,100 @@
+{
+  "format": "native-lab-demo-script",
+  "formatVersion": 1,
+  "id": "share-ingress",
+  "subject": "LAB-007",
+  "title": "Add a pasted note and a pasted link from the share inbox, then reset the demo",
+  "dataTier": "public-fixture",
+  "provenance": "Original synthetic script written for this project's LAB-007 qualification replay and distributed under its MIT License. Its seed is a byte-for-byte copy of the app's demo seed, Fixtures/demo/seed.json. Its two additions are what adding intake/harbor-walk.txt and the link https://example.org/tide-tables to the Field notes collection commits.",
+  "seed": "seed.json",
+  "untested": [
+    "The intake: the replay starts where the review ends. Pasting, choosing files, sharing, staging, and the inbox are exercised by ShareIngressShowcaseReplayTests in Packages/LabFeatures and by the Mac hosted tests.",
+    "The share-extension adapter: the runner is composed as the app UI, the adapter a pasted import is added as. The same additions from the share extension's folder commit as the share extension, and ShareIngressShowcaseReplayTests shows they reach the same state.",
+    "Images, movies, and chosen files: they stage and wait for review, but this build cannot add them to a collection, so they never reach the replay.",
+    "Host views and the receipt inspector: the replay renders nothing.",
+    "Physical devices and the iOS, watchOS, and tvOS simulators: the replay runs in the package test process on the Mac."
+  ],
+  "steps": [
+    {
+      "id": "approve-reset",
+      "approve": "reset",
+      "description": "The person confirms Reset Demo."
+    },
+    {
+      "id": "reset",
+      "request": "DE04B48F-4EE0-4D7C-A1AB-24FC2D53CA50",
+      "resetDemo": {},
+      "description": "Reset Demo creates the 12 original samples: 3 collections and 12 items in the demo namespace."
+    },
+    {
+      "id": "create-collection",
+      "request": "5A4151B1-B525-44EC-992D-91B3E2A66C63",
+      "createCollection": { "id": "D246FD2A-EFE5-4FC5-9E15-7D3D365C6A5B", "title": "Field notes" },
+      "description": "New Collection… on the review screen creates one of the person's own collections, Field notes, because a demo collection cannot take an import."
+    },
+    {
+      "id": "approve-add-note",
+      "approve": "add-note",
+      "description": "The person's Add on the pasted note: a grant for exactly one new item in Field notes."
+    },
+    {
+      "id": "add-note",
+      "request": "2F6CBC60-DA61-8B08-A044-7D854B4A01ED",
+      "createItem": {
+        "id": "DA70B1D5-DC5B-8106-93B1-C22AD3032F05",
+        "collection": "D246FD2A-EFE5-4FC5-9E15-7D3D365C6A5B",
+        "title": "Harbor walk",
+        "note": "Harbor walk\nBring the blue notebook."
+      },
+      "description": "Add the pasted note: its first line becomes the title and the whole text the note. The item and request IDs are the ones its content and the collection derive."
+    },
+    {
+      "id": "approve-add-link",
+      "approve": "add-link",
+      "description": "The person's Add on the pasted link: a grant for exactly one new item in Field notes."
+    },
+    {
+      "id": "add-link",
+      "request": "01E590F7-ED74-8854-B6FC-FF6CD0CCBFF8",
+      "createItem": {
+        "id": "DFE178D0-0518-8AD4-A1E8-772CCDA3DF75",
+        "collection": "D246FD2A-EFE5-4FC5-9E15-7D3D365C6A5B",
+        "title": "example.org",
+        "note": "https://example.org/tide-tables"
+      },
+      "description": "Add the pasted link: with no page title, its host becomes the title and the address the note. The link is stored as text and never opened."
+    },
+    {
+      "id": "find-harbor",
+      "find": { "text": "harbor", "expect": ["DA70B1D5-DC5B-8106-93B1-C22AD3032F05"] },
+      "description": "Find the added note by a word from it."
+    },
+    {
+      "id": "find-field-notes",
+      "find": {
+        "collection": "D246FD2A-EFE5-4FC5-9E15-7D3D365C6A5B",
+        "expect": ["DFE178D0-0518-8AD4-A1E8-772CCDA3DF75", "DA70B1D5-DC5B-8106-93B1-C22AD3032F05"]
+      },
+      "description": "List Field notes, ordered by title: the link, then the note."
+    },
+    {
+      "id": "approve-reset-again",
+      "approve": "reset-again",
+      "description": "The person confirms Reset Demo a second time."
+    },
+    {
+      "id": "reset-again",
+      "request": "9E8E0A27-569E-45D6-88EF-2FBEFF22A1F5",
+      "resetDemo": {},
+      "description": "Reset Demo finds the samples already as seeded and changes nothing: the imported items are the person's, not the demo's."
+    },
+    {
+      "id": "find-yours-after-reset",
+      "find": {
+        "collection": "D246FD2A-EFE5-4FC5-9E15-7D3D365C6A5B",
+        "expect": ["DFE178D0-0518-8AD4-A1E8-772CCDA3DF75", "DA70B1D5-DC5B-8106-93B1-C22AD3032F05"]
+      },
+      "description": "Both imported items are still in Field notes, unchanged."
+    }
+  ]
+}

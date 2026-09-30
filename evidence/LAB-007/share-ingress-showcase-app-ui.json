@@ -1,0 +1,49 @@
+{
+  "check" : "Share Ingress showcase replayed twice from a clean SQLite store as the app-UI adapter, the adapter a pasted import is added as; both replays share one fingerprint",
+  "date" : "2026-09-30T20:59:31Z",
+  "execution" : {
+    "path" : "fixture"
+  },
+  "inputs" : [
+    "script:share-ingress@sha256:f5e2398d33ecf437fddc67734dccd5f75100327c566b19e79814db26975e83b7",
+    "seed:share-ingress@sha256:d132b2dc787cea268736ac6a4ac4acc1f582b430bbb1a30f59dff2d02201041d"
+  ],
+  "limitations" : [
+    "Fixture path: the replay drives OperationService on original fixtures. It proves the domain contract on this build, not a device, a system surface, an entry point other than the runner's adapter, or a UI.",
+    "The intake: the replay starts where the review ends. Pasting, choosing files, sharing, staging, and the inbox are exercised by ShareIngressShowcaseReplayTests in Packages/LabFeatures and by the Mac hosted tests.",
+    "The share-extension adapter: the runner is composed as the app UI, the adapter a pasted import is added as. The same additions from the share extension's folder commit as the share extension, and ShareIngressShowcaseReplayTests shows they reach the same state.",
+    "Images, movies, and chosen files: they stage and wait for review, but this build cannot add them to a collection, so they never reach the replay.",
+    "Host views and the receipt inspector: the replay renders nothing.",
+    "Physical devices and the iOS, watchOS, and tvOS simulators: the replay runs in the package test process on the Mac."
+  ],
+  "outcome" : {
+    "detail" : "12 of 12 steps passed. Replay fingerprint sha256:4210abb27db8793669bfbc40a2bdd6fca71ffc9599aca1f98eedb280e9819c69. Adapter app-ui; store sqlite (schema 3, temporary file); timebase swift-continuous-clock.",
+    "result" : "passed"
+  },
+  "provenance" : {
+    "appVersion" : "unknown",
+    "buildNumber" : "unknown",
+    "buildProfile" : "unknown",
+    "minimumOS" : "unknown",
+    "sdkName" : "macosx27.0",
+    "sourceRevision" : "074eaaa",
+    "xcodeBuild" : "27A266a",
+    "xcodeVersion" : "27.0"
+  },
+  "schemaVersion" : 1,
+  "steps" : [
+    "approve-reset: The person confirms Reset Demo.",
+    "reset: Reset Demo creates the 12 original samples: 3 collections and 12 items in the demo namespace.",
+    "create-collection: New Collection… on the review screen creates one of the person's own collections, Field notes, because a demo collection cannot take an import.",
+    "approve-add-note: The person's Add on the pasted note: a grant for exactly one new item in Field notes.",
+    "add-note: Add the pasted note: its first line becomes the title and the whole text the note. The item and request IDs are the ones its content and the collection derive.",
+    "approve-add-link: The person's Add on the pasted link: a grant for exactly one new item in Field notes.",
+    "add-link: Add the pasted link: with no page title, its host becomes the title and the address the note. The link is stored as text and never opened.",
+    "find-harbor: Find the added note by a word from it.",
+    "find-field-notes: List Field notes, ordered by title: the link, then the note.",
+    "approve-reset-again: The person confirms Reset Demo a second time.",
+    "reset-again: Reset Demo finds the samples already as seeded and changes nothing: the imported items are the person's, not the demo's.",
+    "find-yours-after-reset: Both imported items are still in Field notes, unchanged."
+  ],
+  "subject" : "LAB-007"
+}

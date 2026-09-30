@@ -84,6 +84,40 @@ The same script is replayed two ways:
 
 The request IDs and the person's collection and item IDs were generated once at random for this fixture. Never change or reuse one.
 
+## `share-ingress/`
+
+The [LAB-007](../../experiments/LAB-007-share-ingress-station.md) fixture interaction, for the LAB-007-B qualification. Its `seed.json` is a byte-for-byte copy of the app's demo seed; `ShareIngressShowcaseTests` in `Packages/LabDemo` fails if the two differ.
+
+`intake/` holds what is pasted, chosen, and shared. Every file is original and synthetic, made for this project:
+
+| File | What it is |
+|---|---|
+| `harbor-walk.txt` | The note: "Harbor walk", then "Bring the blue notebook.", with no final line break |
+| `gull-count.txt` | A one-line text file for the file picker |
+| `harbor-sketch.png` | A 48 × 32 drawing of a pier over water, written pixel by pixel, with no metadata chunks |
+| `tide-clip.mov` | One second of a rising tide line, 64 × 48, 12 frames of H.264, no audio and no metadata items |
+
+The link is `https://example.org/tide-tables`, on a domain reserved for examples.
+
+A replay cannot stage or review, so `script.json` starts where the review ends:
+
+| Step | What it does |
+|---|---|
+| `approve-reset`, `reset` | The person confirms Reset Demo, which creates the 3 collections and 12 items of the seed. |
+| `create-collection` | New Collection… on the review screen creates Field notes, one of the person's own collections. A demo collection cannot take an import. |
+| `approve-add-note`, `add-note` | The person's Add on the note: a grant for exactly one new item in Field notes, then the item. Its title is the note's first line, and its note the whole text. |
+| `approve-add-link`, `add-link` | The same for the link: with no page title, its title is the host, `example.org`, and its note the address. |
+| `find-harbor`, `find-field-notes` | Find the note by a word from it, and list Field notes by title. |
+| `approve-reset-again`, `reset-again`, `find-yours-after-reset` | A second Reset Demo finds the demo as seeded, and both imports are still in Field notes, unchanged. |
+
+The two additions' item and request IDs are not chosen: `ImportAdopter` derives them from the content's digest and the collection's ID. They change if a byte of `harbor-walk.txt`, the link, or the collection ID changes, and the tests below fail until the script is updated. The other request IDs and the collection ID were generated once at random for this fixture. Never change or reuse one.
+
+The interaction is run three ways:
+
+- by `Packages/LabDemo` as evidence, from Reset Demo, composed as the app-UI adapter, the adapter a pasted import is added as;
+- from the intake in `ShareIngressShowcaseReplayTests` (`Packages/LabFeatures`): the note and the link are pasted and `gull-count.txt` is chosen, and in a second clean lab the link, the note, the image, and the movie arrive in one share through the share extension's folder. Both commit exactly the script's additions and end in the same state;
+- in the Mac app by `ShareIngressHostEvidenceTests`, through the inbox's own model, on SQLite.
+
 ## Script format
 
 `script.json` (`format: "native-lab-demo-script"`, `formatVersion: 1`) names its seed, a file in the same folder in the demo seed format that `Fixtures/demo/seed.json` uses. `DemoScript(folder:)` loads both:

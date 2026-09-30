@@ -61,6 +61,8 @@ These support the manual passes and never replace them. The last run is in the C
 | Access as a Superpower qualification (LAB-035-B) | `AccessSuperpowerQualificationHostTests` and `AccessSuperpowerHostEvidenceTests` in `script/test.sh`; an accessibility-API client against the running Mac app from another process, with no key presses; the iOS Simulator harness again | The whole task through the accessibility tree alone. Five ways to finish, each on a fresh store, end in the same receipt, announcement, and state. Archived and active squares differ without color. Cancellation, a stale chart, a second press, and Reset Practice beside imported data. From another process, the bars' words and actions, the rotor, the `AXAudiograph` data, and the Restore Sample button's Voice Control names | VoiceOver speech, Audio Graph playback, Voice Control recognition, Full Keyboard Access, the Mac audit |
 | Access as a Superpower on iPhone (LAB-035) | A UI-test harness in a throwaway copy, iOS Simulator, at the default settings and at the largest accessibility text size with Increase Contrast | The journey by accessibility label, from the catalog page's Open button through practice data, a Restore button, the result, the receipt, and its pinned Undo. Each bar's label and value. Xcode's accessibility audit results per screen | A physical iPhone, VoiceOver, Voice Control, the custom actions and rotor on iOS |
 | Action Atlas on iPhone (LAB-001) | A UI-test harness in a throwaway copy, iOS Simulator, at the default and largest accessibility text sizes | The Action Atlas journey works by accessibility label, from the Actions tab to a receipt's pinned Undo. Xcode's accessibility audit results are recorded per screen, and whether each form's action is on screen at the largest size | A physical iPhone, VoiceOver, Voice Control |
+| Share Ingress through the accessibility API (LAB-007) | `ShareIngressAccessibilityTests` in `script/test.sh` | Paste and Choose Files… are named buttons. With the file entitlement, Choose Files… is enabled and says what it does; without it, it stays in place, disabled, with a hint that names the way round. Each waiting import is one element that reads its content, kind, and origin with commas, and a file says it can't be added yet. An intake's result is one element: the summary, then each refusal by position. The review screen reads its origin, keeps Add disabled until the person has a collection, and Add, pressed through the accessibility press action, commits as the app UI and hands over its receipt. | VoiceOver speech, Voice Control, Full Keyboard Access, or the system settings |
+| Share Ingress on iPhone and in the running Mac app (LAB-007) | A UI-test harness in a throwaway copy on an iPhone 17 Pro simulator (iOS 27.0), and the accessibility API against a Debug Mac build under a separate bundle prefix | iPhone: Paste, the review screen, New Collection…, Add, and the receipt by accessibility label; Choose Files… through the document picker; a Photos share into the extension. Xcode's accessibility audit results at the default text size. Mac: View › Share Inbox, Choose Files…, and the open panel, by accessibility element | A physical iPhone, VoiceOver, Voice Control, large text |
 
 ## Manual passes
 
@@ -188,6 +190,37 @@ What to check in the Access as a Superpower flows, beyond the core list:
 - **Largest text size (iPhone).** Each bar puts its count under its name, the Open button is on screen without scrolling, and every Restore button can be reached.
 - **Grayscale and Differentiate Without Color.** Filled squares against dashed outlines, the counts, and the word "Most" carry the answer without color.
 
+| ID | Experiment | Flow | Done when |
+|---|---|---|---|
+| I1 | [LAB-007](../experiments/LAB-007-share-ingress-station.md) Share Ingress Station | Open the inbox (Mac: sidebar or ⌘6; iPhone: Import tab) and read it | The intake buttons, the limits, each waiting import (content, kind, origin), and the share sheet status are read |
+| I2 | LAB-007 | Paste a note, open it, create a collection, and Add | The intake's summary is heard, the review reads content then origin, Add says what it does, and the receipt is heard or focused |
+| I3 | LAB-007 | Choose Files… and pick two files | The picker is reachable, and each file reads as File picker with its position and "Can't be added in this version" |
+| I4 | LAB-007 | Share an image from another app to Native Lab (iPhone, SystemSurfaces build) | The extension's summary and each item's line are read, and Done is reachable |
+| I5 | LAB-007 | Paste content that is refused, then remove a waiting import | Each refusal is read by position, never by content; Remove asks first, and its result is heard |
+
+| Pass | Device | I1 | I2 | I3 | I4 | I5 |
+|---|---|---|---|---|---|---|
+| VoiceOver | Mac | not-run | not-run | not-run | not applicable | not-run |
+| VoiceOver | iPhone | not-run | not-run | not-run | not-run | not-run |
+| Voice Control | Mac | not-run | not-run | not-run | not applicable | not-run |
+| Voice Control | iPhone | not-run | not-run | not-run | not-run | not-run |
+| Full Keyboard Access | Mac | not-run | not-run | not-run | not applicable | not-run |
+| Full Keyboard Access (hardware keyboard) | iPhone | not-run | not-run | not-run | not-run | not-run |
+| Largest accessibility text size | iPhone | not-run | not-run | not-run | not-run | not-run |
+| Increase Contrast | Mac, iPhone | not-run | not-run | not-run | not-run | not-run |
+| Reduce Motion | Mac, iPhone | not-run | not-run | not-run | not-run | not-run |
+| Reduce Transparency | Mac, iPhone | not-run | not-run | not-run | not-run | not-run |
+| Differentiate Without Color, grayscale | Mac, iPhone | not-run | not-run | not-run | not-run | not-run |
+
+The Mac has no share extension, so I4 is not applicable there.
+
+What to check in the Share Ingress flows, beyond the core list:
+
+- **VoiceOver.** After Paste, listen for the intake's summary; after Add, for the receipt's announcement. A refusal must name its position ("Item 2: …") and never read the refused content. On the Mac, confirm where focus goes when the receipt opens in the inspector.
+- **Voice Control.** "Tap Paste", "Tap Choose Files", "Tap Add to Collection", and "Tap Remove from Inbox" work. In the share extension, "Tap Done" works.
+- **Full Keyboard Access (Mac).** ⌘V pastes into the inbox. Record how Choose Files…, Add to Collection, and Remove from Inbox are reached from the keyboard (finding 1 below).
+- **Largest text size (iPhone).** Record whether Add to Collection is on screen without scrolling (finding 2 below), and whether any row's origin line truncates.
+
 ## Known gaps
 
 - **Mac announcements are posted but not yet heard.** Since the integration of CORE-010, `LabAnnouncement.post()` uses AppKit's `announcementRequested` notification on the Mac (the product policy allows AppKit for that). No person has yet confirmed that VoiceOver speaks them; that stays a manual row.
@@ -314,3 +347,24 @@ LAB-035-B qualified the experiment with automated checks and by reading the code
 |---|---|---|---|---|---|
 | 1 | 9 | Each Audio Graph data point carries a label that repeats its value. Read from the running Mac app, the points' descriptions are "2 of 4 archived, Pigment swatches, 2 archived samples", and so on: the point's label, its category, then the axis's reading of its value. | `ChartSemantics` points in `Packages/LabFeatures/Sources/AccessSuperpower/`, and `Fixtures/access/archive-chart.json` | accessibility API, running Mac app | For the Access as a Superpower module (LAB-035): the Audio Graph pass records what VoiceOver says for a point. If it repeats the count, drop the point label or make it add only what the value doesn't, such as "of 4". The fixture and its tests change with it. |
 | 2 | 1 | On the Mac, the task's status badge has no role: it reads as `AXUnknown` with its label, such as "Task: To Do", like the chart's bars. | `StatusBadge` in `Apps/Shared/Components/` | accessibility API, running Mac app | For the shared components: the Mac VoiceOver pass records what is spoken for it. If VoiceOver says nothing about what kind of element it is, consider giving the badge a static-text role there. |
+
+## Share Ingress review (LAB-007-B)
+
+[LAB-007](../experiments/LAB-007-share-ingress-station.md) stages what is pasted, chosen, or shared into an inbox, where each import waits until the person reviews it, chooses a collection, and presses Add. The review below was made with automated checks, two driven runs, and by reading the code. No manual pass was run: every row in the [experiment flows](#manual-passes) matrix for I1 to I5 is `not-run`.
+
+**Automated results**
+
+| Check | Path | Result |
+|---|---|---|
+| `ShareIngressAccessibilityTests` (Mac hosted tests, in `script/test.sh`) | hosted test, macOS 27.0 | passed: 4 tests, 5 cases, covering the intake controls with and without the file picker, the rows, an intake's result, and the review screen from New Collection… to Add |
+| iPhone journey by accessibility label | simulator, iPhone 17 Pro, iOS 27.0, created for this ticket and deleted afterwards; a UI-test harness in a throwaway copy that is not committed | passed: Import tab, Paste, the pasted row, its review screen, New Collection…, Add to Collection, the receipt; Choose Files… through the document picker; a Photos share into the extension and Done; the shared movie's review screen |
+| Xcode's accessibility audit, default text size | same harness | issues recorded as finding 3 |
+| Mac Share Inbox by accessibility element | a Debug build at 074eaaa under a separate bundle prefix, driven by process ID | passed: View › Share Inbox, Choose Files…, the open panel, the imports' rows, and a movie's review screen were reached and read |
+
+**Findings.** These stay open until fixed or closed by the manual pass. Each names the rule it concerns.
+
+| # | Rule | Finding | Where | Found by | Triage |
+|---|---|---|---|---|---|
+| 1 | 2 | On the Mac, Choose Files…, Add to Collection, and Remove from Inbox have no menu command or shortcut. Paste has Edit › Paste (⌘V). | `LabCommands` in `Apps/Mac/LabCommands.swift`; `ShareInboxListColumn` and `InboxEntryDetail` | static review | For the host views' owner: a command for Choose Files… (a File-menu item) and for Add and Remove on the selected import, or the Full Keyboard Access pass decides that the buttons are enough. |
+| 2 | 6 | On iPhone, Add to Collection sits in the review form rather than in a pinned bar. At the default size it was on screen without scrolling; at the largest size it will scroll. | `InboxEntryDetail` in `Apps/Shared/ShareInbox/ShareInboxViews.swift` | static review and the simulator harness | Pin Add in a `PinnedActionBar` on iPhone, as a receipt pins Undo. |
+| 3 | 6, 8 | At the default text size the audit reported 13 issues on the Import tab, 13 on a text import's review screen, and 10 on a file import's review screen. Dynamic Type was flagged "partially unsupported" on section footers, the share sheet status, and form rows. Contrast "nearly passed" on section headers and footers, and failed on the review screen's footer ("Adding creates one item…"). The Choose Files… label was flagged as clipped, though it read whole in the screenshot. | iPhone Import tab and review screens | simulator audit | Secondary text follows the core audit triage above. Confirm the clipping and the footers in the large-text and Increase Contrast passes. |
