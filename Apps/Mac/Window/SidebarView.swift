@@ -26,6 +26,9 @@ struct SidebarView: View {
                 Label("Typed Local Intelligence", systemImage: "text.badge.checkmark")
                     .tag(SidebarDestination.typedIntelligence)
                     .accessibilityHint("Turn a note into a proposal you review before anything changes")
+                Label(AccessSuperpowerExperiment.title, systemImage: AccessSuperpowerExperiment.symbol)
+                    .tag(SidebarDestination.accessSuperpower)
+                    .accessibilityHint("One task, finished by sight, VoiceOver, keyboard, or Audio Graph")
             }
             Section("Experiments") {
                 row(.all, symbol: "square.grid.2x2")

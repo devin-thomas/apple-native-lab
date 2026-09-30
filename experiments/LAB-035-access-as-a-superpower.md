@@ -1,7 +1,7 @@
 ---
 id: "LAB-035"
 title: "Access as a Superpower"
-state: "specified"
+state: "implemented"
 milestone: "M1"
 category: "Accessibility"
 depends_on: ["LAB-001"]
@@ -55,6 +55,22 @@ A fixture replay is labeled as a replay. It can prove the domain/UI contract but
 ## Build ownership
 
 Proposed module: `Packages/LabFeatures/access-as-a-superpower/`, with native adapters only in supported hosts/extensions. Shared operations and imported document structures belong in the domain/store packages rather than a view. Record any narrower module split during implementation.
+
+Implemented split (LAB-035-A):
+
+- `Packages/LabFeatures/Sources/AccessSuperpower/`: the task (`AccessibleTask`, its outcome and status), the per-collection tally, the chart semantics and the `AXChartDescriptor` built from them, the practice set, and the four `InteractionAlternative` descriptions. It depends on LabDomain only and never holds the store.
+- `Apps/Shared/AccessSuperpower/`: the session every path calls, the chart view, the semantic list, and the iPhone page, pushed from this experiment's catalog page. The Mac shows the same parts in its window (`Apps/Mac/Window/AccessSuperpowerColumns.swift`), reached from the sidebar, View › Access as a Superpower (⌘5), and the catalog page.
+- `Fixtures/access/archive-chart.json`: the practice set and the exact reading of the chart it produces.
+
+## Implementation notes (LAB-035-A)
+
+Observed with Xcode 27.0 (27A266a) and the 27.0 SDKs. These are compile, Mac, and simulator facts, not device proof.
+
+- The task is "Which demo collection has the most archived samples? Restore one sample from that collection." Every path ends in `restoreItem` through the operation service as the app UI, with a receipt that offers an undo. A restore from another collection still commits, and the result says the task is not done.
+- `AXChartDescriptor` and its axis, series, and point types are declared macOS 12.0, iOS 15.0, tvOS 15.0, and watchOS 8.0 in the installed SDK, so they exist above the 26.0 floor. SwiftUI's `accessibilityChartDescriptor(_:)` takes an `AXChartDescriptorRepresentable`. SwiftUI keeps the first descriptor and calls `updateChartDescriptor(_:)` afterwards, so the update rewrites every field. `AXDataPointValue` exposes `number` and `category` to Swift only through their refined names.
+- On the Mac the running app exposes the descriptor to assistive clients as the `AXAudiograph` attribute of the chart's group: its title, summary, both axes, and the series values.
+- On macOS 27 SwiftUI lists an element's custom actions in reverse declaration order, so the Mac declares them reversed to read in title order. A chart bar with no role of its own reads as `AXUnknown` with its value as the value description, as a Swift Charts bar does.
+- A selectable `Text` on the Mac keeps its first value for assistive technology after the text changes, so the chart summary is not selectable.
 
 ## Delivery
 

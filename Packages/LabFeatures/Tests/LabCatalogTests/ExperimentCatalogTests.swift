@@ -29,11 +29,12 @@ import Testing
     @Test func nothingClaimsToRunWithoutEvidence() {
         // Update this expectation only when a spec's state changes with evidence behind it.
         // LAB-001 is implemented: its fallback ran on the Mac and in the iOS simulator (LAB-001-A).
-        // LAB-010 is implemented: its model path ran on the development Mac and its fallback on the
-        // Mac and in the iOS simulator (LAB-010-A).
-        #expect(catalog.experiments.filter { $0.state != .specified }.map(\.id) == ["LAB-001", "LAB-010"])
+        // Implemented: LAB-001 (Mac and simulator; in-app path on a physical iPhone), LAB-010 (model on the
+        // development Mac and simulator, fallback on both), LAB-035 (four paths on the Mac and simulator).
+        #expect(catalog.experiments.filter { $0.state != .specified }.map(\.id) == ["LAB-001", "LAB-010", "LAB-035"])
         #expect(catalog.experiments.first { $0.id == "LAB-001" }?.state == .implemented)
         #expect(catalog.experiments.first { $0.id == "LAB-010" }?.state == .implemented)
+        #expect(catalog.experiments.first { $0.id == "LAB-035" }?.state == .implemented)
         #expect(catalog.progress(for: .m1) == (live: 2, total: 6))
     }
 

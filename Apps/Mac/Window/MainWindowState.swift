@@ -12,6 +12,8 @@ enum SidebarDestination: Hashable {
     case actionAtlas
     /// LAB-010: typed proposals from a note, reviewed before anything changes.
     case typedIntelligence
+    /// LAB-035: one task, finished by sight, VoiceOver, keyboard, or Audio Graph.
+    case accessSuperpower
     case catalog(CatalogScope)
 
     var title: String {
@@ -19,6 +21,7 @@ enum SidebarDestination: Hashable {
         case .collection: "Lab Collection"
         case .actionAtlas: "Action Atlas"
         case .typedIntelligence: "Typed Local Intelligence"
+        case .accessSuperpower: AccessSuperpowerExperiment.title
         case .catalog(let scope): scope.title
         }
     }
@@ -29,6 +32,7 @@ enum SidebarDestination: Hashable {
         case .collection: "collection"
         case .actionAtlas: "action-atlas"
         case .typedIntelligence: "typed-intelligence"
+        case .accessSuperpower: "access-superpower"
         case .catalog(.all): "all"
         case .catalog(.milestone(let milestone)): "milestone:\(milestone.rawValue)"
         case .catalog(.category(let category)): "category:\(category)"
@@ -42,6 +46,7 @@ enum SidebarDestination: Hashable {
         case ("collection", nil): self = .collection
         case ("action-atlas", nil): self = .actionAtlas
         case ("typed-intelligence", nil): self = .typedIntelligence
+        case ("access-superpower", nil): self = .accessSuperpower
         case ("all", nil): self = .catalog(.all)
         case ("milestone", let raw?): guard let milestone = Milestone(rawValue: raw) else { return nil }
             self = .catalog(.milestone(milestone))
@@ -65,6 +70,8 @@ final class MainWindowState {
     var atlasAction: AtlasAction?
     /// The Typed Local Intelligence note whose workbench the detail column shows.
     var intelligenceNote: IntelligenceFixture?
+    /// Access as a Superpower's selection and result in this window.
+    let access = AccessTaskSession()
     var searchText = ""
     /// Incremented to ask the window to focus its search field.
     var searchRequests = 0

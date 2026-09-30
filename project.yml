@@ -75,6 +75,9 @@ targets:
       # LAB-010 Typed Local Intelligence: typed proposals, the sample parser, and the Foundation Models extractor.
       - package: LabFeatures
         product: TypedIntelligence
+      # LAB-035 Access as a Superpower: the task, its chart semantics, and the Audio Graph descriptor.
+      - package: LabFeatures
+        product: AccessSuperpower
     info:
       path: Apps/Mac/Info.plist
       properties:
@@ -138,6 +141,9 @@ targets:
       # LAB-010 Typed Local Intelligence: typed proposals, the sample parser, and the Foundation Models extractor.
       - package: LabFeatures
         product: TypedIntelligence
+      # LAB-035 Access as a Superpower: the task, its chart semantics, and the Audio Graph descriptor.
+      - package: LabFeatures
+        product: AccessSuperpower
     info:
       path: Apps/Phone/Info.plist
       properties:

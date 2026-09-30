@@ -645,7 +645,7 @@
       "title": "Access as a Superpower",
       "category": "Accessibility",
       "milestone": "M1",
-      "state": "specified",
+      "state": "implemented",
       "dependsOn": [
         "LAB-001"
       ],

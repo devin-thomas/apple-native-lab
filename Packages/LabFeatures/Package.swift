@@ -8,6 +8,7 @@ let package = Package(
         .library(name: "LabCatalog", targets: ["LabCatalog"]),
         .library(name: "ActionAtlas", targets: ["ActionAtlas"]),
         .library(name: "TypedIntelligence", targets: ["TypedIntelligence"]),
+        .library(name: "AccessSuperpower", targets: ["AccessSuperpower"]),
     ],
     dependencies: [
         .package(path: "../LabSupport"),
@@ -47,6 +48,17 @@ let package = Package(
                 .product(name: "LabDomain", package: "LabDomain"),
                 .product(name: "LabSupport", package: "LabSupport"),
             ]
+        ),
+        // LAB-035 Access as a Superpower: the task, its chart semantics and Audio Graph descriptor,
+        // and the practice data, over LabDomain values. The hosts draw it and commit through the
+        // operation service.
+        .target(
+            name: "AccessSuperpower",
+            dependencies: [.product(name: "LabDomain", package: "LabDomain")]
+        ),
+        .testTarget(
+            name: "AccessSuperpowerTests",
+            dependencies: ["AccessSuperpower", .product(name: "LabDomain", package: "LabDomain")]
         ),
     ]
 )

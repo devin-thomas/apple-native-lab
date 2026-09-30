@@ -39,6 +39,14 @@ struct LabAnnouncement: Hashable, Sendable {
         priority = .high
     }
 
+    /// A sentence of the caller's own, such as the result of several changes that each left a
+    /// receipt, or a receipt's sentence followed by what it meant for a task. The same words must
+    /// be visible on screen.
+    init(text: String, priority: Priority = .normal) {
+        self.text = text
+        self.priority = priority
+    }
+
     /// The announcement for an action's result: its receipt, or the failure the library recorded.
     /// `nil` when there is neither, for example when the action was refused because another was
     /// still running.

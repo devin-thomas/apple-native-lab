@@ -1,0 +1,78 @@
+{
+  "format": "native-lab-access-chart",
+  "formatVersion": 1,
+  "provenance": "Original synthetic data written for this project and distributed under its MIT License. Built only from the lab's own demo seed, demo/seed.json; no external data.",
+  "seed": "demo/seed.json",
+  "practice": [
+    { "id": "AF451890-CA80-4DE9-B18B-4007066C9177", "title": "Quartz point", "collection": "Mineral specimens" },
+    { "id": "D279FB0E-642E-463A-B3DA-299442A1C7CB", "title": "Banded agate slice", "collection": "Mineral specimens" },
+    { "id": "C6468C0B-4BF6-48E8-AE5D-F5FC7A041097", "title": "Obsidian flake", "collection": "Mineral specimens" },
+    { "id": "9B97BF2F-4D0B-4197-9CA8-36489DF40455", "title": "Cobalt swatch", "collection": "Pigment swatches" },
+    { "id": "C8E1904C-E8DC-40A0-93D3-53F6C0FFF95D", "title": "Ochre swatch", "collection": "Pigment swatches" },
+    { "id": "6933AC83-9E61-4264-8EB8-0535B3C5E0F8", "title": "Tracing vellum", "collection": "Paper stock" }
+  ],
+  "chart": {
+    "title": "Archived samples by collection",
+    "summary": "Mineral specimens has the most archived samples: 3 of 4. By collection: Pigment swatches 2 of 4, Mineral specimens 3 of 4, Paper stock 1 of 4.",
+    "categoryAxis": {
+      "title": "Collection",
+      "categories": ["Pigment swatches", "Mineral specimens", "Paper stock"]
+    },
+    "valueAxis": {
+      "title": "Archived samples",
+      "lowerBound": 0,
+      "upperBound": 4,
+      "gridlines": [0, 1, 2, 3, 4]
+    },
+    "series": [
+      {
+        "name": "Archived samples",
+        "points": [
+          { "category": "Pigment swatches", "value": 2, "label": "2 of 4 archived" },
+          { "category": "Mineral specimens", "value": 3, "label": "3 of 4 archived" },
+          { "category": "Paper stock", "value": 1, "label": "1 of 4 archived" }
+        ]
+      }
+    ]
+  },
+  "spoken": {
+    "valueAxis": {
+      "0": "0 archived samples",
+      "1": "1 archived sample",
+      "2": "2 archived samples",
+      "3": "3 archived samples",
+      "4": "4 archived samples"
+    },
+    "bars": [
+      {
+        "label": "Pigment swatches",
+        "value": "2 of 4 samples archived",
+        "actions": ["Restore Cobalt swatch", "Restore Ochre swatch"]
+      },
+      {
+        "label": "Mineral specimens",
+        "value": "3 of 4 samples archived, the most",
+        "actions": ["Restore Banded agate slice", "Restore Obsidian flake", "Restore Quartz point"]
+      },
+      {
+        "label": "Paper stock",
+        "value": "1 of 4 samples archived",
+        "actions": ["Restore Tracing vellum"]
+      }
+    ]
+  },
+  "task": {
+    "question": "Which demo collection has the most archived samples?",
+    "answer": ["Mineral specimens"],
+    "finish": {
+      "restore": "AF451890-CA80-4DE9-B18B-4007066C9177",
+      "outcome": "Task done: Mineral specimens had the most archived samples (3).",
+      "summaryAfter": "Pigment swatches and Mineral specimens tie for the most archived samples, 2 each. By collection: Pigment swatches 2 of 4, Mineral specimens 2 of 4, Paper stock 1 of 4."
+    },
+    "miss": {
+      "restore": "6933AC83-9E61-4264-8EB8-0535B3C5E0F8",
+      "outcome": "Task not done: Paper stock had 1 archived sample, and Mineral specimens had the most (3).",
+      "summaryAfter": "Mineral specimens has the most archived samples: 3 of 4. By collection: Pigment swatches 2 of 4, Mineral specimens 3 of 4, Paper stock 0 of 4."
+    }
+  }
+}

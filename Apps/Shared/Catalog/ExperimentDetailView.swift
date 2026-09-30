@@ -32,6 +32,7 @@ struct ExperimentDetailView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 24) {
                 header
+                AccessSuperpowerLaunch(experiment: experiment)
                 Text(experiment.moment)
                     .font(.title3)
                     .fixedSize(horizontal: false, vertical: true)

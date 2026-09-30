@@ -58,7 +58,7 @@ struct MainWindow: View {
             window.inspect(record)
         }
         .focusedSceneValue(\.mainWindow, window)
-        // Lets an experiment's catalog page open its sidebar destination (LAB-010).
+        // Views in the window, such as an experiment page's Open button, change its destination (LAB-010, LAB-035).
         .environment(window)
         .onChange(of: window.searchRequests) { focusedPane = .search }
         .onChange(of: window.destination) { old, new in
@@ -83,6 +83,8 @@ struct MainWindow: View {
             ActionAtlasListColumn(window: window)
         case .typedIntelligence:
             TypedIntelligenceListColumn(window: window)
+        case .accessSuperpower:
+            AccessSuperpowerListColumn(window: window, session: window.access)
         case .catalog(let scope):
             if let registry = model.registry {
                 CatalogListColumn(registry: registry, scope: scope, window: window)
@@ -103,6 +105,8 @@ struct MainWindow: View {
             ActionAtlasDetailColumn(window: window)
         case .typedIntelligence:
             TypedIntelligenceDetailColumn(window: window)
+        case .accessSuperpower:
+            AccessSuperpowerDetailColumn(window: window, session: window.access)
         case .catalog:
             if let registry = model.registry {
                 CatalogDetailColumn(registry: registry, experimentID: window.experimentID)
@@ -124,6 +128,7 @@ struct MainWindow: View {
         case .collection: "Search samples"
         case .actionAtlas: "Search actions"
         case .typedIntelligence: "Search notes"
+        case .accessSuperpower: "Search archived samples"
         default: "Search experiments"
         }
     }
