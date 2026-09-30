@@ -360,18 +360,53 @@ final class AccessHostedView {
         return true
     }
 
+    /// A key the list receives from the keyboard.
+    enum ListKey {
+        case down
+        case up
+        case enter
+
+        var characters: String {
+            switch self {
+            case .down: String(Character(UnicodeScalar(NSDownArrowFunctionKey)!))
+            case .up: String(Character(UnicodeScalar(NSUpArrowFunctionKey)!))
+            case .enter: "\r"
+            }
+        }
+
+        var keyCode: UInt16 {
+            switch self {
+            case .down: 125
+            case .up: 126
+            case .enter: 36
+            }
+        }
+
+        var modifierFlags: NSEvent.ModifierFlags {
+            self == .enter ? [] : [.numericPad, .function]
+        }
+    }
+
     /// Gives the list keyboard focus and sends it Return, as AppKit delivers a key press.
     func pressReturnInList() -> Bool {
+        pressKeysInList([.enter])
+    }
+
+    /// Gives the list keyboard focus and sends it each key, down and up, as AppKit delivers a key
+    /// press. No selection is set and no button is pressed.
+    func pressKeysInList(_ keys: [ListKey]) -> Bool {
         guard let list = Self.first(NSOutlineView.self, in: host) ?? Self.first(NSTableView.self, in: host) else { return false }
         window.makeKey()
-        guard window.makeFirstResponder(list) else { return false }
-        for type in [NSEvent.EventType.keyDown, .keyUp] {
-            guard let event = NSEvent.keyEvent(
-                with: type, location: .zero, modifierFlags: [], timestamp: ProcessInfo.processInfo.systemUptime,
-                windowNumber: window.windowNumber, context: nil, characters: "\r", charactersIgnoringModifiers: "\r",
-                isARepeat: false, keyCode: 36
-            ) else { return false }
-            window.sendEvent(event)
+        guard window.firstResponder === list || window.makeFirstResponder(list) else { return false }
+        for key in keys {
+            for type in [NSEvent.EventType.keyDown, .keyUp] {
+                guard let event = NSEvent.keyEvent(
+                    with: type, location: .zero, modifierFlags: key.modifierFlags, timestamp: ProcessInfo.processInfo.systemUptime,
+                    windowNumber: window.windowNumber, context: nil, characters: key.characters,
+                    charactersIgnoringModifiers: key.characters, isARepeat: false, keyCode: key.keyCode
+                ) else { return false }
+                window.sendEvent(event)
+            }
         }
         return true
     }

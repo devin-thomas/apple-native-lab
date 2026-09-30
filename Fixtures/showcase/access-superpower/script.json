@@ -1,0 +1,313 @@
+{
+  "format": "native-lab-demo-script",
+  "formatVersion": 1,
+  "id": "access-superpower",
+  "subject": "LAB-035",
+  "title": "Set up practice, find the collection with the most archived samples, restore one, undo, miss, and reset practice",
+  "dataTier": "public-fixture",
+  "provenance": "Original synthetic script written for this project's LAB-035 qualification replay and distributed under its MIT License. Its seed is a byte-for-byte copy of the app's demo seed, Fixtures/demo/seed.json, and its practice samples are the six that Fixtures/access/archive-chart.json lists.",
+  "seed": "seed.json",
+  "untested": [
+    "The chart, VoiceOver, Voice Control, Full Keyboard Access, and the Audio Graph: the replay submits the task's operations to OperationService as the app UI and renders nothing, so it proves the task's data contract, not any way of reaching it.",
+    "The AccessSuperpower module's choices: the replay states each operation in full. AccessSuperpowerShowcaseReplayTests in Packages/LabFeatures checks that the module builds exactly these operations and judges the task as the step descriptions say.",
+    "Imported user data: the person's collection and item here are created by operations, not adopted from staging.",
+    "Physical devices and the iOS, watchOS, and tvOS simulators: the replay runs in the package test process on the Mac."
+  ],
+  "steps": [
+    {
+      "id": "approve-reset",
+      "approve": "reset",
+      "description": "The person confirms Reset Demo."
+    },
+    {
+      "id": "reset",
+      "request": "78DCA4C8-F81D-46D1-A91A-063397BCCE8C",
+      "resetDemo": {},
+      "description": "Reset Demo creates the 12 original samples, 3 collections of 4, in the demo namespace. Nothing is archived, so the task has no answer yet."
+    },
+    {
+      "id": "find-minerals-first",
+      "find": {
+        "collection": "A222A032-267A-4208-B1F9-F55D739D3C24",
+        "expect": [
+          "D279FB0E-642E-463A-B3DA-299442A1C7CB",
+          "C6468C0B-4BF6-48E8-AE5D-F5FC7A041097",
+          "0FCB968F-7FEC-452A-A67C-20773B9C7761",
+          "AF451890-CA80-4DE9-B18B-4007066C9177"
+        ]
+      },
+      "description": "All 4 mineral specimens are active: a first run archives nothing."
+    },
+    {
+      "id": "approve-practice-quartz",
+      "approve": "practice-quartz",
+      "description": "The person presses Set Up Practice, which approves archiving Quartz point."
+    },
+    {
+      "id": "practice-quartz",
+      "request": "F49BAB69-CA84-4720-A6E9-9B14BEC2B22A",
+      "archiveItem": { "id": "AF451890-CA80-4DE9-B18B-4007066C9177", "expected": 1 },
+      "description": "Set Up Practice, 1 of 6: archive Quartz point (Mineral specimens) at revision 1."
+    },
+    {
+      "id": "approve-practice-agate",
+      "approve": "practice-agate",
+      "description": "Set Up Practice approves archiving Banded agate slice."
+    },
+    {
+      "id": "practice-agate",
+      "request": "3E62FFFD-F7B6-444D-8E2B-31F72F0A03AA",
+      "archiveItem": { "id": "D279FB0E-642E-463A-B3DA-299442A1C7CB", "expected": 1 },
+      "description": "Set Up Practice, 2 of 6: archive Banded agate slice (Mineral specimens)."
+    },
+    {
+      "id": "approve-practice-obsidian",
+      "approve": "practice-obsidian",
+      "description": "Set Up Practice approves archiving Obsidian flake."
+    },
+    {
+      "id": "practice-obsidian",
+      "request": "3F805E06-51EF-417D-A00C-EB370016775C",
+      "archiveItem": { "id": "C6468C0B-4BF6-48E8-AE5D-F5FC7A041097", "expected": 1 },
+      "description": "Set Up Practice, 3 of 6: archive Obsidian flake (Mineral specimens)."
+    },
+    {
+      "id": "approve-practice-cobalt",
+      "approve": "practice-cobalt",
+      "description": "Set Up Practice approves archiving Cobalt swatch."
+    },
+    {
+      "id": "practice-cobalt",
+      "request": "DBE55A7A-BC35-422B-A2FB-64AE3FD79479",
+      "archiveItem": { "id": "9B97BF2F-4D0B-4197-9CA8-36489DF40455", "expected": 1 },
+      "description": "Set Up Practice, 4 of 6: archive Cobalt swatch (Pigment swatches)."
+    },
+    {
+      "id": "approve-practice-ochre",
+      "approve": "practice-ochre",
+      "description": "Set Up Practice approves archiving Ochre swatch."
+    },
+    {
+      "id": "practice-ochre",
+      "request": "9F9A8AE8-6D1A-43A8-9A7F-1B1DD4F2144B",
+      "archiveItem": { "id": "C8E1904C-E8DC-40A0-93D3-53F6C0FFF95D", "expected": 1 },
+      "description": "Set Up Practice, 5 of 6: archive Ochre swatch (Pigment swatches)."
+    },
+    {
+      "id": "approve-practice-vellum",
+      "approve": "practice-vellum",
+      "description": "Set Up Practice approves archiving Tracing vellum."
+    },
+    {
+      "id": "practice-vellum",
+      "request": "55DBC0F2-510F-4DA4-BA4F-C953B28879E2",
+      "archiveItem": { "id": "6933AC83-9E61-4264-8EB8-0535B3C5E0F8", "expected": 1 },
+      "description": "Set Up Practice, 6 of 6: archive Tracing vellum (Paper stock)."
+    },
+    {
+      "id": "find-pigments-active",
+      "find": {
+        "collection": "A40194B3-5E91-4C5C-AE02-CF703BE23224",
+        "expect": ["DB666EF1-F642-43F1-B415-895B6ECFF693", "3A1711A8-E1DB-489E-8321-414266A8DF49"]
+      },
+      "description": "The first bar: Pigment swatches has 2 of 4 archived, so only Amber swatch and Verdigris swatch are active."
+    },
+    {
+      "id": "find-minerals-active",
+      "find": {
+        "collection": "A222A032-267A-4208-B1F9-F55D739D3C24",
+        "expect": ["0FCB968F-7FEC-452A-A67C-20773B9C7761"]
+      },
+      "description": "The middle bar: Mineral specimens has 3 of 4 archived, the most. Only Pyrite cube is active."
+    },
+    {
+      "id": "find-paper-active",
+      "find": {
+        "collection": "E7EEE9BB-FA3B-41F1-805E-41BDB71B44A3",
+        "expect": [
+          "8223D442-4B96-4026-B686-99CCFA09F1E8",
+          "6E2CED9D-B946-4188-8417-2E85C6A7268C",
+          "E8E32999-AA3C-47C7-A530-2ABEE1EECC57"
+        ]
+      },
+      "description": "The last bar: Paper stock has 1 of 4 archived."
+    },
+    {
+      "id": "find-minerals-with-archived",
+      "find": {
+        "collection": "A222A032-267A-4208-B1F9-F55D739D3C24",
+        "includeArchived": true,
+        "expect": [
+          "D279FB0E-642E-463A-B3DA-299442A1C7CB",
+          "C6468C0B-4BF6-48E8-AE5D-F5FC7A041097",
+          "0FCB968F-7FEC-452A-A67C-20773B9C7761",
+          "AF451890-CA80-4DE9-B18B-4007066C9177"
+        ]
+      },
+      "description": "Archiving deletes nothing: with archived samples included, all 4 mineral specimens are there."
+    },
+    {
+      "id": "restore-quartz",
+      "request": "904A7D50-11AB-4D46-8FC4-1A6F18738617",
+      "restoreItem": { "id": "AF451890-CA80-4DE9-B18B-4007066C9177", "expected": 2 },
+      "description": "The task's one operation: restore Quartz point from Mineral specimens, the collection with the most, at the revision the chart showed. The task is done."
+    },
+    {
+      "id": "find-minerals-after-restore",
+      "find": {
+        "collection": "A222A032-267A-4208-B1F9-F55D739D3C24",
+        "expect": ["0FCB968F-7FEC-452A-A67C-20773B9C7761", "AF451890-CA80-4DE9-B18B-4007066C9177"]
+      },
+      "description": "Quartz point is active again."
+    },
+    {
+      "id": "approve-undo-restore",
+      "approve": "undo-restore",
+      "description": "The person presses the receipt's Undo, which approves archiving Quartz point again."
+    },
+    {
+      "id": "undo-restore",
+      "request": "8949D00D-B097-47CF-B501-84A6989CF418",
+      "undo": "restore-quartz",
+      "description": "Undo the restore with the operation its receipt recorded. The task is to do again."
+    },
+    {
+      "id": "find-minerals-after-undo",
+      "find": {
+        "collection": "A222A032-267A-4208-B1F9-F55D739D3C24",
+        "expect": ["0FCB968F-7FEC-452A-A67C-20773B9C7761"]
+      },
+      "description": "Quartz point is archived again, so Mineral specimens has the most once more."
+    },
+    {
+      "id": "restore-vellum",
+      "request": "13CA3783-29EA-4805-84E7-248B12B2C9AB",
+      "restoreItem": { "id": "6933AC83-9E61-4264-8EB8-0535B3C5E0F8", "expected": 2 },
+      "description": "A miss: restore Tracing vellum from Paper stock, which had 1 archived sample. It is a real change with a receipt, but the task is not done."
+    },
+    {
+      "id": "find-paper-after-miss",
+      "find": {
+        "collection": "E7EEE9BB-FA3B-41F1-805E-41BDB71B44A3",
+        "expect": [
+          "8223D442-4B96-4026-B686-99CCFA09F1E8",
+          "6E2CED9D-B946-4188-8417-2E85C6A7268C",
+          "E8E32999-AA3C-47C7-A530-2ABEE1EECC57",
+          "6933AC83-9E61-4264-8EB8-0535B3C5E0F8"
+        ]
+      },
+      "description": "Every paper stock sample is active."
+    },
+    {
+      "id": "create-collection",
+      "request": "7D6DADC8-5BB0-4471-8A5A-B480059D3E9B",
+      "createCollection": { "id": "EAFFDC12-01A7-4206-963C-8A8A24AFE04F", "title": "Field notes" },
+      "description": "Create one of the person's own collections. The task counts only demo collections, so it never enters the chart."
+    },
+    {
+      "id": "create-item",
+      "request": "7D2BB24E-5538-4D14-8F25-B6DD57A88F8B",
+      "createItem": {
+        "id": "E1C4A57E-3721-4A6A-9B15-9756CFEE8861",
+        "collection": "EAFFDC12-01A7-4206-963C-8A8A24AFE04F",
+        "title": "Graphite stick",
+        "note": "Soft, 6B."
+      },
+      "description": "Create an item in that collection."
+    },
+    {
+      "id": "approve-archive-yours",
+      "approve": "archive-yours",
+      "description": "The person confirms archiving their own item."
+    },
+    {
+      "id": "archive-yours",
+      "request": "A0F10BE8-0B0D-425A-8E45-9DE24DA74E96",
+      "archiveItem": { "id": "E1C4A57E-3721-4A6A-9B15-9756CFEE8861", "expected": 1 },
+      "description": "Archive the person's own item at revision 1."
+    },
+    {
+      "id": "approve-archive-amber",
+      "approve": "archive-amber",
+      "description": "The person confirms archiving a demo sample that is not in the practice set."
+    },
+    {
+      "id": "archive-amber",
+      "request": "5F0A63BE-2FD8-43B4-853A-260FD524B6F2",
+      "archiveItem": { "id": "DB666EF1-F642-43F1-B415-895B6ECFF693", "expected": 1 },
+      "description": "Archive Amber swatch at revision 1."
+    },
+    {
+      "id": "reset-practice-quartz",
+      "request": "211A53CF-9384-4CB3-A1EA-796A90CE696B",
+      "restoreItem": { "id": "AF451890-CA80-4DE9-B18B-4007066C9177", "expected": 4 },
+      "description": "Reset Practice, 1 of 5: restore Quartz point, archived again by the undo."
+    },
+    {
+      "id": "reset-practice-agate",
+      "request": "B9E00293-75FA-4E49-B32E-D1970BAB8980",
+      "restoreItem": { "id": "D279FB0E-642E-463A-B3DA-299442A1C7CB", "expected": 2 },
+      "description": "Reset Practice, 2 of 5: restore Banded agate slice."
+    },
+    {
+      "id": "reset-practice-obsidian",
+      "request": "0A04AF35-921E-47F5-A33B-3F58F9912B0D",
+      "restoreItem": { "id": "C6468C0B-4BF6-48E8-AE5D-F5FC7A041097", "expected": 2 },
+      "description": "Reset Practice, 3 of 5: restore Obsidian flake."
+    },
+    {
+      "id": "reset-practice-cobalt",
+      "request": "4668588C-D09F-4DB0-982F-3315501F0515",
+      "restoreItem": { "id": "9B97BF2F-4D0B-4197-9CA8-36489DF40455", "expected": 2 },
+      "description": "Reset Practice, 4 of 5: restore Cobalt swatch."
+    },
+    {
+      "id": "reset-practice-ochre",
+      "request": "69F65E37-5CF4-4156-BCC5-30CD588C1F64",
+      "restoreItem": { "id": "C8E1904C-E8DC-40A0-93D3-53F6C0FFF95D", "expected": 2 },
+      "description": "Reset Practice, 5 of 5: restore Ochre swatch. Tracing vellum was already restored, so it is not touched."
+    },
+    {
+      "id": "find-pigments-after-reset",
+      "find": {
+        "collection": "A40194B3-5E91-4C5C-AE02-CF703BE23224",
+        "expect": [
+          "9B97BF2F-4D0B-4197-9CA8-36489DF40455",
+          "C8E1904C-E8DC-40A0-93D3-53F6C0FFF95D",
+          "3A1711A8-E1DB-489E-8321-414266A8DF49"
+        ]
+      },
+      "description": "Reset Practice left Amber swatch archived: it is not a practice sample."
+    },
+    {
+      "id": "find-minerals-after-reset",
+      "find": {
+        "collection": "A222A032-267A-4208-B1F9-F55D739D3C24",
+        "expect": [
+          "D279FB0E-642E-463A-B3DA-299442A1C7CB",
+          "C6468C0B-4BF6-48E8-AE5D-F5FC7A041097",
+          "0FCB968F-7FEC-452A-A67C-20773B9C7761",
+          "AF451890-CA80-4DE9-B18B-4007066C9177"
+        ]
+      },
+      "description": "Every mineral specimen is active again."
+    },
+    {
+      "id": "find-yours-after-reset",
+      "find": {
+        "collection": "EAFFDC12-01A7-4206-963C-8A8A24AFE04F",
+        "expect": []
+      },
+      "description": "The person's item is still archived: Reset Practice did not touch it."
+    },
+    {
+      "id": "find-yours-with-archived",
+      "find": {
+        "collection": "EAFFDC12-01A7-4206-963C-8A8A24AFE04F",
+        "includeArchived": true,
+        "expect": ["E1C4A57E-3721-4A6A-9B15-9756CFEE8861"]
+      },
+      "description": "It is there when archived items are included, unchanged."
+    }
+  ]
+}

@@ -70,7 +70,6 @@ private struct ArchiveBar: View {
     let tally: ArchiveTally
     let restore: (ItemID) -> Void
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
-    @Environment(\.colorSchemeContrast) private var contrast
     @ScaledMetric(relativeTo: .body) private var squareHeight: CGFloat = 16
 
     var body: some View {
@@ -103,7 +102,7 @@ private struct ArchiveBar: View {
             }
             HStack(spacing: 4) {
                 ForEach(0..<max(tally.largestCollection, 1), id: \.self) { index in
-                    square(index)
+                    SampleSquare(mark: SampleSquare.Mark(index, of: collection))
                 }
             }
             .frame(height: squareHeight)
@@ -128,28 +127,48 @@ private struct ArchiveBar: View {
         samples
         #endif
     }
+}
 
-    @ViewBuilder private func square(_ index: Int) -> some View {
+/// One sample in a bar. An archived sample is filled and has a solid outline; an active one has
+/// only a dashed outline. The outline tells them apart even where the fill's color cannot be
+/// seen, and `AccessSuperpowerQualificationHostTests` checks that in grayscale.
+struct SampleSquare: View {
+    enum Mark: Hashable {
+        case archived
+        case active
+        /// Past the end of a collection smaller than the largest one.
+        case none
+
+        init(_ index: Int, of collection: CollectionTally) {
+            self = index < collection.archivedCount ? .archived : index < collection.total ? .active : .none
+        }
+    }
+
+    let mark: Mark
+    @Environment(\.colorSchemeContrast) private var contrast
+
+    var body: some View {
         let shape = RoundedRectangle(cornerRadius: 3, style: .continuous)
         let increased = contrast == .increased
-        if index < collection.archivedCount {
+        switch mark {
+        case .archived:
             shape.fill(.tint)
                 .overlay(shape.strokeBorder(.primary.opacity(increased ? 1 : 0.35), lineWidth: increased ? 1.5 : 1))
-        } else if index < collection.total {
+        case .active:
             shape.strokeBorder(.secondary, style: StrokeStyle(lineWidth: increased ? 2 : 1, dash: [3, 2]))
-        } else {
+        case .none:
             Color.clear
         }
     }
 }
 
 /// What the squares mean, for sighted readers. Hidden from assistive technology, which reads each
-/// bar's count in words instead.
+/// bar's count in words instead. It names the shapes, not a color, and uses primary text: it is
+/// how a reader who cannot tell the fill's color apart decodes the chart.
 private struct ChartKey: View {
     var body: some View {
-        Text("Each square is one sample. Filled squares are archived; outlined squares are not.")
+        Text("Each square is one sample: filled with a solid edge when archived, a dashed outline when not.")
             .font(.footnote)
-            .foregroundStyle(.secondary)
             .fixedSize(horizontal: false, vertical: true)
             .accessibilityHidden(true)
     }

@@ -38,6 +38,30 @@ The same script is replayed three ways:
 
 The request IDs were generated once at random for this fixture. Never change or reuse one.
 
+## `access-superpower/`
+
+The complete [LAB-035](../../experiments/LAB-035-access-as-a-superpower.md) fixture interaction, from a clean store, for the LAB-035-B qualification. The task is "Which demo collection has the most archived samples? Restore one sample from that collection." Its `seed.json` is a byte-for-byte copy of the app's demo seed, [`Fixtures/demo/seed.json`](../demo/seed.json), and its six practice samples are the ones [`Fixtures/access/archive-chart.json`](../access/README.md) lists. `AccessSuperpowerShowcaseTests` in `Packages/LabDemo` fails if the two seed copies differ.
+
+| Step | What it does |
+|---|---|
+| `approve-reset`, `reset`, `find-minerals-first` | The person confirms Reset Demo, which creates the 12 samples. Nothing is archived yet, so the task has no answer. |
+| `approve-practice-*`, `practice-*` | Set Up Practice: 6 archives in the practice set's order, each with its own approval and receipt: 3 mineral specimens, 2 pigment swatches, and 1 paper stock sample. |
+| `find-pigments-active`, `find-minerals-active`, `find-paper-active`, `find-minerals-with-archived` | The chart's numbers as reads: 2, 3, and 1 of 4 archived. Archiving deletes nothing. |
+| `restore-quartz`, `find-minerals-after-restore` | The task's one operation: restore Quartz point from Mineral specimens at the revision the chart showed. |
+| `approve-undo-restore`, `undo-restore`, `find-minerals-after-undo` | The receipt's undo archives it again, so the task is to do again. |
+| `restore-vellum`, `find-paper-after-miss` | A miss: a restore from Paper stock is a real change with a receipt, but it does not finish the task. |
+| `create-collection`, `create-item`, `approve-archive-yours`, `archive-yours` | The person's own collection and item, archived. The task counts only demo collections. |
+| `approve-archive-amber`, `archive-amber` | The person archives a demo sample that is not in the practice set. |
+| `reset-practice-*` | Reset Practice: restores the 5 practice samples still archived, in the practice set's order. |
+| `find-pigments-after-reset`, `find-minerals-after-reset`, `find-yours-after-reset`, `find-yours-with-archived` | Amber swatch and the person's item stay archived; every practice sample is active. |
+
+The same script is replayed two ways:
+
+- by `Packages/LabDemo` as evidence, as the app-UI adapter;
+- through the AccessSuperpower module in `AccessSuperpowerShowcaseReplayTests` (`Packages/LabFeatures`), which checks that Set Up Practice, the task's restore, the miss, and Reset Practice build exactly these operations, and that the chart and the task's result read as the chart fixture says.
+
+The request IDs and the person's collection and item IDs were generated once at random for this fixture. Never change or reuse one.
+
 ## Script format
 
 `script.json` (`format: "native-lab-demo-script"`, `formatVersion: 1`) names its seed, a file in the same folder in the demo seed format that `Fixtures/demo/seed.json` uses. `DemoScript(folder:)` loads both:
