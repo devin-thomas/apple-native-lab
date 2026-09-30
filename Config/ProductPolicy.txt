@@ -13,6 +13,7 @@
 
 # Every host
 link         *          *        Foundation          # base
+link         *          *        CoreFoundation      # base under Foundation: URL resource-value keys (LabStaging and the share inbox, LAB-007)
 link         *          *        SwiftUI             # host interface
 link         *          ios      UIKit               # linked by SwiftUI apps on iOS
 link         *          watchos  UIKit               # linked by SwiftUI apps on watchOS
@@ -43,6 +44,20 @@ link         CoreLocal  ios      CoreTransferable    # same, iPhone host
 # CoreLocal: Access as a Superpower (LAB-035). The chart's Audio Graph; the summary and table are the fallback
 link         CoreLocal  macos    Accessibility       # AXChartDescriptor for the archive chart's Audio Graph (SwiftUI accessibilityChartDescriptor)
 link         CoreLocal  ios      Accessibility       # same, iPhone host
+# SystemSurfaces: Share Ingress Station (LAB-007). LabPhoneSurfaces is the iPhone host built from
+# LabPhone's sources, so it links what LabPhone links, for the same reasons. The share extension it
+# embeds links only Foundation, SwiftUI, UIKit, and CryptoKit. Only this profile may carry the App Group.
+link         SystemSurfaces ios  ARKit               # host variant: world tracking support, as LabPhone
+link         SystemSurfaces ios  AVFoundation        # host variant: camera and microphone status, as LabPhone
+link         SystemSurfaces ios  Accessibility       # host variant: the Audio Graph chart descriptor, as LabPhone
+link         SystemSurfaces ios  AppIntents          # host variant: Action Atlas intents, as LabPhone
+link         SystemSurfaces ios  CoreBluetooth       # host variant: Bluetooth authorization status, as LabPhone
+link         SystemSurfaces ios  CoreTransferable    # host variant: the action browser's ShareLink, as LabPhone
+link         SystemSurfaces ios  CryptoKit           # host and extension: SHA-256 of staged content and the demo seed
+link         SystemSurfaces ios  FoundationModels    # host variant: on-device language model availability, as LabPhone
+link         SystemSurfaces ios  NearbyInteraction   # host variant: Ultra Wideband capabilities, as LabPhone
+link         SystemSurfaces ios  Speech              # host variant: speech recognition status, as LabPhone
+entitlement  SystemSurfaces ios  com.apple.security.application-groups   # share inbox folder the extension writes and the host variant reads; a device needs a paid team
 
 # Companions: the Watch host's capability status probes (CORE-004)
 link         Companions watchos  AVFAudio            # record permission and audio input

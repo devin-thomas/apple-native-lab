@@ -85,6 +85,8 @@ struct MainWindow: View {
             TypedIntelligenceListColumn(window: window)
         case .accessSuperpower:
             AccessSuperpowerListColumn(window: window, session: window.access)
+        case .shareInbox:
+            ShareInboxListColumn(window: window)
         case .catalog(let scope):
             if let registry = model.registry {
                 CatalogListColumn(registry: registry, scope: scope, window: window)
@@ -107,6 +109,8 @@ struct MainWindow: View {
             TypedIntelligenceDetailColumn(window: window)
         case .accessSuperpower:
             AccessSuperpowerDetailColumn(window: window, session: window.access)
+        case .shareInbox:
+            ShareInboxDetailColumn(window: window)
         case .catalog:
             if let registry = model.registry {
                 CatalogDetailColumn(registry: registry, experimentID: window.experimentID)
@@ -129,6 +133,7 @@ struct MainWindow: View {
         case .actionAtlas: "Search actions"
         case .typedIntelligence: "Search notes"
         case .accessSuperpower: "Search archived samples"
+        case .shareInbox: "Search the inbox"
         default: "Search experiments"
         }
     }

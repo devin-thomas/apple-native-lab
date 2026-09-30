@@ -96,6 +96,31 @@ struct LabDataService: Sendable {
         }
     }
 
+    // MARK: Adopting staged imports (LAB-007 Share Ingress Station)
+
+    /// Adds one reviewed import to a collection through `ImportAdopter` over this service.
+    ///
+    /// `adapter` is fixed by the folder the import waits in, never by its content: the app UI for
+    /// the host's own paste and file-picker imports, the share extension for anything another app
+    /// shared. The person's Add is the authority, so a grant is issued for exactly the operation
+    /// this import maps to, for that adapter and the chosen collection, and revoked when the
+    /// commit returns. The adopter validates the import again and checks the grant, and the
+    /// service's policy checks it once more at commit (ADR-013).
+    func adoptImport(
+        _ id: StagingID,
+        from inbox: any StagingInbox,
+        as adapter: AdapterKind,
+        into collection: CollectionID
+    ) async throws(ImportRejection) -> ImportAdoption {
+        guard adapter == .appUI || adapter == .shareExtension else { throw .notAuthorized }
+        let record = try await inbox.validatedRecord(id)
+        let operation = try ImportAdopter.operation(for: record, into: collection)
+        let grant = try? grants.issue(for: operation, to: adapter, lifetime: .seconds(30))
+        defer { if let grant { grants.revoke(grant.id) } }
+        return try await ImportAdopter(service: service, inbox: inbox, ledger: grants, adapter: adapter)
+            .adopt(id, into: collection)
+    }
+
     // MARK: Reads for other in-app adapters (Action Atlas)
 
     func collection(_ id: CollectionID, as actor: ActorScope) async throws(OperationError) -> LabCollection {

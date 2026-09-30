@@ -241,4 +241,50 @@ final class LabLibrary {
         if let listed = self.receipt(id: receipt.operationID) { return listed }
         return record(receipt, before: before)
     }
+
+    // MARK: Staged imports (LAB-007)
+
+    /// Why a reviewed import was not added.
+    enum ImportFailure: Error, Hashable {
+        /// The store cannot be used. The reason is a sentence for a person.
+        case unavailable(String)
+        case rejected(ImportRejection)
+
+        var message: String {
+            switch self {
+            case .unavailable(let reason): reason
+            case .rejected(let rejection): rejection.userMessage
+            }
+        }
+    }
+
+    /// Adds a reviewed import to one of the person's collections through `LabDataService` and
+    /// lists its receipt. Adding the same content to the same collection again returns the
+    /// original receipt, listed once.
+    func adoptImport(
+        _ id: StagingID,
+        from inbox: any StagingInbox,
+        as adapter: AdapterKind,
+        into collection: CollectionID
+    ) async throws(ImportFailure) -> (record: ReceiptRecord, isDuplicate: Bool) {
+        let service: LabDataService
+        do { service = try await openedService() } catch {
+            switch error {
+            case .unavailable(let reason): throw .unavailable(reason)
+            case .refused(let refusal): throw .unavailable(LibraryMessages.describe(refusal))
+            }
+        }
+        let before = names
+        let adoption: ImportAdoption
+        do {
+            adoption = try await service.adoptImport(id, from: inbox, as: adapter, into: collection)
+        } catch {
+            throw .rejected(error)
+        }
+        await refresh()
+        if let listed = receipt(id: adoption.receipt.operationID) { return (listed, adoption.isDuplicate) }
+        var extra: [EntityReference: String] = [:]
+        if case .createItem(let draft) = adoption.receipt.admitted.operation { extra[.item(draft.id)] = draft.title.value }
+        return (record(adoption.receipt, before: before.merging(extra) { current, _ in current }), adoption.isDuplicate)
+    }
 }

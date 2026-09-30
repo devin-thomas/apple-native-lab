@@ -29,6 +29,9 @@ struct SidebarView: View {
                 Label(AccessSuperpowerExperiment.title, systemImage: AccessSuperpowerExperiment.symbol)
                     .tag(SidebarDestination.accessSuperpower)
                     .accessibilityHint("One task, finished by sight, VoiceOver, keyboard, or Audio Graph")
+                Label("Share Inbox", systemImage: "tray.and.arrow.down")
+                    .tag(SidebarDestination.shareInbox)
+                    .accessibilityHint("Pasted and chosen files waiting for review")
             }
             Section("Experiments") {
                 row(.all, symbol: "square.grid.2x2")

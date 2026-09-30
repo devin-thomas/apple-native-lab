@@ -6,7 +6,7 @@
 # profile's compilation condition. Schemes by profile:
 #   CoreLocal         LabMac-Core, LabPhone-Core
 #   Companions        LabWatch
-#   SystemSurfaces    none yet
+#   SystemSurfaces    LabPhone-Surfaces
 #   CloudOptional     none yet
 #   FrontierOptional  none yet
 # Entitlements and purpose strings are declared per executable, on the target that uses them.
@@ -78,6 +78,9 @@ targets:
       # LAB-035 Access as a Superpower: the task, its chart semantics, and the Audio Graph descriptor.
       - package: LabFeatures
         product: AccessSuperpower
+      # LAB-007 Share Ingress Station: the share inbox and its paste and file-picker fallbacks.
+      - package: LabFeatures
+        product: ShareIngress
     info:
       path: Apps/Mac/Info.plist
       properties:
@@ -144,6 +147,9 @@ targets:
       # LAB-035 Access as a Superpower: the task, its chart semantics, and the Audio Graph descriptor.
       - package: LabFeatures
         product: AccessSuperpower
+      # LAB-007 Share Ingress Station: the share inbox and its paste and file-picker fallbacks.
+      - package: LabFeatures
+        product: ShareIngress
     info:
       path: Apps/Phone/Info.plist
       properties:
@@ -182,6 +188,131 @@ targets:
         INFOPLIST_KEY_NSSpeechRecognitionUsageDescription: $(LAB_PURPOSE_SPEECH_RECOGNITION)
         INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription: $(LAB_PURPOSE_BLUETOOTH)
         INFOPLIST_KEY_NSNearbyInteractionUsageDescription: $(LAB_PURPOSE_NEARBY_INTERACTION)
+
+  # SystemSurfaces: the iPhone host variant that embeds the share extension (LAB-007). Same sources
+  # and bundle identifier as LabPhone, so it replaces the CoreLocal app rather than adding one; its
+  # own scheme, LabPhone-Surfaces, keeps LabPhone-Core free of App Group provisioning. It and the
+  # extension each declare the App Group, derived from LAB_BUNDLE_PREFIX. Simulator builds need no
+  # team; on a device the App Group needs a paid team (a free Personal Team cannot use one).
+  LabPhoneSurfaces:
+    type: application
+    platform: iOS
+    configFiles:
+      Debug: Config/Profiles/SystemSurfaces.xcconfig
+      Release: Config/Profiles/SystemSurfaces.xcconfig
+    sources:
+      - Apps/Shared
+      # LabPhone's Info.plist is not a resource here; this variant has its own.
+      - path: Apps/Phone
+        excludes:
+          - Info.plist
+      - Apps/Icon
+      - path: Fixtures/demo/seed.json
+        buildPhase: resources
+    dependencies:
+      - package: LabSupport
+      - package: LabDomain
+      - package: LabStore
+      - package: LabFeatures
+        product: LabCatalog
+      - package: LabFeatures
+        product: ActionAtlas
+      - package: LabFeatures
+        product: ShareIngress
+      - package: LabFeatures
+        product: TypedIntelligence
+      - package: LabFeatures
+        product: AccessSuperpower
+      - target: ShareExtension
+        embed: true
+    info:
+      path: Extensions/PhoneSurfacesHost/Info.plist
+      properties:
+        CFBundleDisplayName: Native Lab
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        LabSourceRevision: $(LAB_SOURCE_REVISION)
+        LabBuildProfile: $(LAB_BUILD_PROFILE)
+        LabDistributionLane: $(LAB_DISTRIBUTION_LANE)
+        LabAppGroupIdentifier: $(LAB_APP_GROUP_IDENTIFIER)
+        UILaunchScreen: {}
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: true
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+    entitlements:
+      path: Extensions/PhoneSurfacesHost/LabPhoneSurfaces.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - $(LAB_APP_GROUP_IDENTIFIER)
+    settings:
+      base:
+        PRODUCT_NAME: NativeLabSurfaces
+        PRODUCT_BUNDLE_IDENTIFIER: $(LAB_BUNDLE_PREFIX).nativelab
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        TARGETED_DEVICE_FAMILY: "1,2"
+        SUPPORTS_MACCATALYST: NO
+        SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD: NO
+        SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD: NO
+        GENERATE_INFOPLIST_FILE: $(LAB_DECLARES_PURPOSE_STRINGS)
+        INFOPLIST_KEY_NSCameraUsageDescription: $(LAB_PURPOSE_CAMERA)
+        INFOPLIST_KEY_NSMicrophoneUsageDescription: $(LAB_PURPOSE_MICROPHONE)
+        INFOPLIST_KEY_NSSpeechRecognitionUsageDescription: $(LAB_PURPOSE_SPEECH_RECOGNITION)
+        INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription: $(LAB_PURPOSE_BLUETOOTH)
+        INFOPLIST_KEY_NSNearbyInteractionUsageDescription: $(LAB_PURPOSE_NEARBY_INTERACTION)
+
+  # SystemSurfaces: the share extension (LAB-007). It stages what was shared into the App Group
+  # folder and finishes; it never opens the store. Embedded only by LabPhoneSurfaces.
+  ShareExtension:
+    type: app-extension
+    platform: iOS
+    configFiles:
+      Debug: Config/Profiles/SystemSurfaces.xcconfig
+      Release: Config/Profiles/SystemSurfaces.xcconfig
+    sources:
+      - Extensions/ShareExtension
+    dependencies:
+      - package: LabDomain
+      - package: LabFeatures
+        product: ShareIngress
+    info:
+      path: Extensions/ShareExtension/Info.plist
+      properties:
+        CFBundleDisplayName: Native Lab Inbox
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        LabSourceRevision: $(LAB_SOURCE_REVISION)
+        LabBuildProfile: $(LAB_BUILD_PROFILE)
+        LabDistributionLane: $(LAB_DISTRIBUTION_LANE)
+        LabAppGroupIdentifier: $(LAB_APP_GROUP_IDENTIFIER)
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.share-services
+          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).ShareViewController
+          NSExtensionAttributes:
+            NSExtensionActivationRule:
+              NSExtensionActivationSupportsWebURLWithMaxCount: 1
+              NSExtensionActivationSupportsText: true
+              NSExtensionActivationSupportsImageWithMaxCount: 32
+              NSExtensionActivationSupportsMovieWithMaxCount: 32
+    entitlements:
+      path: Extensions/ShareExtension/ShareExtension.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - $(LAB_APP_GROUP_IDENTIFIER)
+    settings:
+      base:
+        PRODUCT_NAME: ShareExtension
+        PRODUCT_BUNDLE_IDENTIFIER: $(LAB_BUNDLE_PREFIX).nativelab.share
+        TARGETED_DEVICE_FAMILY: "1,2"
+        APPLICATION_EXTENSION_API_ONLY: YES
+        SKIP_INSTALL: YES
 
   # Companions: the Watch host installs directly to a paired Watch; it is not embedded in
   # the iPhone app yet, so CoreLocal never depends on Watch provisioning.
@@ -262,6 +393,16 @@ schemes:
     build:
       targets:
         LabPhone: all
+    run:
+      config: Debug
+    archive:
+      config: Release
+
+  LabPhone-Surfaces:
+    build:
+      targets:
+        LabPhoneSurfaces: all
+        ShareExtension: all
     run:
       config: Debug
     archive:

@@ -2,6 +2,7 @@ import LabCatalog
 import LabDomain
 import LabSupport
 import Observation
+import ShareIngress
 import SwiftUI
 import TypedIntelligence
 
@@ -14,6 +15,8 @@ enum SidebarDestination: Hashable {
     case typedIntelligence
     /// LAB-035: one task, finished by sight, VoiceOver, keyboard, or Audio Graph.
     case accessSuperpower
+    /// LAB-007: the share inbox, with the paste and file-picker fallbacks.
+    case shareInbox
     case catalog(CatalogScope)
 
     var title: String {
@@ -22,6 +25,7 @@ enum SidebarDestination: Hashable {
         case .actionAtlas: "Action Atlas"
         case .typedIntelligence: "Typed Local Intelligence"
         case .accessSuperpower: AccessSuperpowerExperiment.title
+        case .shareInbox: "Share Inbox"
         case .catalog(let scope): scope.title
         }
     }
@@ -33,6 +37,7 @@ enum SidebarDestination: Hashable {
         case .actionAtlas: "action-atlas"
         case .typedIntelligence: "typed-intelligence"
         case .accessSuperpower: "access-superpower"
+        case .shareInbox: "share-inbox"
         case .catalog(.all): "all"
         case .catalog(.milestone(let milestone)): "milestone:\(milestone.rawValue)"
         case .catalog(.category(let category)): "category:\(category)"
@@ -47,6 +52,7 @@ enum SidebarDestination: Hashable {
         case ("action-atlas", nil): self = .actionAtlas
         case ("typed-intelligence", nil): self = .typedIntelligence
         case ("access-superpower", nil): self = .accessSuperpower
+        case ("share-inbox", nil): self = .shareInbox
         case ("all", nil): self = .catalog(.all)
         case ("milestone", let raw?): guard let milestone = Milestone(rawValue: raw) else { return nil }
             self = .catalog(.milestone(milestone))
@@ -72,6 +78,8 @@ final class MainWindowState {
     var intelligenceNote: IntelligenceFixture?
     /// Access as a Superpower's selection and result in this window.
     let access = AccessTaskSession()
+    /// The share-inbox import the detail column shows.
+    var inboxEntry: InboxEntry.ID?
     var searchText = ""
     /// Incremented to ask the window to focus its search field.
     var searchRequests = 0

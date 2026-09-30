@@ -11,7 +11,7 @@ The installed Xcode build, Swift compiler, SDK versions, deployment floor, and e
 | Profile | Intended contents | Configuration | Schemes today | External setup |
 |---|---|---|---|---|
 | CoreLocal | Mac/iPhone host, original fixtures, local persistence, manual/fallback experiments, eligible local inference | `Config/Profiles/CoreLocal.xcconfig` | `LabMac-Core`, `LabPhone-Core` | None for the Mac and simulators; any team, including a free Personal Team, for a device |
-| SystemSurfaces | Share/widget/Control extensions, App Group staging, App Intents metadata and integration tests | `Config/Profiles/SystemSurfaces.xcconfig` | none yet | Own paid team for on-device App Group staging; simulator builds need none |
+| SystemSurfaces | Share/widget/Control extensions, App Group staging, App Intents metadata and integration tests | `Config/Profiles/SystemSurfaces.xcconfig` | `LabPhone-Surfaces` | Own paid team for on-device App Group staging; simulator builds need none |
 | Companions | Separate Watch and TV hosts plus LAN/Watch relay | `Config/Profiles/Companions.xcconfig` | `LabWatch` | Physical devices for real transport/camera evidence |
 | CloudOptional | CloudKit, optional PCC/provider adapters | `Config/Profiles/CloudOptional.xcconfig` | none yet | Own paid team with iCloud, own container, explicit account/entitlement/route configuration |
 | FrontierOptional | File Provider, App Clip, Wallet signer integration, CarPlay/PTT/Screen Time/accessory spikes | `Config/Profiles/FrontierOptional.xcconfig` | none yet | Per-feature setup and managed approval where required |

@@ -1,8 +1,8 @@
 // SystemSurfaces build profile: share, widget, and Control extensions, App Group staging, and
 // App Intents integration tests (docs/BUILD_AND_DISTRIBUTION.md).
 //
-// No target attaches yet. The first ones arrive with the Surface Deck and Share Ingress Station
-// experiments. A target that attaches this file:
+// Attached today: LabPhoneSurfaces (the iPhone host variant) and ShareExtension, both built by the
+// scheme LabPhone-Surfaces (LAB-007 Share Ingress Station). A target that attaches this file:
 // - declares its own .entitlements file; an App Group entitlement uses $(LAB_APP_GROUP_IDENTIFIER);
 // - is embedded only by a SystemSurfaces host variant with its own scheme (for example
 //   LabPhone-Surfaces), never by LabPhone, so LabPhone-Core never needs App Group provisioning

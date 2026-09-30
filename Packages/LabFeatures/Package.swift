@@ -9,10 +9,12 @@ let package = Package(
         .library(name: "ActionAtlas", targets: ["ActionAtlas"]),
         .library(name: "TypedIntelligence", targets: ["TypedIntelligence"]),
         .library(name: "AccessSuperpower", targets: ["AccessSuperpower"]),
+        .library(name: "ShareIngress", targets: ["ShareIngress"]),
     ],
     dependencies: [
         .package(path: "../LabSupport"),
         .package(path: "../LabDomain"),
+        .package(path: "../LabStaging"),
     ],
     targets: [
         .target(
@@ -59,6 +61,23 @@ let package = Package(
         .testTarget(
             name: "AccessSuperpowerTests",
             dependencies: ["AccessSuperpower", .product(name: "LabDomain", package: "LabDomain")]
+        ),
+        // LAB-007 Share Ingress Station: stages shared and pasted content into a staging inbox and
+        // lists it for review. Used by the share extension and by both hosts' import fallbacks.
+        .target(
+            name: "ShareIngress",
+            dependencies: [
+                .product(name: "LabDomain", package: "LabDomain"),
+                .product(name: "LabStaging", package: "LabStaging"),
+            ]
+        ),
+        .testTarget(
+            name: "ShareIngressTests",
+            dependencies: [
+                "ShareIngress",
+                .product(name: "LabDomain", package: "LabDomain"),
+                .product(name: "LabStaging", package: "LabStaging"),
+            ]
         ),
     ]
 )

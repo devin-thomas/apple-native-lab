@@ -8,25 +8,39 @@
 
 /* Begin PBXBuildFile section */
 		049D235E474520D658AD3AD3 /* ActionAtlas in Frameworks */ = {isa = PBXBuildFile; productRef = D681B15E8F4FC00BCB2862EE /* ActionAtlas */; };
+		04A714E690365F240DA19ECC /* seed.json in Resources */ = {isa = PBXBuildFile; fileRef = 4C5126791B7E1A1A049AE090 /* seed.json */; };
 		06ED0D7F8928725A2A09905A /* LabSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 25231493CA26D8D2F61E46F5 /* LabSupport */; };
 		154C21111E02462DD0A59BE0 /* LabStore in Frameworks */ = {isa = PBXBuildFile; productRef = 6E71D4CE7F5EFA213F132511 /* LabStore */; };
+		1ABEE97B7C7ACB1EAF41ABC4 /* ShareIngress in Frameworks */ = {isa = PBXBuildFile; productRef = A7B30E9CC74D5DACCC486C60 /* ShareIngress */; };
 		1B0413E82622210BA72820FA /* LabDomain in Frameworks */ = {isa = PBXBuildFile; productRef = 0D6B57C2990B445E8BC56C3B /* LabDomain */; };
 		1C7CA3174A557512B2CC9E55 /* seed.json in Resources */ = {isa = PBXBuildFile; fileRef = 4C5126791B7E1A1A049AE090 /* seed.json */; };
 		21F31C50AAC169B20AE2CF15 /* ActionAtlas in Frameworks */ = {isa = PBXBuildFile; productRef = 7EC14A55645358F739F46AC7 /* ActionAtlas */; };
 		25972D23C4D3197B1F3EB577 /* LabSupport in Frameworks */ = {isa = PBXBuildFile; productRef = C807DDF95D17BFC6553B448B /* LabSupport */; };
+		330EBB105739FBBAFDAE5C28 /* ActionAtlas in Frameworks */ = {isa = PBXBuildFile; productRef = 88023F30308C4118D4A07ABA /* ActionAtlas */; };
 		3801D1772B69CAE4CA93FDFE /* LabSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 23ACA699398C10114E0D39E7 /* LabSupport */; };
 		45673BBE0F16F89FAE113021 /* LabCatalog in Frameworks */ = {isa = PBXBuildFile; productRef = 0A608BA2376945AD3E608486 /* LabCatalog */; };
 		46B8492EDC6B52F10B6794B1 /* LabCatalog in Frameworks */ = {isa = PBXBuildFile; productRef = 2A29DD32F90A05982B97C0F3 /* LabCatalog */; };
+		47F8EF47F63CC3723EA8DEA5 /* ShareExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 8D8791DE695E10C7EC57F692 /* ShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		4C323A1952AE6012980ED83A /* ShareIngress in Frameworks */ = {isa = PBXBuildFile; productRef = 5879A7CAEDD8078739ABF6D6 /* ShareIngress */; };
 		4D1936E1C7A89558B10E01F3 /* intelligence-ambiguous-note.txt in Resources */ = {isa = PBXBuildFile; fileRef = AE4F4AB8C2CC86E0A0AF350A /* intelligence-ambiguous-note.txt */; };
+		4DD8734A8F0814E2CFC44062 /* LabCatalog in Frameworks */ = {isa = PBXBuildFile; productRef = A89F084FC0938D0139A2042E /* LabCatalog */; };
 		4E60DC2D92BC7C909C4D6C56 /* LabCatalog in Frameworks */ = {isa = PBXBuildFile; productRef = 21367E5C42D7E02E6E77C8AB /* LabCatalog */; };
+		526F4C3176A2E25CFBA613A9 /* ShareIngress in Frameworks */ = {isa = PBXBuildFile; productRef = 208ADB6FEE46A094CE66A041 /* ShareIngress */; };
 		542F57ACC91C3B5DD11837E2 /* AccessSuperpower in Frameworks */ = {isa = PBXBuildFile; productRef = 540B210369D029C191E89BAB /* AccessSuperpower */; };
+		5971E4B6D5596414791531A0 /* TypedIntelligence in Frameworks */ = {isa = PBXBuildFile; productRef = 76F28CA76CDDB3E1BD522DA9 /* TypedIntelligence */; };
 		5B74398A19EB86C3087BDEED /* TypedIntelligence in Frameworks */ = {isa = PBXBuildFile; productRef = 872A3526A3C216A5301B05D2 /* TypedIntelligence */; };
+		61C2EFB9489E9A7476A1E7A0 /* LabDomain in Frameworks */ = {isa = PBXBuildFile; productRef = C8548B319C70F000CAD5D26E /* LabDomain */; };
 		682570876F660883019716DB /* seed.json in Resources */ = {isa = PBXBuildFile; fileRef = 4C5126791B7E1A1A049AE090 /* seed.json */; };
+		6F93A9AD463D59BB11A8A5EC /* LabDomain in Frameworks */ = {isa = PBXBuildFile; productRef = CACF77BD90DF68CDE4C515EA /* LabDomain */; };
+		778984D260ECA5DC69A502E1 /* LabStore in Frameworks */ = {isa = PBXBuildFile; productRef = F26F0DA29E5E4B99D5E4143F /* LabStore */; };
 		7FB3F8343A67C0DA7E22236A /* intelligence-injected-note.txt in Resources */ = {isa = PBXBuildFile; fileRef = D89DA08F5504526396A194FA /* intelligence-injected-note.txt */; };
 		7FCD81C07A37C7401F6D675C /* intelligence-ambiguous-note.txt in Resources */ = {isa = PBXBuildFile; fileRef = AE4F4AB8C2CC86E0A0AF350A /* intelligence-ambiguous-note.txt */; };
 		811E4F2E9F9F36796576B37D /* intelligence-injected-note.txt in Resources */ = {isa = PBXBuildFile; fileRef = D89DA08F5504526396A194FA /* intelligence-injected-note.txt */; };
+		8241A9AE0973790DCD57EE24 /* ShareIngress in Frameworks */ = {isa = PBXBuildFile; productRef = C0E3086832C7401036381F13 /* ShareIngress */; };
+		89E214F72A8F8E59C59B440C /* AccessSuperpower in Frameworks */ = {isa = PBXBuildFile; productRef = CC0630EDCCDE6FC7F7BF2FBC /* AccessSuperpower */; };
 		96EA540221683FF1A975546B /* LabSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 9429B9706DB8D93A799FDA9F /* LabSupport */; };
 		AEB17B224B9BD1CF6EE2746E /* LabDomain in Frameworks */ = {isa = PBXBuildFile; productRef = F41E96699628F4302D6E6EE4 /* LabDomain */; };
+		B888B057D5B4B13CA4C86B32 /* LabSupport in Frameworks */ = {isa = PBXBuildFile; productRef = F44C6435C9B6A97B75C33F44 /* LabSupport */; };
 		C5C7E15597C124FFA87914F4 /* LabStore in Frameworks */ = {isa = PBXBuildFile; productRef = 6CF6B1898735341A74FB3DA4 /* LabStore */; };
 		DC14139A63BD575B5A92D755 /* LabCatalog in Frameworks */ = {isa = PBXBuildFile; productRef = D848D3397291632E552B77A2 /* LabCatalog */; };
 		E10047C202637983EF3886EE /* TypedIntelligence in Frameworks */ = {isa = PBXBuildFile; productRef = FA764C388624F65B1FE0AC12 /* TypedIntelligence */; };
@@ -34,6 +48,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		30D0E928463CD88AAA186016 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9BC4DFD4FB07703D0EA4E56B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = EC3F7DFE3B8431537C8D22AA;
+			remoteInfo = ShareExtension;
+		};
 		CA16A35C867C22F7FD57530B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 9BC4DFD4FB07703D0EA4E56B /* Project object */;
@@ -43,17 +64,34 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		A4206BB9C8A2870713E4DAB0 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				47F8EF47F63CC3723EA8DEA5 /* ShareExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		0660F733C038430B9F397461 /* LabFeatures */ = {isa = PBXFileReference; lastKnownFileType = folder; name = LabFeatures; path = Packages/LabFeatures; sourceTree = SOURCE_ROOT; };
 		0D2046C228154D83652F5963 /* LabMacTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LabMacTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		28C2C1B8B040DD0D06AF070E /* LabPhone.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = LabPhone.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F62DB7E020E6BFDAC86BD42 /* LabMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LabMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		3A7D251E0AD8AD98128FE7C9 /* SystemSurfaces.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = SystemSurfaces.xcconfig; sourceTree = "<group>"; };
 		4C5126791B7E1A1A049AE090 /* seed.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = seed.json; sourceTree = "<group>"; };
 		51F3AE91A639F249EFFE23A6 /* LabStore */ = {isa = PBXFileReference; lastKnownFileType = folder; name = LabStore; path = Packages/LabStore; sourceTree = SOURCE_ROOT; };
 		6BFE3236126CFD99DB8529EC /* LabWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LabWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		700897A06A459DF913708DC1 /* Base.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Base.xcconfig; sourceTree = "<group>"; };
 		748764B9E84663B58F1DA899 /* LabSupport */ = {isa = PBXFileReference; lastKnownFileType = folder; name = LabSupport; path = Packages/LabSupport; sourceTree = SOURCE_ROOT; };
 		807AD4AFA0A11FF4B4881588 /* LabDomain */ = {isa = PBXFileReference; lastKnownFileType = folder; name = LabDomain; path = Packages/LabDomain; sourceTree = SOURCE_ROOT; };
+		8D8791DE695E10C7EC57F692 /* ShareExtension.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = ShareExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		9A57B8DBFF3F863D70D41513 /* LabPhoneSurfaces.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = LabPhoneSurfaces.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AE4F4AB8C2CC86E0A0AF350A /* intelligence-ambiguous-note.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "intelligence-ambiguous-note.txt"; sourceTree = "<group>"; };
 		BB95D963471D52C06FB3FA80 /* Companions.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Companions.xcconfig; sourceTree = "<group>"; };
 		D89DA08F5504526396A194FA /* intelligence-injected-note.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "intelligence-injected-note.txt"; sourceTree = "<group>"; };
@@ -75,12 +113,26 @@
 			);
 			target = 33A636E515A245B24603DDA1 /* LabMac */;
 		};
+		B334C9D666086E69C605705B /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = EC3F7DFE3B8431537C8D22AA /* ShareExtension */;
+		};
 		C244F7098CF2995E93F4359E /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
 			);
 			target = 13A3DB99D4B21A7DD1CAD0F3 /* LabWatch */;
+		};
+		C784F85A982CE82D775E6678 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 30E5D77184963759D2D3494D /* LabPhoneSurfaces */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
@@ -108,19 +160,7 @@
 			path = Shared;
 			sourceTree = "<group>";
 		};
-		9576516F60AB8234B4B453C7 /* Phone */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				82F571B045A6942B2E7955E5 /* PBXFileSystemSynchronizedBuildFileExceptionSet */,
-			);
-			explicitFileTypes = {
-			};
-			explicitFolders = (
-			);
-			name = Phone;
-			path = Phone;
-			sourceTree = "<group>";
-		};
+		9576516F60AB8234B4B453C7 /* Phone */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (82F571B045A6942B2E7955E5 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, C784F85A982CE82D775E6678 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); name = Phone; path = Phone; sourceTree = "<group>"; };
 		A13CD67B706C632E945BF718 /* LabMacTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			explicitFileTypes = {
@@ -154,15 +194,52 @@
 			path = Icon;
 			sourceTree = "<group>";
 		};
+		F8C61BABB4107F84427D411E /* ShareExtension */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				B334C9D666086E69C605705B /* PBXFileSystemSynchronizedBuildFileExceptionSet */,
+			);
+			explicitFileTypes = {
+			};
+			explicitFolders = (
+			);
+			name = ShareExtension;
+			path = ShareExtension;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		2524D12E1598E75905149AFF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6F93A9AD463D59BB11A8A5EC /* LabDomain in Frameworks */,
+				8241A9AE0973790DCD57EE24 /* ShareIngress in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		34277A40BD6BC1A46DB9FA82 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				96EA540221683FF1A975546B /* LabSupport in Frameworks */,
 				46B8492EDC6B52F10B6794B1 /* LabCatalog in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		44EE39DAE578568CC1D92771 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B888B057D5B4B13CA4C86B32 /* LabSupport in Frameworks */,
+				61C2EFB9489E9A7476A1E7A0 /* LabDomain in Frameworks */,
+				778984D260ECA5DC69A502E1 /* LabStore in Frameworks */,
+				4DD8734A8F0814E2CFC44062 /* LabCatalog in Frameworks */,
+				330EBB105739FBBAFDAE5C28 /* ActionAtlas in Frameworks */,
+				1ABEE97B7C7ACB1EAF41ABC4 /* ShareIngress in Frameworks */,
+				5971E4B6D5596414791531A0 /* TypedIntelligence in Frameworks */,
+				89E214F72A8F8E59C59B440C /* AccessSuperpower in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -186,6 +263,7 @@
 				049D235E474520D658AD3AD3 /* ActionAtlas in Frameworks */,
 				5B74398A19EB86C3087BDEED /* TypedIntelligence in Frameworks */,
 				542F57ACC91C3B5DD11837E2 /* AccessSuperpower in Frameworks */,
+				4C323A1952AE6012980ED83A /* ShareIngress in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -200,6 +278,7 @@
 				21F31C50AAC169B20AE2CF15 /* ActionAtlas in Frameworks */,
 				E10047C202637983EF3886EE /* TypedIntelligence in Frameworks */,
 				F4026F15E90968A3C198C0E5 /* AccessSuperpower in Frameworks */,
+				526F4C3176A2E25CFBA613A9 /* ShareIngress in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -225,11 +304,20 @@
 			path = demo;
 			sourceTree = "<group>";
 		};
+		32FEB7779EDAF486F7DF9CB9 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				F8C61BABB4107F84427D411E /* ShareExtension */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		5C83823CB8A5387C15EF2188 = {
 			isa = PBXGroup;
 			children = (
 				BC360D0928B2D8A28BD1222B /* Apps */,
 				B90AD27F1A068837B4A13316 /* Config */,
+				32FEB7779EDAF486F7DF9CB9 /* Extensions */,
 				EBA164BF3EC8D82CC3FA8D3B /* Fixtures */,
 				071C35C879138D000B4C815B /* Packages */,
 				B2A2700360051188212A7089 /* Tests */,
@@ -280,6 +368,7 @@
 			children = (
 				BB95D963471D52C06FB3FA80 /* Companions.xcconfig */,
 				EA18A3C1245AEABF4BE3110A /* CoreLocal.xcconfig */,
+				3A7D251E0AD8AD98128FE7C9 /* SystemSurfaces.xcconfig */,
 			);
 			path = Profiles;
 			sourceTree = "<group>";
@@ -299,7 +388,9 @@
 				2F62DB7E020E6BFDAC86BD42 /* LabMac.app */,
 				0D2046C228154D83652F5963 /* LabMacTests.xctest */,
 				28C2C1B8B040DD0D06AF070E /* LabPhone.app */,
+				9A57B8DBFF3F863D70D41513 /* LabPhoneSurfaces.app */,
 				6BFE3236126CFD99DB8529EC /* LabWatch.app */,
+				8D8791DE695E10C7EC57F692 /* ShareExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -332,6 +423,40 @@
 			productReference = 6BFE3236126CFD99DB8529EC /* LabWatch.app */;
 			productType = "com.apple.product-type.application";
 		};
+		30E5D77184963759D2D3494D /* LabPhoneSurfaces */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0A290207686ED22427676534 /* Build configuration list for PBXNativeTarget "LabPhoneSurfaces" */;
+			buildPhases = (
+				49D963549D928EE6B0C07698 /* Sources */,
+				E3D4A423B2B246C34068ACD1 /* Resources */,
+				44EE39DAE578568CC1D92771 /* Frameworks */,
+				A4206BB9C8A2870713E4DAB0 /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A4268EFFAD8D1C0F75C304D2 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				E3BE00E555188C2418B856DE /* Icon */,
+				9576516F60AB8234B4B453C7 /* Phone */,
+				65F6373E1295B61369B3F59D /* Shared */,
+			);
+			name = LabPhoneSurfaces;
+			packageProductDependencies = (
+				F44C6435C9B6A97B75C33F44 /* LabSupport */,
+				C8548B319C70F000CAD5D26E /* LabDomain */,
+				F26F0DA29E5E4B99D5E4143F /* LabStore */,
+				A89F084FC0938D0139A2042E /* LabCatalog */,
+				88023F30308C4118D4A07ABA /* ActionAtlas */,
+				A7B30E9CC74D5DACCC486C60 /* ShareIngress */,
+				76F28CA76CDDB3E1BD522DA9 /* TypedIntelligence */,
+				CC0630EDCCDE6FC7F7BF2FBC /* AccessSuperpower */,
+			);
+			productName = LabPhoneSurfaces;
+			productReference = 9A57B8DBFF3F863D70D41513 /* LabPhoneSurfaces.app */;
+			productType = "com.apple.product-type.application";
+		};
 		33A636E515A245B24603DDA1 /* LabMac */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1384B7B636D45138A9FA4914 /* Build configuration list for PBXNativeTarget "LabMac" */;
@@ -358,6 +483,7 @@
 				7EC14A55645358F739F46AC7 /* ActionAtlas */,
 				FA764C388624F65B1FE0AC12 /* TypedIntelligence */,
 				C1686806D655F8ADADCF3268 /* AccessSuperpower */,
+				208ADB6FEE46A094CE66A041 /* ShareIngress */,
 			);
 			productName = LabMac;
 			productReference = 2F62DB7E020E6BFDAC86BD42 /* LabMac.app */;
@@ -389,6 +515,7 @@
 				D681B15E8F4FC00BCB2862EE /* ActionAtlas */,
 				872A3526A3C216A5301B05D2 /* TypedIntelligence */,
 				540B210369D029C191E89BAB /* AccessSuperpower */,
+				5879A7CAEDD8078739ABF6D6 /* ShareIngress */,
 			);
 			productName = LabPhone;
 			productReference = 28C2C1B8B040DD0D06AF070E /* LabPhone.app */;
@@ -419,6 +546,30 @@
 			productReference = 0D2046C228154D83652F5963 /* LabMacTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		EC3F7DFE3B8431537C8D22AA /* ShareExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B86F9FA4B8E32F19BD3F1E38 /* Build configuration list for PBXNativeTarget "ShareExtension" */;
+			buildPhases = (
+				6557E26DD4F78F63306A6BE5 /* Sources */,
+				7F5147168CD1EC1E7C96342F /* Resources */,
+				2524D12E1598E75905149AFF /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				F8C61BABB4107F84427D411E /* ShareExtension */,
+			);
+			name = ShareExtension;
+			packageProductDependencies = (
+				CACF77BD90DF68CDE4C515EA /* LabDomain */,
+				C0E3086832C7401036381F13 /* ShareIngress */,
+			);
+			productName = ShareExtension;
+			productReference = 8D8791DE695E10C7EC57F692 /* ShareExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -432,6 +583,10 @@
 						DevelopmentTeam = "";
 						ProvisioningStyle = Automatic;
 					};
+					30E5D77184963759D2D3494D = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+					};
 					33A636E515A245B24603DDA1 = {
 						DevelopmentTeam = "$(LAB_MAC_DEVELOPMENT_TEAM)";
 						ProvisioningStyle = Automatic;
@@ -442,6 +597,10 @@
 					};
 					BB1651A25A6528AE95605E65 = {
 						DevelopmentTeam = "$(LAB_MAC_DEVELOPMENT_TEAM)";
+						ProvisioningStyle = Automatic;
+					};
+					EC3F7DFE3B8431537C8D22AA = {
+						DevelopmentTeam = "";
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -468,6 +627,8 @@
 			targets = (
 				33A636E515A245B24603DDA1 /* LabMac */,
 				A1ACB82DE30AFBBFB5948C2B /* LabPhone */,
+				30E5D77184963759D2D3494D /* LabPhoneSurfaces */,
+				EC3F7DFE3B8431537C8D22AA /* ShareExtension */,
 				13A3DB99D4B21A7DD1CAD0F3 /* LabWatch */,
 				BB1651A25A6528AE95605E65 /* LabMacTests */,
 			);
@@ -492,6 +653,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		7F5147168CD1EC1E7C96342F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		BCF6826D1C7E6A4A47CA6029 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -509,6 +677,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E3D4A423B2B246C34068ACD1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				04A714E690365F240DA19ECC /* seed.json in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -519,7 +695,21 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		49D963549D928EE6B0C07698 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		581A0A057141B9D2260A2915 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6557E26DD4F78F63306A6BE5 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -547,6 +737,11 @@
 			isa = PBXTargetDependency;
 			target = 33A636E515A245B24603DDA1 /* LabMac */;
 			targetProxy = CA16A35C867C22F7FD57530B /* PBXContainerItemProxy */;
+		};
+		A4268EFFAD8D1C0F75C304D2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = EC3F7DFE3B8431537C8D22AA /* ShareExtension */;
+			targetProxy = 30D0E928463CD88AAA186016 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -596,6 +791,82 @@
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NativeLab.app/Contents/MacOS/NativeLab";
 			};
 			name = Release;
+		};
+		396D8B1070B8A00E333053C9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3A7D251E0AD8AD98128FE7C9 /* SystemSurfaces.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Extensions/PhoneSurfacesHost/LabPhoneSurfaces.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				GENERATE_INFOPLIST_FILE = "$(LAB_DECLARES_PURPOSE_STRINGS)";
+				INFOPLIST_FILE = Extensions/PhoneSurfacesHost/Info.plist;
+				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "$(LAB_PURPOSE_BLUETOOTH)";
+				INFOPLIST_KEY_NSCameraUsageDescription = "$(LAB_PURPOSE_CAMERA)";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "$(LAB_PURPOSE_MICROPHONE)";
+				INFOPLIST_KEY_NSNearbyInteractionUsageDescription = "$(LAB_PURPOSE_NEARBY_INTERACTION)";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "$(LAB_PURPOSE_SPEECH_RECOGNITION)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(LAB_BUNDLE_PREFIX).nativelab";
+				PRODUCT_NAME = NativeLabSurfaces;
+				SDKROOT = iphoneos;
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		3B70FF53DCBBCE1A3355F212 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3A7D251E0AD8AD98128FE7C9 /* SystemSurfaces.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Extensions/PhoneSurfacesHost/LabPhoneSurfaces.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				GENERATE_INFOPLIST_FILE = "$(LAB_DECLARES_PURPOSE_STRINGS)";
+				INFOPLIST_FILE = Extensions/PhoneSurfacesHost/Info.plist;
+				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "$(LAB_PURPOSE_BLUETOOTH)";
+				INFOPLIST_KEY_NSCameraUsageDescription = "$(LAB_PURPOSE_CAMERA)";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "$(LAB_PURPOSE_MICROPHONE)";
+				INFOPLIST_KEY_NSNearbyInteractionUsageDescription = "$(LAB_PURPOSE_NEARBY_INTERACTION)";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "$(LAB_PURPOSE_SPEECH_RECOGNITION)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(LAB_BUNDLE_PREFIX).nativelab";
+				PRODUCT_NAME = NativeLabSurfaces;
+				SDKROOT = iphoneos;
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		4542D097ED069A4F3645AE3D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3A7D251E0AD8AD98128FE7C9 /* SystemSurfaces.xcconfig */;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = Extensions/ShareExtension/ShareExtension.entitlements;
+				INFOPLIST_FILE = Extensions/ShareExtension/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(LAB_BUNDLE_PREFIX).nativelab.share";
+				PRODUCT_NAME = ShareExtension;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
 		};
 		484664177F3A6089DE590F63 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -862,6 +1133,26 @@
 			};
 			name = Debug;
 		};
+		F882F7E6C7A592DCF87D271D /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3A7D251E0AD8AD98128FE7C9 /* SystemSurfaces.xcconfig */;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = Extensions/ShareExtension/ShareExtension.entitlements;
+				INFOPLIST_FILE = Extensions/ShareExtension/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(LAB_BUNDLE_PREFIX).nativelab.share";
+				PRODUCT_NAME = ShareExtension;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -870,6 +1161,15 @@
 			buildConfigurations = (
 				832452E5D579BA10611FCC54 /* Debug */,
 				07348935BBB6CDE9C4258E24 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		0A290207686ED22427676534 /* Build configuration list for PBXNativeTarget "LabPhoneSurfaces" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3B70FF53DCBBCE1A3355F212 /* Debug */,
+				396D8B1070B8A00E333053C9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
@@ -910,6 +1210,15 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
+		B86F9FA4B8E32F19BD3F1E38 /* Build configuration list for PBXNativeTarget "ShareExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4542D097ED069A4F3645AE3D /* Debug */,
+				F882F7E6C7A592DCF87D271D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
@@ -940,6 +1249,10 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = LabDomain;
 		};
+		208ADB6FEE46A094CE66A041 /* ShareIngress */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ShareIngress;
+		};
 		21367E5C42D7E02E6E77C8AB /* LabCatalog */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = LabCatalog;
@@ -960,6 +1273,10 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = AccessSuperpower;
 		};
+		5879A7CAEDD8078739ABF6D6 /* ShareIngress */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ShareIngress;
+		};
 		6CF6B1898735341A74FB3DA4 /* LabStore */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = LabStore;
@@ -967,6 +1284,10 @@
 		6E71D4CE7F5EFA213F132511 /* LabStore */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = LabStore;
+		};
+		76F28CA76CDDB3E1BD522DA9 /* TypedIntelligence */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = TypedIntelligence;
 		};
 		7EC14A55645358F739F46AC7 /* ActionAtlas */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -976,9 +1297,25 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = TypedIntelligence;
 		};
+		88023F30308C4118D4A07ABA /* ActionAtlas */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ActionAtlas;
+		};
 		9429B9706DB8D93A799FDA9F /* LabSupport */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = LabSupport;
+		};
+		A7B30E9CC74D5DACCC486C60 /* ShareIngress */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ShareIngress;
+		};
+		A89F084FC0938D0139A2042E /* LabCatalog */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = LabCatalog;
+		};
+		C0E3086832C7401036381F13 /* ShareIngress */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ShareIngress;
 		};
 		C1686806D655F8ADADCF3268 /* AccessSuperpower */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -988,6 +1325,18 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = LabSupport;
 		};
+		C8548B319C70F000CAD5D26E /* LabDomain */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = LabDomain;
+		};
+		CACF77BD90DF68CDE4C515EA /* LabDomain */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = LabDomain;
+		};
+		CC0630EDCCDE6FC7F7BF2FBC /* AccessSuperpower */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = AccessSuperpower;
+		};
 		D681B15E8F4FC00BCB2862EE /* ActionAtlas */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ActionAtlas;
@@ -996,9 +1345,17 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = LabCatalog;
 		};
+		F26F0DA29E5E4B99D5E4143F /* LabStore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = LabStore;
+		};
 		F41E96699628F4302D6E6EE4 /* LabDomain */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = LabDomain;
+		};
+		F44C6435C9B6A97B75C33F44 /* LabSupport */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = LabSupport;
 		};
 		FA764C388624F65B1FE0AC12 /* TypedIntelligence */ = {
 			isa = XCSwiftPackageProductDependency;

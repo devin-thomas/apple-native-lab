@@ -132,7 +132,7 @@
       "title": "Share Ingress Station",
       "category": "Sharing",
       "milestone": "M1",
-      "state": "specified",
+      "state": "implemented",
       "dependsOn": [
         "LAB-001"
       ],
