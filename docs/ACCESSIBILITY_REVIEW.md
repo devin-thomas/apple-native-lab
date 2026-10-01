@@ -549,3 +549,15 @@ Static review only of `ShortcutWorkbenchViews.swift`, `ShortcutWorkbenchColumns.
 | Mac manual fallback column contains only card titles when a recipe is selected | ShortcutWorkbenchListColumn | Confirm how keyboard and assistive users return to the full instruction cards |
 
 See the [walkthrough](walkthroughs/LAB-003-shortcut-workbench.md) for the fixture path and unverified system surfaces. These are open review findings, not measured UI failures.
+
+## Point, Inspect, Propose (LAB-012-B)
+
+Source review only; the hosted session replay is not an accessibility-tree test. Title and Note are labeled TextFields; the essential actions are standard named buttons with explanatory hints on Replay Fixture, Read Text, Describe on this Device, and Apply. Uncertainty and results appear as words. No automated audit or manual assistive-technology pass ran for this experiment.
+
+| Flow | Mac VoiceOver / Voice Control / Full Keyboard Access | iPhone VoiceOver / Voice Control / large text |
+|---|---|---|
+| Open, select image or replay fixture | not-run | not-run |
+| Read, edit uncertain fields, apply and inspect receipt | not-run | not-run |
+| Unavailable model, refused image, cancel selection, Reset Demo | not-run | not-run |
+
+Findings retained for follow-up: no dedicated Mac menu commands or shortcuts; iPhone Apply is inside the scrolling Form; status changes have no explicit announcement. No visual accessibility claim follows from the session test. See the [walkthrough](walkthroughs/LAB-012-point-inspect-propose.md).

@@ -363,3 +363,15 @@ Apple’s [WWDC26 Shortcuts session](https://developer.apple.com/videos/play/wwd
 The linked App Shortcuts HIG page required JavaScript in the source fetch; no new HIG availability claim is based on that fetch. See the qualification record and walkthrough for the actual run boundaries.
 
 Installed-SDK re-probe (2026-10-01, Xcode 27.0 (27A266a), iOS 27.0 `arm64e-apple-ios.swiftinterface`): `PersistentlyIdentifiable` at line 3769 declares a **static** `persistentIdentifier: String`; `AppShortcutsProvider` at line 10728 declares builder-backed `appShortcuts: [AppShortcut]`. Both declarations are available from macOS 13.0, iOS 16.0, watchOS 9.0, tvOS 16.0. The static identifier must not be confused with a stored item's UUID. `grep -n -B 2 -A 5 -E "protocol AppShortcutsProvider|protocol PersistentlyIdentifiable"` on research produced these declarations. The first probe attempted `rg`, which is not installed there; the corrected `grep` probe passed. No entitlement or availability setting changed.
+
+### Point, Inspect, Propose (LAB-012)
+
+LAB-012-B re-read the macOS 27.0 SDK interfaces through `labr` on 2026-10-01: Xcode 27.0 (27A266a), Swift 6.4 (swiftlang-6.4.0.34.1), host macOS 27.0 (26A425). No entitlement or purpose-string change. The Apple RecognizeTextRequest documentation's structured response also names iOS/iPadOS 18.0 and macOS 15.0. The linked visual-intelligence and Foundation Models pages were requested, but the documentation reader could not retrieve their Markdown content; no new claim is based on that response.
+
+| Source | Installed symbol | Declared availability | Qualification boundary |
+|---|---|---|---|
+| [S55](SOURCE_INDEX.md#s55) | `RecognizeTextRequest`, `RecognizedTextObservation.transcript` | Request: macOS 15 / iOS 18; transcript: macOS/iOS 26 | Vision adapter tests use generated original text, not a photo or camera |
+| [S55](SOURCE_INDEX.md#s55) | `DetectBarcodesRequest` | macOS 15 / iOS 18 / watchOS 27 | Generated QR adapter test; host Watch and TV do not link PointInspect |
+| [S06](SOURCE_INDEX.md#s06) | `Attachment<ImageAttachmentContent>.init(_ cgImage:orientation:)` | macOS/iOS/visionOS/watchOS 27; tvOS unavailable | Compiled path only; live model description remains not-run |
+
+The first probe failed because `rg` is absent on the build host; the same interface probe with `grep` succeeded. No older SDK or OS-26 runtime was used. Evidence paths and limitations are in [LAB-012-B](../tickets/LAB-012-B.md).

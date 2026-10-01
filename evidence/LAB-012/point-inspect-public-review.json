@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "subject": "LAB-012",
+  "date": "2026-10-01T07:02:17Z",
+  "provenance": {
+    "sourceRevision": "491f004 with final documentation uncommitted",
+    "sdkName": "macosx27.0",
+    "xcodeVersion": "27.0",
+    "xcodeBuild": "27A266a"
+  },
+  "check": "Publication, privacy, rights, walkthrough, and availability review",
+  "execution": {
+    "path": "static-review"
+  },
+  "inputs": [
+    "swatch:Fixtures/point-inspect/swatch-card.png@sha256:5878b4eb086241d408b0ab74bcb3d48c42b035fa93d1766b5d3a43ee9f4a7105",
+    "Packages/LabFeatures/Sources/PointInspect and Apps/Shared/PointInspect at 491f004",
+    "docs/walkthroughs/LAB-012-point-inspect-propose.md, final uncommitted documentation accompanying 491f004"
+  ],
+  "steps": [
+    "Read the fixture README, module and host sources, ticket, spec, and linked source/permission/test boundaries",
+    "Re-read Vision and FoundationModels interfaces in the installed macOS SDK using grep through labr; first attempt using rg failed because it is not installed on the build host",
+    "Review the Apple RecognizeTextRequest structured documentation response and compare OS availability",
+    "Review all ticket artifacts for original input, labels separating replay and live integration, private data, and unsupported claims"
+  ],
+  "outcome": {
+    "result": "passed",
+    "detail": "The fixture is original geometric artwork with the recorded 115-byte hash. All test text is synthetic; no accounts, real photos, credentials, or customer material were used. No screenshots, recordings, or export archives were produced. The walkthrough labels fixture/session execution and leaves camera, live model, system visual search, physical iPhone/iPad, and assistive-technology passes unverified. Module review found no upload or URL-opening route. Apply intentionally persists recognized text in the local note; other explicitly chosen exports may carry it. SDK request and image-attachment gates match the source ledger."
+  },
+  "limitations": [
+    "Static review is not runtime network interception or proof that a system visual-search service stays local. Only this app module is reviewed.",
+    "The documentation reader could not retrieve Visual Intelligence and Foundation Models Markdown; no refreshed behavior claim relies on those failed responses.",
+    "Accessibility review is source-only and records missing Mac shortcuts, unpinned iPhone Apply, and absent explicit status announcements.",
+    "No visual screenshots or generated exports exist to approve; this review covers original fixture and metadata-only evidence."
+  ]
+}

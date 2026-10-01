@@ -33,10 +33,10 @@ The first run uses original fixtures. Keep the underlying operation independent 
 
 ## Acceptance and proof
 
-- [ ] Barcode payloads cannot execute actions.
-- [ ] Photos containing private text remain local by default.
-- [ ] Uncertain recognition stays an editable suggestion.
-- [ ] The declared fallback completes a meaningful version of the interaction.
+- [x] Barcode payloads cannot execute actions.
+- [x] Photos containing private text remain local by default.
+- [x] Uncertain recognition stays an editable suggestion.
+- [x] The declared fallback completes a meaningful version of the interaction.
 - [ ] Essential actions remain available through the platform's assistive and alternate-input paths.
 - [ ] Actual device/OS/permission and adapter-path evidence is recorded; untested combinations remain unverified.
 
@@ -74,3 +74,9 @@ A chosen PNG, JPEG, or GIF stays on the device. Its SHA-256 is the provenance st
 **Primary-source references:** [S06](../docs/SOURCE_INDEX.md#s06), [S55](../docs/SOURCE_INDEX.md#s55), [S62](../docs/SOURCE_INDEX.md#s62). A source is not device proof.
 
 See [data contracts](../docs/DATA_CONTRACTS.md), [permission boundaries](../docs/EXTENSION_AND_PERMISSION_MATRIX.md), and [test strategy](../docs/TEST_STRATEGY.md) for shared requirements.
+
+## Qualification notes (LAB-012-B)
+
+The [walkthrough](../docs/walkthroughs/LAB-012-point-inspect-propose.md) and [evidence](../evidence/LAB-012/) distinguish scripted recognition, generated Vision adapter inputs, and the hosted manual replay. Barcode/local/uncertainty checks are fixture proof; the manual path ran through the Mac and iPhone simulator host sessions on fresh SQLite stores. No physical iPhone/iPad, camera, live image-model description, or system visual-search invocation was qualified. Assistive-technology passes remain not-run. The state stays `implemented`.
+
+One approval can be retried without another item. Separate Apply actions create separate items even for identical bytes. Reset Demo preserves applied inspections in the user namespace. Applying recognized text writes it into the local note; a separately chosen downstream export may carry that note. This is not automatic redaction or a claim about the system visual-search service's own privacy behavior.

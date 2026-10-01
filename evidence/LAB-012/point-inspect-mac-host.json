@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "subject": "LAB-012",
+  "date": "2026-10-01T06:03:19Z",
+  "provenance": {
+    "sourceRevision": "3f0db77",
+    "sdkName": "macosx27.0",
+    "xcodeVersion": "27.0",
+    "xcodeBuild": "27A266a",
+    "appVersion": "0.1.0",
+    "buildNumber": "1",
+    "buildProfile": "CoreLocal",
+    "minimumOS": "26.0"
+  },
+  "check": "Manual swatch replay through PointInspectSession and the Mac host SQLite backend",
+  "execution": {
+    "path": "fixture"
+  },
+  "inputs": [
+    "swatch:Fixtures/point-inspect/swatch-card.png@sha256:5878b4eb086241d408b0ab74bcb3d48c42b035fa93d1766b5d3a43ee9f4a7105"
+  ],
+  "steps": [
+    "labr <ticket worktree> xcodebuild -project AppleNativeLab.xcodeproj -scheme LabMac-Core -derivedDataPath build/DerivedData -only-testing:LabMacTests/PointInspectHostTests -only-testing:LabMacTests/PointInspectQualificationHostTests test -quiet",
+    "On a fresh SQLite store in the sandboxed Mac host, replayFixture, set Title and Note, useFields, apply, inspect item, resetDemo, compare saved item",
+    "Read xcresult summary: 3 tests passed, 0 failed, 0 skipped"
+  ],
+  "outcome": {
+    "result": "passed",
+    "detail": "The bundled swatch decoded as PNG. The backend typed-record test committed as app UI. The complete session replay showed Fixture replay and Manual fields (not a model), added no receipt during Use These Fields, added collection and item receipts on Apply, and stored one user item containing the swatch hash. Reset Demo preserved the item exactly."
+  },
+  "limitations": [
+    "Fixture execution inside the sandboxed Mac app on macOS 27.0 (26A425), not physical camera or live-model evidence.",
+    "No visible window control, open panel, pointer, keyboard, or accessibility tree was driven. Session methods were called directly.",
+    "Focused run used the Mac scheme default destination. Its earlier explicit-destination invocation was stopped while queued and ran no test.",
+    "The source revision identifies the mirrored checkout; the focused command did not set LAB_SOURCE_REVISION for the app Info.plist.",
+    "No iPhone, iPad, camera, system visual search, live image description, or manual assistive-technology run."
+  ]
+}
