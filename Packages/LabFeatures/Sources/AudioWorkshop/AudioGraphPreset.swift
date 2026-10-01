@@ -127,13 +127,57 @@ extension AudioGraphPreset {
         case format, schemaVersion, loop, gainDecibels, filterEnabled, cutoffHertz, resonance, midi
     }
 
-    /// The preset as canonical JSON: sorted keys, no whitespace. The same preset always gives the
-    /// same bytes, which the audio unit's saved state and the tests rely on.
+    /// The preset as canonical JSON: sorted keys, no whitespace, and each number in its shortest
+    /// form that reads back exactly (0.9, not 0.90000000000000002 as JSONSerialization writes it).
+    /// The same preset always gives the same bytes, which the audio unit's saved state relies on.
     public var canonicalJSON: Data {
-        // Every value is a string, number, or Boolean, so encoding cannot fail.
-        try! JSONSerialization.data(withJSONObject: jsonObject, options: [.sortedKeys, .withoutEscapingSlashes])
+        // Every value is a string, a finite number, or a Boolean, so encoding cannot fail.
+        try! Self.encoder.encode(Stored(self))
     }
 
+    private static var encoder: JSONEncoder {
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = [.sortedKeys, .withoutEscapingSlashes]
+        return encoder
+    }
+
+    /// The stored shape, for the encoder. A missing MIDI channel is written as `null`.
+    private struct Stored: Encodable {
+        let preset: AudioGraphPreset
+
+        init(_ preset: AudioGraphPreset) { self.preset = preset }
+
+        private enum Keys: String, CodingKey {
+            case format, schemaVersion, loop, gainDecibels, filterEnabled, cutoffHertz, resonance, midi
+            case controller, channel, lowHertz, highHertz
+        }
+
+        func encode(to encoder: any Encoder) throws {
+            var container = encoder.container(keyedBy: Keys.self)
+            try container.encode(AudioGraphPreset.format, forKey: .format)
+            try container.encode(AudioGraphPreset.schemaVersion, forKey: .schemaVersion)
+            try container.encode(preset.loop.rawValue, forKey: .loop)
+            try container.encode(preset.gainDecibels, forKey: .gainDecibels)
+            try container.encode(preset.filterEnabled, forKey: .filterEnabled)
+            try container.encode(preset.cutoffHertz, forKey: .cutoffHertz)
+            try container.encode(preset.resonance, forKey: .resonance)
+            var midi = container.nestedContainer(keyedBy: Keys.self, forKey: .midi)
+            try midi.encode(Int(preset.midi.controller), forKey: .controller)
+            if let channel = preset.midi.channel {
+                try midi.encode(Int(channel), forKey: .channel)
+            } else {
+                try midi.encodeNil(forKey: .channel)
+            }
+            try midi.encode(preset.midi.lowHertz, forKey: .lowHertz)
+            try midi.encode(preset.midi.highHertz, forKey: .highHertz)
+        }
+    }
+
+    private struct StoredExtras: Encodable {
+        let audioWorkshopPreset: Stored
+    }
+
+    /// The same fields as JSON objects, for tests that change one field at a time.
     var jsonObject: [String: Any] {
         [
             Field.format.rawValue: Self.format,
@@ -180,7 +224,7 @@ extension AudioGraphPreset {
 
     /// The preset as an item's extras: `{"audioWorkshopPreset": {…}}`.
     public var extras: ItemExtras {
-        let data = try! JSONSerialization.data(withJSONObject: [Self.extrasKey: jsonObject], options: [.sortedKeys, .withoutEscapingSlashes])
+        let data = try! Self.encoder.encode(StoredExtras(audioWorkshopPreset: Stored(self)))
         // A preset is far below the extras limit and is always a strict JSON object.
         return try! ItemExtras(json: String(decoding: data, as: UTF8.self))
     }
