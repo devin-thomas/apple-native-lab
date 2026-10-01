@@ -6,7 +6,7 @@
 # profile's compilation condition. Schemes by profile:
 #   CoreLocal         LabMac-Core, LabPhone-Core
 #   Companions        LabWatch, LabTV
-#   SystemSurfaces    LabPhone-Surfaces (the host variant, the share extension, the widget and Control extension)
+#   SystemSurfaces    LabPhone-Surfaces (the host variant, the share extension, the widget and Control extension, the AUv3 extension)
 #   CloudOptional     none yet
 #   FrontierOptional  none yet
 # Entitlements and purpose strings are declared per executable, on the target that uses them.
@@ -90,6 +90,9 @@ targets:
       # LAB-004 Surface Deck: the demo session's deck, its intents, and the in-app widget previews.
       - package: LabFeatures
         product: SurfaceDeck
+      # LAB-029 Audio Workshop: the C kernel, live playback, MIDI, offline processing, and the audio unit.
+      - package: LabFeatures
+        product: AudioWorkshop
     info:
       path: Apps/Mac/Info.plist
       properties:
@@ -176,6 +179,9 @@ targets:
       # LAB-004 Surface Deck: the demo session's deck, its intents, and the in-app widget previews.
       - package: LabFeatures
         product: SurfaceDeck
+      # LAB-029 Audio Workshop: the C kernel, live playback, MIDI, offline processing, and the audio unit.
+      - package: LabFeatures
+        product: AudioWorkshop
     info:
       path: Apps/Phone/Info.plist
       properties:
@@ -223,8 +229,8 @@ targets:
         INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription: $(LAB_PURPOSE_BLUETOOTH)
         INFOPLIST_KEY_NSNearbyInteractionUsageDescription: $(LAB_PURPOSE_NEARBY_INTERACTION)
 
-  # SystemSurfaces: the iPhone host variant that embeds the share extension (LAB-007) and the widget
-  # and Control extension (LAB-004). Same sources
+  # SystemSurfaces: the iPhone host variant that embeds the share extension (LAB-007), the widget
+  # and Control extension (LAB-004), and the AUv3 effect extension (LAB-029). Same sources
   # and bundle identifier as LabPhone, so it replaces the CoreLocal app rather than adding one; its
   # own scheme, LabPhone-Surfaces, keeps LabPhone-Core free of App Group provisioning. It and the
   # extension each declare the App Group, derived from LAB_BUNDLE_PREFIX. Simulator builds need no
@@ -267,10 +273,16 @@ targets:
       # LAB-004 Surface Deck: the deck, its intents, and the snapshot writer, as LabPhone.
       - package: LabFeatures
         product: SurfaceDeck
+      # LAB-029 Audio Workshop, as LabPhone.
+      - package: LabFeatures
+        product: AudioWorkshop
       - target: ShareExtension
         embed: true
       # LAB-004: the widget and Control extension, embedded only in this SystemSurfaces variant.
       - target: SurfaceWidgets
+        embed: true
+      # LAB-029: the AUv3 effect extension, embedded only in this SystemSurfaces variant.
+      - target: AudioWorkshopUnit
         embed: true
     info:
       path: Extensions/PhoneSurfacesHost/Info.plist
@@ -398,6 +410,54 @@ targets:
       base:
         PRODUCT_NAME: SurfaceWidgets
         PRODUCT_BUNDLE_IDENTIFIER: $(LAB_BUNDLE_PREFIX).nativelab.widgets
+        TARGETED_DEVICE_FAMILY: "1,2"
+        APPLICATION_EXTENSION_API_ONLY: YES
+        SKIP_INSTALL: YES
+
+  # SystemSurfaces: the AUv3 effect extension (LAB-029 Audio Workshop). A music app loads it as
+  # "Native Lab: Workshop Filter" and saves its preset with the app's own project (fullState). It
+  # serves the same WorkshopAudioUnit and C kernel the app hosts in-process; it opens no store,
+  # writes no file, records nothing, and needs no entitlement. Embedded only by LabPhoneSurfaces,
+  # so CoreLocal carries no extension. A Mac AUv3 would need a Mac host variant; none exists yet.
+  AudioWorkshopUnit:
+    type: app-extension
+    platform: iOS
+    configFiles:
+      Debug: Config/Profiles/SystemSurfaces.xcconfig
+      Release: Config/Profiles/SystemSurfaces.xcconfig
+    sources:
+      - Extensions/AudioWorkshopUnit
+    dependencies:
+      - package: LabFeatures
+        product: AudioWorkshop
+    info:
+      path: Extensions/AudioWorkshopUnit/Info.plist
+      properties:
+        CFBundleDisplayName: Native Lab Workshop Filter
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        LabSourceRevision: $(LAB_SOURCE_REVISION)
+        LabBuildProfile: $(LAB_BUILD_PROFILE)
+        LabDistributionLane: $(LAB_DISTRIBUTION_LANE)
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.AudioUnit-UI
+          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).AudioUnitViewController
+          NSExtensionAttributes:
+            NSExtensionServiceRoleType: NSExtensionServiceRoleTypeEditor
+            # Must match WorkshopAudioUnit.componentDescription, componentName, and componentVersion.
+            AudioComponents:
+              - name: "Native Lab: Workshop Filter"
+                description: Workshop Filter
+                manufacturer: NLab
+                type: aufx
+                subtype: wksp
+                version: 65536
+                sandboxSafe: true
+                tags: [Effects]
+    settings:
+      base:
+        PRODUCT_NAME: AudioWorkshopUnit
+        PRODUCT_BUNDLE_IDENTIFIER: $(LAB_BUNDLE_PREFIX).nativelab.audiounit
         TARGETED_DEVICE_FAMILY: "1,2"
         APPLICATION_EXTENSION_API_ONLY: YES
         SKIP_INSTALL: YES
@@ -621,8 +681,12 @@ schemes:
         LabPhoneSurfaces: all
         ShareExtension: all
         SurfaceWidgets: all
+        AudioWorkshopUnit: all
+    # The app runs, not an extension: build targets are listed alphabetically, and
+    # AudioWorkshopUnit would otherwise come first.
     run:
       config: Debug
+      executable: LabPhoneSurfaces
     archive:
       config: Release
 

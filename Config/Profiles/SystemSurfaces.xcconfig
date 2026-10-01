@@ -2,8 +2,9 @@
 // App Intents integration tests (docs/BUILD_AND_DISTRIBUTION.md).
 //
 // Attached today: LabPhoneSurfaces (the iPhone host variant), ShareExtension (LAB-007 Share Ingress
-// Station), and SurfaceWidgets (LAB-004 Surface Deck: the widget and Controls), all built by the
-// scheme LabPhone-Surfaces. A target that attaches this file:
+// Station), SurfaceWidgets (LAB-004 Surface Deck: the widget and Controls), and AudioWorkshopUnit
+// (LAB-029 Audio Workshop: the AUv3 effect, which needs no App Group), all built by the scheme
+// LabPhone-Surfaces. A target that attaches this file:
 // - declares its own .entitlements file; an App Group entitlement uses $(LAB_APP_GROUP_IDENTIFIER);
 // - is embedded only by a SystemSurfaces host variant with its own scheme (for example
 //   LabPhone-Surfaces), never by LabPhone, so LabPhone-Core never needs App Group provisioning

@@ -70,6 +70,19 @@ entitlement  CoreLocal  macos    com.apple.security.files.user-selected.read-wri
 link         SystemSurfaces ios  WidgetKit           # the widget and Controls; the host variant's reloadTimelines and reloadControls
 link         SystemSurfaces ios  _AppIntents_SwiftUI # the widget's Toggle(isOn:intent:) comes from SwiftUI's App Intents overlay
 
+# CoreLocal and SystemSurfaces: Audio Workshop (LAB-029). Playback only: no input node is opened and
+# no permission is asked. The offline render is the declared fallback and needs none of these at run time.
+link         CoreLocal  macos    AVFAudio            # AVAudioEngine and its source node for live playback; offline manual rendering
+link         CoreLocal  macos    AudioToolbox        # the workshop's AUv3 effect class, hosted in-process (AUAudioUnit)
+link         CoreLocal  macos    CoreMIDI            # MIDI input, opened only when a person turns on Listen to MIDI Sources
+link         CoreLocal  ios      AVFAudio            # same, iPhone host; AVAudioSession playback category
+link         CoreLocal  ios      AudioToolbox        # same, iPhone host
+link         CoreLocal  ios      CoreMIDI            # same, iPhone host
+link         SystemSurfaces ios  AVFAudio            # host variant, as LabPhone; the AUv3 extension's bus formats
+link         SystemSurfaces ios  AudioToolbox        # host variant, as LabPhone; the AUv3 extension's audio unit
+link         SystemSurfaces ios  CoreMIDI            # host variant, as LabPhone; linked into the extension through the AudioWorkshop product, never opened there
+link         SystemSurfaces ios  CoreAudioKit        # the AUv3 extension's principal class (AUViewController)
+
 # Companions: the Watch host's capability status probes (CORE-004)
 link         Companions watchos  AVFAudio            # record permission and audio input
 link         Companions watchos  CoreBluetooth       # Bluetooth authorization status
