@@ -90,6 +90,11 @@ targets:
       # LAB-004 Surface Deck: the demo session's deck, its intents, and the in-app widget previews.
       - package: LabFeatures
         product: SurfaceDeck
+      # LAB-032 Render That Survives: the reusable job runtime and the render module.
+      - package: LabFeatures
+        product: LabJobs
+      - package: LabFeatures
+        product: RenderThatSurvives
     info:
       path: Apps/Mac/Info.plist
       properties:
@@ -176,6 +181,11 @@ targets:
       # LAB-004 Surface Deck: the demo session's deck, its intents, and the in-app widget previews.
       - package: LabFeatures
         product: SurfaceDeck
+      # LAB-032 Render That Survives: the reusable job runtime and the render module.
+      - package: LabFeatures
+        product: LabJobs
+      - package: LabFeatures
+        product: RenderThatSurvives
     info:
       path: Apps/Phone/Info.plist
       properties:
@@ -193,6 +203,10 @@ targets:
             UTTypeConformsTo: [public.json]
             UTTypeTagSpecification:
               public.filename-extension: [anlab]
+        # LAB-032: continued processing for a render a person starts. Each request registers a new
+        # identifier under this wildcard. No background mode and no background-GPU entitlement.
+        BGTaskSchedulerPermittedIdentifiers:
+          - $(PRODUCT_BUNDLE_IDENTIFIER).render.*
         UILaunchScreen: {}
         UIApplicationSceneManifest:
           UIApplicationSupportsMultipleScenes: true
@@ -267,6 +281,11 @@ targets:
       # LAB-004 Surface Deck: the deck, its intents, and the snapshot writer, as LabPhone.
       - package: LabFeatures
         product: SurfaceDeck
+      # LAB-032 Render That Survives, as LabPhone.
+      - package: LabFeatures
+        product: LabJobs
+      - package: LabFeatures
+        product: RenderThatSurvives
       - target: ShareExtension
         embed: true
       # LAB-004: the widget and Control extension, embedded only in this SystemSurfaces variant.
@@ -282,6 +301,9 @@ targets:
         LabBuildProfile: $(LAB_BUILD_PROFILE)
         LabDistributionLane: $(LAB_DISTRIBUTION_LANE)
         LabAppGroupIdentifier: $(LAB_APP_GROUP_IDENTIFIER)
+        # LAB-032: as LabPhone.
+        BGTaskSchedulerPermittedIdentifiers:
+          - $(PRODUCT_BUNDLE_IDENTIFIER).render.*
         UILaunchScreen: {}
         UIApplicationSceneManifest:
           UIApplicationSupportsMultipleScenes: true

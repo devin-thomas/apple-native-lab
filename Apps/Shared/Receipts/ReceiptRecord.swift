@@ -91,6 +91,8 @@ struct ReceiptPresentation: Hashable {
                 "Nothing changed, so there is nothing to undo."
             } else if kind == .resetDemo {
                 "Reset Demo has no undo. It changed only demo samples; your own data was not touched."
+            } else if kind == .startJob || kind == .updateJob {
+                "A job's steps have no undo: the work and files they record cannot be taken back by a receipt."
             } else {
                 "This operation offers no undo."
             }
@@ -111,6 +113,8 @@ extension OperationKind {
         case .restoreItem: "Restore Item"
         case .resetDemo: "Reset Demo"
         case .setSession: "Set Session"
+        case .startJob: "Start Job"
+        case .updateJob: "Update Job"
         }
     }
 }
@@ -118,7 +122,17 @@ extension OperationKind {
 extension DomainOperation {
     /// What the operation does, naming the direction when the kind alone does not (LAB-004).
     var title: String {
-        if case .setSession(_, _, let running) = self { running ? "Start Session" : "Pause Session" } else { kind.title }
+        switch self {
+        case .setSession(_, _, let running): running ? "Start Session" : "Pause Session"
+        // A job step names itself (LAB-032): the kind alone says only "Update Job".
+        case .updateJob(_, _, .checkpoint): "Save Job Checkpoint"
+        case .updateJob(_, _, .interrupt): "Stop Job"
+        case .updateJob(_, _, .resume): "Resume Job"
+        case .updateJob(_, _, .cancel): "Cancel Job"
+        case .updateJob(_, _, .fail): "Fail Job"
+        case .updateJob(_, _, .succeed): "Finish Job"
+        default: kind.title
+        }
     }
 }
 
@@ -140,6 +154,7 @@ extension EntityKind {
         case .collection: "Collection"
         case .item: "Item"
         case .session: "Session"
+        case .job: "Job"
         }
     }
 }

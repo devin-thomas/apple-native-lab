@@ -11,6 +11,8 @@ struct LabPhoneApp: App {
         // App Intents use this same library, so their receipts join this session's list.
         ActionAtlasHost.connect(library)
         SurfaceDeckHost.connect(library)
+        // LAB-032: continued processing when a render qualifies, a foreground job otherwise.
+        RenderStudioModel.shared.connect(library, runway: ContinuedProcessingRunway())
     }
 
     var body: some Scene {

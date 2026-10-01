@@ -1,3 +1,4 @@
+import LabJobs
 import SwiftUI
 
 @main
@@ -11,6 +12,8 @@ struct LabMacApp: App {
         // App Intents use this same library, so their receipts join this session's list.
         ActionAtlasHost.connect(library)
         SurfaceDeckHost.connect(library)
+        // LAB-032: the Mac worker runs renders while the app runs.
+        RenderStudioModel.shared.connect(library, runway: MacWorkerRunway())
     }
 
     var body: some Scene {

@@ -73,6 +73,9 @@ enum LibraryMessages {
         case .collectionArchived: "Its collection is archived."
         case .demoCollection: "Demo collections hold only the samples. Add items to your own collection."
         case .noChanges: "Nothing would change."
+        case .jobFinished: "That job has finished and cannot change."
+        case .jobPhase(_, let current): "That job is \(current.rawValue), so it cannot take that step."
+        case .jobProgress: "A job's progress only moves forward."
         }
     }
 }
