@@ -480,3 +480,14 @@ LAB-009-B reviewed `DocumentsEverywhereViews.swift` and `DocumentsEverywhereColu
 | E3 Duplicate and reset | Refusal is heard; Reset Demo preserves adopted user data | not-run | not-run | not-run |
 
 **Static findings, still open:** native labeled buttons and picker, combined sample rows, selectable text, and a preview heading are present. The sample row's accessibility label retains middle dots; Add Sample to Lab has no Mac menu command; outcomes do not post `LabAnnouncement`; the iPhone Actions section follows a potentially long preview instead of pinning the primary action; Quick Look HTML uses fixed foreground colors. The provider-disabled explanation is visible independently of the disabled activation control. These findings prevent a release accessibility claim. No screenshot or audit was produced.
+
+## Durable Sync Ledger qualification (LAB-017-B, 2026-10-01)
+
+Static source inspection only; no assistive-technology or layout pass. Native controls have text labels; conflict choices expose device names and edit hints; Mac rows combine device/state; explanations wrap and use words. Mac navigation has View › Durable Sync Ledger (⌥⌘4). Hosted session tests do not prove focus, control reachability, or rendered accessibility.
+
+| Gate | Result | Remaining check |
+|---|---|---|
+| VoiceOver / Voice Control | not-run | Device selector, both conflict choices, deletion/reset confirmation, result announcement |
+| Keyboard / Full Keyboard Access | not-run | Save/reconnect/manual exchange and focus after conflict resolution; these actions have no Mac menu shortcuts |
+| Large text / contrast / reduced motion | not-run | Compact form scrolling, full explanations, manual exchange below the editor |
+| Source privacy/rights | static review | Only original synthetic inputs in evidence; no screenshots or real accounts |

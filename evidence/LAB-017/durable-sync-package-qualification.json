@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "subject": "LAB-017",
+  "check": "Conflict, retained tombstone, account isolation, cancellation, authorization and duplicate qualification",
+  "date": "2026-10-01T06:57:30Z",
+  "provenance": {
+    "sourceRevision": "e35785c-dirty",
+    "sdkName": "macosx27.0",
+    "xcodeVersion": "27.0",
+    "xcodeBuild": "27A266a"
+  },
+  "execution": {
+    "path": "fixture"
+  },
+  "inputs": [
+    "Packages/LabFeatures/Sources/DurableSyncLedger/SyncFixtures.swift@sha256:132fcb0b4bde0ce390ce6e9071801ccfcfa6123b1f52f82ed055af91b87d21a7",
+    "Fixtures/LAB-017/public-scope.json@sha256:a45b5bee7e3b8607370b05db66efbcfb664a33540c23680bad55a3438d94593d",
+    "Fixtures/LAB-017/newer-schema.json@sha256:aa28896beb881503eea18821018f1521cc98b04d27e14a2a0c52b509bd911782",
+    "Packages/LabFeatures/Tests/DurableSyncLedgerTests/AccountTests.swift@sha256:fd24e8fcc85a3e24017b99c2021f5c81be9e619d659c2925e4cb9af4e3cd5809",
+    "Packages/LabFeatures/Tests/DurableSyncLedgerTests/ConflictTests.swift@sha256:2cf532257e8fa93a73985f438f262d8c9ac59d0b16100d964cca3c0116fca801",
+    "Packages/LabFeatures/Tests/DurableSyncLedgerTests/OperationTests.swift@sha256:bd75bca45f200556d462b8844226fdf5b647ed6564f9ecfbf8388e8092ef7bff",
+    "Packages/LabFeatures/Tests/DurableSyncLedgerTests/QualificationTests.swift@sha256:4ba50a064cd167c6051adeac22f00b126d7577cc103ffad5f26fba59c9a3ae52",
+    "Packages/LabFeatures/Tests/DurableSyncLedgerTests/TestSupport.swift@sha256:8900a832d8df65aa13cd69053837daccbbfcd86c9d2cd97a595e4e5c28ba7c7a",
+    "Packages/LabFeatures/Tests/DurableSyncLedgerTests/TombstoneTests.swift@sha256:b9d0a3417e10fac37a65945531fc5f142a27c7477935377caf83d5957ddc29de"
+  ],
+  "steps": [
+    "Through labr: swift test --package-path Packages/LabFeatures --filter \"DurableSyncQualificationTests|ConflictAndCausalTests|TombstoneReinstallTests|AccountAndProfileTests|LedgerOperationTests\"",
+    "Use fresh temporary directories and in-memory OperationService backends, FileSyncProfile or DisabledSyncProfile; remove test directories on cleanup"
+  ],
+  "outcome": {
+    "result": "passed",
+    "detail": "17 tests in 5 suites passed. Both offline edits stay inspectable until a choice; stale choice leaves document bytes unchanged. Deleting the same synthetic device directory and recreating it pulls a retained tombstone; importing the older document twice still leaves two envelopes and deleted state. Account B receives no private Account A record; foreign document/directory and nonmember share access are refused. Disabled profile has zero pulls/pushes. Unauthorized deletion and model commits are refused; cancelled commit/import writes nothing and import retry succeeds once. Crash replay and duplicate import preserve one operation/record."
+  },
+  "limitations": [
+    "Local file-profile and manual-document fixtures on macOS 27.0 (26A425); not CloudKit, Apple account switching, OS reinstall, or a physical device run.",
+    "No network, account connection, screenshot, recording or real user data.",
+    "Package tests do not establish the host reopening its in-memory materialization; that is checked separately."
+  ]
+}

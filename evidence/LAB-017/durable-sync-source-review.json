@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "subject": "LAB-017",
+  "check": "Live adapter gates, original-material rights, privacy and accessibility source review",
+  "date": "2026-10-01T06:57:30Z",
+  "provenance": {
+    "sourceRevision": "e35785c-dirty",
+    "sdkName": "macosx27.0",
+    "xcodeVersion": "27.0",
+    "xcodeBuild": "27A266a"
+  },
+  "execution": {
+    "path": "static-review"
+  },
+  "inputs": [
+    "Apps/Shared/DurableSync/DurableSyncSession.swift@sha256:935340c99b60a0a809d7906778a861f4630948bf3ac2f843a14791fc02759e8c",
+    "Apps/Shared/DurableSync/DurableSyncViews.swift@sha256:6a10462e5b04f9d92639693b3f5d7d2bc7c87cdd66aca049a6235b72fdcaeac7",
+    "Apps/Mac/Window/DurableSyncColumns.swift@sha256:cf38ab1feb23868266518ad22436039865a2378ff6ef76fc21e43c2442435b2a",
+    "Packages/LabFeatures/Sources/DurableSyncLedger/LedgerDocument.swift@sha256:4d840cfc3c6214b4974275c1a69be7554aebf891513c38ef518bf922693a2d23"
+  ],
+  "steps": [
+    "Inspect folder replay caption, operation backend, reset root, file import, native labels/controls and conflict hints",
+    "Re-probe installed iOS 27.0 CloudKit arm64e interface using grep; consult Apple CKSyncEngine primary documentation on 2026-10-01",
+    "Review published evidence for synthetic fixture hashes and observations only"
+  ],
+  "outcome": {
+    "result": "blocked",
+    "detail": "No CloudOptional ledger host or CKSyncEngine adapter exists, so live synchronization/account-switch/reinstall qualification is blocked. Existing SDK signatures match the earlier ledger; Apple requires app-owned state persistence and account-change handling. Publication review passes for original synthetic metadata only: no screenshots, recordings, raw stores or personal account data. Static controls have labels/hints and text explanations; no manual accessibility pass. Main-actor file import reads the whole file before the decoder applies its byte bound."
+  },
+  "limitations": [
+    "Physical iPhone/iPad, live CloudKit accounts/container, remote notifications, companion distribution and 26-SDK compile not run.",
+    "VoiceOver, Voice Control, Full Keyboard Access, focus/announcements, large text and contrast not run.",
+    "Review findings are not behavior changes or release qualification; CoreLocal capabilities remain unchanged."
+  ]
+}
