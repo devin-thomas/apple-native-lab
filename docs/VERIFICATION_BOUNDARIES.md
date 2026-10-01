@@ -103,3 +103,15 @@ Recorded at [LAB-004-B](../tickets/LAB-004-B.md) from the [LAB-004-A](../tickets
 | [S59](SOURCE_INDEX.md#s59) | `Toggle(isOn:intent:label:)` in `_AppIntents_SwiftUI`, which the widget extension links | iOS 17.0, macOS 14.0, tvOS 17.0, watchOS 10.0 | The widget's toggle in the simulator. The release manifest records the link (LAB-004-A) | None beyond the widget's own |
 | [S59](SOURCE_INDEX.md#s59) | `View.privacySensitive(_:)` and `RedactionReasons.privacy` | iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0 | Drawn with the privacy redaction in a package test and read back by text recognition: the detail line is gone and the state stays readable. The deck's "Lock Screen, locked" preview uses the same redaction | That the system applies it to this widget on a locked device |
 
+### Wallet passes (LAB-038)
+
+Recorded at [LAB-038-A](../tickets/LAB-038-A.md). Symbols were read on 2026-09-30 from the iOS 27.0 and macOS 27.0 PassKit headers in Xcode 27.0 (27A266a). No PassKit framework is linked into CoreLocal by this ticket. No entitlement was added. Nothing here has run as add-to-Wallet on a device or in the simulator.
+
+| Source | Installed symbol | Declared availability | Demonstrated | Remaining uncertainty |
+|---|---|---|---|---|
+| [S45](SOURCE_INDEX.md#s45) | `PKPass` Objective-C `initWithData:error:` | Present in the iOS and macOS 27.0 PassKit headers (class availability follows PassKit platform support) | Header read only. LAB-038-A validates lab-owned `PassDefinition` fixtures without constructing a `PKPass` | Loading a real signed `.pkpass` on a device |
+| [S45](SOURCE_INDEX.md#s45) | `PKPassLibrary.isPassLibraryAvailable()`, `passes`, `containsPass:`, `addPasses:withCompletionHandler:` | `isPassLibraryAvailable`: iOS 6.0, watchOS 3.0. Add-passes completion: iOS 7.0, watchOS 3.0 | Header read only | Library contents and add-passes on a physical iPhone |
+| [S45](SOURCE_INDEX.md#s45) | `PKPassTypeBarcode` (and deprecated `PKPassTypePayment` alias of secure-element) | `PKPassType` property: macOS 11.0, iOS 8.0, watchOS 3.0. Secure-element: iOS 13.4, watchOS 6.2 | Header read only. LAB-038-A stays on barcode-style event passes in its domain model | Secure-element / payment passes (out of scope) |
+| [S45](SOURCE_INDEX.md#s45) | `PKAddPassesViewController` (`initWithPass:`, `canAddPasses`); iOS 27 archive/data initializers | Controller: iOS 6.0, behind `TARGET_OS_IPHONE`. `canAddPasses`: iOS 8.0. Archive/data inits: iOS 27.0, visionOS 27.0 | Header read only. Not linked | Presenting add-to-Wallet after an operator-signed pass |
+| [S45](SOURCE_INDEX.md#s45) | Operator signing seam (injected adapter) — lab-owned, not an Apple symbol | Not applicable | Package tests: unavailable by default; operator double accepts a ZIP envelope and refuses non-archive or oversized output (`PassSigningTests`) | A real operator tool producing a signed `.pkpass` |
+

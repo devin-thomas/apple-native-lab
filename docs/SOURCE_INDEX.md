@@ -495,6 +495,8 @@ Use in this plan: Pass signing and updates reference; secure-element features se
 
 Implementation evidence required: actual SDK symbol/availability, permissions or entitlement, and a named compile/device result.
 
+Installed SDK check (2026-09-30, Xcode 27.0 with the iOS 27.0 SDK): `PKPass`, `PKPassLibrary`, `PKAddPassesViewController`, and `PKPassTypeBarcode` are in the installed PassKit headers, with their declared availability recorded in the [installed SDK ledger](VERIFICATION_BOUNDARIES.md#wallet-passes-lab-038). LAB-038-A does not link PassKit into CoreLocal; it ships the unsigned preview and sample event card. No Wallet install or device add-passes run.
+
 ## S46
 
 **StoreKit** — reference
