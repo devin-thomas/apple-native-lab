@@ -1,0 +1,40 @@
+{
+  "check": "Host backend: fresh four-step recipe in one commit, refusal before commit, and typed-text export withholding",
+  "date": "2026-10-01T07:23:31Z",
+  "execution": {
+    "path": "fixture"
+  },
+  "inputs": [
+    "fresh-walkthrough-export@sha256:74f06341fc92ffd766d43917964a8574858580cdc94c2435938b36dfc4a56114",
+    "typed-sentinel-export@sha256:2b841aef314d230052506c45f1d972f97beaf84b5e71b9bcc601b572dd24c9c3"
+  ],
+  "limitations": [
+    "Fixture invocation inside the host, not a Shortcuts, Siri, Storage or model execution. No UI controls or assistive technology were driven.",
+    "The sentinel is invented. Export safety is proven for recipe exports and the Inspect Model Step result; the in-app inspection still shows typed values with secret-shaped names masked.",
+    "No physical mobile device, cross-device identity or durable recipe persistence was tested.",
+    "Captured from the passing LabMac-Core host test in the full gate on Mac Studio, macOS 27.0 (26A425). Fixture path; no Shortcuts UI. The -dirty suffix is research's mirror reporting its untracked build symlink; the mirrored sources were exactly commit ed4a1e1."
+  ],
+  "outcome": {
+    "detail": "The unbound transform recipe was refused before commit. The fresh recipe completed four steps with one appUI createItem receipt carrying the transform; the new item was bound as the recipe source. The sentinel was absent from the export bytes, the saved file and the filename; the message reported the withheld positions. The lab-written walkthrough exported with nothing withheld.",
+    "result": "passed"
+  },
+  "provenance": {
+    "appVersion": "0.1.0",
+    "buildNumber": "1",
+    "buildProfile": "CoreLocal",
+    "minimumOS": "26.0",
+    "sdkName": "macosx27.0",
+    "sourceRevision": "ed4a1e1-dirty",
+    "xcodeBuild": "27A266a",
+    "xcodeVersion": "27.0"
+  },
+  "schemaVersion": 1,
+  "steps": [
+    "Run ShortcutWorkbenchQualificationHostTests in the built host test action",
+    "Open a fresh SQLite store; create Qualification inbox; run an unbound transform recipe and confirm it is refused with an empty inbox and no draft",
+    "Run the unbound bundled Import → Query → Transform → Export recipe through LibraryWorkbenchBackend with a fixed request ID",
+    "Export an original recipe holding an invented sentinel in its title, a query, and model-step values under ordinary, new, nested and sentinel names; save it with RecipeExport.write and read the file back",
+    "Connect a fresh ShortcutWorkbenchModel and compare its export text and message"
+  ],
+  "subject": "LAB-003"
+}
