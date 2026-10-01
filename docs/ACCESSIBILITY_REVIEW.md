@@ -480,3 +480,15 @@ LAB-009-B reviewed `DocumentsEverywhereViews.swift` and `DocumentsEverywhereColu
 | E3 Duplicate and reset | Refusal is heard; Reset Demo preserves adopted user data | not-run | not-run | not-run |
 
 **Static findings, still open:** native labeled buttons and picker, combined sample rows, selectable text, and a preview heading are present. The sample row's accessibility label retains middle dots; Add Sample to Lab has no Mac menu command; outcomes do not post `LabAnnouncement`; the iPhone Actions section follows a potentially long preview instead of pinning the primary action; Quick Look HTML uses fixed foreground colors. The provider-disabled explanation is visible independently of the disabled activation control. These findings prevent a release accessibility claim. No screenshot or audit was produced.
+
+## Audio Workshop qualification (LAB-029-B)
+
+Static review of the shared workshop views and Mac columns: safety controls have labels and hints, graph rows use spoken summaries, parameter sliders speak units, MIDI preset buttons have expanded labels, large accessibility sizes switch safety controls to a vertical stack, and saving posts a `LabAnnouncement`. The existing hosted Mac safety test presses Panic Mute and Play via accessibility; it is not a person using VoiceOver.
+
+| Flow | Done when | Mac assistive / keyboard pass | iPhone assistive / keyboard pass | Large text / contrast |
+|---|---|---|---|---|
+| A1 Safety and graph | Play, Stop, Panic Mute, Unmute, Bypass and settings remain reachable and state is heard | not-run | not-run | not-run |
+| A2 MIDI and offline | Controller values, render, cancellation, invalid file reason and export are reachable | not-run | not-run | not-run |
+| A3 Preset, plugin and reset | Receipt, restored preset, reload result and reset boundary are understood | not-run | not-run | not-run |
+
+**Open findings:** offline completion/error and plugin outcomes have no explicit announcement; cancellation focus was not checked; offline/preset/plugin actions have no Mac menu shortcuts. The stats note claims the callback is checked by clang without naming unchecked Swift trampolines and 26-family builds. No manual accessibility, iPad, contrast, or screenshot pass is claimed.

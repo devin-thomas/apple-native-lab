@@ -1,0 +1,47 @@
+{
+  "check" : "Clean graph, offline file, preset, recovery, and in-process plugin replay",
+  "date" : "2026-10-01T07:22:53Z",
+  "execution" : {
+    "path" : "simulator",
+    "simulator" : {
+      "deviceClass" : "iPhone19,2",
+      "osVersion" : "Version 27.0 (Build 24A434)",
+      "platform" : "iOS"
+    }
+  },
+  "inputs" : [
+    "preset@sha256:1432556d0df3ac412bc1c4c1ac91ebf133c74fdcb9f598c8df82ac189be210da",
+    "original-loop.wav@sha256:dafaff4e93e9aa53195564173799ec89af667a63d34b3930d1e4a9181fd5840b",
+    "invalid.wav@sha256:e23b51a40d21aad70200ec1f08c6e4883d6ca40c22b6ffbdff306c9c62c408e4"
+  ],
+  "limitations" : [
+    "Hosted session calls, not rendered UI or file dialogs; no physical device, speaker, microphone, or MIDI source.",
+    "Configuration change injected; not a real output-route change, interruption, or media-services reset.",
+    "Plugin registered in-process; AUv3 extension and third-party host not loaded.",
+    "Realtime C compile-time enforcement is separate; no runtime allocation/deadline trace. Offline render does not apply live panic mute."
+  ],
+  "outcome" : {
+    "detail" : "Real manual-rendering engine recovered once at 96 kHz retaining mute, bypass and settings. File processing retained original bytes and refused invalid input. Presets committed with app-UI receipts; retry returned one receipt and one item. In-process unit reloaded with the same preset. Both resets preserved user preset and original WAVE. Unavailable-output fallback completed.",
+    "result" : "passed"
+  },
+  "provenance" : {
+    "appVersion" : "0.1.0",
+    "buildNumber" : "1",
+    "buildProfile" : "CoreLocal",
+    "minimumOS" : "26.0",
+    "sdkName" : "iphonesimulator27.0",
+    "sourceRevision" : "fc010a0-dirty",
+    "xcodeBuild" : "27A266a",
+    "xcodeVersion" : "27.0"
+  },
+  "schemaVersion" : 1,
+  "steps" : [
+    "Start a fresh SQLite library and workshop; original noise, gain -12 dB, on-screen CC 74 value 64",
+    "Manually render the real engine at 44100 Hz; mute and bypass; inject change to 96000 Hz; render silence and inspect settings",
+    "Render 0.1 seconds offline; write original WAVE; process with cutoff 300 Hz; refuse invalid WAVE retaining last result",
+    "Save preset through app UI; retry an identical request; inspect user namespace and receipts",
+    "Load the in-process unit, save state, reload and compare; reset workshop and library; compare preset item and source file",
+    "Unavailable output: on-screen MIDI and offline render still complete"
+  ],
+  "subject" : "LAB-029"
+}

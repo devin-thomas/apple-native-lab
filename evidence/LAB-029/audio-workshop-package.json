@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "subject": "LAB-029",
+  "check": "Audio Workshop domain and native manual-rendering adapter regression",
+  "date": "2026-10-01T06:57:42Z",
+  "provenance": {
+    "sourceRevision": "e35785c; Audio Workshop package unchanged throughout LAB-029-B",
+    "sdkName": "macosx27.0",
+    "xcodeVersion": "27.0",
+    "xcodeBuild": "27A266a",
+    "minimumOS": "26.0"
+  },
+  "execution": {
+    "path": "fixture"
+  },
+  "inputs": [
+    "Packages/LabFeatures/Tests/AudioWorkshopTests/EngineAndPluginTests.swift@sha256:c3735f3d5ff6544f20e63e7b5c88a7647d73988f57931f7c95cbc0acd675074f",
+    "Packages/LabFeatures/Tests/AudioWorkshopTests/KernelTests.swift@sha256:91c9dae2cae93578f2e725441e58e52a1dda06fdf75e4202d147f6d549be3c62",
+    "Packages/LabFeatures/Tests/AudioWorkshopTests/OfflineTests.swift@sha256:1281b7e286ab737c47b97912ce312b5ce60774244843716eb536176be078d4f2",
+    "Packages/LabFeatures/Tests/AudioWorkshopTests/PresetAndMidiTests.swift@sha256:6f6c3619023fce41cb52e7f7ab78150636d18b8a71d040047b875fad3c405462",
+    "Packages/LabFeatures/Tests/AudioWorkshopTests/PresetStoreTests.swift@sha256:dcea1d9d203e24cba814b5d917ea68a15ad0de6f1256b8b71bd8ef2531093780",
+    "Packages/LabFeatures/Tests/AudioWorkshopTests/TestSupport.swift@sha256:9f2dc9191d6b155ce185068db0dfcf548b367488784bf1c54bce62e24c909752"
+  ],
+  "steps": [
+    "Through labr: script/toolchain_report.sh",
+    "Through labr: swift test --package-path Packages/LabFeatures --filter \"KernelTests|PresetTests|MidiTests|WaveFileTests|OfflineProcessorTests|PresetStoreTests|LivePlaybackTests|AudioUnitTests\""
+  ],
+  "outcome": {
+    "result": "passed",
+    "detail": "71 tests in 8 suites passed. Original loop determinism, smoothing, non-finite and oversized calls, hostile presets/MIDI/WAVE files, invalid lengths, render/save cancellation, model-tool denial, duplicate save receipt, archived collection refusal, manual-rendering rate recovery/fade/mute/bypass retention and failed recovery fallback, interruption injection, real in-process plugin state reload and damaged-state retention all passed."
+  },
+  "limitations": [
+    "Fixture path on Apple M5 Max, macOS 27.0 (26A425), Swift 6.4. No physical device or realtime output opened.",
+    "Route/rate and interruption events are injected into a real manual-rendering engine; no system output-route event observed. Plugin is registered in-process, not the AUv3 extension.",
+    "No hardware MIDI client, runtime allocation trace, manual accessibility pass, or system file dialog. Authorization/store cases use the in-memory operation backend."
+  ]
+}
