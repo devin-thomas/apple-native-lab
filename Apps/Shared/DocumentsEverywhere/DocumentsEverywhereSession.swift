@@ -37,7 +37,7 @@ final class DocumentsEverywhereSession {
     private(set) var outcome: Outcome?
     private(set) var providerState: ProviderConnectionState = .disabled
     /// Always reports that the File Provider stays off in this build.
-    let providerStatusMessage = "The sample File Provider stays disabled until LAB-009-B qualifies it. Previews use the document browser and Quick Look, not the provider."
+    let providerStatusMessage = "The sample File Provider is not included in this build. Use the document browser for previews."
 
     @ObservationIgnored private var catalog = SampleCatalog.bundled
     @ObservationIgnored private var importer: PortableObjectsImporter?

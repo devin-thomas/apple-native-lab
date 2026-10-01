@@ -468,3 +468,15 @@ Static source review only: the search field and action buttons have names, shelf
 | Explicit donation / unavailable message | passed (named button and textual outcome) | not-run | not-run | not-run | not-run |
 
 Findings: no Mac menu commands for index actions; no result announcements; UUID-heavy citation labels; iPhone index actions may be below the fold (source review, not a measured layout result). No manual or automated rendered accessibility pass is claimed. See the [walkthrough](walkthroughs/LAB-006-find-the-thing.md) for the search deletion versus retained shelf detail boundary.
+
+## Documents Everywhere (LAB-009)
+
+LAB-009-B reviewed `DocumentsEverywhereViews.swift` and `DocumentsEverywhereColumns.swift` statically. Hosted replays verify the session's outcomes, not the accessibility tree or screen layout. No manual pass is claimed.
+
+| Flow | Done when | Mac VoiceOver / Voice Control / Full Keyboard Access | iPhone VoiceOver / Voice Control / keyboard | Large text and contrast |
+|---|---|---|---|---|
+| E1 Open browser and select both samples | Title, revision, summary, and provider-disabled explanation are reachable | not-run | not-run | not-run |
+| E2 Adopt a sample | Destination and Add Sample to Lab are reachable; result and receipt are heard | not-run | not-run | not-run |
+| E3 Duplicate and reset | Refusal is heard; Reset Demo preserves adopted user data | not-run | not-run | not-run |
+
+**Static findings, still open:** native labeled buttons and picker, combined sample rows, selectable text, and a preview heading are present. The sample row's accessibility label retains middle dots; Add Sample to Lab has no Mac menu command; outcomes do not post `LabAnnouncement`; the iPhone Actions section follows a potentially long preview instead of pinning the primary action; Quick Look HTML uses fixed foreground colors. The provider-disabled explanation is visible independently of the disabled activation control. These findings prevent a release accessibility claim. No screenshot or audit was produced.

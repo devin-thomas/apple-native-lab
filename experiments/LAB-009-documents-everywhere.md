@@ -34,9 +34,9 @@ The first run uses original fixtures. Keep the underlying operation independent 
 ## Acceptance and proof
 
 - [ ] Quick Look works without provider activation.
-- [ ] External edits preserve document revision rules.
-- [ ] Provider disconnect never deletes the authoritative source.
-- [ ] The declared fallback completes a meaningful version of the interaction.
+- [x] External edits preserve document revision rules (fixture model only; LAB-009-B metadata/content and stale-base checks, not a live external editor).
+- [x] Provider disconnect never deletes the authoritative source (fixture model only; LAB-009-B compares catalog bytes after eviction/disconnect/reconnect, not live domain removal).
+- [x] The declared fallback completes a meaningful version of the interaction (Mac and iPhone simulator hosted replays: both samples preview and adopt once, and Reset Demo preserves their user copies; no rendered UI pass).
 - [ ] Essential actions remain available through the platform's assistive and alternate-input paths.
 - [ ] Actual device/OS/permission and adapter-path evidence is recorded; untested combinations remain unverified.
 
@@ -73,6 +73,18 @@ Observed with Xcode 27.0 and the 27.0 SDKs. These are package and simulator fact
 - `NSFileProviderReplicatedExtension` and `NSFileProviderItemVersion` (content + metadata) informed `DocumentRevision`. The live provider is not activated: `ProviderSession` starts `.disabled`, and Activate Sample Provider… is disabled in the UI.
 - Adopting a sample stages and commits through Portable Objects' importer, so receipts join the same authorization path as LAB-008 imports.
 - S22 in the source index names AR Quick Look; this experiment uses document Quick Look (`QLPreviewProvider`), not USDZ/AR. Recorded in the installed SDK ledger.
+
+## Qualification boundary (LAB-009-B)
+
+The qualification exercises the available browser session and adoption operation on fresh host
+stores, and the revision/disconnect model with original fixtures. It does not activate File
+Provider: the extension sources have no target or FrontierOptional host. Qualification alone
+does not turn the provider on. No physical iPhone/iPad, live external editor, or registered-domain
+disconnect is claimed. System Quick Look dispatch remains a separate unverified gate.
+
+See the [walkthrough](../docs/walkthroughs/LAB-009-documents-everywhere.md) and
+[qualification record](../tickets/LAB-009-B.md) for exact run results and remaining gates.
+The state stays `implemented`; this is not a device or release promotion.
 
 ## Delivery
 
