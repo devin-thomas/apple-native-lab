@@ -12,7 +12,7 @@ The installed Xcode build, Swift compiler, SDK versions, deployment floor, and e
 |---|---|---|---|---|
 | CoreLocal | Mac/iPhone host, original fixtures, local persistence, manual/fallback experiments, eligible local inference | `Config/Profiles/CoreLocal.xcconfig` | `LabMac-Core`, `LabPhone-Core` | None for the Mac and simulators; any team, including a free Personal Team, for a device |
 | SystemSurfaces | Share/widget/Control extensions, App Group staging, App Intents metadata and integration tests | `Config/Profiles/SystemSurfaces.xcconfig` | `LabPhone-Surfaces` | Own paid team for on-device App Group staging; simulator builds need none |
-| Companions | Separate Watch and TV hosts plus LAN/Watch relay | `Config/Profiles/Companions.xcconfig` | `LabWatch`, `LabTV` | Physical devices for real transport/camera evidence |
+| Companions | Separate Watch and TV hosts plus LAN/Watch relay | `Config/Profiles/Companions.xcconfig` | `LabWatch`, `LabTV`, `LabMac-Companions`, `LabPhone-Companions` | Physical devices for real transport/camera evidence |
 | CloudOptional | CloudKit, optional PCC/provider adapters | `Config/Profiles/CloudOptional.xcconfig` | none yet | Own paid team with iCloud, own container, explicit account/entitlement/route configuration |
 | FrontierOptional | File Provider, App Clip, Wallet signer integration, CarPlay/PTT/Screen Time/accessory spikes | `Config/Profiles/FrontierOptional.xcconfig` | none yet | Per-feature setup and managed approval where required |
 
@@ -50,8 +50,10 @@ Every host has a scheme whose test action runs a smoke test inside that host: th
 | `LabPhone-Surfaces` | iPhone variant with the share, widget, and Control extensions | SystemSurfaces | none yet |
 | `LabWatch` | Apple Watch | Companions | `LabWatchTests`, hosted smoke tests; the `LabSupport` and `LabCatalog` package tests on watchOS |
 | `LabTV` | Apple TV (tvOS 26.0 floor) | Companions | `LabTVTests`, hosted smoke tests; `LabTVUITests`, the host driven with the remote alone; the `LabSupport` and `LabCatalog` package tests on tvOS |
+| `LabMac-Companions` | Mac variant with Local Constellation's local-network adapter (LAB-019) | Companions | none; `LabMac-Core` tests the shared sources |
+| `LabPhone-Companions` | iPhone and iPad variant with Local Constellation's local-network adapter (LAB-019) | Companions | none; `LabPhone-Core` tests the shared sources |
 
-The Apple TV host links only `LabSupport` and `LabCatalog`, which compile FoundationModels and Speech out of tvOS, and declares no entitlement. Its icon and Top Shelf images are a layered tvOS brand asset (`Apps/TV/Assets.xcassets`) that `script/make_app_icon.py` draws from the same geometry as `Apps/Icon/AppIcon.icon`, because an Icon Composer document does not compile for tvOS with Xcode 27.0.
+The Apple TV host links `LabSupport` and `LabCatalog`, which compile FoundationModels and Speech out of tvOS, and Local Constellation's session layer, network adapter, and show (LAB-019), and declares no entitlement. The two Companions host variants are LabMac and LabPhone built from the same sources with the same bundle identifiers plus that network adapter, the local network purpose string, and the Bonjour service type; the Mac variant also carries the sandbox's `network.client` and `network.server` entitlements, which need no team ([ADR-015](adr/ADR-015.md)). Its icon and Top Shelf images are a layered tvOS brand asset (`Apps/TV/Assets.xcassets`) that `script/make_app_icon.py` draws from the same geometry as `Apps/Icon/AppIcon.icon`, because an Icon Composer document does not compile for tvOS with Xcode 27.0.
 
 | Script | Purpose |
 |---|---|
