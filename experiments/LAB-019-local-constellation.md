@@ -83,7 +83,7 @@ The state stays `implemented`: the fallback is qualified on the Mac host and in 
 - **Key checking stops at the vocabulary's own objects.** The envelope, its payload, and the command, sample, and snapshot objects are checked key by key; an object nested inside them is checked only by its own decoder. Local Constellation's payloads are flat. [DATA_CONTRACTS](../docs/DATA_CONTRACTS.md) now says so.
 - **The conductor's age check starts with a link's first clock round trip.** Until then the joiner's own 5-second limit bounds a command, which is what bounds commands flushed right after a reconnect.
 - **A command queued before any snapshot names revision 0 and no epoch.** It applies only while the conductor is still at revision 0. The show's controls stay disabled until a snapshot arrives; a later experiment's must too.
-- **Known issue: Forget keeps the forgotten peer's held requests,** so Allow can still commit one as the authorized peer. Held as a known issue in `PeerSessionContractQualification` and `ConstellationQualification`.
+- **Fixed: Forget kept the forgotten peer's held requests,** so Allow could still commit one as the authorized peer. Forget now withdraws them with the pin, and the show's Allow commits only through `Conductor.settle`, which refuses a request from a forgotten or unpaired device before anything is committed. The held tests pass, with negative cases in `PeerSessionForget` and `ConstellationQualification`.
 - **Fixed: the Apple TV screen had no background** of its own and overlapped the page it covers.
 
 ## Delivery

@@ -90,7 +90,7 @@ That runs the replay twice, the qualification and contract suites, and the netwo
 
 ## Known issues
 
-- **Forget doesn't withdraw a held request.** If a device asks to start the show and the person at the conductor then forgets that device, the request stays on screen, and Allow still starts the show as that device's request. Decline it before forgetting the device. The tests hold this as a known issue.
+- None open. Qualification found that Forget left a device's held request on screen and that Allow still started the show as that device's request. Now Forget withdraws the request, the device is told so, and an Allow pressed afterwards is refused with the reason and changes nothing.
 
 ## Not checked yet
 
