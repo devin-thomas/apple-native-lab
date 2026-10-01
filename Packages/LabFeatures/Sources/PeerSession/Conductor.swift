@@ -33,6 +33,10 @@ public struct CommandOrigin: Hashable, Sendable {
 /// with the sender's clock estimate), the sender has not lost sequence continuity, and it is based
 /// on the current revision. A replayed command ID gets its recorded answer. A stale command is
 /// never applied: the sender gets `stale` and the current snapshot, and decides again.
+///
+/// A held command belongs to the pairing it arrived under. Forgetting a peer ends that pairing at
+/// once: its pin, its links, and every request it has waiting go together, and nothing it sent
+/// can be admitted or allowed again, even after the device pairs anew.
 public actor Conductor<V: SessionVocabulary> {
     public struct Configuration: Sendable {
         public var identity: LocalIdentity
@@ -115,6 +119,8 @@ public actor Conductor<V: SessionVocabulary> {
     private struct Pending {
         let command: PendingCommand<V.Command>
         let token: UInt64
+        /// The pairing the command arrived under, or `nil` for the conductor's own.
+        let pairing: UInt64?
     }
 
     public nonisolated let identity: PeerIdentity
@@ -130,6 +136,20 @@ public actor Conductor<V: SessionVocabulary> {
     private var links: [UInt64: LinkRecord] = [:]
     private var peers: [PeerID: PeerHistory] = [:]
     private var pending: [MessageID: Pending] = [:]
+    /// Held commands a person is allowing now, through `settle`.
+    private var settling: [MessageID: Pending] = [:]
+    /// Forgets waiting for an Allow that began before them, by peer.
+    private var settleWaiters: [PeerID: [CheckedContinuation<Void, Never>]] = [:]
+    /// Each paired peer's current pairing. A peer gets a new one when it joins after a Forget.
+    private var pairings: [PeerID: UInt64] = [:]
+    private var lastPairing: UInt64 = 0
+    /// How many Forgets have begun, and the count when each peer was last forgotten, so a
+    /// handshake that overlapped a Forget of its peer is not adopted.
+    private var forgets: UInt64 = 0
+    private var forgottenAt: [PeerID: UInt64] = [:]
+    /// Peers whose Forget is still unpinning them.
+    private var revoking: [PeerID: Int] = [:]
+    private var retired = RetiredCommands()
     private var pairing: (closesAt: PeerInstant, attemptsLeft: Int)?
     private var approval = PromptSlot<PairingRequest, Bool>()
     private var log = EventLog()
@@ -184,10 +204,11 @@ public actor Conductor<V: SessionVocabulary> {
             )
         )
         let label = connection.remoteLabel
+        let forgetsBefore = forgets
         let task = Task { [weak self] in
             do {
                 let established = try await handshake.run(on: connection)
-                await self?.adopt(established)
+                await self?.adopt(established, forgetsBefore: forgetsBefore)
             } catch {
                 await self?.handshakeFailed((error as? HandshakeFailure) ?? .disconnected, label: label)
             }
@@ -215,15 +236,53 @@ public actor Conductor<V: SessionVocabulary> {
         publish()
     }
 
-    /// Unpins a peer and closes its link. It must pair again to return.
+    /// Unpins a peer, withdraws every request it has waiting, and closes its links. It must pair
+    /// again to return, and nothing it sent before can be admitted or allowed after that.
+    ///
+    /// Everything that decides whether the peer may act changes before this method first
+    /// suspends: a frame that arrives later, an Allow pressed on a request the screen still
+    /// shows, and a handshake that finishes later all find the peer forgotten. An Allow that
+    /// began before the Forget is finished first; the Forget returns after it.
     public func forget(_ peer: PeerID) async {
+        forgets += 1
+        forgottenAt[peer] = forgets
+        revoking[peer, default: 0] += 1
+        pairings[peer] = nil
+        var withdrawn: [CommandResult] = []
+        for (id, held) in pending where held.command.from.id == peer {
+            pending[id] = nil
+            let result = CommandResult(
+                commandID: id, disposition: .refused, revision: revision,
+                summary: "Withdrawn: the conductor forgot the device that asked. Nothing changed."
+            )
+            retired.retire(result, from: peer)
+            withdrawn.append(result)
+        }
+        if let history = peers.removeValue(forKey: peer) {
+            // Their recorded answers stay answerable, and only answerable: never admitted again.
+            for id in history.replayOrder {
+                if let result = history.replay[id] { retired.retire(result, from: peer) }
+            }
+        }
+        let closing = links.filter { $0.value.identity.id == peer }.sorted { $0.key < $1.key }.map(\.value)
+        for record in closing { links[record.token] = nil }
+        if !withdrawn.isEmpty { note("Withdrew \(withdrawn.count) waiting request(s) from a forgotten peer.", .notice) }
+        publish()
+
         await configuration.trust.forget(peer)
-        for (token, record) in links where record.identity.id == peer {
+        revoking[peer, default: 1] -= 1
+        if revoking[peer] == 0 { revoking[peer] = nil }
+        for record in closing {
+            // The device hears its waiting requests were withdrawn, then that it was forgotten.
+            for result in withdrawn.sorted(by: { $0.commandID.rawValue.uuidString < $1.commandID.rawValue.uuidString }) {
+                _ = try? await record.link.send(.result(result), session: sessionID, epoch: epoch)
+            }
             _ = try? await record.link.send(.goodbye(.forgotten), session: sessionID, epoch: epoch)
             await record.link.close()
-            closeLink(token)
         }
-        peers[peer] = nil
+        while settling.values.contains(where: { $0.command.from.id == peer }) {
+            await withCheckedContinuation { settleWaiters[peer, default: []].append($0) }
+        }
         note("Forgot a peer. It must pair again to rejoin.")
         publish()
     }
@@ -239,15 +298,71 @@ public actor Conductor<V: SessionVocabulary> {
         return result
     }
 
-    /// Finishes a held command. `decide` sees the current state, which may have moved on since
-    /// the command was held.
+    /// Finishes a held command whose answer needs nothing outside the conductor, such as a
+    /// decline. `decide` sees the current state, which may have moved on since the command was
+    /// held. Returns `nil` when the command is not waiting: answered, expired, withdrawn with a
+    /// forgotten peer, or being allowed through `settle`.
+    ///
+    /// A host whose Allow commits somewhere else first (a store, through its operation service)
+    /// uses `settle`, which takes the command before the commit and checks that its peer is still
+    /// paired.
     @discardableResult
     public func resolve(_ id: MessageID, _ decide: @Sendable (V.Snapshot) -> CommandDecision<V.Snapshot>) async -> CommandResult? {
-        guard let held = pending.removeValue(forKey: id) else { return nil }
+        guard let held = pending[id] else { return nil }
+        guard isCurrent(held) else { return nil }
+        pending[id] = nil
         let origin = CommandOrigin(peer: held.command.from, role: held.command.role)
         let result = await conclude(decide(snapshot), id: id, origin: origin)
         await answer(result, to: held.command.from.id, token: held.token)
         return result
+    }
+
+    /// Allows a held command whose effect is committed outside the conductor.
+    ///
+    /// The conductor takes the command first, so nothing else can answer it, and checks that its
+    /// peer is still paired, by its own record and by the trust store. Only then does `body` run:
+    /// the host commits there, and returns the decision to apply against the state at that
+    /// moment. A command from a forgotten or unpaired peer is refused before `body` runs, so
+    /// nothing is committed for it. A Forget that begins while `body` runs waits for it to finish.
+    public func settle<Extra: Sendable>(
+        _ id: MessageID,
+        _ body: @Sendable (PendingCommand<V.Command>) async -> HeldDecision<V.Snapshot, Extra>
+    ) async -> Result<SettledCommand<Extra>, HeldCommandRefusal> {
+        guard let held = pending.removeValue(forKey: id) else {
+            if settling[id] != nil { return .failure(.alreadyDeciding) }
+            if retired.contains(id) { return .failure(.peerForgotten) }
+            return .failure(.notWaiting)
+        }
+        settling[id] = held
+        publish()
+        let peer = held.command.from
+        if let pairing = held.pairing {
+            let pin = await configuration.trust.check(peer, role: held.command.role)
+            let forgotten = pairings[peer.id] != pairing || revoking[peer.id] != nil
+            let pinned = if case .trusted = pin { true } else { false }
+            if forgotten || !pinned {
+                let result = CommandResult(
+                    commandID: id, disposition: .refused, revision: revision,
+                    summary: "Withdrawn: the device that asked is no longer paired. Nothing changed."
+                )
+                retired.retire(result, from: peer.id)
+                peers[peer.id]?.refused += 1
+                await answer(result, to: peer.id, token: held.token)
+                note("Refused to allow a request from \(peer.name): it is no longer paired.", .notice)
+                finishSettling(id)
+                return .failure(forgotten ? .peerForgotten : .peerNotPaired)
+            }
+        }
+        let decision = await body(held.command)
+        let origin = CommandOrigin(peer: peer, role: held.command.role)
+        let result = await conclude(decision.decide(snapshot), id: id, origin: origin)
+        if let pairing = held.pairing, pairings[peer.id] != pairing {
+            // Forgotten while the host committed: the answer stays with the forgotten pairing.
+            retired.retire(result, from: peer.id)
+        }
+        await answer(result, to: peer.id, token: held.token)
+        finishSettling(id)
+        return .success(SettledCommand(result: result, extra: decision.extra))
     }
 
     /// Changes the state from outside any command, such as a change another entry point made.
@@ -282,7 +397,8 @@ public actor Conductor<V: SessionVocabulary> {
             }
         }
         for (id, held) in pending where held.command.expiresAt <= now {
-            pending[id] = nil
+            // Taken, withdrawn, or answered while this loop waited on a send: not this loop's.
+            guard pending.removeValue(forKey: id) != nil else { continue }
             let result = CommandResult(
                 commandID: id, disposition: .expired, revision: revision,
                 summary: "No one at the conductor answered in time. Nothing changed."
@@ -381,19 +497,42 @@ public actor Conductor<V: SessionVocabulary> {
 
     // MARK: Serving a peer
 
-    private func adopt(_ established: EstablishedLink) async {
+    private func adopt(_ established: EstablishedLink, forgetsBefore: UInt64) async {
         guard !stopped else {
             established.connection.close()
             return
         }
-        nextToken += 1
-        let token = nextToken
         let link = PeerLink<V>(
             established, isHost: true, clock: configuration.clock,
             makeMessageID: configuration.makeMessageID, record: configuration.wireRecord
         )
-        let now = configuration.clock.now()
         let peer = established.remote
+        // The handshake checked the pin when it began. Check it again now it has finished, after
+        // any Forget that overlapped it: what such a handshake established belongs to the
+        // pairing the person ended, so the device is told to pair again and nothing it pinned
+        // is kept.
+        let pin = await configuration.trust.check(peer, role: established.joinerRole)
+        let pinned = if case .trusted = pin { true } else { false }
+        let overlapped = forgottenAt[peer.id].map { $0 > forgetsBefore } ?? false
+        guard !stopped else {
+            established.connection.close()
+            return
+        }
+        if overlapped || revoking[peer.id] != nil || !pinned {
+            _ = try? await link.send(.goodbye(.forgotten), session: sessionID, epoch: epoch)
+            await link.close()
+            if established.pairedNow, overlapped { await configuration.trust.forget(peer.id) }
+            note("\(peer.name) finished joining after it was forgotten, and was told to pair again.", .notice)
+            publish()
+            return
+        }
+        if pairings[peer.id] == nil {
+            lastPairing += 1
+            pairings[peer.id] = lastPairing
+        }
+        nextToken += 1
+        let token = nextToken
+        let now = configuration.clock.now()
         var history = peers[peer.id] ?? PeerHistory(identity: peer, role: established.joinerRole, lastHeard: now)
         history.identity = peer
         history.role = established.joinerRole
@@ -443,10 +582,13 @@ public actor Conductor<V: SessionVocabulary> {
     }
 
     private func handle(_ envelope: SessionEnvelope<V>, token: UInt64) async {
+        guard let link = links[token]?.link else { return }
+        let rejectedCount = await link.rejections.count
+        // Read the link's record after the wait: it may have closed, or its peer been forgotten,
+        // while this frame was on its way. A frame from a forgotten peer is dropped here.
         guard var record = links[token] else { return }
         let now = configuration.clock.now()
         record.lastHeard = now
-        let rejectedCount = await record.link.rejections.count
         record.counters.refusedFrames = rejectedCount
 
         guard envelope.sessionID == sessionID, envelope.sessionEpoch == epoch else {
@@ -531,13 +673,23 @@ public actor Conductor<V: SessionVocabulary> {
     }
 
     private func admit(_ issued: IssuedCommand<V.Command>, id: MessageID, base: Int, origin: CommandOrigin, token: UInt64) async {
+        if let recorded = retired.answer(for: id, from: origin.peer.id) {
+            // Sent under a pairing the person forgot: its old answer, never admitted again.
+            await answer(recorded, to: origin.peer.id, token: token)
+            note("\(origin.peer.name) sent a request from before it was forgotten. It was not admitted.", .notice)
+            return
+        }
         if let recorded = peers[origin.peer.id]?.replay[id] {
             // A resend after a lost answer: the same answer, never a second effect.
             await answer(recorded, to: origin.peer.id, token: token)
             return
         }
-        if pending[id] != nil {
-            await reply(.received, id: id, summary: "Still waiting for the person at the conductor.", token: token, remember: false)
+        if let waiting = pending[id] ?? settling[id] {
+            if waiting.command.from.id == origin.peer.id {
+                await reply(.received, id: id, summary: "Still waiting for the person at the conductor.", token: token, remember: false)
+            } else {
+                await reply(.refused, id: id, summary: "Another device's request has that ID. Nothing changed.", token: token)
+            }
             return
         }
         guard V.rolesAllowed(toSend: issued.command).contains(origin.role) else {
@@ -568,12 +720,21 @@ public actor Conductor<V: SessionVocabulary> {
     private func judge(_ command: V.Command, id: MessageID, origin: CommandOrigin, token: UInt64?) async -> CommandResult {
         let decision = decide(command, snapshot, origin)
         if case .hold(let summary) = decision {
+            var pairing: UInt64?
+            if origin.role != .conductor {
+                guard let current = pairings[origin.peer.id] else {
+                    let result = CommandResult(commandID: id, disposition: .refused, revision: revision, summary: "This device is no longer paired. Nothing changed.")
+                    if let token { await answer(result, to: origin.peer.id, token: token) }
+                    return result
+                }
+                pairing = current
+            }
             let now = configuration.clock.now()
             let held = PendingCommand(
                 commandID: id, command: command, from: origin.peer, role: origin.role,
                 receivedAt: now, expiresAt: now.advanced(by: configuration.timing.approvalLifetime)
             )
-            pending[id] = Pending(command: held, token: token ?? 0)
+            pending[id] = Pending(command: held, token: token ?? 0, pairing: pairing)
             note("\(origin.peer.name) asks: \(summary)")
             let result = CommandResult(commandID: id, disposition: .received, revision: revision, summary: summary)
             if let token { await answer(result, to: origin.peer.id, token: token) }
@@ -670,6 +831,20 @@ public actor Conductor<V: SessionVocabulary> {
             }
             links[token]?.sampleInFlight = false
         }
+    }
+
+    /// Whether a held command's pairing is still the peer's current one.
+    private func isCurrent(_ held: Pending) -> Bool {
+        guard let pairing = held.pairing else { return true }
+        return pairings[held.command.from.id] == pairing && revoking[held.command.from.id] == nil
+    }
+
+    private func finishSettling(_ id: MessageID) {
+        guard let held = settling.removeValue(forKey: id) else { return }
+        let peer = held.command.from.id
+        publish()
+        guard !settling.values.contains(where: { $0.command.from.id == peer }) else { return }
+        for waiter in settleWaiters.removeValue(forKey: peer) ?? [] { waiter.resume() }
     }
 
     // MARK: State

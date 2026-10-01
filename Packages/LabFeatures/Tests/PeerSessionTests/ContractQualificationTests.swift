@@ -8,10 +8,11 @@ import Testing
 /// vocabulary or transport must know about, and checks it with the `Tally` vocabulary over the
 /// loopback with manual clocks. Fixture path: no network, no device.
 ///
-/// One test records current behavior the contract does not want, as a known issue: Forget leaves
-/// the forgotten peer's held commands waiting. Two more record limits a later experiment must
-/// design around: a command queued before any snapshot is judged against revision 0, and the
-/// conductor's age check starts with a link's first clock round trip.
+/// One test recorded behavior the contract did not want, as a known issue: Forget left the
+/// forgotten peer's held commands waiting. It now passes (the fix is in `Conductor.forget` and
+/// `Conductor.settle`; its negative cases are in `PeerSessionForget`). Two more record limits a
+/// later experiment must design around: a command queued before any snapshot is judged against
+/// revision 0, and the conductor's age check starts with a link's first clock round trip.
 @Suite(.timeLimit(.minutes(1))) struct PeerSessionContractQualification {
     // MARK: Stale and duplicate commands
 
@@ -206,8 +207,8 @@ import Testing
         #expect(seen.snapshot == nil && seen.sessionID == nil && seen.revision == nil)
     }
 
-    /// Forget unpins a peer and closes its link. Its held commands should go with it, so that no
-    /// one at the conductor can allow a request from a device they just forgot. Today they stay.
+    /// Forget unpins a peer and closes its link, and its held commands go with it, so that no one
+    /// at the conductor can allow a request from a device they just forgot.
     @Test func forgettingAPeerWithdrawsItsHeldCommands() async throws {
         let rig = Rig()
         try await rig.pair(rig.controller, label: "phone")
@@ -216,11 +217,12 @@ import Testing
         await rig.conductor.forget(rig.controller.identity.id)
         #expect(await rig.conductorTrust.all().isEmpty)
 
-        await withKnownIssue("LAB-019-B finding: Conductor.forget keeps the forgotten peer's held commands, so a person at the conductor can still allow one") {
-            #expect(await rig.conductor.state.pending.isEmpty)
-            let late = await rig.conductor.resolve(asked) { _ in .apply(Tally.Snapshot(value: 40), summary: "Allowed.") }
-            #expect(late == nil, "a forgotten peer's request is no longer waiting")
-        }
+        #expect(await rig.conductor.state.pending.isEmpty)
+        let late = await rig.conductor.resolve(asked) { _ in .apply(Tally.Snapshot(value: 40), summary: "Allowed.") }
+        #expect(late == nil, "a forgotten peer's request is no longer waiting")
+        let allowed = await rig.conductor.settle(asked) { _ in HeldDecision { _ in .apply(Tally.Snapshot(value: 40), summary: "Allowed.") } }
+        #expect(allowed.refusal == .peerForgotten)
+        #expect(await rig.conductor.state.snapshot.value == 0)
     }
 
     // MARK: Limits a later vocabulary must know
