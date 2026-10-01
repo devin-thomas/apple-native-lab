@@ -1,4 +1,5 @@
 import ContextCards
+import AudioWorkshop
 import LabCatalog
 import LabDomain
 import LabSupport
@@ -59,6 +60,8 @@ enum SidebarDestination: Hashable {
     case renderSurvives
     /// LAB-031: watch the test card, move it between surfaces, and resume.
     case screeningRoom
+    /// LAB-029: the audio graph, its safety controls, MIDI, offline processing, and presets.
+    case audioWorkshop
     case catalog(CatalogScope)
 
     var title: String {
@@ -85,6 +88,7 @@ enum SidebarDestination: Hashable {
         case .shortcutWorkbench: ShortcutWorkbench.title
         case .renderSurvives: RenderThatSurvives.title
         case .screeningRoom: ScreeningRoom.title
+        case .audioWorkshop: AudioWorkshop.title
         case .catalog(let scope): scope.title
         }
     }
@@ -114,6 +118,7 @@ enum SidebarDestination: Hashable {
         case .shortcutWorkbench: "shortcut-workbench"
         case .renderSurvives: "render-survives"
         case .screeningRoom: "screening-room"
+        case .audioWorkshop: "audio-workshop"
         case .catalog(.all): "all"
         case .catalog(.milestone(let milestone)): "milestone:\(milestone.rawValue)"
         case .catalog(.category(let category)): "category:\(category)"
@@ -146,6 +151,7 @@ enum SidebarDestination: Hashable {
         case ("shortcut-workbench", nil): self = .shortcutWorkbench
         case ("render-survives", nil): self = .renderSurvives
         case ("screening-room", nil): self = .screeningRoom
+        case ("audio-workshop", nil): self = .audioWorkshop
         case ("all", nil): self = .catalog(.all)
         case ("milestone", let raw?): guard let milestone = Milestone(rawValue: raw) else { return nil }
             self = .catalog(.milestone(milestone))

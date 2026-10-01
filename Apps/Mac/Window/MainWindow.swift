@@ -128,6 +128,8 @@ struct MainWindow: View {
             RenderListColumn(window: window)
         case .screeningRoom:
             ScreeningRoomListColumn()
+        case .audioWorkshop:
+            AudioWorkshopListColumn(window: window)
         case .catalog(let scope):
             if let registry = model.registry {
                 CatalogListColumn(registry: registry, scope: scope, window: window)
@@ -187,6 +189,8 @@ struct MainWindow: View {
             RenderDetailColumn()
         case .screeningRoom:
             ScreeningRoomDetailColumn()
+        case .audioWorkshop:
+            AudioWorkshopDetailColumn(window: window)
         case .catalog:
             if let registry = model.registry {
                 CatalogDetailColumn(registry: registry, experimentID: window.experimentID)

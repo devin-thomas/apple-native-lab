@@ -91,6 +91,22 @@ LAB-017-A fixes the manual-exchange document (`LedgerDocument` in `Packages/LabF
 - **Merge.** Each envelope carries a version vector. An edit that happened after another wins. Edits that were made apart stay as a conflict until a person chooses. The choice is a new envelope. A tombstone that dominates an older edit does not recreate the record.
 - **Where it is written.** Each device appends its own write-ahead log, then materializes through `OperationService`. The optional profile is a directory of one JSON file per mutation. Reset Demo for this experiment removes only that experiment's folder.
 
+## Audio Workshop presets
+
+LAB-029 saves a graph preset as an ordinary item, with a `createItem` receipt whose undo archives it. The item is in the person's `Audio Workshop Presets` collection, in the `user` namespace, whose ID is fixed (`76573EDC-03EC-43E3-B1EA-A1122CAA5CF6`), so every save finds the same collection. The first save creates it. Reset Demo never touches it. The item's title is the preset's name, and its note is a readable summary. Its extras hold the preset, and loading reads only the extras:
+
+```json
+{"audioWorkshopPreset":{"cutoffHertz":2400,"filterEnabled":true,"format":"native-lab-audio-preset","gainDecibels":-6,"loop":"pulse","midi":{"channel":null,"controller":74,"highHertz":12000,"lowHertz":80},"resonance":0.9,"schemaVersion":1}}
+```
+
+- `format` is `native-lab-audio-preset` and `schemaVersion` is 1. A newer version is refused, not guessed at.
+- `loop` is `pulse`, `chords`, or `noise`. `gainDecibels` is -60 to 6, `cutoffHertz` 20 to 20,000, and `resonance` (a filter Q) 0.5 to 8. `filterEnabled` is a JSON Boolean.
+- `midi.controller` is 0 to 119, since 120 to 127 are channel mode messages. `midi.channel` is 1 to 16, or `null` for any channel. `lowHertz` is below `highHertz`, and both are within the cutoff range. A controller value moves the cutoff exponentially between them.
+- Every field is required. An unknown field, a wrong type (a number for a Boolean, or the reverse), and an out-of-range value are refused, never clamped. So are a duplicate key (`StrictJSON`) and a preset over 4 KiB.
+- Bypass and panic mute are never saved. Loading a preset cannot unmute the output or change bypass.
+
+The AUv3 unit keeps the same canonical JSON in its `fullState` under `nativeLab.audioWorkshop.preset`, so a host saves it in its own project. The canonical form has sorted keys and no whitespace, so the same preset always gives the same bytes.
+
 ## Import resource policy
 
 Initial defaults: at most 32 attachments per import; at most 2 MiB of metadata/text; at most 1 GiB total staged media; at most 2,000 archive entries; nesting depth at most 16. These are proposed protective defaults, not measured device limits. Media should stream to disk rather than allocate the declared total in memory. A smaller device/profile can impose stricter limits, and the UI must show the effective limit before import.

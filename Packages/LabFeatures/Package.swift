@@ -32,6 +32,7 @@ let package = Package(
         .library(name: "RenderThatSurvives", targets: ["RenderThatSurvives"]),
         .library(name: "ScreeningRoom", targets: ["ScreeningRoom"]),
         .library(name: "ScreeningRoomPlayback", targets: ["ScreeningRoomPlayback"]),
+        .library(name: "AudioWorkshop", targets: ["AudioWorkshop"]),
     ],
     dependencies: [
         .package(path: "../LabSupport"),
@@ -369,6 +370,20 @@ let package = Package(
         .testTarget(
             name: "ScreeningRoomPlaybackTests",
             dependencies: ["ScreeningRoomPlayback", "ScreeningRoom", .product(name: "LabDomain", package: "LabDomain")]
+        ),
+        // LAB-029 Audio Workshop: the realtime kernel in C, where clang checks that every function
+        // a render callback calls is non-blocking, and never allocates or locks.
+        .target(name: "AudioWorkshopDSP"),
+        // LAB-029 Audio Workshop: the graph preset, MIDI mapping, render stats, offline file
+        // processing, the preset save through OperationService, and the iOS and macOS adapters:
+        // AVAudioEngine output, Core MIDI input, and the AUv3 audio unit the extension serves.
+        .target(
+            name: "AudioWorkshop",
+            dependencies: ["AudioWorkshopDSP", .product(name: "LabDomain", package: "LabDomain")]
+        ),
+        .testTarget(
+            name: "AudioWorkshopTests",
+            dependencies: ["AudioWorkshop", "AudioWorkshopDSP", .product(name: "LabDomain", package: "LabDomain")]
         ),
     ]
 )

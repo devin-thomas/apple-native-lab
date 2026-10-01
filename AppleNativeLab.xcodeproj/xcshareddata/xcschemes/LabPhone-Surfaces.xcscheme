@@ -15,6 +15,20 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
+               BlueprintIdentifier = "B2A8ECDE729AB77539953AC6"
+               BuildableName = "AudioWorkshopUnit.appex"
+               BlueprintName = "AudioWorkshopUnit"
+               ReferencedContainer = "container:AppleNativeLab.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
                BlueprintIdentifier = "30E5D77184963759D2D3494D"
                BuildableName = "LabPhoneSurfaces.app"
                BlueprintName = "LabPhoneSurfaces"

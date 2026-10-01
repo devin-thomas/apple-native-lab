@@ -46,6 +46,7 @@ struct ExperimentDetailView: View {
                 ShortcutWorkbenchLaunch(experiment: experiment)
                 RenderLaunch(experiment: experiment)
                 ScreeningRoomLaunch(experiment: experiment)
+                AudioWorkshopLaunch(experiment: experiment)
                 Text(experiment.moment)
                     .font(.title3)
                     .fixedSize(horizontal: false, vertical: true)

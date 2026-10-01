@@ -1,5 +1,6 @@
 import ContextCards
 import FindTheThing
+import AudioWorkshop
 import LabCatalog
 import LabSupport
 import RespectfulAttention
@@ -91,6 +92,9 @@ struct SidebarView: View {
                 Label(ScreeningRoom.title, systemImage: ScreeningRoom.symbol)
                     .tag(SidebarDestination.screeningRoom)
                     .accessibilityHint("Watch an original clip, move it between surfaces, and resume with the same captions")
+                Label(AudioWorkshop.title, systemImage: AudioWorkshop.symbol)
+                    .tag(SidebarDestination.audioWorkshop)
+                    .accessibilityHint("A small audio processor with panic mute, bypass, MIDI, and offline processing")
             }
             Section("Experiments") {
                 row(.all, symbol: "square.grid.2x2")

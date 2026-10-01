@@ -469,6 +469,8 @@ Use in this plan: Playback, capture, export, and timing reference.
 
 Implementation evidence required: actual SDK symbol/availability, permissions or entitlement, and a named compile/device result.
 
+Installed SDK check (2026-09-30, Xcode 27.0 with the macOS and iOS 27.0 SDKs): the AVAudioEngine, Audio Unit, and realtime-annotation symbols Audio Workshop uses, with their declared availability, are in the [installed SDK ledger](VERIFICATION_BOUNDARIES.md#audio-graph-audio-unit-and-midi-lab-029). They ran on the Mac in offline manual rendering, which opens no audio device, and compiled for the iOS simulator. Nothing played through a speaker.
+
 ## S42
 
 **ScreenCaptureKit** — reference
@@ -635,6 +637,8 @@ Source: [Core MIDI](https://developer.apple.com/documentation/coremidi)
 Use in this plan: MIDI transport and endpoint reference.
 
 Implementation evidence required: actual SDK symbol/availability, permissions or entitlement, and a named compile/device result.
+
+Installed SDK check (2026-09-30): the Core MIDI input symbols Audio Workshop uses are in the [installed SDK ledger](VERIFICATION_BOUNDARIES.md#audio-graph-audio-unit-and-midi-lab-029). They compile for macOS and iOS; no MIDI client has been created in a test or with a real source.
 
 ## S57
 

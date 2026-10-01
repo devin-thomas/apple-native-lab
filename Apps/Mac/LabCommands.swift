@@ -1,3 +1,4 @@
+import AudioWorkshop
 import ContextCards
 import DesktopNativePower
 import FindTheThing
@@ -94,6 +95,9 @@ struct LabCommands: Commands {
             Button("Documents Everywhere") { window?.destination = .documentsEverywhere }
                 .keyboardShortcut("2", modifiers: [.command, .control])
                 .disabled(window == nil)
+            Button(AudioWorkshop.title) { window?.destination = .audioWorkshop }
+                .keyboardShortcut("3", modifiers: [.command, .control])
+                .disabled(window == nil)
             Button(DesktopCommand.showPalette.title) { desktop.showsPalette = true }
                 .keyboardShortcut("k", modifiers: .command)
             Button(DesktopCommand.showStatus.title) {
@@ -149,7 +153,22 @@ struct LabCommands: Commands {
             // keyboard path that does not depend on keyboard navigation reaching those buttons.
             archiveCommand
             undoCommand
+
+            Divider()
+
+            // LAB-029: the workshop's safety controls work whichever window, or none, is in front.
+            audioCommands
         }
+    }
+
+    @ViewBuilder private var audioCommands: some View {
+        let workshop = AudioWorkshopSession.shared
+        Button(workshop.state.isPlaying ? "Stop Audio Workshop" : "Play Audio Workshop") { workshop.togglePlayback() }
+            .keyboardShortcut("p", modifiers: [.command, .shift])
+        Button(workshop.isMuted ? "Unmute Audio Workshop" : "Panic Mute Audio Workshop") { workshop.setMuted(!workshop.isMuted) }
+            .keyboardShortcut("m", modifiers: [.command, .shift])
+        Button(workshop.isBypassed ? "Stop Bypassing Audio Workshop" : "Bypass Audio Workshop") { workshop.setBypassed(!workshop.isBypassed) }
+            .keyboardShortcut("b", modifiers: [.command, .shift])
     }
 
     private var archiveCommand: some View {

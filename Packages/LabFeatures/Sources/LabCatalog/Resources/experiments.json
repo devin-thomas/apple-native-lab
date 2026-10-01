@@ -535,7 +535,7 @@
       "title": "Audio Workshop",
       "category": "Audio",
       "milestone": "M3",
-      "state": "specified",
+      "state": "implemented",
       "dependsOn": [
         "LAB-008"
       ],

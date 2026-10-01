@@ -118,13 +118,13 @@ link         SystemSurfaces ios  QuickLookSupport    # QLPreviewProvider / QLPre
 # that play cues. No entitlement: capability is read from the device, and a missing actuator falls back.
 link         CoreLocal  macos    CoreHaptics         # CHHapticEngine when the Mac reports haptic support
 link         CoreLocal  macos    GameController      # controller haptics; support differs by controller
-link         CoreLocal  macos    AVFAudio            # quiet cue tone (AVAudioPlayer); ambient category is not used on Mac
+# (allowed above) CoreLocal macos AVFAudio — quiet cue tone (AVAudioPlayer); ambient category is not used on Mac
 link         CoreLocal  ios      CoreHaptics         # CHHapticEngine on iPhone
 link         CoreLocal  ios      GameController      # controller haptics on iPhone
-link         CoreLocal  ios      AVFAudio            # quiet cue tone; AVAudioSession category .ambient
+# (allowed above) CoreLocal ios AVFAudio — quiet cue tone; AVAudioSession category .ambient
 link         SystemSurfaces ios  CoreHaptics         # host variant compiles the iPhone cue adapter
 link         SystemSurfaces ios  GameController      # host variant compiles the controller adapter
-link         SystemSurfaces ios  AVFAudio            # host variant quiet cue tone, as LabPhone
+# (allowed above) SystemSurfaces ios AVFAudio — host variant quiet cue tone, as LabPhone
 
 # SystemSurfaces: Respectful Attention (LAB-043). Only the iPhone surfaces host links AlarmKit and
 # UserNotifications. CoreLocal keeps the in-app agenda and never links either framework. Cancel
@@ -160,21 +160,34 @@ link         SystemSurfaces ios  BackgroundTasks     # host variant: as LabPhone
 # player, caption menu, Picture in Picture, and AirPlay picker. The Mac and iPhone publish Now Playing
 # and take remote commands; Apple TV's system player does that itself. No camera or microphone is used.
 link         CoreLocal  macos    AVKit               # AVPlayerView, Picture in Picture, and the AirPlay route picker
-link         CoreLocal  macos    CoreMedia           # clip durations and the sample-entry code of a track that cannot play
+# (allowed above) CoreLocal macos CoreMedia — clip durations and the sample-entry code of a track that cannot play
 link         CoreLocal  macos    MediaPlayer         # Now Playing and the media keys, as commands with receipts
 link         CoreLocal  ios      AVKit               # AVPlayerViewController, Picture in Picture, and the AirPlay route picker
-link         CoreLocal  ios      AVFAudio            # the playback audio session: interruptions and route changes
-link         CoreLocal  ios      CoreMedia           # clip durations and the sample-entry code of a track that cannot play
+# (allowed above) CoreLocal ios AVFAudio — the playback audio session: interruptions and route changes
+# (allowed above) CoreLocal ios CoreMedia — clip durations and the sample-entry code of a track that cannot play
 link         CoreLocal  ios      MediaPlayer         # Now Playing and remote commands, as commands with receipts
 link         SystemSurfaces ios  AVKit               # host variant: Native Screening Room, as LabPhone
-link         SystemSurfaces ios  AVFAudio            # host variant: the playback audio session, as LabPhone
-link         SystemSurfaces ios  CoreMedia           # host variant: clip durations and codes, as LabPhone
+# (allowed above) SystemSurfaces ios AVFAudio — host variant: the playback audio session, as LabPhone
+# (allowed above) SystemSurfaces ios CoreMedia — host variant: clip durations and codes, as LabPhone
 link         SystemSurfaces ios  MediaPlayer         # host variant: Now Playing and remote commands, as LabPhone
 link         Companions tvos     AVFoundation        # Native Screening Room: playback of the bundled clips
 link         Companions tvos     AVKit               # the system player (AVPlayerViewController) and Picture in Picture
 link         Companions tvos     AVFAudio            # the playback audio session: interruptions and route changes
 link         Companions tvos     CoreMedia           # clip durations and the sample-entry code of a track that cannot play
 link         Companions tvos     CryptoKit           # LabDomain, under the Screening Room's session and receipts (its staging digests)
+
+# CoreLocal and SystemSurfaces: Audio Workshop (LAB-029). Playback only: no input node is opened and
+# no permission is asked. The offline render is the declared fallback and needs none of these at run time.
+# (allowed above) CoreLocal macos AVFAudio — AVAudioEngine and its source node for live playback; offline manual rendering
+link         CoreLocal  macos    AudioToolbox        # the workshop's AUv3 effect class, hosted in-process (AUAudioUnit)
+link         CoreLocal  macos    CoreMIDI            # MIDI input, opened only when a person turns on Listen to MIDI Sources
+# (allowed above) CoreLocal ios AVFAudio — same, iPhone host; AVAudioSession playback category
+link         CoreLocal  ios      AudioToolbox        # same, iPhone host
+link         CoreLocal  ios      CoreMIDI            # same, iPhone host
+# (allowed above) SystemSurfaces ios AVFAudio — host variant, as LabPhone; the AUv3 extension's bus formats
+link         SystemSurfaces ios  AudioToolbox        # host variant, as LabPhone; the AUv3 extension's audio unit
+link         SystemSurfaces ios  CoreMIDI            # host variant, as LabPhone; linked into the extension through the AudioWorkshop product, never opened there
+link         SystemSurfaces ios  CoreAudioKit        # the AUv3 extension's principal class (AUViewController)
 
 # Companions: the Watch host's capability status probes (CORE-004)
 link         Companions watchos  AVFAudio            # record permission and audio input
