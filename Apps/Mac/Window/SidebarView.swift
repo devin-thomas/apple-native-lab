@@ -52,6 +52,9 @@ struct SidebarView: View {
                 Label("Desktop Native Power", systemImage: "macwindow")
                     .tag(SidebarDestination.desktopPower)
                     .accessibilityHint("Command palette, notes, and the menu-bar status")
+                Label(LocalModelBenchExperiment.title, systemImage: LocalModelBenchExperiment.symbol)
+                    .tag(SidebarDestination.localModelBench)
+                    .accessibilityHint("Compare a fixed corpus. Cold and warm stay separate, and nothing is recorded until you ask.")
             }
             Section("Experiments") {
                 row(.all, symbol: "square.grid.2x2")

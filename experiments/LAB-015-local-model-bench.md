@@ -1,7 +1,7 @@
 ---
 id: "LAB-015"
 title: "Local Model Bench"
-state: "specified"
+state: "implemented"
 milestone: "M3"
 category: "Intelligence"
 depends_on: ["LAB-010"]
@@ -55,6 +55,21 @@ A fixture replay is labeled as a replay. It can prove the domain/UI contract but
 ## Build ownership
 
 Proposed module: `Packages/LabFeatures/local-model-bench/`, with native adapters only in supported hosts/extensions. Shared operations and imported document structures belong in the domain/store packages rather than a view. Record any narrower module split during implementation.
+
+Implemented split (LAB-015-A):
+
+- `Packages/LabFeatures/Sources/LocalModelBench/` holds the corpus, the license and memory gate, the fixture executor, the score rules, and the recorder. It depends on LabDomain and never holds the store. It does not import Core ML, Foundation Models, or MLX.
+- `Apps/Shared/LocalModelBench/` holds the session, `LibraryBenchBackend` (commits through `LabLibrary.submit`), and the iPhone screen. The Mac reaches it from the sidebar and View › Local Model Bench (⌥⌘3). The iPhone reaches it from this experiment's catalog page, with no new tab.
+
+## Implementation notes (LAB-015-A)
+
+Observed with Xcode 27.0 (27A266a) and the macOS 27.0 SDK. These are package tests and Mac hosted tests, not device proof, and not a claim that a model ran.
+
+- **No model load.** `MLModel.load(contentsOf:configuration:)` (macOS 12.0, iOS 15.0, watchOS 8.0, tvOS 15.0) loads a compiled model from a URL. `MLComputePlan.load` (macOS 14.4, iOS 17.4, watchOS 10.4, tvOS 17.4) also reads an asset, and `estimatedCost(of:)` returns a unitless `weight`, not a byte budget. Nothing in that interface reports bytes before a load. This build does not call either one, and it does not link Core ML. Foundation Models has no evaluation type this bench calls; the word "evaluate" in that interface is the profile builder, not a harness. MLX is not a dependency.
+- **Gate.** A descriptor with an unreviewed license, or with `declaredMemoryBytes` above the caller's available bytes, throws before the loader closure runs. The fixture descriptor is 1 MiB and the fixture loader reports `allocatedBytes` 0.
+- **Phases.** Download, warm-up, and measured are separate runs. A score exists only for a measured run whose every task passed, and only inside one thermal class. Cold and warm throw `mixedThermal`. A failed task throws `failedTask`; its latency is not a median.
+- **Fixture.** The executor compares each case to the corpus's expected text. Every report has `inference: false`, `executor: "fixture"`, `timebase: "fixture-script"`, and `thermalSensor: "not-observed"`. The same inputs export the same JSON.
+- **Receipts.** Record creates a user collection and one item through `OperationService`. A retry of the same report returns the original receipt. Reset archives only items in that collection whose extras are a bench report, and only with a grant. A model tool is refused and writes nothing. The lab's own Reset Demo does not remove user items.
 
 ## Delivery
 

@@ -102,6 +102,9 @@ targets:
       # LAB-002 Context Cards: the visible sample, the schema gate, and the set-aside intents.
       - package: LabFeatures
         product: ContextCards
+      # LAB-015 Local Model Bench: the fixture executor. It does not link Core ML.
+      - package: LabFeatures
+        product: LocalModelBench
     info:
       path: Apps/Mac/Info.plist
       properties:
@@ -213,6 +216,9 @@ targets:
       # LAB-002 Context Cards: the visible sample, the schema gate, and the set-aside intents.
       - package: LabFeatures
         product: ContextCards
+      # LAB-015 Local Model Bench: the fixture executor. It does not link Core ML.
+      - package: LabFeatures
+        product: LocalModelBench
     info:
       path: Apps/Phone/Info.plist
       properties:
@@ -321,6 +327,9 @@ targets:
       # LAB-002 Context Cards: the same module LabPhone links. This host compiles Apps/Shared.
       - package: LabFeatures
         product: ContextCards
+      # LAB-015 Local Model Bench: the fixture executor, as LabPhone. It does not link Core ML.
+      - package: LabFeatures
+        product: LocalModelBench
       - target: ShareExtension
         embed: true
       # LAB-004: the widget and Control extension, embedded only in this SystemSurfaces variant.

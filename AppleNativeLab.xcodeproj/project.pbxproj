@@ -15,6 +15,7 @@
 		0A76696BFB66718AF104AB2B /* SurfaceDeck in Frameworks */ = {isa = PBXBuildFile; productRef = D251249EBC83B2887F7B36D3 /* SurfaceDeck */; };
 		0C04D42E682D6F9F2608CDD5 /* SurfaceDeck in Frameworks */ = {isa = PBXBuildFile; productRef = C00FE8FBC35881E832DADD27 /* SurfaceDeck */; };
 		154C21111E02462DD0A59BE0 /* LabStore in Frameworks */ = {isa = PBXBuildFile; productRef = 6E71D4CE7F5EFA213F132511 /* LabStore */; };
+		1971878BD77FD9FBB927D999 /* LocalModelBench in Frameworks */ = {isa = PBXBuildFile; productRef = 59350CEF01CB3A0AC950B880 /* LocalModelBench */; };
 		1ABEE97B7C7ACB1EAF41ABC4 /* ShareIngress in Frameworks */ = {isa = PBXBuildFile; productRef = A7B30E9CC74D5DACCC486C60 /* ShareIngress */; };
 		1B0413E82622210BA72820FA /* LabDomain in Frameworks */ = {isa = PBXBuildFile; productRef = 0D6B57C2990B445E8BC56C3B /* LabDomain */; };
 		1C7CA3174A557512B2CC9E55 /* seed.json in Resources */ = {isa = PBXBuildFile; fileRef = 4C5126791B7E1A1A049AE090 /* seed.json */; };
@@ -23,6 +24,7 @@
 		29496A5626839FD3F7D5287D /* PortableObjects in Frameworks */ = {isa = PBXBuildFile; productRef = F9A656A9EA01777E437005A8 /* PortableObjects */; };
 		2DC4325948CAC8E236586BB5 /* LabSupport in Frameworks */ = {isa = PBXBuildFile; productRef = B0B980774D943168FEA7065A /* LabSupport */; };
 		302604032E20F6AE4A5120CB /* SurfaceWidgets.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 82FD43D87B67084E0C795F37 /* SurfaceWidgets.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		31AFEC7DFA568A155997BBC4 /* LocalModelBench in Frameworks */ = {isa = PBXBuildFile; productRef = 47A98A400215FB089E3EDF93 /* LocalModelBench */; };
 		330EBB105739FBBAFDAE5C28 /* ActionAtlas in Frameworks */ = {isa = PBXBuildFile; productRef = 88023F30308C4118D4A07ABA /* ActionAtlas */; };
 		34205B0D4B75B6C58B2006B2 /* intelligence-ambiguous-note.txt in Resources */ = {isa = PBXBuildFile; fileRef = AE4F4AB8C2CC86E0A0AF350A /* intelligence-ambiguous-note.txt */; };
 		3801D1772B69CAE4CA93FDFE /* LabSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 23ACA699398C10114E0D39E7 /* LabSupport */; };
@@ -46,6 +48,7 @@
 		6DE4F776CBFE16A956072B91 /* PortableObjects in Frameworks */ = {isa = PBXBuildFile; productRef = 5138B46379EB0CDA5C7A520B /* PortableObjects */; };
 		6F93A9AD463D59BB11A8A5EC /* LabDomain in Frameworks */ = {isa = PBXBuildFile; productRef = CACF77BD90DF68CDE4C515EA /* LabDomain */; };
 		72DC9866A6C7DE5D6279D72F /* intelligence-injected-note.txt in Resources */ = {isa = PBXBuildFile; fileRef = D89DA08F5504526396A194FA /* intelligence-injected-note.txt */; };
+		73AF93F8C738CF705BA9D0E5 /* LocalModelBench in Frameworks */ = {isa = PBXBuildFile; productRef = 3ACA181AD3B230C4BEB973C8 /* LocalModelBench */; };
 		76C6A1AD242AA9CD5B90099D /* ContextCards in Frameworks */ = {isa = PBXBuildFile; productRef = 0A1E283E59A2E6CE6A1FCEF2 /* ContextCards */; };
 		778984D260ECA5DC69A502E1 /* LabStore in Frameworks */ = {isa = PBXBuildFile; productRef = F26F0DA29E5E4B99D5E4143F /* LabStore */; };
 		7BC2B01F79C7BDAE1AA50AC5 /* PickUpHere in Frameworks */ = {isa = PBXBuildFile; productRef = D2925C43D1B2531E485720E6 /* PickUpHere */; };
@@ -405,6 +408,7 @@
 				D4FFE59C3D108F7EEC03F76B /* SurfaceDeck in Frameworks */,
 				AA05060A1927DB052D03BA7E /* TrustDesk in Frameworks */,
 				823467FF125D225EC5477CA3 /* ContextCards in Frameworks */,
+				1971878BD77FD9FBB927D999 /* LocalModelBench in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -434,6 +438,7 @@
 				0C04D42E682D6F9F2608CDD5 /* SurfaceDeck in Frameworks */,
 				0696065FF182D17B47C7385C /* TrustDesk in Frameworks */,
 				4FDBD4A004E827140BE8A421 /* ContextCards in Frameworks */,
+				73AF93F8C738CF705BA9D0E5 /* LocalModelBench in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -491,6 +496,7 @@
 				A0AF3C92D36C68C1D64BE7D6 /* DesktopNativePower in Frameworks */,
 				AD455F75C2D216702A2B62CE /* TrustDesk in Frameworks */,
 				76C6A1AD242AA9CD5B90099D /* ContextCards in Frameworks */,
+				31AFEC7DFA568A155997BBC4 /* LocalModelBench in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -707,6 +713,7 @@
 				3CF19F7CC72BE703FC6929AD /* SurfaceDeck */,
 				C5D34BAE1E274DDF6B129BCC /* TrustDesk */,
 				B07CF76A07881747B6BDDC65 /* ContextCards */,
+				59350CEF01CB3A0AC950B880 /* LocalModelBench */,
 			);
 			productName = LabPhoneSurfaces;
 			productReference = 9A57B8DBFF3F863D70D41513 /* LabPhoneSurfaces.app */;
@@ -745,6 +752,7 @@
 				799F4CAFFEC3C33B73985488 /* DesktopNativePower */,
 				ED6B5B90B0BE1BD3A5AE104F /* TrustDesk */,
 				0A1E283E59A2E6CE6A1FCEF2 /* ContextCards */,
+				47A98A400215FB089E3EDF93 /* LocalModelBench */,
 			);
 			productName = LabMac;
 			productReference = 2F62DB7E020E6BFDAC86BD42 /* LabMac.app */;
@@ -852,6 +860,7 @@
 				C00FE8FBC35881E832DADD27 /* SurfaceDeck */,
 				DAA9D7AA6F4848C5373DE1B3 /* TrustDesk */,
 				2170AE2584F7EF6C7CC11E04 /* ContextCards */,
+				3ACA181AD3B230C4BEB973C8 /* LocalModelBench */,
 			);
 			productName = LabPhone;
 			productReference = 28C2C1B8B040DD0D06AF070E /* LabPhone.app */;
@@ -2097,9 +2106,17 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = LabCatalog;
 		};
+		3ACA181AD3B230C4BEB973C8 /* LocalModelBench */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = LocalModelBench;
+		};
 		3CF19F7CC72BE703FC6929AD /* SurfaceDeck */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SurfaceDeck;
+		};
+		47A98A400215FB089E3EDF93 /* LocalModelBench */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = LocalModelBench;
 		};
 		487F08AAFA8FFA4128830EF0 /* LabCatalog */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -2120,6 +2137,10 @@
 		5879A7CAEDD8078739ABF6D6 /* ShareIngress */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ShareIngress;
+		};
+		59350CEF01CB3A0AC950B880 /* LocalModelBench */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = LocalModelBench;
 		};
 		59FA911654D48713C53F9816 /* LabCatalog */ = {
 			isa = XCSwiftPackageProductDependency;

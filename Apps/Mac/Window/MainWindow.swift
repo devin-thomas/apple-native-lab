@@ -104,6 +104,8 @@ struct MainWindow: View {
             SurfaceDeckListColumn(window: window)
         case .desktopPower:
             DesktopPowerListColumn()
+        case .localModelBench:
+            LocalModelBenchListColumn(window: window)
         case .catalog(let scope):
             if let registry = model.registry {
                 CatalogListColumn(registry: registry, scope: scope, window: window)
@@ -140,6 +142,8 @@ struct MainWindow: View {
             SurfaceDeckDetailColumn()
         case .desktopPower:
             DesktopPowerDetailColumn()
+        case .localModelBench:
+            LocalModelBenchDetailColumn(window: window)
         case .catalog:
             if let registry = model.registry {
                 CatalogDetailColumn(registry: registry, experimentID: window.experimentID)
@@ -168,6 +172,7 @@ struct MainWindow: View {
         case .trustDesk: "Search the desk"
         case .pickUpHere: "Search drafts"
         case .contextCards: "Search samples"
+        case .localModelBench: "Search bench cases"
         default: "Search experiments"
         }
     }
