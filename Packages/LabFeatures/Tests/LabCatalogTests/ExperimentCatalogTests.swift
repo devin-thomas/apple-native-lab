@@ -37,12 +37,13 @@ import Testing
         // simulator, fallback on both), LAB-015 (fixture executor in package tests and in the Mac host; no
         // model loaded, no physical device), LAB-016 (continuation hints in package tests; Handoff between
         // devices was not run), LAB-017 (two fixture devices, the file profile, and the manual exchange in
-        // package and Mac host tests; not live CloudKit, no physical device), LAB-035 (four paths on the Mac
-        // and simulator), LAB-041 (local confirmation and a passkey simulation on the Mac; the keychain
-        // record inside the sandboxed host), LAB-042 (domain and adapter tests on the development Mac; the
-        // running menus, Services menu, and a device were not exercised).
-        #expect(catalog.experiments.filter { $0.state != .specified }.map(\.id) == ["LAB-001", "LAB-002", "LAB-004", "LAB-007", "LAB-008", "LAB-010", "LAB-015", "LAB-016", "LAB-017", "LAB-035", "LAB-041", "LAB-042"])
-        #expect(catalog.experiments.filter { $0.state == .implemented }.count == 12)
+        // package and Mac host tests; not live CloudKit, no physical device), LAB-030 (cue grammar, settings,
+        // and the audio and visual fallback in package and Mac host tests; no haptic hardware, no physical
+        // device), LAB-035 (four paths on the Mac and simulator), LAB-041 (local confirmation and a passkey
+        // simulation on the Mac; the keychain record inside the sandboxed host), LAB-042 (domain and adapter
+        // tests on the development Mac; the running menus, Services menu, and a device were not exercised).
+        #expect(catalog.experiments.filter { $0.state != .specified }.map(\.id) == ["LAB-001", "LAB-002", "LAB-004", "LAB-007", "LAB-008", "LAB-010", "LAB-015", "LAB-016", "LAB-017", "LAB-030", "LAB-035", "LAB-041", "LAB-042"])
+        #expect(catalog.experiments.filter { $0.state == .implemented }.count == 13)
         #expect(catalog.progress(for: .m1) == (live: 6, total: 6))
     }
 

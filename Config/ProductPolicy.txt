@@ -85,10 +85,24 @@ purpose      LocalAuthentication NSFaceIDUsageDescription    # device-owner conf
 link         SystemSurfaces ios  WidgetKit           # the widget and Controls; the host variant's reloadTimelines and reloadControls
 link         SystemSurfaces ios  _AppIntents_SwiftUI # the widget's Toggle(isOn:intent:); the host's Context Cards snippets (LAB-002)
 
+# CoreLocal: Tactile Grammar (LAB-030). Core Haptics and GameController are linked only by the hosts
+# that play cues. No entitlement: capability is read from the device, and a missing actuator falls back.
+link         CoreLocal  macos    CoreHaptics         # CHHapticEngine when the Mac reports haptic support
+link         CoreLocal  macos    GameController      # controller haptics; support differs by controller
+link         CoreLocal  macos    AVFAudio            # quiet cue tone (AVAudioPlayer); ambient category is not used on Mac
+link         CoreLocal  ios      CoreHaptics         # CHHapticEngine on iPhone
+link         CoreLocal  ios      GameController      # controller haptics on iPhone
+link         CoreLocal  ios      AVFAudio            # quiet cue tone; AVAudioSession category .ambient
+link         SystemSurfaces ios  CoreHaptics         # host variant compiles the iPhone cue adapter
+link         SystemSurfaces ios  GameController      # host variant compiles the controller adapter
+link         SystemSurfaces ios  AVFAudio            # host variant quiet cue tone, as LabPhone
+
 # Companions: the Watch host's capability status probes (CORE-004)
 link         Companions watchos  AVFAudio            # record permission and audio input
 link         Companions watchos  CoreBluetooth       # Bluetooth authorization status
 link         Companions watchos  NearbyInteraction   # Ultra Wideband device capabilities
+link         Companions watchos  WatchKit            # LAB-030 system haptics (WKInterfaceDevice.play); no custom waveform
+link         Companions watchos  CryptoKit           # LAB-030: TactileGrammar → LabDomain ContentDigest (SHA-256)
 
 # Companions: the Apple TV host (CORE-013). It links LabSupport and LabCatalog only, and declares no
 # entitlement: no `entitlement` line names tvOS, so any entitlement fails the manifest.

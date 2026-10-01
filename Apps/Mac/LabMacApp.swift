@@ -1,4 +1,5 @@
 import SwiftUI
+import TactileGrammar
 
 @main
 struct LabMacApp: App {
@@ -15,6 +16,7 @@ struct LabMacApp: App {
         let desktop = DesktopPowerHost.connect(library)
         _desktop = State(initialValue: desktop)
         ContextCardsHost.connect(library)
+        TactileGrammarCenter.shared.install(LiveTactileGrammar.makeEngine())
     }
 
     var body: some Scene {

@@ -40,6 +40,7 @@ struct ExperimentDetailView: View {
                 TrustDeskLaunch(experiment: experiment)
                 ContextCardsLaunch(experiment: experiment)
                 DurableSyncLaunch(experiment: experiment)
+                TactileGrammarLaunch(experiment: experiment)
                 Text(experiment.moment)
                     .font(.title3)
                     .fixedSize(horizontal: false, vertical: true)

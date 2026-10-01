@@ -1,4 +1,5 @@
 import SwiftUI
+import TactileGrammar
 
 @main
 struct LabPhoneApp: App {
@@ -12,6 +13,7 @@ struct LabPhoneApp: App {
         ActionAtlasHost.connect(library)
         SurfaceDeckHost.connect(library)
         ContextCardsHost.connect(library)
+        TactileGrammarCenter.shared.install(LiveTactileGrammar.makeEngine())
     }
 
     var body: some Scene {

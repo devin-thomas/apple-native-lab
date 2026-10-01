@@ -6,6 +6,7 @@ import Observation
 import ShareIngress
 import SurfaceDeck
 import SwiftUI
+import TactileGrammar
 import TypedIntelligence
 
 /// What the sidebar selects: the lab's own data, or a slice of the experiment catalog.
@@ -35,6 +36,8 @@ enum SidebarDestination: Hashable {
     case localModelBench
     /// LAB-017: two devices, a local ledger, and a manual document.
     case durableSync
+    /// LAB-030: three tactile cues, their visual and spoken equivalents, and device feedback.
+    case tactileGrammar
     case catalog(CatalogScope)
 
     var title: String {
@@ -52,6 +55,7 @@ enum SidebarDestination: Hashable {
         case .desktopPower: "Desktop Native Power"
         case .localModelBench: LocalModelBenchExperiment.title
         case .durableSync: DurableSyncExperiment.title
+        case .tactileGrammar: TactileGrammarExperiment.title
         case .catalog(let scope): scope.title
         }
     }
@@ -72,6 +76,7 @@ enum SidebarDestination: Hashable {
         case .desktopPower: "desktop-power"
         case .localModelBench: "local-model-bench"
         case .durableSync: "durable-sync"
+        case .tactileGrammar: "tactile-grammar"
         case .catalog(.all): "all"
         case .catalog(.milestone(let milestone)): "milestone:\(milestone.rawValue)"
         case .catalog(.category(let category)): "category:\(category)"
@@ -95,6 +100,7 @@ enum SidebarDestination: Hashable {
         case ("desktop-power", nil): self = .desktopPower
         case ("local-model-bench", nil): self = .localModelBench
         case ("durable-sync", nil): self = .durableSync
+        case ("tactile-grammar", nil): self = .tactileGrammar
         case ("all", nil): self = .catalog(.all)
         case ("milestone", let raw?): guard let milestone = Milestone(rawValue: raw) else { return nil }
             self = .catalog(.milestone(milestone))
@@ -134,6 +140,8 @@ final class MainWindowState {
     let bench = LocalModelBenchSession()
     /// LAB-017: this window's two-device ledger replay.
     let durableSync = DurableSyncSession()
+    /// LAB-030: this window's cues, intensity, and last result.
+    let tactile = TactileGrammarModel()
     var searchText = ""
     /// Incremented to ask the window to focus its search field.
     var searchRequests = 0

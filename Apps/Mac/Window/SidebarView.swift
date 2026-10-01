@@ -3,6 +3,7 @@ import LabCatalog
 import LabSupport
 import SurfaceDeck
 import SwiftUI
+import TactileGrammar
 
 /// The sidebar: the lab's own collection first, then the catalog by milestone, lifecycle state, and
 /// category, each with a count. Every one of the six states is listed, even when it is empty, so
@@ -58,6 +59,9 @@ struct SidebarView: View {
                 Label(DurableSyncExperiment.title, systemImage: DurableSyncExperiment.symbol)
                     .tag(SidebarDestination.durableSync)
                     .accessibilityHint("Two devices, a local ledger, and a document you can exchange by hand")
+                Label(TactileGrammarExperiment.title, systemImage: TactileGrammarExperiment.symbol)
+                    .tag(SidebarDestination.tactileGrammar)
+                    .accessibilityHint("Success, warning, and timing cues, with a visual pulse when haptics are missing")
             }
             Section("Experiments") {
                 row(.all, symbol: "square.grid.2x2")

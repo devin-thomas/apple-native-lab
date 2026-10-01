@@ -1,8 +1,9 @@
-import DesktopNativePower
 import ContextCards
+import DesktopNativePower
 import LabCatalog
 import SurfaceDeck
 import SwiftUI
+import TactileGrammar
 
 /// Menu bar commands for the essential actions, each with a keyboard shortcut. Window-specific
 /// commands act on the frontmost main window and are disabled when none is in front.
@@ -65,6 +66,9 @@ struct LabCommands: Commands {
                 .disabled(window == nil)
             Button(DurableSyncExperiment.title) { window?.destination = .durableSync }
                 .keyboardShortcut("4", modifiers: [.command, .option])
+                .disabled(window == nil)
+            Button(TactileGrammarExperiment.title) { window?.destination = .tactileGrammar }
+                .keyboardShortcut("5", modifiers: [.command, .option])
                 .disabled(window == nil)
             Button(DesktopCommand.showPalette.title) { desktop.showsPalette = true }
                 .keyboardShortcut("k", modifiers: .command)

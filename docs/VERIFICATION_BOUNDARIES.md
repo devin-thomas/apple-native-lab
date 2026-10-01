@@ -156,3 +156,13 @@ Recorded at [LAB-017-A](../tickets/LAB-017-A.md). Symbols were read on 2026-09-3
 | [S15](SOURCE_INDEX.md#s15) | `CKSyncEngine.Event.accountChange` with `signIn`, `signOut`, and `switchAccounts` | macOS 14.0, iOS 17.0, tvOS 17.0, watchOS 10.0 | Not called. Package tests refuse another account's ledger directory and another account's private document (`AccountAndProfileTests`). | A live account change |
 | [S15](SOURCE_INDEX.md#s15) | `CKDatabase.Scope` (`public`, `private`, `shared`); `CKAccountStatus.temporarilyUnavailable` | Scope: macOS 10.12, iOS 10.0. `temporarilyUnavailable`: macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0 | `RecordScope` is only `private` and `shared`. A document whose scope is `public` is refused (`Fixtures/LAB-017/public-scope.json`). The file profile is not contacted when it is disabled. | What a live engine does while the account is temporarily unavailable |
 
+### Core Haptics, controllers, and Watch haptics (LAB-030)
+
+Recorded at LAB-030-A from the Core Haptics, GameController, and WatchKit headers of the 27.0 SDKs on 2026-09-30. No entitlement is required. Nothing here was played on a physical device. A package test called `CHHapticEngine.capabilitiesForHardware()` and `GCController.controllers()` on the research Mac and got a value back.
+
+| Source | Installed symbol | Declared availability | Demonstrated | Remaining uncertainty |
+|---|---|---|---|---|
+| [S50](SOURCE_INDEX.md#s50) | `CHHapticEngine`, `capabilitiesForHardware()`, `supportsHaptics`, `makePlayer(with:)`, `CHHapticEvent` transient and continuous, `CHHapticTimeImmediate` (0) | iOS 13.0, macOS 10.15, tvOS 14.0; unavailable on watchOS. The watchOS SDK has no Core Haptics framework | Compiled into the Mac and iPhone hosts. On the research Mac (Apple M5 Max), `supportsHaptics` was false. The call did not play a pattern | What an iPhone or a Mac with a haptic actuator reports, and what the pattern feels like |
+| [S49](SOURCE_INDEX.md#s49) | `GCController.haptics`, `GCDeviceHaptics.createEngine(withLocality:)`, `GCHapticsLocality.default` | macOS 11.0, iOS 14.0, tvOS 14.0. No GameController framework on watchOS | Compiled into the Mac and iPhone hosts. On the research Mac, no controller reported haptics | Which controllers return a non-nil `haptics`, and playback on one |
+| WatchKit | `WKInterfaceDevice.play(_:)` with `WKHapticType.success`, `.retry`, and `.start` | watchOS 2.0 for `play`; the three types are in the original enum | Compiled into the Watch host. The route sends one system haptic and an empty event list. Not played | What a Watch does, including a Watch that ignores the call |
+

@@ -108,6 +108,9 @@ targets:
       # LAB-017 Durable Sync Ledger: the write-ahead ledger, the file profile, and the manual document.
       - package: LabFeatures
         product: DurableSyncLedger
+      # LAB-030 Tactile Grammar: the cues, their fallback, and Play Tactile Cue.
+      - package: LabFeatures
+        product: TactileGrammar
     info:
       path: Apps/Mac/Info.plist
       properties:
@@ -225,6 +228,9 @@ targets:
       # LAB-017 Durable Sync Ledger: the write-ahead ledger, the file profile, and the manual document.
       - package: LabFeatures
         product: DurableSyncLedger
+      # LAB-030 Tactile Grammar: the cues, their fallback, and Play Tactile Cue.
+      - package: LabFeatures
+        product: TactileGrammar
     info:
       path: Apps/Phone/Info.plist
       properties:
@@ -339,6 +345,9 @@ targets:
       # LAB-017 Durable Sync Ledger: the same ledger the iPhone host links.
       - package: LabFeatures
         product: DurableSyncLedger
+      # LAB-030 Tactile Grammar: the cues, their fallback, and Play Tactile Cue.
+      - package: LabFeatures
+        product: TactileGrammar
       - target: ShareExtension
         embed: true
       # LAB-004: the widget and Control extension, embedded only in this SystemSurfaces variant.
@@ -497,6 +506,9 @@ targets:
       - package: LabSupport
       - package: LabFeatures
         product: LabCatalog
+      # LAB-030 Tactile Grammar: Watch system haptics only. No custom waveform.
+      - package: LabFeatures
+        product: TactileGrammar
     info:
       path: Apps/Watch/Info.plist
       properties:

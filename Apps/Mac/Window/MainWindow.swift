@@ -108,6 +108,8 @@ struct MainWindow: View {
             LocalModelBenchListColumn(window: window)
         case .durableSync:
             DurableSyncListColumn(window: window)
+        case .tactileGrammar:
+            TactileGrammarListColumn(model: window.tactile)
         case .catalog(let scope):
             if let registry = model.registry {
                 CatalogListColumn(registry: registry, scope: scope, window: window)
@@ -148,6 +150,8 @@ struct MainWindow: View {
             LocalModelBenchDetailColumn(window: window)
         case .durableSync:
             DurableSyncDetailColumn(window: window)
+        case .tactileGrammar:
+            TactileGrammarDetailColumn(model: window.tactile)
         case .catalog:
             if let registry = model.registry {
                 CatalogDetailColumn(registry: registry, experimentID: window.experimentID)
@@ -178,6 +182,7 @@ struct MainWindow: View {
         case .contextCards: "Search samples"
         case .localModelBench: "Search bench cases"
         case .durableSync: "Search devices"
+        case .tactileGrammar: "Search cues"
         default: "Search experiments"
         }
     }
