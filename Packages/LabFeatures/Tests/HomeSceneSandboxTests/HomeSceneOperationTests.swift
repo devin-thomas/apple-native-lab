@@ -5,7 +5,7 @@ import Testing
 
 struct ServiceBackend: HomeSceneBackend {
     let service: OperationService
-    let actor = ActorScope(adapter: .appUI, grants: Set(Permission.allCases))
+    var actor = ActorScope(adapter: .appUI, grants: Set(Permission.allCases))
 
     func item(_ id: ItemID) async throws(HomeSceneError) -> LabItem? {
         do { return try await service.findItem(id, as: actor) } catch {
@@ -193,6 +193,8 @@ private func lab(hallwayReachable: Bool = false) -> (HomeSceneSandbox, ServiceBa
         await #expect(throws: HomeSceneError.cancelled) {
             try await sandbox.commit(through: cancelled, requestID: RequestID())
         }
+        let home = try await sandbox.refreshHome()
+        #expect(home.accessory(FictionalHome.livingLamp)?.isOn == false)
     }
 
     @Test func resetDemoRestoresOnlyTheFixtureNote() async throws {
@@ -208,6 +210,9 @@ private func lab(hallwayReachable: Bool = false) -> (HomeSceneSandbox, ServiceBa
         let after = try #require(await backend.item(FictionalHome.item))
         #expect(after.note.value == FictionalHome.sealedNote)
         #expect(sandbox.route == .simulated)
+        let home = try await sandbox.refreshHome()
+        #expect(home.accessory(FictionalHome.livingLamp)?.isOn == false)
+        #expect(home.accessory(FictionalHome.livingLamp)?.brightness == 40)
     }
 
     @Test func liveRouteIsUnavailableOnTheFictionalSource() async throws {
@@ -215,4 +220,95 @@ private func lab(hallwayReachable: Bool = false) -> (HomeSceneSandbox, ServiceBa
             try await FictionalHomeSource().homes(on: .live)
         }
     }
+    @Test func duplicateCommitReplaysWithoutChangingTheSceneAgain() async throws {
+        let (sandbox, backend, _) = lab()
+        _ = try await sandbox.refreshHome()
+        try sandbox.select(LightChange(isOn: true), for: FictionalHome.livingLamp)
+        let request = RequestID()
+        let first = try await sandbox.commit(through: backend, requestID: request)
+        let second = try await sandbox.commit(through: backend, requestID: request)
+        #expect(first.receipt.operationID == second.receipt.operationID)
+        #expect(first.report == second.report)
+        let item = try #require(await backend.item(FictionalHome.item))
+        #expect(item.note.value.contains("Scene succeeded"))
+    }
+
+    @Test func incompleteOutcomeSetCannotSucceed() async throws {
+        let (sandbox, _, _) = lab(hallwayReachable: true)
+        _ = try await sandbox.refreshHome()
+        try sandbox.select(LightChange(isOn: true), for: FictionalHome.livingLamp)
+        try sandbox.select(LightChange(isOn: false), for: FictionalHome.hallwayLamp)
+        let report = SceneCommitReport(proposal: try sandbox.preview(), outcomes: [.succeeded(FictionalHome.livingLamp, "Changed")])
+        #expect(!report.sceneSucceeded)
+    }
+
+    @Test func fictionalAccessRequestKeepsFallbackUsable() async throws {
+        let (sandbox, _, _) = lab()
+        #expect(try await sandbox.requestLiveAccess() == .denied)
+        #expect(sandbox.route == .simulated)
+        #expect(try await sandbox.refreshHome().isSimulated)
+    }
+
+    @Test func deniedCommitCannotChangeLampState() async throws {
+        let (sandbox, backend, _) = lab()
+        var denied = backend
+        denied.actor = ActorScope(adapter: .modelTool, grants: Set(Permission.allCases))
+        _ = try await sandbox.refreshHome()
+        try sandbox.select(LightChange(isOn: true), for: FictionalHome.livingLamp)
+        do {
+            _ = try await sandbox.commit(through: denied, requestID: RequestID())
+            Issue.record("Model tool committed")
+        } catch {
+            guard case .operation(.unauthorized) = error else {
+                Issue.record("Expected unauthorized, got \(error)")
+                return
+            }
+        }
+        #expect(try await sandbox.refreshHome().accessory(FictionalHome.livingLamp)?.isOn == false)
+        #expect(try await backend.item(FictionalHome.item) == nil)
+    }
+
+    @Test func changedHomeRequiresAnotherPreview() async throws {
+        let (sandbox, backend, source) = lab()
+        let home = try await sandbox.refreshHome()
+        try sandbox.select(LightChange(isOn: true), for: FictionalHome.livingLamp)
+        _ = try await source.apply(LightChange(brightness: 15), to: home.accessory(FictionalHome.livingLamp)!, in: home, previewOnly: false)
+        await #expect(throws: HomeSceneError.invalidInput("The home changed after preview. Refresh and review the changes again.")) {
+            try await sandbox.commit(through: backend, requestID: RequestID())
+        }
+        #expect(try await backend.item(FictionalHome.item) == nil)
+    }
+
+    @Test func duplicateCommitIsAuthorizedAgain() async throws {
+        let (sandbox, backend, _) = lab()
+        _ = try await sandbox.refreshHome()
+        try sandbox.select(LightChange(isOn: true), for: FictionalHome.livingLamp)
+        let request = RequestID()
+        _ = try await sandbox.commit(through: backend, requestID: request)
+        var denied = backend
+        denied.actor = ActorScope(adapter: .modelTool, grants: Set(Permission.allCases))
+        do {
+            _ = try await sandbox.commit(through: denied, requestID: request)
+            Issue.record("Model tool replayed a commit")
+        } catch {
+            guard case .operation(.unauthorized) = error else {
+                Issue.record("Expected unauthorized, got \(error)")
+                return
+            }
+        }
+    }
+
+    @Test func duplicateRequestCannotCommitDifferentSelection() async throws {
+        let (sandbox, backend, _) = lab()
+        _ = try await sandbox.refreshHome()
+        try sandbox.select(LightChange(isOn: true), for: FictionalHome.livingLamp)
+        let request = RequestID()
+        _ = try await sandbox.commit(through: backend, requestID: request)
+        try sandbox.select(LightChange(isOn: false), for: FictionalHome.livingLamp)
+        await #expect(throws: HomeSceneError.operation(.requestIDReused(request))) {
+            try await sandbox.commit(through: backend, requestID: request)
+        }
+        #expect(try await sandbox.refreshHome().accessory(FictionalHome.livingLamp)?.isOn == true)
+    }
+
 }

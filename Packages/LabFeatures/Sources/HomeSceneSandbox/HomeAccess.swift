@@ -5,10 +5,12 @@ import Synchronization
 /// A live source is optional and stops when permission is revoked.
 public protocol HomeAccessSource: Sendable {
     var permission: HomePermission { get async }
-    /// Asks for home access. Simulated sources stay authorized for the fictional home only.
+    /// Asks for live home access. Fictional sources refuse live access.
     func requestAccess() async -> HomePermission
+    func resetSimulation() async
     func homes(on route: HomeRoute) async throws(HomeSceneError) -> [HomeSnapshot]
-    func apply(_ change: LightChange, to accessory: AccessorySnapshot, in home: HomeSnapshot) async throws(HomeSceneError) -> AccessoryOutcome
+    /// With previewOnly, calculate the outcome without changing accessories.
+    func apply(_ change: LightChange, to accessory: AccessorySnapshot, in home: HomeSnapshot, previewOnly: Bool) async throws(HomeSceneError) -> AccessoryOutcome
 }
 
 /// Deterministic fictional home. Permission is always authorized for the simulated route; live
@@ -22,7 +24,11 @@ public final class FictionalHomeSource: HomeAccessSource, @unchecked Sendable {
 
     public var permission: HomePermission { .authorized }
 
-    public func requestAccess() async -> HomePermission { .authorized }
+    public func requestAccess() async -> HomePermission { .denied }
+
+    public func resetSimulation() async {
+        state.withLock { $0 = FictionalHome.snapshot(hallwayReachable: $0.accessory(FictionalHome.hallwayLamp)?.isReachable ?? false) }
+    }
 
     public func homes(on route: HomeRoute) async throws(HomeSceneError) -> [HomeSnapshot] {
         switch route {
@@ -36,7 +42,8 @@ public final class FictionalHomeSource: HomeAccessSource, @unchecked Sendable {
     public func apply(
         _ change: LightChange,
         to accessory: AccessorySnapshot,
-        in home: HomeSnapshot
+        in home: HomeSnapshot,
+        previewOnly: Bool
     ) async throws(HomeSceneError) -> AccessoryOutcome {
         _ = home
         guard accessory.kind == .light else {
@@ -54,6 +61,7 @@ public final class FictionalHomeSource: HomeAccessSource, @unchecked Sendable {
         if let brightness = change.brightness, !(0...100).contains(brightness) {
             throw .invalidInput("Brightness must be between 0 and 100.")
         }
+        if previewOnly { return .succeeded(accessory.id, "“\(accessory.name)” → \(change.summary).") }
         state.withLock { snapshot in
             guard let index = snapshot.accessories.firstIndex(where: { $0.id == accessory.id }) else { return }
             let current = snapshot.accessories[index]
@@ -103,6 +111,8 @@ public final class ScriptedPermissionSource: HomeAccessSource, @unchecked Sendab
         return next
     }
 
+    public func resetSimulation() async { await inner.resetSimulation() }
+
     /// Advances to the next scripted permission without a request, for revocation mid-session.
     public func revokeTo(_ permission: HomePermission) {
         current.withLock { $0 = permission }
@@ -130,11 +140,12 @@ public final class ScriptedPermissionSource: HomeAccessSource, @unchecked Sendab
     public func apply(
         _ change: LightChange,
         to accessory: AccessorySnapshot,
-        in home: HomeSnapshot
+        in home: HomeSnapshot,
+        previewOnly: Bool
     ) async throws(HomeSceneError) -> AccessoryOutcome {
         if !home.isSimulated && !permission.allowsLiveMode {
             throw .permissionRevoked(permission)
         }
-        return try await inner.apply(change, to: accessory, in: home)
+        return try await inner.apply(change, to: accessory, in: home, previewOnly: previewOnly)
     }
 }

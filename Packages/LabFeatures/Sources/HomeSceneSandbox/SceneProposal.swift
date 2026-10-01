@@ -152,7 +152,8 @@ public struct SceneCommitReport: Hashable, Sendable, Codable {
         self.outcomes = outcomes
         let selectedIDs = Set(proposal.selected.map(\.accessory.id))
         let relevant = outcomes.filter { selectedIDs.contains($0.accessoryID) }
-        sceneSucceeded = !relevant.isEmpty && relevant.allSatisfy(\.didSucceed)
+        sceneSucceeded = !selectedIDs.isEmpty && relevant.count == selectedIDs.count
+            && Set(relevant.map(\.accessoryID)) == selectedIDs && relevant.allSatisfy(\.didSucceed)
         if relevant.isEmpty {
             explanation = "Nothing was committed."
         } else if sceneSucceeded {

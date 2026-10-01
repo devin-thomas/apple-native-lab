@@ -13,6 +13,7 @@ struct HomeSceneForm: View {
             routeSection
             homeSection
             selectionSection
+                .disabled(session.isRunning)
             previewSection
             commitSection
         }

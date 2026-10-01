@@ -44,7 +44,7 @@ public enum HomeKitPlatformFacts {
     /// One sentence for the UI and evidence when live mode is not offered.
     public static var coreLocalGateExplanation: String {
         if homeKitClientAvailableInSDK {
-            return "Live HomeKit needs a separate opt-in build with \(entitlementKey) and \(purposeStringKey). This CoreLocal build uses the fictional home only."
+            return "Live HomeKit access is unavailable in this build. Use the fictional home."
         }
         return "HomeKit is unavailable on macOS in the installed SDK. This Mac client uses the fictional home only."
     }

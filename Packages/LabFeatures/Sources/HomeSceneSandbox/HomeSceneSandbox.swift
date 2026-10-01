@@ -6,6 +6,8 @@ import Synchronization
 /// failure. Locks, doors, alarms, and heating stay excluded by default. Live mode stops when
 /// home permission is revoked. Commits record a run through `HomeSceneBackend` (OperationService).
 public final class HomeSceneSandbox: @unchecked Sendable {
+    private let committing = Mutex(false)
+    private let completed = Mutex<[RequestID: (SceneCommitReport, ActionReceipt)]>([:])
     private let source: any HomeAccessSource
     private let routeLock = Mutex<HomeRoute>(.simulated)
     private let selection = Mutex<[AccessoryID: LightChange]>([:])
@@ -33,6 +35,7 @@ public final class HomeSceneSandbox: @unchecked Sendable {
             let permission = await source.permission
             if !permission.allowsLiveMode {
                 routeLock.withLock { $0 = .simulated }
+                clearSelection()
                 if let home = try await source.homes(on: .simulated).first {
                     lastHome.withLock { $0 = home }
                 }
@@ -51,11 +54,16 @@ public final class HomeSceneSandbox: @unchecked Sendable {
     @discardableResult
     public func requestLiveAccess() async throws(HomeSceneError) -> HomePermission {
         try cancelled()
+        let previousRoute = route
         let permission = await source.requestAccess()
         if permission.allowsLiveMode {
             routeLock.withLock { $0 = .live }
         } else {
             routeLock.withLock { $0 = .simulated }
+        }
+        if route != previousRoute {
+            lastHome.withLock { $0 = nil }
+            clearSelection()
         }
         return permission
     }
@@ -63,6 +71,8 @@ public final class HomeSceneSandbox: @unchecked Sendable {
     /// Leaves live mode for the fictional home. Safe when already simulated.
     public func useSimulatedHome() {
         routeLock.withLock { $0 = .simulated }
+        lastHome.withLock { $0 = nil }
+        clearSelection()
     }
 
     /// Records a desired light change. Sensitive kinds are refused.
@@ -123,6 +133,20 @@ public final class HomeSceneSandbox: @unchecked Sendable {
         requestID: RequestID
     ) async throws(HomeSceneError) -> (report: SceneCommitReport, receipt: ActionReceipt) {
         try cancelled()
+        let admitted = committing.withLock { busy in
+            if busy { return false }
+            busy = true
+            return true
+        }
+        guard admitted else { throw .invalidInput("A scene commit is already running.") }
+        defer { committing.withLock { $0 = false } }
+        if let previous = completed.withLock({ $0[requestID] }) {
+            let chosen = selection.withLock { $0 }
+            let original = Dictionary(uniqueKeysWithValues: previous.0.proposal.selected.map { ($0.accessory.id, $0.change) })
+            guard chosen.isEmpty || chosen == original else { throw .operation(.requestIDReused(requestID)) }
+            let receipt = try await backend.perform(previous.1.admitted.operation, requestID: requestID, names: names(title: previous.1.summary))
+            return (previous.0, receipt)
+        }
         if route == .live {
             let permission = await source.permission
             if !permission.allowsLiveMode {
@@ -130,17 +154,28 @@ public final class HomeSceneSandbox: @unchecked Sendable {
                 throw .permissionRevoked(permission)
             }
         }
+        guard route == .simulated else {
+            throw .liveUnavailable("Live writes require a separate authorization-checked HomeKit adapter. Use the fictional home.")
+        }
         let proposal = try preview()
         guard !proposal.selected.isEmpty else { throw .emptySelection }
+        guard let current = try await source.homes(on: .simulated).first, current == proposal.home else {
+            throw .invalidInput("The home changed after preview. Refresh and review the changes again.")
+        }
 
         var outcomes: [AccessoryOutcome] = []
         for action in proposal.selected {
             if Task.isCancelled { throw .cancelled }
-            let outcome = try await source.apply(action.change, to: action.accessory, in: proposal.home)
+            let outcome = try await source.apply(action.change, to: action.accessory, in: proposal.home, previewOnly: true)
             outcomes.append(outcome)
         }
         let report = SceneCommitReport(proposal: proposal, outcomes: outcomes)
         let receipt = try await record(report, through: backend, requestID: requestID)
+        completed.withLock { $0[requestID] = (report, receipt) }
+        // Only the reversible fictional source publishes state after admission succeeds.
+        for action in proposal.selected {
+            _ = try await source.apply(action.change, to: action.accessory, in: proposal.home, previewOnly: false)
+        }
         // Refresh home state after writes.
         _ = try? await refreshHome()
         selection.withLock { $0 = [:] }
@@ -151,17 +186,32 @@ public final class HomeSceneSandbox: @unchecked Sendable {
     @discardableResult
     public func resetDemo(through backend: any HomeSceneBackend, requestID: RequestID) async throws(HomeSceneError) -> ActionReceipt? {
         try cancelled()
+        let admitted = committing.withLock { busy in
+            if busy { return false }
+            busy = true
+            return true
+        }
+        guard admitted else { throw .invalidInput("A scene commit is already running.") }
+        defer { committing.withLock { $0 = false } }
         clearSelection()
         useSimulatedHome()
-        guard let item = try await backend.item(FictionalHome.item) else { return nil }
+        guard let item = try await backend.item(FictionalHome.item) else {
+            await source.resetSimulation()
+            return nil
+        }
         let sealed = try note(FictionalHome.sealedNote)
-        guard item.note != sealed else { return nil }
+        guard item.note != sealed else {
+            await source.resetSimulation()
+            return nil
+        }
         let changes = try itemChanges(title: nil, note: sealed)
-        return try await backend.perform(
+        let receipt = try await backend.perform(
             .updateItem(id: item.id, expected: item.revision, changes: changes),
             requestID: requestID,
             names: names(title: item.title.value)
         )
+        await source.resetSimulation()
+        return receipt
     }
 
     // MARK: Receipt recording

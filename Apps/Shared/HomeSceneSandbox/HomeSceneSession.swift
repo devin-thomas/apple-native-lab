@@ -61,11 +61,7 @@ final class HomeSceneSession {
         do {
             let permission = try await sandbox.requestLiveAccess()
             message = permission.explanation + " " + platformGate
-            if permission.allowsLiveMode {
-                home = try await sandbox.refreshHome()
-            } else {
-                home = try await sandbox.refreshHome()
-            }
+            home = try await sandbox.refreshHome()
             rebuildProposal()
             LabAnnouncement(text: message ?? "").post()
         } catch let error as HomeSceneError {
@@ -164,7 +160,7 @@ final class HomeSceneSession {
             hallwayBrightness = 20
             includeHallway = true
             await refresh()
-            message = "Reset the fictional home run note."
+            message = "Reset the fictional home and its run note."
             guard let action else { return nil }
             let record = library.receipt(id: action.operationID)
                 ?? ReceiptRecord(receipt: action, recordedAt: .now, names: [:])
