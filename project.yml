@@ -111,6 +111,9 @@ targets:
       # LAB-030 Tactile Grammar: the cues, their fallback, and Play Tactile Cue.
       - package: LabFeatures
         product: TactileGrammar
+      # LAB-043 Respectful Attention: the agenda, its intents, and lab-owned alerts.
+      - package: LabFeatures
+        product: RespectfulAttention
     info:
       path: Apps/Mac/Info.plist
       properties:
@@ -231,6 +234,9 @@ targets:
       # LAB-030 Tactile Grammar: the cues, their fallback, and Play Tactile Cue.
       - package: LabFeatures
         product: TactileGrammar
+      # LAB-043 Respectful Attention: the agenda, its intents, and lab-owned alerts.
+      - package: LabFeatures
+        product: RespectfulAttention
     info:
       path: Apps/Phone/Info.plist
       properties:
@@ -348,6 +354,9 @@ targets:
       # LAB-030 Tactile Grammar: the cues, their fallback, and Play Tactile Cue.
       - package: LabFeatures
         product: TactileGrammar
+      # LAB-043 Respectful Attention: the agenda, its intents, and lab-owned alerts.
+      - package: LabFeatures
+        product: RespectfulAttention
       - target: ShareExtension
         embed: true
       # LAB-004: the widget and Control extension, embedded only in this SystemSurfaces variant.
@@ -403,6 +412,7 @@ targets:
         INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription: $(LAB_PURPOSE_BLUETOOTH)
         INFOPLIST_KEY_NSNearbyInteractionUsageDescription: $(LAB_PURPOSE_NEARBY_INTERACTION)
         INFOPLIST_KEY_NSFaceIDUsageDescription: $(LAB_PURPOSE_FACE_ID)
+        INFOPLIST_KEY_NSAlarmKitUsageDescription: Apple Native Lab schedules an alarm only after you add one from Respectful Attention.
 
   # SystemSurfaces: the share extension (LAB-007). It stages what was shared into the App Group
   # folder and finishes; it never opens the store. Embedded only by LabPhoneSurfaces.

@@ -4,6 +4,7 @@ import LabDomain
 import LabSupport
 import Observation
 import ShareIngress
+import RespectfulAttention
 import SurfaceDeck
 import SwiftUI
 import TactileGrammar
@@ -38,6 +39,8 @@ enum SidebarDestination: Hashable {
     case durableSync
     /// LAB-030: three tactile cues, their visual and spoken equivalents, and device feedback.
     case tactileGrammar
+    /// LAB-043: the agenda, its timers, and lab-owned alerts.
+    case respectfulAttention
     case catalog(CatalogScope)
 
     var title: String {
@@ -56,6 +59,7 @@ enum SidebarDestination: Hashable {
         case .localModelBench: LocalModelBenchExperiment.title
         case .durableSync: DurableSyncExperiment.title
         case .tactileGrammar: TactileGrammarExperiment.title
+        case .respectfulAttention: RespectfulAttention.title
         case .catalog(let scope): scope.title
         }
     }
@@ -77,6 +81,7 @@ enum SidebarDestination: Hashable {
         case .localModelBench: "local-model-bench"
         case .durableSync: "durable-sync"
         case .tactileGrammar: "tactile-grammar"
+        case .respectfulAttention: "respectful-attention"
         case .catalog(.all): "all"
         case .catalog(.milestone(let milestone)): "milestone:\(milestone.rawValue)"
         case .catalog(.category(let category)): "category:\(category)"
@@ -101,6 +106,7 @@ enum SidebarDestination: Hashable {
         case ("local-model-bench", nil): self = .localModelBench
         case ("durable-sync", nil): self = .durableSync
         case ("tactile-grammar", nil): self = .tactileGrammar
+        case ("respectful-attention", nil): self = .respectfulAttention
         case ("all", nil): self = .catalog(.all)
         case ("milestone", let raw?): guard let milestone = Milestone(rawValue: raw) else { return nil }
             self = .catalog(.milestone(milestone))

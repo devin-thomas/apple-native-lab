@@ -111,6 +111,9 @@ extension OperationKind {
         case .restoreItem: "Restore Item"
         case .resetDemo: "Reset Demo"
         case .setSession: "Set Session"
+        case .scheduleAttention: "Schedule Lab Alert"
+        case .cancelLabAlerts: "Cancel Lab Alerts"
+        case .restoreLabAlerts: "Restore Lab Alerts"
         }
     }
 }
@@ -118,7 +121,11 @@ extension OperationKind {
 extension DomainOperation {
     /// What the operation does, naming the direction when the kind alone does not (LAB-004).
     var title: String {
-        if case .setSession(_, _, let running) = self { running ? "Start Session" : "Pause Session" } else { kind.title }
+        switch self {
+        case .setSession(_, _, let running): running ? "Start Session" : "Pause Session"
+        case .scheduleAttention(_, let draft): "Schedule \(draft.channel.title)"
+        default: kind.title
+        }
     }
 }
 
@@ -140,6 +147,7 @@ extension EntityKind {
         case .collection: "Collection"
         case .item: "Item"
         case .session: "Session"
+        case .attention: "Lab alert"
         }
     }
 }

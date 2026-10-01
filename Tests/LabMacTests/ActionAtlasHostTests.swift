@@ -262,9 +262,13 @@ import Testing
         #expect(intents(from: "DesktopNativePower") == ["RunDesktopCommandIntent"])
         // LAB-002 Context Cards' ask and set-aside. Neither is a curated App Shortcut.
         #expect(intents(from: "ContextCards") == ["AskAboutVisibleSampleIntent", "SetAsideSampleIntent"])
-        // LAB-030 Play Tactile Cue. Nothing else joins them.
+        // LAB-030 Play Tactile Cue.
         #expect(intents(from: "TactileGrammar") == ["PlayTactileCueIntent"])
-        #expect(actions.count == 15)
+        // LAB-043 Respectful Attention's schedule, cancel, and Focus filter. Nothing else joins them.
+        #expect(intents(from: "RespectfulAttention") == [
+            "ScheduleLabAlertIntent", "CancelLabAlertsIntent", "LabFocusFilterIntent",
+        ])
+        #expect(actions.count == 18)
         let entities = try #require(metadata["entities"] as? [String: Any])
         #expect(Set(entities.keys) == ["LabItemEntity", "LabCollectionEntity"])
         let queries = try #require(metadata["queries"] as? [String: Any])

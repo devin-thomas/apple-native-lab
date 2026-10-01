@@ -207,6 +207,13 @@ final class LabLibrary {
         case refused(OperationError)
     }
 
+    /// Every lab alert, read through the operation service (LAB-043).
+    func attentions() async throws(SubmitFailure) -> [LabAttention] {
+        let service = try await openedService()
+        do { return try await service.attentions(as: LabDataService.appUI) }
+        catch { throw .refused(error) }
+    }
+
     /// The data service once the store is open. It opens the store the way every window does, so
     /// an App Intent that launches the app finds the same store and demo.
     func openedService() async throws(SubmitFailure) -> LabDataService {

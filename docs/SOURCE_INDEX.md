@@ -379,6 +379,8 @@ Use in this plan: App-owned alarms and authorization.
 
 Implementation evidence required: actual SDK symbol/availability, permissions or entitlement, and a named compile/device result.
 
+Installed SDK check (2026-09-30, Xcode 27.0 with the iOS 27.0 SDK): `AlarmManager.shared`, `requestAuthorization()`, `authorizationState`, `schedule(id:configuration:)`, `cancel(id:)`, `AlarmConfiguration.alarm(schedule:attributes:)`, `Alarm.Schedule.fixed(Date)`, `AlarmAttributes`, `AlarmMetadata`, and `AlarmPresentation.Alert` (title-only from iOS 26.1; `stopButton` deprecated) are in the installed `AlarmKit.swiftinterface`, declared iOS 26.0 and unavailable on Mac Catalyst. There is no AlarmKit framework in the macOS SDK. Findings are in the [installed SDK ledger](VERIFICATION_BOUNDARIES.md#installed-sdk-ledger). Compiled into `LabPhoneSurfaces` only; not run on a device.
+
 ## S34
 
 **CarPlay entitlements** — reviewed

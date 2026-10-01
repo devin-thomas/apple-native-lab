@@ -53,6 +53,10 @@ public enum GrantTarget: Hashable, Sendable {
             true
         case (.entity(.session), .setSession):
             true
+        case (.entity(.attention), .scheduleAttention):
+            true
+        case (.demo, .cancelLabAlerts), (.demo, .restoreLabAlerts):
+            true
         default: false
         }
     }

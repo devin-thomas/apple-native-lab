@@ -62,7 +62,7 @@ public struct ActionReceipt: Hashable, Sendable, Codable, Identifiable {
     /// Every entity the operation created or changed, with its previous and new revision. Empty
     /// for a conflict.
     public let changes: [EntityChange]
-    /// Every entity the operation deleted. Only Reset Demo deletes, and only demo entities.
+    /// Every entity the operation deleted. Reset Demo and Cancel Lab Alerts delete, and only demo entities.
     public let removed: [EntityReference]
     /// A short sentence for the person who made the request.
     public let summary: String

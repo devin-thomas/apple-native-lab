@@ -110,6 +110,8 @@ struct MainWindow: View {
             DurableSyncListColumn(window: window)
         case .tactileGrammar:
             TactileGrammarListColumn(model: window.tactile)
+        case .respectfulAttention:
+            AttentionPage()
         case .catalog(let scope):
             if let registry = model.registry {
                 CatalogListColumn(registry: registry, scope: scope, window: window)
@@ -152,6 +154,9 @@ struct MainWindow: View {
             DurableSyncDetailColumn(window: window)
         case .tactileGrammar:
             TactileGrammarDetailColumn(model: window.tactile)
+        case .respectfulAttention:
+            // The agenda fills the content column; the detail stays empty so the page is not doubled.
+            Color.clear
         case .catalog:
             if let registry = model.registry {
                 CatalogDetailColumn(registry: registry, experimentID: window.experimentID)

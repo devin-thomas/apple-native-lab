@@ -1,6 +1,7 @@
 import ContextCards
 import LabCatalog
 import LabSupport
+import RespectfulAttention
 import SurfaceDeck
 import SwiftUI
 import TactileGrammar
@@ -62,6 +63,9 @@ struct SidebarView: View {
                 Label(TactileGrammarExperiment.title, systemImage: TactileGrammarExperiment.symbol)
                     .tag(SidebarDestination.tactileGrammar)
                     .accessibilityHint("Success, warning, and timing cues, with a visual pulse when haptics are missing")
+                Label(RespectfulAttention.title, systemImage: RespectfulAttention.symbol)
+                    .tag(SidebarDestination.respectfulAttention)
+                    .accessibilityHint("A reminder, a Focus filter, and an alarm, scheduled only when you ask")
             }
             Section("Experiments") {
                 row(.all, symbol: "square.grid.2x2")

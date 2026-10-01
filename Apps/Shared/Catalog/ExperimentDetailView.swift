@@ -41,6 +41,7 @@ struct ExperimentDetailView: View {
                 ContextCardsLaunch(experiment: experiment)
                 DurableSyncLaunch(experiment: experiment)
                 TactileGrammarLaunch(experiment: experiment)
+                RespectfulAttentionLaunch(experiment: experiment)
                 Text(experiment.moment)
                     .font(.title3)
                     .fixedSize(horizontal: false, vertical: true)

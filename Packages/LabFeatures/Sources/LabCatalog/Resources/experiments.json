@@ -791,7 +791,7 @@
       "title": "Respectful Attention",
       "category": "System surfaces",
       "milestone": "M3",
-      "state": "specified",
+      "state": "implemented",
       "dependsOn": [
         "LAB-004"
       ],

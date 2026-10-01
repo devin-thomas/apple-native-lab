@@ -4,6 +4,7 @@ public actor InMemoryOperationStore: OperationStore {
     private var collectionsByID: [CollectionID: LabCollection] = [:]
     private var itemsByID: [ItemID: LabItem] = [:]
     private var sessionsByID: [SessionID: LabSession] = [:]
+    private var attentionsByID: [AttentionID: LabAttention] = [:]
     private var receiptsByRequest: [RequestID: ActionReceipt] = [:]
 
     public init() {}
@@ -24,6 +25,10 @@ public actor InMemoryOperationStore: OperationStore {
     public func session(_ id: SessionID) -> LabSession? { sessionsByID[id] }
 
     public func sessions() -> [LabSession] { Array(sessionsByID.values) }
+
+    public func attention(_ id: AttentionID) -> LabAttention? { attentionsByID[id] }
+
+    public func attentions() -> [LabAttention] { Array(attentionsByID.values) }
 
     /// Checks and writes without suspending, so the actor makes the whole commit atomic. Every
     /// check runs before the first write, so a throw leaves nothing written.
@@ -53,11 +58,15 @@ public actor InMemoryOperationStore: OperationStore {
         for session in commit.sessions {
             sessionsByID[session.id] = session
         }
+        for attention in commit.attentions {
+            attentionsByID[attention.id] = attention
+        }
         for removal in commit.removals {
             switch removal {
             case .collection(let id): collectionsByID[id] = nil
             case .item(let id): itemsByID[id] = nil
             case .session(let id): sessionsByID[id] = nil
+            case .attention(let id): attentionsByID[id] = nil
             }
         }
         receiptsByRequest[commit.requestID] = commit.receipt
@@ -90,6 +99,7 @@ public actor InMemoryOperationStore: OperationStore {
         case .collection(let id): collectionsByID[id]?.namespace
         case .item(let id): itemsByID[id]?.namespace
         case .session(let id): sessionsByID[id]?.namespace
+        case .attention(let id): attentionsByID[id]?.namespace
         }
     }
 
@@ -98,6 +108,7 @@ public actor InMemoryOperationStore: OperationStore {
         case .collection(let id): collectionsByID[id]?.revision
         case .item(let id): itemsByID[id]?.revision
         case .session(let id): sessionsByID[id]?.revision
+        case .attention(let id): attentionsByID[id]?.revision
         }
     }
 }

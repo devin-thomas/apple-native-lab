@@ -17,6 +17,7 @@ struct LabMacApp: App {
         _desktop = State(initialValue: desktop)
         ContextCardsHost.connect(library)
         TactileGrammarCenter.shared.install(LiveTactileGrammar.makeEngine())
+        AttentionHost.connect(library)
     }
 
     var body: some Scene {

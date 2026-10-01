@@ -1,6 +1,7 @@
 import ContextCards
 import DesktopNativePower
 import LabCatalog
+import RespectfulAttention
 import SurfaceDeck
 import SwiftUI
 import TactileGrammar
@@ -69,6 +70,9 @@ struct LabCommands: Commands {
                 .disabled(window == nil)
             Button(TactileGrammarExperiment.title) { window?.destination = .tactileGrammar }
                 .keyboardShortcut("5", modifiers: [.command, .option])
+                .disabled(window == nil)
+            Button(RespectfulAttention.title) { window?.destination = .respectfulAttention }
+                .keyboardShortcut("6", modifiers: [.command, .option])
                 .disabled(window == nil)
             Button(DesktopCommand.showPalette.title) { desktop.showsPalette = true }
                 .keyboardShortcut("k", modifiers: .command)

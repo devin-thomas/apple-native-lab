@@ -95,6 +95,18 @@ public actor SQLiteOperationStore: OperationStore {
         try entities(read { try database.rows("SELECT \(Self.sessionColumns) FROM sessions", map: Self.session) })
     }
 
+    public func attention(_ id: AttentionID) throws(StoreError) -> LabAttention? {
+        try entities(read {
+            try database.rows(
+                "SELECT \(Self.attentionColumns) FROM attentions WHERE id = ?1", [.text(id.rawValue.uuidString)], map: Self.attention
+            )
+        }).first
+    }
+
+    public func attentions() throws(StoreError) -> [LabAttention] {
+        try entities(read { try database.rows("SELECT \(Self.attentionColumns) FROM attentions", map: Self.attention) })
+    }
+
     // MARK: Commit
 
     public func apply(_ commit: AuthorizedCommit) throws(StoreError) -> CommitOutcome {
@@ -138,6 +150,10 @@ public actor SQLiteOperationStore: OperationStore {
         for session in commit.sessions {
             try upsert(session)
             try checkpoint(.wrote(session.reference))
+        }
+        for attention in commit.attentions {
+            try upsert(attention)
+            try checkpoint(.wrote(attention.reference))
         }
         for entity in commit.removals {
             try remove(entity)
@@ -201,6 +217,26 @@ public actor SQLiteOperationStore: OperationStore {
         }
     }
 
+    private func upsert(_ attention: LabAttention) throws(StoreError) {
+        try change(attention.reference) {
+            try database.run(
+                """
+                INSERT INTO attentions (id, channel, reason, year, month, day, hour, minute, time_zone, revision)
+                VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10)
+                ON CONFLICT (id) DO UPDATE SET channel = excluded.channel, reason = excluded.reason,
+                    year = excluded.year, month = excluded.month, day = excluded.day, hour = excluded.hour,
+                    minute = excluded.minute, time_zone = excluded.time_zone, revision = excluded.revision
+                """,
+                [
+                    .text(attention.id.rawValue.uuidString), .text(attention.channel.rawValue), .text(attention.reason.value),
+                    .integer(attention.moment.year), .integer(attention.moment.month), .integer(attention.moment.day),
+                    .integer(attention.moment.hour), .integer(attention.moment.minute), .text(attention.moment.timeZoneIdentifier),
+                    .integer(attention.revision.rawValue),
+                ]
+            )
+        }
+    }
+
     /// Deletes one demo entity. The `namespace` condition means a user row is never matched, and
     /// the schema's triggers refuse a user deletion from any other path too.
     private func remove(_ entity: EntityReference) throws(StoreError) {
@@ -253,6 +289,7 @@ public actor SQLiteOperationStore: OperationStore {
         case .collection: "collections"
         case .item: "items"
         case .session: "sessions"
+        case .attention: "attentions"
         }
     }
 
@@ -261,6 +298,7 @@ public actor SQLiteOperationStore: OperationStore {
     private static let collectionColumns = "id, title, is_archived, revision, namespace"
     private static let itemColumns = "id, collection_id, title, note, is_archived, revision, namespace, extras"
     private static let sessionColumns = "id, is_running, revision, namespace"
+    private static let attentionColumns = "id, channel, reason, year, month, day, hour, minute, time_zone, revision, namespace"
 
     private static func session(_ row: SQLiteStatement) -> LabSession? {
         guard let id = row.text(0).flatMap(UUID.init(uuidString:)),
@@ -269,6 +307,22 @@ public actor SQLiteOperationStore: OperationStore {
               [0, 1].contains(row.integer(1))
         else { return nil }
         return LabSession(id: SessionID(rawValue: id), isRunning: row.integer(1) == 1, revision: revision)
+    }
+
+    private static func attention(_ row: SQLiteStatement) -> LabAttention? {
+        guard let id = row.text(0).flatMap(UUID.init(uuidString:)),
+              let channel = row.text(1).flatMap(AttentionChannel.init(rawValue:)),
+              let reason = row.text(2).flatMap({ try? AttentionReason($0) }),
+              let moment = try? CivilMoment(
+                year: row.integer(3), month: row.integer(4), day: row.integer(5),
+                hour: row.integer(6), minute: row.integer(7), timeZoneIdentifier: row.text(8) ?? ""
+              ),
+              let revision = Revision(rawValue: row.integer(9)),
+              row.text(10) == DataNamespace.demo.rawValue
+        else { return nil }
+        return LabAttention(
+            id: AttentionID(rawValue: id), channel: channel, reason: reason, moment: moment, revision: revision
+        )
     }
 
     private static func collection(_ row: SQLiteStatement) -> LabCollection? {

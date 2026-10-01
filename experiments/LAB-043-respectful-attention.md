@@ -1,7 +1,7 @@
 ---
 id: "LAB-043"
 title: "Respectful Attention"
-state: "specified"
+state: "implemented"
 milestone: "M3"
 category: "System surfaces"
 depends_on: ["LAB-004"]
@@ -55,6 +55,23 @@ A fixture replay is labeled as a replay. It can prove the domain/UI contract but
 ## Build ownership
 
 Proposed module: `Packages/LabFeatures/respectful-attention/`, with native adapters only in supported hosts/extensions. Shared operations and imported document structures belong in the domain/store packages rather than a view. Record any narrower module split during implementation.
+
+Implemented split (LAB-043-A):
+
+- `Packages/LabDomain`: `LabAttention`, `AttentionDraft`, `CivilMoment`, `AttentionConsent`, and `DomainOperation.scheduleAttention` / `cancelLabAlerts` / `restoreLabAlerts`. A draft exists only after explicit consent. The civil time keeps its own time zone identifier, so a device zone change does not move the intended wall time. Cancel names only lab-owned alerts. Reset Demo removes demo attention rows and never touches user collections.
+- `Packages/LabStore`: schema version 4 adds an `attentions` table whose rows can only be in the demo namespace.
+- `Packages/LabFeatures/Sources/RespectfulAttention/`: the sample offers and previews; the in-app agenda and Focus scope; `PromptGate` (one prompt, sticky denial); `AttentionActions` shared by the page and the intents; `ScheduleLabAlertIntent`, `CancelLabAlertsIntent`, and `LabFocusFilterIntent` (`SetFocusFilterIntent`). It depends on LabDomain only. AlarmKit and UserNotifications stay out of this package.
+- `Apps/Shared/RespectfulAttention/`: the host model, the library backend, and the agenda page. `LiveAttentionSystem` (AlarmKit + UserNotifications) compiles only in a SystemSurfaces iPhone build; CoreLocal and Mac keep `UnavailableAttentionSystem` and the in-app agenda.
+
+## Implementation notes (LAB-043-A)
+
+Observed with Xcode 27.0 and the 27.0 SDKs on research. These are compile and package/hosted-test facts, not device proof.
+
+- AlarmKit is iOS 26.0+, unavailable on Mac Catalyst and absent from the macOS SDK. `AlarmManager.requestAuthorization()`, `authorizationState`, `schedule(id:configuration:)`, `cancel(id:)`, `AlarmConfiguration.alarm(schedule:attributes:)`, `Alarm.Schedule.fixed(Date)`, and `AlarmPresentation.Alert` (title-only from iOS 26.1; stopButton deprecated) match the installed `AlarmKit.swiftinterface`. Scheduling uses the lab alert's own UUID; cancel names only those IDs.
+- `SetFocusFilterIntent`, `FocusFilterAppContext(notificationFilterPredicate:)`, and `suggestedFocusFilters(for:)` are in the iOS, macOS, watchOS, and tvOS AppIntents interfaces. The lab filter's predicate keeps only `lab-alert.` notification identifiers; a foreign identifier in the parameter is dropped before the predicate is built.
+- `NSAlarmKitUsageDescription` is declared only on `LabPhoneSurfaces`. CoreLocal never links AlarmKit or UserNotifications. AlarmKit's `AlarmAttributes` conforms to ActivityKit's `ActivityAttributes`, so SystemSurfaces also links ActivityKit for that conformance alone; no Live Activity starts.
+- Denied permission: `PromptGate` allows at most one system prompt and stores a denial so Allow Lab Alerts does not ask again. The agenda timers still run while the page is open.
+- Cancel Lab Alerts removes only stored lab attentions and, on SystemSurfaces, only lab-owned notification and AlarmKit IDs. Other pending identifiers stay.
 
 ## Delivery
 

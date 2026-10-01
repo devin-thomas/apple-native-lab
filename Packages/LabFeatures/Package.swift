@@ -22,6 +22,7 @@ let package = Package(
         .library(name: "LocalModelBench", targets: ["LocalModelBench"]),
         .library(name: "DurableSyncLedger", targets: ["DurableSyncLedger"]),
         .library(name: "TactileGrammar", targets: ["TactileGrammar"]),
+        .library(name: "RespectfulAttention", targets: ["RespectfulAttention"]),
     ],
     dependencies: [
         .package(path: "../LabSupport"),
@@ -218,6 +219,17 @@ let package = Package(
         .testTarget(
             name: "TactileGrammarTests",
             dependencies: ["TactileGrammar", .product(name: "LabDomain", package: "LabDomain")]
+        ),
+        // LAB-043 Respectful Attention: the agenda, Focus filter, and consented lab alerts over
+        // LabDomain. AlarmKit and UserNotifications stay out of this package so CoreLocal never
+        // links them.
+        .target(
+            name: "RespectfulAttention",
+            dependencies: [.product(name: "LabDomain", package: "LabDomain")]
+        ),
+        .testTarget(
+            name: "RespectfulAttentionTests",
+            dependencies: ["RespectfulAttention", .product(name: "LabDomain", package: "LabDomain")]
         ),
     ]
 )
