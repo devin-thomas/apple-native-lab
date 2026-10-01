@@ -28,6 +28,8 @@ struct LabPhoneApp: App {
 /// Action Atlas action browser, the import entry point, and Readiness.
 struct PhoneRootView: View {
     let model: LabModel
+    @Environment(LabLibrary.self) private var library
+    @State private var pickUp = PickUpSession()
 
     var body: some View {
         TabView {
@@ -47,5 +49,7 @@ struct PhoneRootView: View {
                 NavigationStack { ReadinessView(model: model) }
             }
         }
+        .environment(pickUp)
+        .pickUpContinuation(session: pickUp, library: library) {}
     }
 }

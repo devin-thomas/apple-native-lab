@@ -28,6 +28,10 @@
 	<string>$(LAB_DISTRIBUTION_LANE)</string>
 	<key>LabSourceRevision</key>
 	<string>$(LAB_SOURCE_REVISION)</string>
+	<key>NSUserActivityTypes</key>
+	<array>
+		<string>nativelab.pick-up-here</string>
+	</array>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
