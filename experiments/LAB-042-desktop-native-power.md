@@ -1,7 +1,7 @@
 ---
 id: "LAB-042"
 title: "Desktop Native Power"
-state: "specified"
+state: "implemented"
 milestone: "M2"
 category: "Mac"
 depends_on: ["LAB-001", "LAB-008"]
@@ -54,7 +54,18 @@ A fixture replay is labeled as a replay. It can prove the domain/UI contract but
 
 ## Build ownership
 
-Proposed module: `Packages/LabFeatures/desktop-native-power/`, with native adapters only in supported hosts/extensions. Shared operations and imported document structures belong in the domain/store packages rather than a view. Record any narrower module split during implementation.
+- `Packages/LabFeatures/Sources/DesktopNativePower/`: `DesktopCommand`, `DesktopDocument`, `WindowRoute` as `DesktopWindow` plus `SceneSnapshot`, the note parser, `ScriptAdmission`, `DesktopStation`, and `RunDesktopCommandIntent`. It depends on LabDomain and commits through a `DesktopBackend`. It never holds the store. The bundled fixture is `sample-desk-note.txt`.
+- `Apps/Mac/Desktop/`: the session, the list and detail, the document window, the menu-bar menu, and the Services provider. The Mac host links the product. iPhone, Watch, and Apple TV do not.
+
+## Implementation notes (LAB-042-A)
+
+Observed with Xcode 27.0 and the macOS 27.0 SDK, read on research. These are package-test facts on that Mac, not a running menu, a Services menu invocation, or a device.
+
+- `MenuBarExtra` is macOS 13.0 and unavailable on iOS, watchOS, tvOS, and visionOS. `WindowGroup(id:for:content:)` is iOS 16.0 and macOS 13.0, unavailable on watchOS and tvOS. Both are below the 26.0 floor, so neither is gated. `NSApplication.servicesProvider` is the AppKit `NSServicesHandling` property, with no availability macro on that declaration. No new entitlement: the file dialog uses the user-selected file access LabMac already has, and the Services item is an Info.plist declaration. The symbols are in the [installed SDK ledger](../docs/VERIFICATION_BOUNDARIES.md#desktop-scenes-and-services-lab-042).
+- A note import commits `createItem` in the user collection Desktop Notes through `OperationService`. The menu uses the app UI actor. The intent uses the App Intent actor. A model tool is refused and writes nothing.
+- `RunDesktopCommandIntent` takes an enum, `import-fixture-note` or `show-status`. `ScriptAdmission` refuses any other string, including shell text, before a commit. Importing selected text that happens to look like a shell stores it as a note and does not run it.
+- Closing a window removes the window. The document and its lab item stay. A private note can be open in the session that imported it. Its id is left out of the scene storage key, and a restored snapshot that names it does not open it.
+- Reset Fixture Notes removes the uncommitted fixture preview only.
 
 ## Delivery
 
