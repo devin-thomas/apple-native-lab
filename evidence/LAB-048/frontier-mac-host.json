@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "subject": "LAB-048",
+  "date": "2026-10-01T07:38:03Z",
+  "provenance": {
+    "sourceRevision": "5d28e44-dirty",
+    "sdkName": "macosx27.0",
+    "xcodeVersion": "27.0",
+    "xcodeBuild": "27A266a",
+    "appVersion": "0.1.0",
+    "buildNumber": "1",
+    "buildProfile": "CoreLocal",
+    "minimumOS": "26.0"
+  },
+  "execution": {
+    "path": "fixture"
+  },
+  "check": "Mac hosted lifecycle fixture replay",
+  "inputs": [
+    "Tests/LabMacTests/FrontierHostTests.swift@sha256:440ede81142ae610bc961bad5e936657ca8082b96aac303c05427641a1ca662f",
+    "Apps/Shared/CommercialFrontier/FrontierSession.swift@sha256:fe7576e8630011ca13a791343995adc30ccbb8a0aa86bf77d8be46e0e8701113",
+    "Packages/LabFeatures/Sources/CommercialFrontier/FrontierCase.swift@sha256:d4f62e5ca628442d9759507954feb0b376dabff3f25bd86e6a4e96c63a617da8"
+  ],
+  "steps": [
+    "LAB_SIMULATOR_PREFIX=\"NL LAB-048-A\" script/test.sh",
+    "FrontierHostTests/lifecycleReceiptsAndEscapePersistWithoutTouchingImports()",
+    "xcresulttool get test-results tests and summary: selected test result Passed"
+  ],
+  "outcome": {
+    "result": "passed",
+    "detail": "One hosted fixture replay passed through the real SQLite-backed library and app-UI operation service. Joined PTT, connected audio preview, authorized/restricted/revoked the Screen Time sample, reset PTT, reopened the desk, retained CarPlay connection and unrelated user collection, and observed a committed app-UI receipt. Mac Studio, macOS 27.0 (26A425); the complete Mac hosted action passed."
+  },
+  "limitations": [
+    "Scripted in-app simulation; harness calls session methods and does not press or inspect rendered controls.",
+    "No native PTT, CarPlay scene, Screen Time system prompt, restrictions or monitors ran.",
+    "No physical mobile device or manual accessibility pass.",
+    "The full gate is failed, not passed; see the ticket for the unrelated phone crash and remaining-stage results."
+  ]
+}

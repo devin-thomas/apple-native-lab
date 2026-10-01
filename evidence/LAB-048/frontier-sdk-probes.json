@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "subject": "LAB-048",
+  "date": "2026-10-01T07:00:27Z",
+  "provenance": {
+    "sourceRevision": "e35785c-dirty",
+    "sdkName": "iphoneos27.0",
+    "xcodeVersion": "27.0",
+    "xcodeBuild": "27A266a",
+    "appVersion": "0.1.0",
+    "buildNumber": "1",
+    "buildProfile": "CoreLocal",
+    "minimumOS": "26.0"
+  },
+  "execution": {
+    "path": "static-review"
+  },
+  "check": "Independent optional SDK compile seams",
+  "inputs": [
+    "Packages/LabFeatures/Sources/FrontierPTTProbe/PTTProbe.swift@sha256:b9ec45b0943f292054d7f2d4374b669d86e3a00ea72cd3f56e35e19b94b4f2a7",
+    "Packages/LabFeatures/Sources/FrontierCarPlayProbe/CarPlayProbe.swift@sha256:633f2a561450b998a480c22cef5d1b05dcf0e19d45b53044c2e09fbe5eabae85",
+    "Packages/LabFeatures/Sources/FrontierScreenTimeProbe/ScreenTimeProbe.swift@sha256:cf5b472674e37665419824a9fd560357dec1a11ca4faa47ef580d8824b3c9e7c"
+  ],
+  "steps": [
+    "xcodebuild -version; sw_vers; installed iPhoneOS headers/interface grep and sed",
+    "set -e; sdk=$(xcrun --sdk iphoneos --show-sdk-path); for probe in FrontierPTTProbe FrontierCarPlayProbe FrontierScreenTimeProbe; do xcrun swiftc -typecheck -sdk \"$sdk\" -target arm64-apple-ios26.0 Packages/LabFeatures/Sources/$probe/*.swift; done",
+    "Read Apple S34/S35/S36 articles and record installed symbols in docs/VERIFICATION_BOUNDARIES.md",
+    "Final at 5d28e44-dirty: xcrun swiftc -swift-version 6 -typecheck -sdk \"$sdk\" -target arm64-apple-ios26.0 for each of the three unchanged probe sources: all passed."
+  ],
+  "outcome": {
+    "result": "passed",
+    "detail": "All three isolated iOS SDK seams typechecked without managed entitlements or execution. Initial PTT initializer probe failed until UIKit was imported. Exact join/leave, audio-category CPListTemplate construction and individual authorization/revocation signatures are present. The final explicit Swift 6-mode check also passed all three unchanged sources."
+  },
+  "limitations": [
+    "Compile-only package targets; no optional signed executable hosts were created.",
+    "No CarPlay external-display scene, PTT manager creation or authorization ceremony ran.",
+    "No 26-family SDK compile; deployment target 26 used SDK 27.",
+    "Managed approval, provisioning and distribution remain external gates."
+  ]
+}

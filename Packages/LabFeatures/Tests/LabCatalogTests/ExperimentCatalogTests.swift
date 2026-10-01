@@ -63,8 +63,9 @@ import Testing
         // adapter tests on the development Mac; the running menus, or visual search), LAB-013 (the on-device
         // transcriber on a synthesized clip on the development Mac and in the simulator, quiet hours, rip in
         // the simulator), LAB-010 (model on the development Mac and simulator, settings, the file profile.
-        #expect(catalog.experiments.filter { $0.state != .specified }.map(\.id) == ["LAB-001", "LAB-002", "LAB-003", "LAB-004", "LAB-006", "LAB-007", "LAB-008", "LAB-009", "LAB-010", "LAB-011", "LAB-012", "LAB-013", "LAB-015", "LAB-016", "LAB-017", "LAB-019", "LAB-023", "LAB-029", "LAB-030", "LAB-031", "LAB-032", "LAB-035", "LAB-037", "LAB-038", "LAB-040", "LAB-041", "LAB-042", "LAB-043"])
-        #expect(catalog.experiments.filter { $0.state == .implemented }.count == 28)
+        // LAB-048: receipt-backed lifecycle simulations only; optional system hosts remain blocked.
+        #expect(catalog.experiments.filter { $0.state != .specified }.map(\.id) == ["LAB-001", "LAB-002", "LAB-003", "LAB-004", "LAB-006", "LAB-007", "LAB-008", "LAB-009", "LAB-010", "LAB-011", "LAB-012", "LAB-013", "LAB-015", "LAB-016", "LAB-017", "LAB-019", "LAB-023", "LAB-029", "LAB-030", "LAB-031", "LAB-032", "LAB-035", "LAB-037", "LAB-038", "LAB-040", "LAB-041", "LAB-042", "LAB-043", "LAB-048"])
+        #expect(catalog.experiments.filter { $0.state == .implemented }.count == 29)
         #expect(catalog.progress(for: .m1) == (live: 6, total: 6))
         #expect(catalog.progress(for: .m3).live >= 1)
     }

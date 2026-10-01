@@ -119,6 +119,14 @@ struct LabCommands: Commands {
             Button(CommerceExperiment.title) { window?.destination = .commerceWithoutTricks }
                 .keyboardShortcut("9", modifiers: [.command, .control])
                 .disabled(window == nil)
+            // LAB-048 has no window destination: this shows its catalog page, whose Open button
+            // presents the desk.
+            Button("Commercial Frontier Desk") {
+                window?.destination = .catalog(.all)
+                window?.experimentID = "LAB-048"
+            }
+            .keyboardShortcut("0", modifiers: [.command, .control])
+            .disabled(window == nil)
             Button(DesktopCommand.showPalette.title) { desktop.showsPalette = true }
                 .keyboardShortcut("k", modifiers: .command)
             Button(DesktopCommand.showStatus.title) {

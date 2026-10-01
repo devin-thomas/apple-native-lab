@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "subject": "LAB-048",
+  "date": "2026-10-01T07:25:40Z",
+  "provenance": {
+    "sourceRevision": "5d28e44-dirty",
+    "sdkName": "macosx27.0",
+    "xcodeVersion": "27.0",
+    "xcodeBuild": "27A266a",
+    "appVersion": "0.1.0",
+    "buildNumber": "1",
+    "buildProfile": "CoreLocal",
+    "minimumOS": "26.0"
+  },
+  "execution": {
+    "path": "fixture"
+  },
+  "check": "Catalog lifecycle state and implemented experiment inventory",
+  "inputs": [
+    "Packages/LabFeatures/Tests/LabCatalogTests/ExperimentRegistryTests.swift@sha256:d29e707a9cdf9e88bba561f1f333d66239abcacf73c734fb0a7a58036cab76fe",
+    "Packages/LabFeatures/Tests/LabCatalogTests/ExperimentCatalogTests.swift@sha256:09eb681fbbe6e633d1f870b02da28d876c58ca55ef79d71406dd502817ef555b",
+    "Packages/LabFeatures/Sources/LabCatalog/Resources/experiments.json@sha256:dc9fa313752a951a0c9a396e254634d5707a168bfe8f312e18245704b8af5634"
+  ],
+  "steps": [
+    "python3 script/generate_catalog.py",
+    "swift test --package-path Packages/LabFeatures --filter LabCatalogTests"
+  ],
+  "outcome": {
+    "result": "passed",
+    "detail": "14 tests in two suites passed. The registry and bundled catalog agree on 29 implemented and 19 specified experiments; LAB-048 is in the explicit implemented inventory, and fallback text matches the specification. Initial full gate found missed specified-count/inventory assertions. The first narrow retry had old registry source in the mirror; the next had correct source but reused the old test binary. Refreshing only the two changed test-file timestamps forced recompilation and produced this passing result."
+  },
+  "limitations": [
+    "Fixture/package tests on macOS 27.0, not a rendered UI or a system capability run.",
+    "Implemented describes the LAB-048 lifecycle simulation, not the three optional signed system hosts."
+  ]
+}

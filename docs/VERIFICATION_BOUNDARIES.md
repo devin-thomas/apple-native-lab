@@ -383,3 +383,23 @@ LAB-012-B re-read the macOS 27.0 SDK interfaces through `labr` on 2026-10-01: Xc
 | [S06](SOURCE_INDEX.md#s06) | `Attachment<ImageAttachmentContent>.init(_ cgImage:orientation:)` | macOS/iOS/visionOS/watchOS 27; tvOS unavailable | Compiled path only; live model description remains not-run |
 
 The first probe failed because `rg` is absent on the build host; the same interface probe with `grep` succeeded. No older SDK or OS-26 runtime was used. Evidence paths and limitations are in [LAB-012-B](../tickets/LAB-012-B.md).
+
+### Commercial Frontier Desk (LAB-048-A, 2026-10-01)
+
+Probed through `labr` on research: Xcode 27.0 (27A266a), macOS 27.0 (26A425), iPhoneOS27.0 SDK.
+Apple's S34/S35/S36 articles were read alongside installed headers/interfaces. CarPlay needs
+category-specific managed approval; Family Controls development configuration differs from
+permission to distribute. PTT requires explicit foreground channel joining and app-owned audio
+transport. No capability is enabled here. See [ADR-LAB-048](adr/ADR-LAB-048.md).
+
+| Source | Installed symbol | Declared availability | Demonstrated | Remaining uncertainty |
+|---|---|---|---|---|
+| [S35](SOURCE_INDEX.md#s35) | `PTChannelDescriptor(name:image:)`, `PTChannelManager.requestJoinChannel(channelUUID:descriptor:)`, `leaveChannel(channelUUID:)` | iOS 16.0; macOS, Catalyst, tvOS, watchOS unavailable | Standalone iOS 26 deployment-target typecheck using SDK 27 passed. Initial descriptor construction failed without UIKit import; importing UIKit exposes the initializer's UIImage type. No renamed API | Channel manager creation, delegate outcomes, audio and APNs on a physical device |
+| [S34](SOURCE_INDEX.md#s34) | `CPListItem(text:detailText:)`, `CPListSection(items:)`, `CPListTemplate(title:sections:)` | iOS 12.0; macOS, tvOS, watchOS unavailable | Compile-only audio-category list-template factory; in-app two-row simulation | Approved optional app/scene and CarPlay external-display simulator run; neither exists in this change |
+| [S36](SOURCE_INDEX.md#s36) | `AuthorizationCenter.shared.requestAuthorization(for: .individual)`, `revokeAuthorization(completionHandler:)` | center/revoke iOS 15.0; individual request iOS 16.0; center unavailable on macOS, Catalyst, tvOS, visionOS, watchOS in this interface | Compile-only individual authorization/revocation seam; simulation restriction and escape use domain receipts | Provisioned authorization ceremony and owned ManagedSettings/DeviceActivity cleanup on a device |
+
+The three framework-specific targets are not linked by any host. All used APIs predate iOS 27;
+no 27-generation symbol is referenced. The 26-family SDK itself was not installed/probed in this
+run. No restriction, monitor, background wake, recording, account connection or app network request ran.
+
+Final LAB-048-A probe: all three standalone sources also passed `xcrun swiftc -swift-version 6 -typecheck` for arm64 iOS 26 with SDK 27. The four baseline hosts built; Release Source-lane CoreLocal/SystemSurfaces/Companions passed framework and entitlement policy. FrontierOptional has no attached executable target and was skipped. The default host products do not link the three SDK seams.
