@@ -12,6 +12,7 @@
 		06ED0D7F8928725A2A09905A /* LabSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 25231493CA26D8D2F61E46F5 /* LabSupport */; };
 		07A0496F553D9F8D4D40ED4E /* LabCatalog in Frameworks */ = {isa = PBXBuildFile; productRef = 487F08AAFA8FFA4128830EF0 /* LabCatalog */; };
 		0A76696BFB66718AF104AB2B /* SurfaceDeck in Frameworks */ = {isa = PBXBuildFile; productRef = D251249EBC83B2887F7B36D3 /* SurfaceDeck */; };
+		0C04D42E682D6F9F2608CDD5 /* LocalModelBench in Frameworks */ = {isa = PBXBuildFile; productRef = 3ACA181AD3B230C4BEB973C8 /* LocalModelBench */; };
 		154C21111E02462DD0A59BE0 /* LabStore in Frameworks */ = {isa = PBXBuildFile; productRef = 6E71D4CE7F5EFA213F132511 /* LabStore */; };
 		1ABEE97B7C7ACB1EAF41ABC4 /* ShareIngress in Frameworks */ = {isa = PBXBuildFile; productRef = A7B30E9CC74D5DACCC486C60 /* ShareIngress */; };
 		1B0413E82622210BA72820FA /* LabDomain in Frameworks */ = {isa = PBXBuildFile; productRef = 0D6B57C2990B445E8BC56C3B /* LabDomain */; };
@@ -49,6 +50,7 @@
 		7FCD81C07A37C7401F6D675C /* intelligence-ambiguous-note.txt in Resources */ = {isa = PBXBuildFile; fileRef = AE4F4AB8C2CC86E0A0AF350A /* intelligence-ambiguous-note.txt */; };
 		811E4F2E9F9F36796576B37D /* intelligence-injected-note.txt in Resources */ = {isa = PBXBuildFile; fileRef = D89DA08F5504526396A194FA /* intelligence-injected-note.txt */; };
 		8241A9AE0973790DCD57EE24 /* ShareIngress in Frameworks */ = {isa = PBXBuildFile; productRef = C0E3086832C7401036381F13 /* ShareIngress */; };
+		85AB9FBA224F864273906840 /* LocalModelBench in Frameworks */ = {isa = PBXBuildFile; productRef = 47A98A400215FB089E3EDF93 /* LocalModelBench */; };
 		89E214F72A8F8E59C59B440C /* AccessSuperpower in Frameworks */ = {isa = PBXBuildFile; productRef = CC0630EDCCDE6FC7F7BF2FBC /* AccessSuperpower */; };
 		8FDE617CDA6BA219C4DA965D /* LabCatalog in Frameworks */ = {isa = PBXBuildFile; productRef = 59FA911654D48713C53F9816 /* LabCatalog */; };
 		96EA540221683FF1A975546B /* LabSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 9429B9706DB8D93A799FDA9F /* LabSupport */; };
@@ -59,6 +61,7 @@
 		C5C7E15597C124FFA87914F4 /* LabStore in Frameworks */ = {isa = PBXBuildFile; productRef = 6CF6B1898735341A74FB3DA4 /* LabStore */; };
 		CB80ACDC68FE94D0F8CD2D18 /* SurfaceDeck in Frameworks */ = {isa = PBXBuildFile; productRef = 3CF19F7CC72BE703FC6929AD /* SurfaceDeck */; };
 		CBF185BA448CD3285E3F5BC8 /* LabSupport in Frameworks */ = {isa = PBXBuildFile; productRef = F5558900C8E1A34A220E60D3 /* LabSupport */; };
+		D4FFE59C3D108F7EEC03F76B /* LocalModelBench in Frameworks */ = {isa = PBXBuildFile; productRef = 59350CEF01CB3A0AC950B880 /* LocalModelBench */; };
 		DC14139A63BD575B5A92D755 /* LabCatalog in Frameworks */ = {isa = PBXBuildFile; productRef = D848D3397291632E552B77A2 /* LabCatalog */; };
 		E10047C202637983EF3886EE /* TypedIntelligence in Frameworks */ = {isa = PBXBuildFile; productRef = FA764C388624F65B1FE0AC12 /* TypedIntelligence */; };
 		E70BDD2C02F2994CBB681ED7 /* SurfaceDeck in Frameworks */ = {isa = PBXBuildFile; productRef = C00FE8FBC35881E832DADD27 /* SurfaceDeck */; };
@@ -392,6 +395,7 @@
 				89E214F72A8F8E59C59B440C /* AccessSuperpower in Frameworks */,
 				6DE4F776CBFE16A956072B91 /* PortableObjects in Frameworks */,
 				CB80ACDC68FE94D0F8CD2D18 /* SurfaceDeck in Frameworks */,
+				D4FFE59C3D108F7EEC03F76B /* LocalModelBench in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -418,6 +422,7 @@
 				4C323A1952AE6012980ED83A /* ShareIngress in Frameworks */,
 				5CDF75C467BB20F773986DD1 /* PortableObjects in Frameworks */,
 				E70BDD2C02F2994CBB681ED7 /* SurfaceDeck in Frameworks */,
+				0C04D42E682D6F9F2608CDD5 /* LocalModelBench in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -471,6 +476,7 @@
 				526F4C3176A2E25CFBA613A9 /* ShareIngress in Frameworks */,
 				29496A5626839FD3F7D5287D /* PortableObjects in Frameworks */,
 				7BC2B01F79C7BDAE1AA50AC5 /* SurfaceDeck in Frameworks */,
+				85AB9FBA224F864273906840 /* LocalModelBench in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -684,6 +690,7 @@
 				CC0630EDCCDE6FC7F7BF2FBC /* AccessSuperpower */,
 				5138B46379EB0CDA5C7A520B /* PortableObjects */,
 				3CF19F7CC72BE703FC6929AD /* SurfaceDeck */,
+				59350CEF01CB3A0AC950B880 /* LocalModelBench */,
 			);
 			productName = LabPhoneSurfaces;
 			productReference = 9A57B8DBFF3F863D70D41513 /* LabPhoneSurfaces.app */;
@@ -718,6 +725,7 @@
 				208ADB6FEE46A094CE66A041 /* ShareIngress */,
 				F9A656A9EA01777E437005A8 /* PortableObjects */,
 				CE841A8FB5E31C78D4112220 /* SurfaceDeck */,
+				47A98A400215FB089E3EDF93 /* LocalModelBench */,
 			);
 			productName = LabMac;
 			productReference = 2F62DB7E020E6BFDAC86BD42 /* LabMac.app */;
@@ -822,6 +830,7 @@
 				5879A7CAEDD8078739ABF6D6 /* ShareIngress */,
 				4E31A68F4912B6784D878C4C /* PortableObjects */,
 				C00FE8FBC35881E832DADD27 /* SurfaceDeck */,
+				3ACA181AD3B230C4BEB973C8 /* LocalModelBench */,
 			);
 			productName = LabPhone;
 			productReference = 28C2C1B8B040DD0D06AF070E /* LabPhone.app */;
@@ -2053,9 +2062,17 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = LabCatalog;
 		};
+		3ACA181AD3B230C4BEB973C8 /* LocalModelBench */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = LocalModelBench;
+		};
 		3CF19F7CC72BE703FC6929AD /* SurfaceDeck */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SurfaceDeck;
+		};
+		47A98A400215FB089E3EDF93 /* LocalModelBench */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = LocalModelBench;
 		};
 		487F08AAFA8FFA4128830EF0 /* LabCatalog */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -2076,6 +2093,10 @@
 		5879A7CAEDD8078739ABF6D6 /* ShareIngress */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ShareIngress;
+		};
+		59350CEF01CB3A0AC950B880 /* LocalModelBench */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = LocalModelBench;
 		};
 		59FA911654D48713C53F9816 /* LabCatalog */ = {
 			isa = XCSwiftPackageProductDependency;

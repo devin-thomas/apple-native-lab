@@ -44,6 +44,9 @@ struct LabCommands: Commands {
             Button("Portable Objects") { window?.destination = .portableObjects }
                 .keyboardShortcut("8", modifiers: .command)
                 .disabled(window == nil)
+            Button(LocalModelBenchExperiment.title) { window?.destination = .localModelBench }
+                .keyboardShortcut("9", modifiers: .command)
+                .disabled(window == nil)
         }
 
         CommandGroup(replacing: .textEditing) {

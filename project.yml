@@ -90,6 +90,9 @@ targets:
       # LAB-004 Surface Deck: the demo session's deck, its intents, and the in-app widget previews.
       - package: LabFeatures
         product: SurfaceDeck
+      # LAB-015 Local Model Bench: the fixture executor. It does not link Core ML.
+      - package: LabFeatures
+        product: LocalModelBench
     info:
       path: Apps/Mac/Info.plist
       properties:
@@ -176,6 +179,9 @@ targets:
       # LAB-004 Surface Deck: the demo session's deck, its intents, and the in-app widget previews.
       - package: LabFeatures
         product: SurfaceDeck
+      # LAB-015 Local Model Bench: the fixture executor. It does not link Core ML.
+      - package: LabFeatures
+        product: LocalModelBench
     info:
       path: Apps/Phone/Info.plist
       properties:
@@ -267,6 +273,9 @@ targets:
       # LAB-004 Surface Deck: the deck, its intents, and the snapshot writer, as LabPhone.
       - package: LabFeatures
         product: SurfaceDeck
+      # LAB-015 Local Model Bench: the fixture executor, as LabPhone. It does not link Core ML.
+      - package: LabFeatures
+        product: LocalModelBench
       - target: ShareExtension
         embed: true
       # LAB-004: the widget and Control extension, embedded only in this SystemSurfaces variant.

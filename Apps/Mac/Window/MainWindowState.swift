@@ -22,6 +22,8 @@ enum SidebarDestination: Hashable {
     case portableObjects
     /// LAB-004: the demo session, its receipts, and the widget and Control previews.
     case surfaceDeck
+    /// LAB-015: cold and warm fixture runs, recorded only when asked.
+    case localModelBench
     case catalog(CatalogScope)
 
     var title: String {
@@ -33,6 +35,7 @@ enum SidebarDestination: Hashable {
         case .shareInbox: "Share Inbox"
         case .portableObjects: "Portable Objects"
         case .surfaceDeck: SurfaceDeck.title
+        case .localModelBench: LocalModelBenchExperiment.title
         case .catalog(let scope): scope.title
         }
     }
@@ -47,6 +50,7 @@ enum SidebarDestination: Hashable {
         case .shareInbox: "share-inbox"
         case .portableObjects: "portable-objects"
         case .surfaceDeck: "surface-deck"
+        case .localModelBench: "local-model-bench"
         case .catalog(.all): "all"
         case .catalog(.milestone(let milestone)): "milestone:\(milestone.rawValue)"
         case .catalog(.category(let category)): "category:\(category)"
@@ -64,6 +68,7 @@ enum SidebarDestination: Hashable {
         case ("share-inbox", nil): self = .shareInbox
         case ("portable-objects", nil): self = .portableObjects
         case ("surface-deck", nil): self = .surfaceDeck
+        case ("local-model-bench", nil): self = .localModelBench
         case ("all", nil): self = .catalog(.all)
         case ("milestone", let raw?): guard let milestone = Milestone(rawValue: raw) else { return nil }
             self = .catalog(.milestone(milestone))
@@ -93,6 +98,8 @@ final class MainWindowState {
     var inboxEntry: InboxEntry.ID?
     /// LAB-008: this window's objects, selection, and import under review.
     let portableObjects = PortableObjectsSession()
+    /// LAB-015: this window's bench runs. Nothing is recorded until Record Selected Run.
+    let bench = LocalModelBenchSession()
     var searchText = ""
     /// Incremented to ask the window to focus its search field.
     var searchRequests = 0
