@@ -7,126 +7,131 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		039F6AC45ABDCB594CCCB743 /* LocalModelBench in Frameworks */ = {isa = PBXBuildFile; productRef = 59350CEF01CB3A0AC950B880 /* LocalModelBench */; };
-		041571FBEDEE6D20DB01B173 /* LabJobs in Frameworks */ = {isa = PBXBuildFile; productRef = 223B8BCAF2A3CB2ABE340018 /* LabJobs */; };
+		039F6AC45ABDCB594CCCB743 /* ContextCards in Frameworks */ = {isa = PBXBuildFile; productRef = B07CF76A07881747B6BDDC65 /* ContextCards */; };
+		041571FBEDEE6D20DB01B173 /* ShortcutWorkbench in Frameworks */ = {isa = PBXBuildFile; productRef = 36BBB5CECC03D8EB03B2B8E3 /* ShortcutWorkbench */; };
 		049D235E474520D658AD3AD3 /* ActionAtlas in Frameworks */ = {isa = PBXBuildFile; productRef = D681B15E8F4FC00BCB2862EE /* ActionAtlas */; };
 		04A714E690365F240DA19ECC /* seed.json in Resources */ = {isa = PBXBuildFile; fileRef = 4C5126791B7E1A1A049AE090 /* seed.json */; };
-		0696065FF182D17B47C7385C /* SurfaceDeck in Frameworks */ = {isa = PBXBuildFile; productRef = C00FE8FBC35881E832DADD27 /* SurfaceDeck */; };
+		0696065FF182D17B47C7385C /* DocumentsEverywhere in Frameworks */ = {isa = PBXBuildFile; productRef = BA45D7FB429E184A9914E1EE /* DocumentsEverywhere */; };
 		06ED0D7F8928725A2A09905A /* LabSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 25231493CA26D8D2F61E46F5 /* LabSupport */; };
 		07A0496F553D9F8D4D40ED4E /* LabCatalog in Frameworks */ = {isa = PBXBuildFile; productRef = 487F08AAFA8FFA4128830EF0 /* LabCatalog */; };
-		07B83BC2A5F536D912FB5499 /* SpeechTimeline in Frameworks */ = {isa = PBXBuildFile; productRef = DD6B5A5D377A99A4E139C082 /* SpeechTimeline */; };
+		07B83BC2A5F536D912FB5499 /* RespectfulAttention in Frameworks */ = {isa = PBXBuildFile; productRef = 162A84CBFDB2A97151B9FE17 /* RespectfulAttention */; };
 		0A76696BFB66718AF104AB2B /* SurfaceDeck in Frameworks */ = {isa = PBXBuildFile; productRef = D251249EBC83B2887F7B36D3 /* SurfaceDeck */; };
 		0C04D42E682D6F9F2608CDD5 /* PickUpHere in Frameworks */ = {isa = PBXBuildFile; productRef = 9A18EBD4D341D0695E5F8C7B /* PickUpHere */; };
-		124E2B5FB4A68967374ADE97 /* DurableSyncLedger in Frameworks */ = {isa = PBXBuildFile; productRef = E08448913DADC94B523B6867 /* DurableSyncLedger */; };
-		133579F88E88722C1A567973 /* RenderThatSurvives in Frameworks */ = {isa = PBXBuildFile; productRef = 34ADCE5970E7AD9261946AFD /* RenderThatSurvives */; };
-		14D3B3DFC30B0C1AA90BB2F2 /* TactileGrammar in Frameworks */ = {isa = PBXBuildFile; productRef = 0CC56DC092F1A632E1457223 /* TactileGrammar */; };
+		124E2B5FB4A68967374ADE97 /* LocalModelBench in Frameworks */ = {isa = PBXBuildFile; productRef = 59350CEF01CB3A0AC950B880 /* LocalModelBench */; };
+		133579F88E88722C1A567973 /* LabJobs in Frameworks */ = {isa = PBXBuildFile; productRef = 55FA0BEAD79AB3A699310DD3 /* LabJobs */; };
+		14D3B3DFC30B0C1AA90BB2F2 /* DurableSyncLedger in Frameworks */ = {isa = PBXBuildFile; productRef = E08448913DADC94B523B6867 /* DurableSyncLedger */; };
 		154C21111E02462DD0A59BE0 /* LabStore in Frameworks */ = {isa = PBXBuildFile; productRef = 6E71D4CE7F5EFA213F132511 /* LabStore */; };
-		191EE6EDFFD979CB2B784507 /* LabJobs in Frameworks */ = {isa = PBXBuildFile; productRef = 71315AD3886CA002360CAB39 /* LabJobs */; };
-		1971878BD77FD9FBB927D999 /* ContextCards in Frameworks */ = {isa = PBXBuildFile; productRef = B07CF76A07881747B6BDDC65 /* ContextCards */; };
+		191EE6EDFFD979CB2B784507 /* ShortcutWorkbench in Frameworks */ = {isa = PBXBuildFile; productRef = 0081520B6B9891B500090A1E /* ShortcutWorkbench */; };
+		1971878BD77FD9FBB927D999 /* TrustDesk in Frameworks */ = {isa = PBXBuildFile; productRef = C5D34BAE1E274DDF6B129BCC /* TrustDesk */; };
 		1ABEE97B7C7ACB1EAF41ABC4 /* ShareIngress in Frameworks */ = {isa = PBXBuildFile; productRef = A7B30E9CC74D5DACCC486C60 /* ShareIngress */; };
 		1B0413E82622210BA72820FA /* LabDomain in Frameworks */ = {isa = PBXBuildFile; productRef = 0D6B57C2990B445E8BC56C3B /* LabDomain */; };
 		1C7CA3174A557512B2CC9E55 /* seed.json in Resources */ = {isa = PBXBuildFile; fileRef = 4C5126791B7E1A1A049AE090 /* seed.json */; };
 		1D0454867F58F2F2FCC15C53 /* ScreeningRoom in Frameworks */ = {isa = PBXBuildFile; productRef = 4529826CC5A2B22E37D11960 /* ScreeningRoom */; };
-		208089E6548B04B4FAD2D503 /* ScreeningRoom in Frameworks */ = {isa = PBXBuildFile; productRef = D936B53FB1447A86F5E17CB1 /* ScreeningRoom */; };
+		208089E6548B04B4FAD2D503 /* RenderThatSurvives in Frameworks */ = {isa = PBXBuildFile; productRef = 4111F1FCFF0D20919AC1435F /* RenderThatSurvives */; };
 		20CC763D9B597BD74A7E2248 /* ScreeningRoom in Frameworks */ = {isa = PBXBuildFile; productRef = 74C61848479A3E2EA028359B /* ScreeningRoom */; };
 		21F31C50AAC169B20AE2CF15 /* ActionAtlas in Frameworks */ = {isa = PBXBuildFile; productRef = 7EC14A55645358F739F46AC7 /* ActionAtlas */; };
+		2220B24A35B1AB2579CAD232 /* QuickLookPreview.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 8553628FD334E96BFBF76D0D /* QuickLookPreview.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		226E33C6282D786FCC203015 /* speech-sample-captions.vtt in Resources */ = {isa = PBXBuildFile; fileRef = C4B33BA8A8374E544563EE90 /* speech-sample-captions.vtt */; };
 		25972D23C4D3197B1F3EB577 /* LabSupport in Frameworks */ = {isa = PBXBuildFile; productRef = C807DDF95D17BFC6553B448B /* LabSupport */; };
+		285FF529BDB992F47842C145 /* ScreeningRoomPlayback in Frameworks */ = {isa = PBXBuildFile; productRef = 07643C9C8F9AAE5026317A8E /* ScreeningRoomPlayback */; };
 		29496A5626839FD3F7D5287D /* ShareIngress in Frameworks */ = {isa = PBXBuildFile; productRef = 208ADB6FEE46A094CE66A041 /* ShareIngress */; };
-		2B7CE60245911BE30BCE0A59 /* RespectfulAttention in Frameworks */ = {isa = PBXBuildFile; productRef = 162A84CBFDB2A97151B9FE17 /* RespectfulAttention */; };
+		2B7CE60245911BE30BCE0A59 /* TactileGrammar in Frameworks */ = {isa = PBXBuildFile; productRef = 0CC56DC092F1A632E1457223 /* TactileGrammar */; };
 		2DC4325948CAC8E236586BB5 /* LabSupport in Frameworks */ = {isa = PBXBuildFile; productRef = B0B980774D943168FEA7065A /* LabSupport */; };
 		302604032E20F6AE4A5120CB /* SurfaceWidgets.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 82FD43D87B67084E0C795F37 /* SurfaceWidgets.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		31AFEC7DFA568A155997BBC4 /* ContextCards in Frameworks */ = {isa = PBXBuildFile; productRef = 0A1E283E59A2E6CE6A1FCEF2 /* ContextCards */; };
+		31AFEC7DFA568A155997BBC4 /* TrustDesk in Frameworks */ = {isa = PBXBuildFile; productRef = ED6B5B90B0BE1BD3A5AE104F /* TrustDesk */; };
 		330EBB105739FBBAFDAE5C28 /* ActionAtlas in Frameworks */ = {isa = PBXBuildFile; productRef = 88023F30308C4118D4A07ABA /* ActionAtlas */; };
 		34205B0D4B75B6C58B2006B2 /* intelligence-ambiguous-note.txt in Resources */ = {isa = PBXBuildFile; fileRef = AE4F4AB8C2CC86E0A0AF350A /* intelligence-ambiguous-note.txt */; };
+		370C645B2FAA7C0422749202 /* DocumentsEverywhere in Frameworks */ = {isa = PBXBuildFile; productRef = 5BF8C26F06F10FFB0AF1D6CB /* DocumentsEverywhere */; };
 		3801D1772B69CAE4CA93FDFE /* LabSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 23ACA699398C10114E0D39E7 /* LabSupport */; };
-		3812E98375DD0AD6ACB802BD /* TactileGrammar in Frameworks */ = {isa = PBXBuildFile; productRef = 324EFBAF6F4776B60F1A8261 /* TactileGrammar */; };
-		3C5668CFD762C5B374A3842A /* RespectfulAttention in Frameworks */ = {isa = PBXBuildFile; productRef = 5C86286540B38D0B7E0CCAA6 /* RespectfulAttention */; };
+		3812E98375DD0AD6ACB802BD /* DurableSyncLedger in Frameworks */ = {isa = PBXBuildFile; productRef = 88DB2EE25490771C42F2A729 /* DurableSyncLedger */; };
+		3C5668CFD762C5B374A3842A /* TactileGrammar in Frameworks */ = {isa = PBXBuildFile; productRef = 142DDF1CDB91674FC377411B /* TactileGrammar */; };
 		3F3F947E26D4C7C8AFE4443C /* swatch-card.png in Resources */ = {isa = PBXBuildFile; fileRef = B0EE3CF6B78A0435A2E4F6EC /* swatch-card.png */; };
 		45673BBE0F16F89FAE113021 /* LabCatalog in Frameworks */ = {isa = PBXBuildFile; productRef = 0A608BA2376945AD3E608486 /* LabCatalog */; };
 		46B8492EDC6B52F10B6794B1 /* LabCatalog in Frameworks */ = {isa = PBXBuildFile; productRef = 2A29DD32F90A05982B97C0F3 /* LabCatalog */; };
 		47F8EF47F63CC3723EA8DEA5 /* ShareExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 8D8791DE695E10C7EC57F692 /* ShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		4B2A43D0E3738A399F39F68E /* speech-sample-script.txt in Resources */ = {isa = PBXBuildFile; fileRef = 7DE0EE54C4DB67B0300205B9 /* speech-sample-script.txt */; };
 		4C323A1952AE6012980ED83A /* AccessSuperpower in Frameworks */ = {isa = PBXBuildFile; productRef = 540B210369D029C191E89BAB /* AccessSuperpower */; };
-		4C77075AA982DE68699E3EDC /* FindTheThing in Frameworks */ = {isa = PBXBuildFile; productRef = 642B301753124012D1855B8B /* FindTheThing */; };
+		4C77075AA982DE68699E3EDC /* SpeechTimeline in Frameworks */ = {isa = PBXBuildFile; productRef = F6364CBD60BE2BEE0A31456F /* SpeechTimeline */; };
 		4D1936E1C7A89558B10E01F3 /* intelligence-ambiguous-note.txt in Resources */ = {isa = PBXBuildFile; fileRef = AE4F4AB8C2CC86E0A0AF350A /* intelligence-ambiguous-note.txt */; };
 		4DD8734A8F0814E2CFC44062 /* LabCatalog in Frameworks */ = {isa = PBXBuildFile; productRef = A89F084FC0938D0139A2042E /* LabCatalog */; };
 		4E60DC2D92BC7C909C4D6C56 /* LabCatalog in Frameworks */ = {isa = PBXBuildFile; productRef = 21367E5C42D7E02E6E77C8AB /* LabCatalog */; };
-		4FDBD4A004E827140BE8A421 /* TrustDesk in Frameworks */ = {isa = PBXBuildFile; productRef = DAA9D7AA6F4848C5373DE1B3 /* TrustDesk */; };
+		4FDBD4A004E827140BE8A421 /* SurfaceDeck in Frameworks */ = {isa = PBXBuildFile; productRef = C00FE8FBC35881E832DADD27 /* SurfaceDeck */; };
 		526F4C3176A2E25CFBA613A9 /* AccessSuperpower in Frameworks */ = {isa = PBXBuildFile; productRef = C1686806D655F8ADADCF3268 /* AccessSuperpower */; };
 		542F57ACC91C3B5DD11837E2 /* PointInspect in Frameworks */ = {isa = PBXBuildFile; productRef = 76FDA9F0D9BC7498A0E29AEC /* PointInspect */; };
 		5971E4B6D5596414791531A0 /* TypedIntelligence in Frameworks */ = {isa = PBXBuildFile; productRef = 76F28CA76CDDB3E1BD522DA9 /* TypedIntelligence */; };
 		5B74398A19EB86C3087BDEED /* TypedIntelligence in Frameworks */ = {isa = PBXBuildFile; productRef = 872A3526A3C216A5301B05D2 /* TypedIntelligence */; };
 		5CDF75C467BB20F773986DD1 /* ShareIngress in Frameworks */ = {isa = PBXBuildFile; productRef = 5879A7CAEDD8078739ABF6D6 /* ShareIngress */; };
-		5F8117A2D793190FC5F0B060 /* LabJobs in Frameworks */ = {isa = PBXBuildFile; productRef = 55FA0BEAD79AB3A699310DD3 /* LabJobs */; };
+		5F8117A2D793190FC5F0B060 /* ShortcutWorkbench in Frameworks */ = {isa = PBXBuildFile; productRef = E977E30B60B7D9E20E4D2E91 /* ShortcutWorkbench */; };
 		5FE8E27B13BCF7A700A0CFDA /* LabCatalog in Frameworks */ = {isa = PBXBuildFile; productRef = 980162FF318C34A9B6AA4D5E /* LabCatalog */; };
 		619B33546461D4857F8092B4 /* LabCatalog in Frameworks */ = {isa = PBXBuildFile; productRef = F8C00E7480D74B30ED42E170 /* LabCatalog */; };
 		61C2EFB9489E9A7476A1E7A0 /* LabDomain in Frameworks */ = {isa = PBXBuildFile; productRef = C8548B319C70F000CAD5D26E /* LabDomain */; };
-		679EEDEC38DEFE36745AB4C7 /* ShortcutWorkbench in Frameworks */ = {isa = PBXBuildFile; productRef = 36BBB5CECC03D8EB03B2B8E3 /* ShortcutWorkbench */; };
+		679EEDEC38DEFE36745AB4C7 /* FindTheThing in Frameworks */ = {isa = PBXBuildFile; productRef = 592FAE1A0F9F452B0C657DFD /* FindTheThing */; };
 		682570876F660883019716DB /* seed.json in Resources */ = {isa = PBXBuildFile; fileRef = 4C5126791B7E1A1A049AE090 /* seed.json */; };
-		68EC02016C26F09D53BEA041 /* RenderThatSurvives in Frameworks */ = {isa = PBXBuildFile; productRef = 4111F1FCFF0D20919AC1435F /* RenderThatSurvives */; };
+		68EC02016C26F09D53BEA041 /* LabJobs in Frameworks */ = {isa = PBXBuildFile; productRef = 223B8BCAF2A3CB2ABE340018 /* LabJobs */; };
 		6AA9269C26437D2151922984 /* ScreeningRoomPlayback in Frameworks */ = {isa = PBXBuildFile; productRef = F1300675BF04E22A751AAA8A /* ScreeningRoomPlayback */; };
 		6C9BB14472B7F36AEC6C36CF /* ScreeningRoomPlayback in Frameworks */ = {isa = PBXBuildFile; productRef = FCC939009043AE3BBBFEAAD9 /* ScreeningRoomPlayback */; };
 		6DE4F776CBFE16A956072B91 /* AccessSuperpower in Frameworks */ = {isa = PBXBuildFile; productRef = CC0630EDCCDE6FC7F7BF2FBC /* AccessSuperpower */; };
 		6F93A9AD463D59BB11A8A5EC /* LabDomain in Frameworks */ = {isa = PBXBuildFile; productRef = CACF77BD90DF68CDE4C515EA /* LabDomain */; };
-		7231065BB4094B132F17740D /* DurableSyncLedger in Frameworks */ = {isa = PBXBuildFile; productRef = 88DB2EE25490771C42F2A729 /* DurableSyncLedger */; };
+		7231065BB4094B132F17740D /* LocalModelBench in Frameworks */ = {isa = PBXBuildFile; productRef = 3ACA181AD3B230C4BEB973C8 /* LocalModelBench */; };
 		72DC9866A6C7DE5D6279D72F /* intelligence-injected-note.txt in Resources */ = {isa = PBXBuildFile; fileRef = D89DA08F5504526396A194FA /* intelligence-injected-note.txt */; };
-		73AF93F8C738CF705BA9D0E5 /* ContextCards in Frameworks */ = {isa = PBXBuildFile; productRef = 2170AE2584F7EF6C7CC11E04 /* ContextCards */; };
-		76C6A1AD242AA9CD5B90099D /* TrustDesk in Frameworks */ = {isa = PBXBuildFile; productRef = ED6B5B90B0BE1BD3A5AE104F /* TrustDesk */; };
+		73AF93F8C738CF705BA9D0E5 /* TrustDesk in Frameworks */ = {isa = PBXBuildFile; productRef = DAA9D7AA6F4848C5373DE1B3 /* TrustDesk */; };
+		76C6A1AD242AA9CD5B90099D /* DesktopNativePower in Frameworks */ = {isa = PBXBuildFile; productRef = 799F4CAFFEC3C33B73985488 /* DesktopNativePower */; };
 		778984D260ECA5DC69A502E1 /* LabStore in Frameworks */ = {isa = PBXBuildFile; productRef = F26F0DA29E5E4B99D5E4143F /* LabStore */; };
 		7BC2B01F79C7BDAE1AA50AC5 /* PortableObjects in Frameworks */ = {isa = PBXBuildFile; productRef = F9A656A9EA01777E437005A8 /* PortableObjects */; };
 		7D6B06422ED9B2D8D51A3491 /* speech-sample-script.txt in Resources */ = {isa = PBXBuildFile; fileRef = 7DE0EE54C4DB67B0300205B9 /* speech-sample-script.txt */; };
 		7E5EE50FD4E0DFB7DD6FE372 /* swatch-card.png in Resources */ = {isa = PBXBuildFile; fileRef = B0EE3CF6B78A0435A2E4F6EC /* swatch-card.png */; };
+		7F3E5776B9B5AA1B581C7932 /* ScreeningRoomPlayback in Frameworks */ = {isa = PBXBuildFile; productRef = DE07DAE9810D1A3BEC9A361A /* ScreeningRoomPlayback */; };
 		7FB3F8343A67C0DA7E22236A /* intelligence-injected-note.txt in Resources */ = {isa = PBXBuildFile; fileRef = D89DA08F5504526396A194FA /* intelligence-injected-note.txt */; };
 		7FCD81C07A37C7401F6D675C /* intelligence-ambiguous-note.txt in Resources */ = {isa = PBXBuildFile; fileRef = AE4F4AB8C2CC86E0A0AF350A /* intelligence-ambiguous-note.txt */; };
 		811E4F2E9F9F36796576B37D /* intelligence-injected-note.txt in Resources */ = {isa = PBXBuildFile; fileRef = D89DA08F5504526396A194FA /* intelligence-injected-note.txt */; };
-		823467FF125D225EC5477CA3 /* TrustDesk in Frameworks */ = {isa = PBXBuildFile; productRef = C5D34BAE1E274DDF6B129BCC /* TrustDesk */; };
+		823467FF125D225EC5477CA3 /* SurfaceDeck in Frameworks */ = {isa = PBXBuildFile; productRef = 3CF19F7CC72BE703FC6929AD /* SurfaceDeck */; };
 		8241A9AE0973790DCD57EE24 /* ShareIngress in Frameworks */ = {isa = PBXBuildFile; productRef = C0E3086832C7401036381F13 /* ShareIngress */; };
 		84B3B61948F3C7DE691D8B56 /* speech-sample-captions.vtt in Resources */ = {isa = PBXBuildFile; fileRef = C4B33BA8A8374E544563EE90 /* speech-sample-captions.vtt */; };
 		85AB9FBA224F864273906840 /* PickUpHere in Frameworks */ = {isa = PBXBuildFile; productRef = D2925C43D1B2531E485720E6 /* PickUpHere */; };
 		86F8F6D1921317F228A28908 /* ScreeningRoom in Frameworks */ = {isa = PBXBuildFile; productRef = 6349782257D9D832781DCBD1 /* ScreeningRoom */; };
 		89E214F72A8F8E59C59B440C /* PointInspect in Frameworks */ = {isa = PBXBuildFile; productRef = 1AB36AC1BEC9879ABFC930C0 /* PointInspect */; };
-		8A6729B0DB6FC2773ADD61D0 /* FindTheThing in Frameworks */ = {isa = PBXBuildFile; productRef = 592FAE1A0F9F452B0C657DFD /* FindTheThing */; };
+		8A6729B0DB6FC2773ADD61D0 /* SpeechTimeline in Frameworks */ = {isa = PBXBuildFile; productRef = 313A41B2A33E906243201726 /* SpeechTimeline */; };
 		8C40BB2646A4DDD89846D930 /* ScreeningRoomPlayback in Frameworks */ = {isa = PBXBuildFile; productRef = EE4E0B95BA1C58D2D1D88F08 /* ScreeningRoomPlayback */; };
-		8D5B9929C2461FEBE0755266 /* TactileGrammar in Frameworks */ = {isa = PBXBuildFile; productRef = 142DDF1CDB91674FC377411B /* TactileGrammar */; };
-		8FDDF8EBEF317883CD104666 /* FindTheThing in Frameworks */ = {isa = PBXBuildFile; productRef = D6C031B31CED84F339102FE1 /* FindTheThing */; };
+		8D5B9929C2461FEBE0755266 /* DurableSyncLedger in Frameworks */ = {isa = PBXBuildFile; productRef = 8073F2E8020227D6576B157F /* DurableSyncLedger */; };
+		8FDDF8EBEF317883CD104666 /* SpeechTimeline in Frameworks */ = {isa = PBXBuildFile; productRef = DD6B5A5D377A99A4E139C082 /* SpeechTimeline */; };
 		8FDE617CDA6BA219C4DA965D /* LabCatalog in Frameworks */ = {isa = PBXBuildFile; productRef = 59FA911654D48713C53F9816 /* LabCatalog */; };
-		93CB6F4DEFBC2F06BFC03D5A /* ShortcutWorkbench in Frameworks */ = {isa = PBXBuildFile; productRef = 0081520B6B9891B500090A1E /* ShortcutWorkbench */; };
+		93CB6F4DEFBC2F06BFC03D5A /* FindTheThing in Frameworks */ = {isa = PBXBuildFile; productRef = 642B301753124012D1855B8B /* FindTheThing */; };
 		96EA540221683FF1A975546B /* LabSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 9429B9706DB8D93A799FDA9F /* LabSupport */; };
-		9C7655FCC68FA0E2CBB6353B /* ScreeningRoom in Frameworks */ = {isa = PBXBuildFile; productRef = 0BCDA999B1C4E5FE428B26A7 /* ScreeningRoom */; };
-		A0AF3C92D36C68C1D64BE7D6 /* SurfaceDeck in Frameworks */ = {isa = PBXBuildFile; productRef = CE841A8FB5E31C78D4112220 /* SurfaceDeck */; };
+		9C7655FCC68FA0E2CBB6353B /* RenderThatSurvives in Frameworks */ = {isa = PBXBuildFile; productRef = 1E0AFD34A5739FC35B622C6E /* RenderThatSurvives */; };
+		A0AF3C92D36C68C1D64BE7D6 /* DocumentsEverywhere in Frameworks */ = {isa = PBXBuildFile; productRef = 909AA41C9765A2E3E64E7982 /* DocumentsEverywhere */; };
 		A7263A9B473715BBE7677C52 /* ScreeningRoomPlayback in Frameworks */ = {isa = PBXBuildFile; productRef = 91013B5B2C9E82183BFB82CB /* ScreeningRoomPlayback */; };
 		A78294EBFE96BEA10AEF5BCD /* swatch-card.png in Resources */ = {isa = PBXBuildFile; fileRef = B0EE3CF6B78A0435A2E4F6EC /* swatch-card.png */; };
-		AA05060A1927DB052D03BA7E /* SurfaceDeck in Frameworks */ = {isa = PBXBuildFile; productRef = 3CF19F7CC72BE703FC6929AD /* SurfaceDeck */; };
-		AD455F75C2D216702A2B62CE /* DesktopNativePower in Frameworks */ = {isa = PBXBuildFile; productRef = 799F4CAFFEC3C33B73985488 /* DesktopNativePower */; };
+		AA05060A1927DB052D03BA7E /* DocumentsEverywhere in Frameworks */ = {isa = PBXBuildFile; productRef = 0E4C9D44FF07D7969E3AB12A /* DocumentsEverywhere */; };
+		AD455F75C2D216702A2B62CE /* SurfaceDeck in Frameworks */ = {isa = PBXBuildFile; productRef = CE841A8FB5E31C78D4112220 /* SurfaceDeck */; };
 		AEB17B224B9BD1CF6EE2746E /* LabDomain in Frameworks */ = {isa = PBXBuildFile; productRef = F41E96699628F4302D6E6EE4 /* LabDomain */; };
-		AFC454E3BA10F271D73AC35A /* SpeechTimeline in Frameworks */ = {isa = PBXBuildFile; productRef = F6364CBD60BE2BEE0A31456F /* SpeechTimeline */; };
+		AFC454E3BA10F271D73AC35A /* RespectfulAttention in Frameworks */ = {isa = PBXBuildFile; productRef = 94A9495834CC96447469549B /* RespectfulAttention */; };
 		B55D587C861F0C54393A2BD7 /* LabDomain in Frameworks */ = {isa = PBXBuildFile; productRef = A6A3022C8795348044F49723 /* LabDomain */; };
 		B888B057D5B4B13CA4C86B32 /* LabSupport in Frameworks */ = {isa = PBXBuildFile; productRef = F44C6435C9B6A97B75C33F44 /* LabSupport */; };
-		BB699EEA120C158F2774463A /* ScreeningRoomPlayback in Frameworks */ = {isa = PBXBuildFile; productRef = DE07DAE9810D1A3BEC9A361A /* ScreeningRoomPlayback */; };
-		BD13FCF347A13D74C8BD2E77 /* SpeechTimeline in Frameworks */ = {isa = PBXBuildFile; productRef = 313A41B2A33E906243201726 /* SpeechTimeline */; };
-		C391743BD8D48ED847A43AEB /* ScreeningRoomPlayback in Frameworks */ = {isa = PBXBuildFile; productRef = 07643C9C8F9AAE5026317A8E /* ScreeningRoomPlayback */; };
+		BB699EEA120C158F2774463A /* ScreeningRoom in Frameworks */ = {isa = PBXBuildFile; productRef = D936B53FB1447A86F5E17CB1 /* ScreeningRoom */; };
+		BD13FCF347A13D74C8BD2E77 /* RespectfulAttention in Frameworks */ = {isa = PBXBuildFile; productRef = 5C86286540B38D0B7E0CCAA6 /* RespectfulAttention */; };
+		C03D6C38FE03559204059C26 /* ScreeningRoomPlayback in Frameworks */ = {isa = PBXBuildFile; productRef = 1BF03CA9A6DA75961B2F1ABF /* ScreeningRoomPlayback */; };
+		C391743BD8D48ED847A43AEB /* ScreeningRoom in Frameworks */ = {isa = PBXBuildFile; productRef = A9F266E53907B2EEF4980EC7 /* ScreeningRoom */; };
 		C518F27DD869D1087ED96B1E /* LabSupport in Frameworks */ = {isa = PBXBuildFile; productRef = ECD021B68B4C48CC863BA8C6 /* LabSupport */; };
 		C5C7E15597C124FFA87914F4 /* LabStore in Frameworks */ = {isa = PBXBuildFile; productRef = 6CF6B1898735341A74FB3DA4 /* LabStore */; };
 		CB80ACDC68FE94D0F8CD2D18 /* PortableObjects in Frameworks */ = {isa = PBXBuildFile; productRef = 5138B46379EB0CDA5C7A520B /* PortableObjects */; };
 		CBF185BA448CD3285E3F5BC8 /* LabSupport in Frameworks */ = {isa = PBXBuildFile; productRef = F5558900C8E1A34A220E60D3 /* LabSupport */; };
-		CC2518A05966A3E4A729C240 /* ScreeningRoomPlayback in Frameworks */ = {isa = PBXBuildFile; productRef = 1BF03CA9A6DA75961B2F1ABF /* ScreeningRoomPlayback */; };
+		CC2518A05966A3E4A729C240 /* ScreeningRoom in Frameworks */ = {isa = PBXBuildFile; productRef = 0BCDA999B1C4E5FE428B26A7 /* ScreeningRoom */; };
 		D078C387824227F073DA06D7 /* TactileGrammar in Frameworks */ = {isa = PBXBuildFile; productRef = EF27A03B7FC8CEEAC7B10B94 /* TactileGrammar */; };
 		D4FFE59C3D108F7EEC03F76B /* PickUpHere in Frameworks */ = {isa = PBXBuildFile; productRef = E71BE15BDC35B0EB85330C6A /* PickUpHere */; };
-		DA8FA64970D79CF504A4B4C2 /* ScreeningRoom in Frameworks */ = {isa = PBXBuildFile; productRef = A9F266E53907B2EEF4980EC7 /* ScreeningRoom */; };
-		DB0EEC99D027016FD0052072 /* ShortcutWorkbench in Frameworks */ = {isa = PBXBuildFile; productRef = E977E30B60B7D9E20E4D2E91 /* ShortcutWorkbench */; };
-		DBE25FF6B377671BE1C03843 /* RespectfulAttention in Frameworks */ = {isa = PBXBuildFile; productRef = 94A9495834CC96447469549B /* RespectfulAttention */; };
+		DA8FA64970D79CF504A4B4C2 /* RenderThatSurvives in Frameworks */ = {isa = PBXBuildFile; productRef = 34ADCE5970E7AD9261946AFD /* RenderThatSurvives */; };
+		DB0EEC99D027016FD0052072 /* FindTheThing in Frameworks */ = {isa = PBXBuildFile; productRef = D6C031B31CED84F339102FE1 /* FindTheThing */; };
+		DBE25FF6B377671BE1C03843 /* TactileGrammar in Frameworks */ = {isa = PBXBuildFile; productRef = 324EFBAF6F4776B60F1A8261 /* TactileGrammar */; };
 		DC14139A63BD575B5A92D755 /* LabCatalog in Frameworks */ = {isa = PBXBuildFile; productRef = D848D3397291632E552B77A2 /* LabCatalog */; };
-		DD69237B7E59E67A329EA06F /* DurableSyncLedger in Frameworks */ = {isa = PBXBuildFile; productRef = 8073F2E8020227D6576B157F /* DurableSyncLedger */; };
-		DEA91004D4A50A418656EE6C /* LocalModelBench in Frameworks */ = {isa = PBXBuildFile; productRef = 47A98A400215FB089E3EDF93 /* LocalModelBench */; };
-		DFDD855525D781253FF7DE3E /* RenderThatSurvives in Frameworks */ = {isa = PBXBuildFile; productRef = 1E0AFD34A5739FC35B622C6E /* RenderThatSurvives */; };
+		DD69237B7E59E67A329EA06F /* LocalModelBench in Frameworks */ = {isa = PBXBuildFile; productRef = 47A98A400215FB089E3EDF93 /* LocalModelBench */; };
+		DEA91004D4A50A418656EE6C /* ContextCards in Frameworks */ = {isa = PBXBuildFile; productRef = 0A1E283E59A2E6CE6A1FCEF2 /* ContextCards */; };
+		DFDD855525D781253FF7DE3E /* LabJobs in Frameworks */ = {isa = PBXBuildFile; productRef = 71315AD3886CA002360CAB39 /* LabJobs */; };
 		E10047C202637983EF3886EE /* TypedIntelligence in Frameworks */ = {isa = PBXBuildFile; productRef = FA764C388624F65B1FE0AC12 /* TypedIntelligence */; };
 		E70BDD2C02F2994CBB681ED7 /* PortableObjects in Frameworks */ = {isa = PBXBuildFile; productRef = 4E31A68F4912B6784D878C4C /* PortableObjects */; };
 		E74023387AFE04DFFFB9ED21 /* ScreeningRoom in Frameworks */ = {isa = PBXBuildFile; productRef = CF93F978BEB2E06FB32052F1 /* ScreeningRoom */; };
 		EABEBBDC64006AF6DFF01764 /* speech-sample-captions.vtt in Resources */ = {isa = PBXBuildFile; fileRef = C4B33BA8A8374E544563EE90 /* speech-sample-captions.vtt */; };
 		F4026F15E90968A3C198C0E5 /* PointInspect in Frameworks */ = {isa = PBXBuildFile; productRef = FD202470B394E5BFBC497587 /* PointInspect */; };
 		FAB9761A4B3BA5EE6B7D4921 /* LabSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 0A4E65ACA3B88C9D6E09A91B /* LabSupport */; };
-		FB9D9D6AF4DA62B78C9A8F2C /* LocalModelBench in Frameworks */ = {isa = PBXBuildFile; productRef = 3ACA181AD3B230C4BEB973C8 /* LocalModelBench */; };
+		FB9D9D6AF4DA62B78C9A8F2C /* ContextCards in Frameworks */ = {isa = PBXBuildFile; productRef = 2170AE2584F7EF6C7CC11E04 /* ContextCards */; };
 		FD1C7E8AA1D3763716416317 /* speech-sample-script.txt in Resources */ = {isa = PBXBuildFile; fileRef = 7DE0EE54C4DB67B0300205B9 /* speech-sample-script.txt */; };
 /* End PBXBuildFile section */
 
@@ -144,6 +149,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = EC3F7DFE3B8431537C8D22AA;
 			remoteInfo = ShareExtension;
+		};
+		3416E420E02C34DD9121C103 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9BC4DFD4FB07703D0EA4E56B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A7EBFBB119264CD518B9CC8A;
+			remoteInfo = QuickLookPreview;
 		};
 		77A01C6B6FEC3D3B3C225F31 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -191,6 +203,7 @@
 			files = (
 				47F8EF47F63CC3723EA8DEA5 /* ShareExtension.appex in Embed Foundation Extensions */,
 				302604032E20F6AE4A5120CB /* SurfaceWidgets.appex in Embed Foundation Extensions */,
+				2220B24A35B1AB2579CAD232 /* QuickLookPreview.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -212,6 +225,7 @@
 		7DE0EE54C4DB67B0300205B9 /* speech-sample-script.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "speech-sample-script.txt"; sourceTree = "<group>"; };
 		807AD4AFA0A11FF4B4881588 /* LabDomain */ = {isa = PBXFileReference; lastKnownFileType = folder; name = LabDomain; path = Packages/LabDomain; sourceTree = SOURCE_ROOT; };
 		82FD43D87B67084E0C795F37 /* SurfaceWidgets.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = SurfaceWidgets.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		8553628FD334E96BFBF76D0D /* QuickLookPreview.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = QuickLookPreview.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D8791DE695E10C7EC57F692 /* ShareExtension.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = ShareExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		8DBBAC0F883318002CAFB896 /* LabPhoneTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = LabPhoneTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9A57B8DBFF3F863D70D41513 /* LabPhoneSurfaces.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = LabPhoneSurfaces.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -233,6 +247,13 @@
 				Info.plist,
 			);
 			target = 54BD900CBAD2819FFDE15F5F /* SurfaceWidgets */;
+		};
+		57755C05BD7F61E522E135E2 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = A7EBFBB119264CD518B9CC8A /* QuickLookPreview */;
 		};
 		82F571B045A6942B2E7955E5 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
@@ -333,6 +354,19 @@
 			);
 			name = Shared;
 			path = Shared;
+			sourceTree = "<group>";
+		};
+		6D47951648A550B74E6D5690 /* QuickLookPreview */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				57755C05BD7F61E522E135E2 /* PBXFileSystemSynchronizedBuildFileExceptionSet */,
+			);
+			explicitFileTypes = {
+			};
+			explicitFolders = (
+			);
+			name = QuickLookPreview;
+			path = QuickLookPreview;
 			sourceTree = "<group>";
 		};
 		836C1771FD9EAB7D98BA536B /* LabWatchTests */ = {
@@ -448,6 +482,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		417F7B0F94742FAE90AD8619 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				370C645B2FAA7C0422749202 /* DocumentsEverywhere in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		44EE39DAE578568CC1D92771 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -463,20 +505,21 @@
 				6DE4F776CBFE16A956072B91 /* AccessSuperpower in Frameworks */,
 				CB80ACDC68FE94D0F8CD2D18 /* PortableObjects in Frameworks */,
 				D4FFE59C3D108F7EEC03F76B /* PickUpHere in Frameworks */,
-				AA05060A1927DB052D03BA7E /* SurfaceDeck in Frameworks */,
-				823467FF125D225EC5477CA3 /* TrustDesk in Frameworks */,
-				1971878BD77FD9FBB927D999 /* ContextCards in Frameworks */,
-				039F6AC45ABDCB594CCCB743 /* LocalModelBench in Frameworks */,
-				124E2B5FB4A68967374ADE97 /* DurableSyncLedger in Frameworks */,
-				14D3B3DFC30B0C1AA90BB2F2 /* TactileGrammar in Frameworks */,
-				2B7CE60245911BE30BCE0A59 /* RespectfulAttention in Frameworks */,
-				07B83BC2A5F536D912FB5499 /* SpeechTimeline in Frameworks */,
-				8FDDF8EBEF317883CD104666 /* FindTheThing in Frameworks */,
-				DB0EEC99D027016FD0052072 /* ShortcutWorkbench in Frameworks */,
-				5F8117A2D793190FC5F0B060 /* LabJobs in Frameworks */,
-				133579F88E88722C1A567973 /* RenderThatSurvives in Frameworks */,
-				DA8FA64970D79CF504A4B4C2 /* ScreeningRoom in Frameworks */,
-				C391743BD8D48ED847A43AEB /* ScreeningRoomPlayback in Frameworks */,
+				AA05060A1927DB052D03BA7E /* DocumentsEverywhere in Frameworks */,
+				823467FF125D225EC5477CA3 /* SurfaceDeck in Frameworks */,
+				1971878BD77FD9FBB927D999 /* TrustDesk in Frameworks */,
+				039F6AC45ABDCB594CCCB743 /* ContextCards in Frameworks */,
+				124E2B5FB4A68967374ADE97 /* LocalModelBench in Frameworks */,
+				14D3B3DFC30B0C1AA90BB2F2 /* DurableSyncLedger in Frameworks */,
+				2B7CE60245911BE30BCE0A59 /* TactileGrammar in Frameworks */,
+				07B83BC2A5F536D912FB5499 /* RespectfulAttention in Frameworks */,
+				8FDDF8EBEF317883CD104666 /* SpeechTimeline in Frameworks */,
+				DB0EEC99D027016FD0052072 /* FindTheThing in Frameworks */,
+				5F8117A2D793190FC5F0B060 /* ShortcutWorkbench in Frameworks */,
+				133579F88E88722C1A567973 /* LabJobs in Frameworks */,
+				DA8FA64970D79CF504A4B4C2 /* RenderThatSurvives in Frameworks */,
+				C391743BD8D48ED847A43AEB /* ScreeningRoom in Frameworks */,
+				285FF529BDB992F47842C145 /* ScreeningRoomPlayback in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -506,20 +549,21 @@
 				5CDF75C467BB20F773986DD1 /* ShareIngress in Frameworks */,
 				E70BDD2C02F2994CBB681ED7 /* PortableObjects in Frameworks */,
 				0C04D42E682D6F9F2608CDD5 /* PickUpHere in Frameworks */,
-				0696065FF182D17B47C7385C /* SurfaceDeck in Frameworks */,
-				4FDBD4A004E827140BE8A421 /* TrustDesk in Frameworks */,
-				73AF93F8C738CF705BA9D0E5 /* ContextCards in Frameworks */,
-				FB9D9D6AF4DA62B78C9A8F2C /* LocalModelBench in Frameworks */,
-				7231065BB4094B132F17740D /* DurableSyncLedger in Frameworks */,
-				3812E98375DD0AD6ACB802BD /* TactileGrammar in Frameworks */,
-				DBE25FF6B377671BE1C03843 /* RespectfulAttention in Frameworks */,
-				AFC454E3BA10F271D73AC35A /* SpeechTimeline in Frameworks */,
-				4C77075AA982DE68699E3EDC /* FindTheThing in Frameworks */,
-				93CB6F4DEFBC2F06BFC03D5A /* ShortcutWorkbench in Frameworks */,
-				191EE6EDFFD979CB2B784507 /* LabJobs in Frameworks */,
-				DFDD855525D781253FF7DE3E /* RenderThatSurvives in Frameworks */,
-				9C7655FCC68FA0E2CBB6353B /* ScreeningRoom in Frameworks */,
-				CC2518A05966A3E4A729C240 /* ScreeningRoomPlayback in Frameworks */,
+				0696065FF182D17B47C7385C /* DocumentsEverywhere in Frameworks */,
+				4FDBD4A004E827140BE8A421 /* SurfaceDeck in Frameworks */,
+				73AF93F8C738CF705BA9D0E5 /* TrustDesk in Frameworks */,
+				FB9D9D6AF4DA62B78C9A8F2C /* ContextCards in Frameworks */,
+				7231065BB4094B132F17740D /* LocalModelBench in Frameworks */,
+				3812E98375DD0AD6ACB802BD /* DurableSyncLedger in Frameworks */,
+				DBE25FF6B377671BE1C03843 /* TactileGrammar in Frameworks */,
+				AFC454E3BA10F271D73AC35A /* RespectfulAttention in Frameworks */,
+				4C77075AA982DE68699E3EDC /* SpeechTimeline in Frameworks */,
+				93CB6F4DEFBC2F06BFC03D5A /* FindTheThing in Frameworks */,
+				191EE6EDFFD979CB2B784507 /* ShortcutWorkbench in Frameworks */,
+				DFDD855525D781253FF7DE3E /* LabJobs in Frameworks */,
+				9C7655FCC68FA0E2CBB6353B /* RenderThatSurvives in Frameworks */,
+				CC2518A05966A3E4A729C240 /* ScreeningRoom in Frameworks */,
+				C03D6C38FE03559204059C26 /* ScreeningRoomPlayback in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -578,21 +622,22 @@
 				29496A5626839FD3F7D5287D /* ShareIngress in Frameworks */,
 				7BC2B01F79C7BDAE1AA50AC5 /* PortableObjects in Frameworks */,
 				85AB9FBA224F864273906840 /* PickUpHere in Frameworks */,
-				A0AF3C92D36C68C1D64BE7D6 /* SurfaceDeck in Frameworks */,
-				AD455F75C2D216702A2B62CE /* DesktopNativePower in Frameworks */,
-				76C6A1AD242AA9CD5B90099D /* TrustDesk in Frameworks */,
-				31AFEC7DFA568A155997BBC4 /* ContextCards in Frameworks */,
-				DEA91004D4A50A418656EE6C /* LocalModelBench in Frameworks */,
-				DD69237B7E59E67A329EA06F /* DurableSyncLedger in Frameworks */,
-				8D5B9929C2461FEBE0755266 /* TactileGrammar in Frameworks */,
-				3C5668CFD762C5B374A3842A /* RespectfulAttention in Frameworks */,
-				BD13FCF347A13D74C8BD2E77 /* SpeechTimeline in Frameworks */,
-				8A6729B0DB6FC2773ADD61D0 /* FindTheThing in Frameworks */,
-				679EEDEC38DEFE36745AB4C7 /* ShortcutWorkbench in Frameworks */,
-				041571FBEDEE6D20DB01B173 /* LabJobs in Frameworks */,
-				68EC02016C26F09D53BEA041 /* RenderThatSurvives in Frameworks */,
-				208089E6548B04B4FAD2D503 /* ScreeningRoom in Frameworks */,
-				BB699EEA120C158F2774463A /* ScreeningRoomPlayback in Frameworks */,
+				A0AF3C92D36C68C1D64BE7D6 /* DocumentsEverywhere in Frameworks */,
+				AD455F75C2D216702A2B62CE /* SurfaceDeck in Frameworks */,
+				76C6A1AD242AA9CD5B90099D /* DesktopNativePower in Frameworks */,
+				31AFEC7DFA568A155997BBC4 /* TrustDesk in Frameworks */,
+				DEA91004D4A50A418656EE6C /* ContextCards in Frameworks */,
+				DD69237B7E59E67A329EA06F /* LocalModelBench in Frameworks */,
+				8D5B9929C2461FEBE0755266 /* DurableSyncLedger in Frameworks */,
+				3C5668CFD762C5B374A3842A /* TactileGrammar in Frameworks */,
+				BD13FCF347A13D74C8BD2E77 /* RespectfulAttention in Frameworks */,
+				8A6729B0DB6FC2773ADD61D0 /* SpeechTimeline in Frameworks */,
+				679EEDEC38DEFE36745AB4C7 /* FindTheThing in Frameworks */,
+				041571FBEDEE6D20DB01B173 /* ShortcutWorkbench in Frameworks */,
+				68EC02016C26F09D53BEA041 /* LabJobs in Frameworks */,
+				208089E6548B04B4FAD2D503 /* RenderThatSurvives in Frameworks */,
+				BB699EEA120C158F2774463A /* ScreeningRoom in Frameworks */,
+				7F3E5776B9B5AA1B581C7932 /* ScreeningRoomPlayback in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -621,6 +666,7 @@
 		32FEB7779EDAF486F7DF9CB9 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				6D47951648A550B74E6D5690 /* QuickLookPreview */,
 				F8C61BABB4107F84427D411E /* ShareExtension */,
 				00D76A0ACEA49E3EA52EB7F3 /* SurfaceWidgets */,
 			);
@@ -734,6 +780,7 @@
 				B62780EE08AE4201D4983F65 /* LabTVUITests.xctest */,
 				6BFE3236126CFD99DB8529EC /* LabWatch.app */,
 				63DF264ABD7CFB4477850DDC /* LabWatchTests.xctest */,
+				8553628FD334E96BFBF76D0D /* QuickLookPreview.appex */,
 				8D8791DE695E10C7EC57F692 /* ShareExtension.appex */,
 				82FD43D87B67084E0C795F37 /* SurfaceWidgets.appex */,
 			);
@@ -808,6 +855,7 @@
 			dependencies = (
 				A4268EFFAD8D1C0F75C304D2 /* PBXTargetDependency */,
 				FC690C80BF1A790921360006 /* PBXTargetDependency */,
+				B55682132F884F3AE9E232B8 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				E3BE00E555188C2418B856DE /* Icon */,
@@ -827,6 +875,7 @@
 				CC0630EDCCDE6FC7F7BF2FBC /* AccessSuperpower */,
 				5138B46379EB0CDA5C7A520B /* PortableObjects */,
 				E71BE15BDC35B0EB85330C6A /* PickUpHere */,
+				0E4C9D44FF07D7969E3AB12A /* DocumentsEverywhere */,
 				3CF19F7CC72BE703FC6929AD /* SurfaceDeck */,
 				C5D34BAE1E274DDF6B129BCC /* TrustDesk */,
 				B07CF76A07881747B6BDDC65 /* ContextCards */,
@@ -876,6 +925,7 @@
 				208ADB6FEE46A094CE66A041 /* ShareIngress */,
 				F9A656A9EA01777E437005A8 /* PortableObjects */,
 				D2925C43D1B2531E485720E6 /* PickUpHere */,
+				909AA41C9765A2E3E64E7982 /* DocumentsEverywhere */,
 				CE841A8FB5E31C78D4112220 /* SurfaceDeck */,
 				799F4CAFFEC3C33B73985488 /* DesktopNativePower */,
 				ED6B5B90B0BE1BD3A5AE104F /* TrustDesk */,
@@ -998,6 +1048,7 @@
 				5879A7CAEDD8078739ABF6D6 /* ShareIngress */,
 				4E31A68F4912B6784D878C4C /* PortableObjects */,
 				9A18EBD4D341D0695E5F8C7B /* PickUpHere */,
+				BA45D7FB429E184A9914E1EE /* DocumentsEverywhere */,
 				C00FE8FBC35881E832DADD27 /* SurfaceDeck */,
 				DAA9D7AA6F4848C5373DE1B3 /* TrustDesk */,
 				2170AE2584F7EF6C7CC11E04 /* ContextCards */,
@@ -1016,6 +1067,29 @@
 			productName = LabPhone;
 			productReference = 28C2C1B8B040DD0D06AF070E /* LabPhone.app */;
 			productType = "com.apple.product-type.application";
+		};
+		A7EBFBB119264CD518B9CC8A /* QuickLookPreview */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AD11BDF2BB2690EEFED6F728 /* Build configuration list for PBXNativeTarget "QuickLookPreview" */;
+			buildPhases = (
+				54608B0BA38965C6889D5BA5 /* Sources */,
+				8DA2C5F91477928051BB684E /* Resources */,
+				417F7B0F94742FAE90AD8619 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				6D47951648A550B74E6D5690 /* QuickLookPreview */,
+			);
+			name = QuickLookPreview;
+			packageProductDependencies = (
+				5BF8C26F06F10FFB0AF1D6CB /* DocumentsEverywhere */,
+			);
+			productName = QuickLookPreview;
+			productReference = 8553628FD334E96BFBF76D0D /* QuickLookPreview.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 		A838D237C540A385D3BD03F8 /* LabTVTests */ = {
 			isa = PBXNativeTarget;
@@ -1164,6 +1238,10 @@
 						DevelopmentTeam = "";
 						ProvisioningStyle = Automatic;
 					};
+					A7EBFBB119264CD518B9CC8A = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+					};
 					A838D237C540A385D3BD03F8 = {
 						DevelopmentTeam = "";
 						ProvisioningStyle = Automatic;
@@ -1207,6 +1285,7 @@
 				30E5D77184963759D2D3494D /* LabPhoneSurfaces */,
 				EC3F7DFE3B8431537C8D22AA /* ShareExtension */,
 				54BD900CBAD2819FFDE15F5F /* SurfaceWidgets */,
+				A7EBFBB119264CD518B9CC8A /* QuickLookPreview */,
 				13A3DB99D4B21A7DD1CAD0F3 /* LabWatch */,
 				40740F5CACD13A555B13F284 /* LabTV */,
 				BB1651A25A6528AE95605E65 /* LabMacTests */,
@@ -1268,6 +1347,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		7F5147168CD1EC1E7C96342F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8DA2C5F91477928051BB684E /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1339,6 +1425,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		518A513F835EB0AAB2193BB5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		54608B0BA38965C6889D5BA5 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1426,6 +1519,11 @@
 			target = EC3F7DFE3B8431537C8D22AA /* ShareExtension */;
 			targetProxy = 30D0E928463CD88AAA186016 /* PBXContainerItemProxy */;
 		};
+		B55682132F884F3AE9E232B8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A7EBFBB119264CD518B9CC8A /* QuickLookPreview */;
+			targetProxy = 3416E420E02C34DD9121C103 /* PBXContainerItemProxy */;
+		};
 		B761125BB26001A14F8595CF /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 13A3DB99D4B21A7DD1CAD0F3 /* LabWatch */;
@@ -1449,6 +1547,26 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		0452500EACD80854705C4D5C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3A7D251E0AD8AD98128FE7C9 /* SystemSurfaces.xcconfig */;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = Extensions/QuickLookPreview/QuickLookPreview.entitlements;
+				INFOPLIST_FILE = Extensions/QuickLookPreview/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(LAB_BUNDLE_PREFIX).nativelab.quicklook";
+				PRODUCT_NAME = QuickLookPreview;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
 		0519F9B621B975CF497473F6 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = BB95D963471D52C06FB3FA80 /* Companions.xcconfig */;
@@ -1825,6 +1943,26 @@
 			};
 			name = Debug;
 		};
+		8C7325B51488FBDA0202D3F9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3A7D251E0AD8AD98128FE7C9 /* SystemSurfaces.xcconfig */;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = Extensions/QuickLookPreview/QuickLookPreview.entitlements;
+				INFOPLIST_FILE = Extensions/QuickLookPreview/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(LAB_BUNDLE_PREFIX).nativelab.quicklook";
+				PRODUCT_NAME = QuickLookPreview;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		99884E0D5A6323A36F38AEDC /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 3A7D251E0AD8AD98128FE7C9 /* SystemSurfaces.xcconfig */;
@@ -2180,6 +2318,15 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
+		AD11BDF2BB2690EEFED6F728 /* Build configuration list for PBXNativeTarget "QuickLookPreview" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0452500EACD80854705C4D5C /* Debug */,
+				8C7325B51488FBDA0202D3F9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
 		ADBA298914D733219B2EE7A2 /* Build configuration list for PBXNativeTarget "LabMacTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -2269,6 +2416,10 @@
 		0D6B57C2990B445E8BC56C3B /* LabDomain */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = LabDomain;
+		};
+		0E4C9D44FF07D7969E3AB12A /* DocumentsEverywhere */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DocumentsEverywhere;
 		};
 		142DDF1CDB91674FC377411B /* TactileGrammar */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -2390,6 +2541,10 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = LabCatalog;
 		};
+		5BF8C26F06F10FFB0AF1D6CB /* DocumentsEverywhere */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DocumentsEverywhere;
+		};
 		5C86286540B38D0B7E0CCAA6 /* RespectfulAttention */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = RespectfulAttention;
@@ -2450,6 +2605,10 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = DurableSyncLedger;
 		};
+		909AA41C9765A2E3E64E7982 /* DocumentsEverywhere */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DocumentsEverywhere;
+		};
 		91013B5B2C9E82183BFB82CB /* ScreeningRoomPlayback */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ScreeningRoomPlayback;
@@ -2493,6 +2652,10 @@
 		B0B980774D943168FEA7065A /* LabSupport */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = LabSupport;
+		};
+		BA45D7FB429E184A9914E1EE /* DocumentsEverywhere */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DocumentsEverywhere;
 		};
 		C00FE8FBC35881E832DADD27 /* SurfaceDeck */ = {
 			isa = XCSwiftPackageProductDependency;

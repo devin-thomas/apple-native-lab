@@ -13,6 +13,7 @@ let package = Package(
         .library(name: "ShareIngress", targets: ["ShareIngress"]),
         .library(name: "PortableObjects", targets: ["PortableObjects"]),
         .library(name: "PickUpHere", targets: ["PickUpHere"]),
+        .library(name: "DocumentsEverywhere", targets: ["DocumentsEverywhere"]),
         .library(name: "SurfaceDeck", targets: ["SurfaceDeck"]),
         .library(name: "ShortcutWorkbench", targets: ["ShortcutWorkbench"]),
         // CORE-012: the journey's fixed values only. A product so that Xcode gives the journey's
@@ -141,6 +142,28 @@ let package = Package(
         .testTarget(
             name: "PickUpHereTests",
             dependencies: ["PickUpHere", .product(name: "LabDomain", package: "LabDomain")]
+        ),
+        // LAB-009 Documents Everywhere: Quick Look previews, the in-app document browser, and the
+        // opt-in local-fixture File Provider model. Depends on PortableObjects for `.anlab` decode
+        // and for adopting a sample through the same importer/receipt path. Never holds the store.
+        .target(
+            name: "DocumentsEverywhere",
+            dependencies: [
+                .product(name: "LabDomain", package: "LabDomain"),
+                "PortableObjects",
+            ],
+            resources: [
+                .copy("Resources/harbor-note.anlab"),
+                .copy("Resources/tide-card.anlab"),
+            ]
+        ),
+        .testTarget(
+            name: "DocumentsEverywhereTests",
+            dependencies: [
+                "DocumentsEverywhere",
+                "PortableObjects",
+                .product(name: "LabDomain", package: "LabDomain"),
+            ]
         ),
         // LAB-004 Surface Deck: the demo session's actions and App Intents over the host's
         // OperationService, the immutable snapshot the app writes for surfaces, and the widget

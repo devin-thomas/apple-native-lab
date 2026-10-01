@@ -168,7 +168,7 @@
       "title": "Documents Everywhere",
       "category": "Sharing",
       "milestone": "M4",
-      "state": "specified",
+      "state": "implemented",
       "dependsOn": [
         "LAB-008"
       ],

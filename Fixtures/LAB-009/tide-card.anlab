@@ -1,0 +1,19 @@
+{
+  "format": "native-lab-object",
+  "schemaVersion": 1,
+  "documentID": "A9000001-0000-4000-8000-000000000002",
+  "kind": "collection-item",
+  "revision": 1,
+  "title": "Tide card",
+  "fields": {
+    "note": "A tiny sample card used only for previews and the local fixture provider."
+  },
+  "provenance": {
+    "origin": "bundled-fixture",
+    "sourceID": "documents-everywhere-tide-card"
+  },
+  "attachments": [],
+  "extras": {
+    "fixture": "LAB-009"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "format": "native-lab-object",
+  "schemaVersion": 99,
+  "documentID": "A9000001-0000-4000-8000-000000000099",
+  "kind": "collection-item",
+  "revision": 1,
+  "title": "Future schema",
+  "fields": {
+    "note": "Refused because the schema is newer."
+  },
+  "attachments": []
+}

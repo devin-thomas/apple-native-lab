@@ -33,6 +33,8 @@ enum SidebarDestination: Hashable {
     case pickUpHere
     /// LAB-002: one sample on screen, and the decision to set it aside.
     case contextCards
+    /// LAB-009: browse sample documents and previews without the File Provider.
+    case documentsEverywhere
     /// LAB-004: the demo session, its receipts, and the widget and Control previews.
     case surfaceDeck
     /// LAB-042: command palette, notes, and menu-bar status. Mac only.
@@ -70,6 +72,7 @@ enum SidebarDestination: Hashable {
         case .trustDesk: TrustDeskExperiment.title
         case .pickUpHere: "Pick Up Here"
         case .contextCards: ContextCards.title
+        case .documentsEverywhere: "Documents Everywhere"
         case .surfaceDeck: SurfaceDeck.title
         case .desktopPower: "Desktop Native Power"
         case .localModelBench: LocalModelBenchExperiment.title
@@ -98,6 +101,7 @@ enum SidebarDestination: Hashable {
         case .trustDesk: "trust-desk"
         case .pickUpHere: "pick-up-here"
         case .contextCards: "context-cards"
+        case .documentsEverywhere: "documents-everywhere"
         case .surfaceDeck: "surface-deck"
         case .desktopPower: "desktop-power"
         case .localModelBench: "local-model-bench"
@@ -129,6 +133,7 @@ enum SidebarDestination: Hashable {
         case ("trust-desk", nil): self = .trustDesk
         case ("pick-up-here", nil): self = .pickUpHere
         case ("context-cards", nil): self = .contextCards
+        case ("documents-everywhere", nil): self = .documentsEverywhere
         case ("surface-deck", nil): self = .surfaceDeck
         case ("desktop-power", nil): self = .desktopPower
         case ("local-model-bench", nil): self = .localModelBench
@@ -186,6 +191,8 @@ final class MainWindowState {
     let finder = FindTheThingSession()
     /// LAB-003: selected recipe in the workbench list.
     var workbenchRecipeID: RecipeID?
+    /// LAB-009: sample documents, previews, and adopt-into-lab.
+    let documentsEverywhere = DocumentsEverywhereSession()
     var searchText = ""
     /// Incremented to ask the window to focus its search field.
     var searchRequests = 0

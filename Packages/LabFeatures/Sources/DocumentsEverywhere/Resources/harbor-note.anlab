@@ -1,0 +1,19 @@
+{
+  "format": "native-lab-object",
+  "schemaVersion": 1,
+  "documentID": "A9000001-0000-4000-8000-000000000001",
+  "kind": "collection-item",
+  "revision": 1,
+  "title": "Harbor note",
+  "fields": {
+    "note": "A short fictional berth log for the document browser."
+  },
+  "provenance": {
+    "origin": "bundled-fixture",
+    "sourceID": "documents-everywhere-harbor-note"
+  },
+  "attachments": [],
+  "extras": {
+    "fixture": "LAB-009"
+  }
+}

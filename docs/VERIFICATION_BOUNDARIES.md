@@ -254,3 +254,12 @@ Recorded at [LAB-031-A](../tickets/LAB-031-A.md). Read on 2026-09-30 from the AV
 | [S41](SOURCE_INDEX.md#s41) | `AVRoutePickerView`; `AVPlayer.allowsExternalPlayback` and `isExternalPlaybackActive` | The picker: macOS 10.15, iOS 11.0, tvOS 11.0, unavailable on watchOS and visionOS. The player properties: macOS 10.11, iOS 6.0, tvOS 9.0 | Compiled into the Mac and iPhone pages | An AirPlay receiver was never chosen |
 | — | `MPRemoteCommandCenter` (play, pause, toggle, skip with `preferredIntervals`, change position) and `MPNowPlayingInfoCenter` (`nowPlayingInfo`, and `playbackState` on the Mac) | iOS 7.1 and 5.0, macOS 10.12.2, tvOS 7.1 and 5.0, watchOS 5.0 | Compiled into the Mac and iPhone hosts; the tests turn it off so they never register remote commands | Control Center, the Lock Screen, headphones, and media keys were not used |
 
+### Documents Everywhere (LAB-009)
+
+Recorded at [LAB-009-A](../tickets/LAB-009-A.md). Document Quick Look is distinct from AR Quick Look ([S22](SOURCE_INDEX.md#s22)). No File Provider domain is registered in this build. Nothing here has run on a physical device.
+
+| Source | Installed symbol | Declared availability | Demonstrated | Remaining uncertainty |
+|---|---|---|---|---|
+| — (document Quick Look; not AR [S22](SOURCE_INDEX.md#s22)) | `QLPreviewProvider`, `QLPreviewingController.providePreview(for:completionHandler:)`, `QLPreviewReply(dataOfContentType:contentSize:dataCreationBlock:)`, `QLFilePreviewRequest.fileURL` | iOS 15.0, macOS 12.0; unavailable on watchOS and tvOS | Compiled into `QuickLookPreview` (SystemSurfaces). Package tests build the same HTML via `DocumentPreviewBuilder` with the provider disabled | Finder/Files Quick Look on a device; Mac Quick Look extension (no LabMacSurfaces host yet) |
+| [S14](SOURCE_INDEX.md#s14) | `NSFileProviderReplicatedExtension`, `NSFileProviderItemVersion(contentVersion:metadataVersion:)`, `NSFileProviderManager` domain APIs | File Provider v3+ (iOS 16 / macOS 13 family and later in the installed headers) | Lab-owned `DocumentRevision` and `ProviderSession` mirror content/metadata versions and disconnect/eviction without deleting authority (`DocumentsEverywhereTests`). Extension sources exist under `Extensions/DocumentsProvider/`; no FrontierOptional host embeds them yet | Live domain add/remove, materialization, and a qualified FrontierOptional build |
+

@@ -29,6 +29,20 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
+               BlueprintIdentifier = "A7EBFBB119264CD518B9CC8A"
+               BuildableName = "QuickLookPreview.appex"
+               BlueprintName = "QuickLookPreview"
+               ReferencedContainer = "container:AppleNativeLab.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
                BlueprintIdentifier = "EC3F7DFE3B8431537C8D22AA"
                BuildableName = "ShareExtension.appex"
                BlueprintName = "ShareExtension"

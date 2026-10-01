@@ -63,6 +63,7 @@ struct MainWindow: View {
         .environment(window)
         .environment(\.openPortableObjects, OpenPortableObjectsAction(window: ObjectIdentifier(window)) { window.destination = .portableObjects })
         .pickUpContinuation(session: window.pickUp, library: library) { window.destination = .pickUpHere }
+        .environment(\.openDocumentsEverywhere, OpenDocumentsEverywhereAction(window: ObjectIdentifier(window)) { window.destination = .documentsEverywhere })
         .onChange(of: window.searchRequests) { focusedPane = .search }
         .onChange(of: window.destination) { old, new in
             if (old == .collection) != (new == .collection) { window.searchText = "" }
@@ -101,6 +102,8 @@ struct MainWindow: View {
             PickUpListColumn(window: window)
         case .contextCards:
             ContextCardsListColumn(window: window)
+        case .documentsEverywhere:
+            DocumentsEverywhereListColumn(window: window)
         case .surfaceDeck:
             SurfaceDeckListColumn(window: window)
         case .desktopPower:
@@ -157,6 +160,8 @@ struct MainWindow: View {
             PickUpDetailColumn(window: window)
         case .contextCards:
             ContextCardsDetailColumn()
+        case .documentsEverywhere:
+            DocumentsEverywhereDetailColumn(window: window)
         case .surfaceDeck:
             SurfaceDeckDetailColumn()
         case .desktopPower:
@@ -215,6 +220,7 @@ struct MainWindow: View {
         case .tactileGrammar: "Search cues"
         case .pointInspect: "Search the record"
         case .findTheThing: "Search records"
+        case .documentsEverywhere: "Search samples"
         default: "Search experiments"
         }
     }

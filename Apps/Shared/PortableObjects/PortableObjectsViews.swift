@@ -548,6 +548,7 @@ extension EnvironmentValues {
 struct ExperimentModuleAction: View {
     let experimentID: String
     @Environment(\.openPortableObjects) private var openPortableObjects
+    @Environment(\.openDocumentsEverywhere) private var openDocumentsEverywhere
 
     var body: some View {
         if experimentID == PortableObjectsModule.experimentID {
@@ -595,6 +596,29 @@ struct ExperimentModuleAction: View {
             .buttonStyle(.bordered)
             .controlSize(.large)
             .help("Show Shortcut Workbench in this window (⌥⌘8)")
+            #endif
+        } else if experimentID == DocumentsEverywhereModule.experimentID {
+            #if os(iOS)
+            NavigationLink {
+                DocumentsEverywhereScreen()
+            } label: {
+                Label("Open Documents Everywhere", systemImage: "doc.text.magnifyingglass")
+                    .frame(maxWidth: .infinity)
+            }
+            .buttonStyle(.bordered)
+            .controlSize(.large)
+            .accessibilityHint("Browse sample documents and previews without the File Provider.")
+            #else
+            if let openDocumentsEverywhere {
+                Button {
+                    openDocumentsEverywhere()
+                } label: {
+                    Label("Open Documents Everywhere", systemImage: "doc.text.magnifyingglass")
+                }
+                .buttonStyle(.bordered)
+                .controlSize(.large)
+                .help("Show Documents Everywhere in this window (⌃⌘2)")
+            }
             #endif
         }
     }

@@ -111,6 +111,8 @@ link         SystemSurfaces ios  AVFAudio            # host variant: Speech Time
 # links WidgetKit.
 link         SystemSurfaces ios  WidgetKit           # the widget and Controls; the host variant's reloadTimelines and reloadControls
 link         SystemSurfaces ios  _AppIntents_SwiftUI # the widget's Toggle(isOn:intent:); the host's Context Cards snippets (LAB-002)
+link         SystemSurfaces ios  QuickLook           # LAB-009 Quick Look preview extension for .anlab (no File Provider)
+link         SystemSurfaces ios  QuickLookSupport    # QLPreviewProvider / QLPreviewReply on iOS
 
 # CoreLocal: Tactile Grammar (LAB-030). Core Haptics and GameController are linked only by the hosts
 # that play cues. No entitlement: capability is read from the device, and a missing actuator falls back.

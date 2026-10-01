@@ -91,6 +91,9 @@ struct LabCommands: Commands {
             Button(ScreeningRoom.title) { window?.destination = .screeningRoom }
                 .keyboardShortcut("1", modifiers: [.command, .control])
                 .disabled(window == nil)
+            Button("Documents Everywhere") { window?.destination = .documentsEverywhere }
+                .keyboardShortcut("2", modifiers: [.command, .control])
+                .disabled(window == nil)
             Button(DesktopCommand.showPalette.title) { desktop.showsPalette = true }
                 .keyboardShortcut("k", modifiers: .command)
             Button(DesktopCommand.showStatus.title) {

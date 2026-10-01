@@ -1,11 +1,11 @@
 ---
 id: "LAB-009"
 title: "Documents Everywhere"
-state: "specified"
+state: "implemented"
 milestone: "M4"
 category: "Sharing"
 depends_on: ["LAB-008"]
-source_review: "2026-09-29"
+source_review: "2026-09-30"
 ---
 
 # LAB-009 — Documents Everywhere
@@ -55,6 +55,24 @@ A fixture replay is labeled as a replay. It can prove the domain/UI contract but
 ## Build ownership
 
 Proposed module: `Packages/LabFeatures/documents-everywhere/`, with native adapters only in supported hosts/extensions. Shared operations and imported document structures belong in the domain/store packages rather than a view. Record any narrower module split during implementation.
+
+Implemented split (LAB-009-A):
+
+- `Packages/LabFeatures/Sources/DocumentsEverywhere/`: `ProviderItem`, `DocumentRevision`, `RevisionRules`, `ProviderSession` (connect / disconnect / eviction without deleting authority), `SampleCatalog` and bundled fixtures, `DocumentPreviewBuilder` (shared by Quick Look and the browser), and `SampleAdopter` (adopts through `PortableObjectsImporter` and the operation service). Depends on LabDomain and PortableObjects; never holds the store.
+- `Apps/Shared/DocumentsEverywhere/` and `Apps/Mac/Window/DocumentsEverywhereColumns.swift`: the document browser. Mac: sidebar and View › Documents Everywhere (⌃⌘2). iPhone: catalog page Open Documents Everywhere.
+- `Extensions/QuickLookPreview/`: SystemSurfaces Quick Look preview embedded in `LabPhoneSurfaces`. Uses the same preview builder; needs no File Provider.
+- `Extensions/DocumentsProvider/`: local-fixture File Provider sources. FrontierOptional; not attached to a scheme in this ticket — the host keeps the provider disabled. Domain tests cover disconnect and eviction.
+- `Fixtures/LAB-009/`: original samples and hostile inputs.
+
+## Implementation notes (LAB-009-A)
+
+Observed with Xcode 27.0 and the 27.0 SDKs. These are package and simulator facts, not device proof.
+
+- `QLPreviewProvider` / `QLPreviewingController.providePreview(for:completionHandler:)` and `QLPreviewReply(dataOfContentType:contentSize:dataCreationBlock:)` are iOS 15 / macOS 12, under the 26 floor. The preview extension is embedded only in SystemSurfaces (`LabPhoneSurfaces`).
+- `DocumentPreviewBuilder` produces plain text and HTML from `.anlab` bytes without any provider session. The in-app browser on CoreLocal Mac and iPhone uses it as the declared fallback.
+- `NSFileProviderReplicatedExtension` and `NSFileProviderItemVersion` (content + metadata) informed `DocumentRevision`. The live provider is not activated: `ProviderSession` starts `.disabled`, and Activate Sample Provider… is disabled in the UI.
+- Adopting a sample stages and commits through Portable Objects' importer, so receipts join the same authorization path as LAB-008 imports.
+- S22 in the source index names AR Quick Look; this experiment uses document Quick Look (`QLPreviewProvider`), not USDZ/AR. Recorded in the installed SDK ledger.
 
 ## Delivery
 
