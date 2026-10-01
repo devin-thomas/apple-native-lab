@@ -61,3 +61,38 @@ import Testing
         #expect(items[0].note.value.contains("green and blue"))
     }
 }
+
+/// Complete fallback through the host session on a fresh store. No window or file dialog is driven.
+@MainActor
+@Suite struct PointInspectQualificationHostTests {
+    @Test func fixtureFieldsCommitAndResetPreservesTheRecord() async throws {
+        let folder = FileManager.default.temporaryDirectory.appending(path: "PointInspectQualification-\(UUID().uuidString)")
+        try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: folder) }
+        let library = LabLibrary(locateStore: { folder.appending(path: LabStoreLocation.fileName) })
+        await library.start()
+        try #require(library.phase == .ready)
+        let session = PointInspectSession()
+        session.prepare(library: library)
+        session.replayFixture()
+        #expect(session.status.contains("Fixture replay"))
+        let before = library.receipts.count
+        session.title = "Original swatch"
+        session.body = "Green and blue, typed by the reviewer"
+        await session.useFields()
+        #expect(session.badge == "Manual fields (not a model)")
+        #expect(library.receipts.count == before)
+        await session.apply()
+        #expect(session.status.hasPrefix("Saved in Inspections"))
+        #expect(library.receipts.count == before + 2)
+        let service = try await library.openedService()
+        let filter = try ItemFilter(collectionID: PointInspect.collectionID, includeArchived: false, limit: 20)
+        let saved = try await service.items(filter, as: LabDataService.appUI)
+        try #require(saved.count == 1)
+        #expect(saved[0].namespace == .user)
+        #expect(saved[0].note.value.contains("5878b4eb086241d408b0ab74bcb3d48c42b035fa93d1766b5d3a43ee9f4a7105"))
+        #expect(await library.resetDemo() != nil)
+        let after = try await service.items(filter, as: LabDataService.appUI)
+        #expect(after == saved)
+    }
+}
