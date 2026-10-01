@@ -1,5 +1,6 @@
 import LabDomain
 import PortableObjects
+import ShortcutWorkbench
 import SwiftUI
 import UniformTypeIdentifiers
 
@@ -571,6 +572,27 @@ struct ExperimentModuleAction: View {
                 .controlSize(.large)
                 .help("Show Portable Objects in this window (⌘8)")
             }
+            #endif
+        } else if experimentID == ShortcutWorkbench.experimentID {
+            #if os(iOS)
+            NavigationLink {
+                ShortcutWorkbenchPage()
+            } label: {
+                Label("Open \(ShortcutWorkbench.title)", systemImage: ShortcutWorkbench.symbol)
+                    .frame(maxWidth: .infinity)
+            }
+            .buttonStyle(.bordered)
+            .controlSize(.large)
+            .accessibilityHint("Curated recipes and manual instructions; no secret storage in Shortcuts.")
+            #else
+            Button {
+                ShortcutWorkbenchModel.shared.requestOpen()
+            } label: {
+                Label("Open \(ShortcutWorkbench.title)", systemImage: ShortcutWorkbench.symbol)
+            }
+            .buttonStyle(.bordered)
+            .controlSize(.large)
+            .help("Show Shortcut Workbench in this window (⌘9)")
             #endif
         }
     }

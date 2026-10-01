@@ -256,9 +256,14 @@ import Testing
             "CreateCollectionIntent", "CreateItemIntent", "FindItemsIntent", "GetItemIntent",
             "UpdateItemIntent", "ArchiveItemIntent", "RestoreItemIntent", "ExportItemIntent",
         ])
-        // LAB-004 Surface Deck's toggle, read, and launch action join them, and nothing else does.
+        // LAB-004 Surface Deck's toggle, read, and launch action join them.
         #expect(intents(from: "SurfaceDeck") == ["SetDemoSessionIntent", "GetDemoSessionIntent", "OpenSurfaceDeckIntent"])
-        #expect(actions.count == 11)
+        // LAB-003 Shortcut Workbench curated entries.
+        #expect(intents(from: "ShortcutWorkbench") == [
+            "OpenShortcutWorkbenchIntent", "RunImportExportRecipeIntent", "ResolveLabItemIntent",
+            "InspectModelStepIntent", "ExportRecipeIntent",
+        ])
+        #expect(actions.count == 16)
         let entities = try #require(metadata["entities"] as? [String: Any])
         #expect(Set(entities.keys) == ["LabItemEntity", "LabCollectionEntity"])
         let queries = try #require(metadata["queries"] as? [String: Any])

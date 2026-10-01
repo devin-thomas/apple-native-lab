@@ -34,6 +34,7 @@ struct ExperimentDetailView: View {
                 header
                 AccessSuperpowerLaunch(experiment: experiment)
                 SurfaceDeckLaunch(experiment: experiment)
+                ShortcutWorkbenchLaunch(experiment: experiment)
                 Text(experiment.moment)
                     .font(.title3)
                     .fixedSize(horizontal: false, vertical: true)

@@ -3,6 +3,7 @@ import LabDomain
 import LabSupport
 import Observation
 import ShareIngress
+import ShortcutWorkbench
 import SurfaceDeck
 import SwiftUI
 import TypedIntelligence
@@ -22,6 +23,8 @@ enum SidebarDestination: Hashable {
     case portableObjects
     /// LAB-004: the demo session, its receipts, and the widget and Control previews.
     case surfaceDeck
+    /// LAB-003: curated App Shortcuts, recipes, and the manual fallback.
+    case shortcutWorkbench
     case catalog(CatalogScope)
 
     var title: String {
@@ -33,6 +36,7 @@ enum SidebarDestination: Hashable {
         case .shareInbox: "Share Inbox"
         case .portableObjects: "Portable Objects"
         case .surfaceDeck: SurfaceDeck.title
+        case .shortcutWorkbench: ShortcutWorkbench.title
         case .catalog(let scope): scope.title
         }
     }
@@ -47,6 +51,7 @@ enum SidebarDestination: Hashable {
         case .shareInbox: "share-inbox"
         case .portableObjects: "portable-objects"
         case .surfaceDeck: "surface-deck"
+        case .shortcutWorkbench: "shortcut-workbench"
         case .catalog(.all): "all"
         case .catalog(.milestone(let milestone)): "milestone:\(milestone.rawValue)"
         case .catalog(.category(let category)): "category:\(category)"
@@ -64,6 +69,7 @@ enum SidebarDestination: Hashable {
         case ("share-inbox", nil): self = .shareInbox
         case ("portable-objects", nil): self = .portableObjects
         case ("surface-deck", nil): self = .surfaceDeck
+        case ("shortcut-workbench", nil): self = .shortcutWorkbench
         case ("all", nil): self = .catalog(.all)
         case ("milestone", let raw?): guard let milestone = Milestone(rawValue: raw) else { return nil }
             self = .catalog(.milestone(milestone))
@@ -93,6 +99,8 @@ final class MainWindowState {
     var inboxEntry: InboxEntry.ID?
     /// LAB-008: this window's objects, selection, and import under review.
     let portableObjects = PortableObjectsSession()
+    /// LAB-003: selected recipe in the workbench list.
+    var workbenchRecipeID: RecipeID?
     var searchText = ""
     /// Incremented to ask the window to focus its search field.
     var searchRequests = 0

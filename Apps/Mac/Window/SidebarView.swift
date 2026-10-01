@@ -1,5 +1,6 @@
 import LabCatalog
 import LabSupport
+import ShortcutWorkbench
 import SurfaceDeck
 import SwiftUI
 
@@ -39,6 +40,9 @@ struct SidebarView: View {
                 Label(SurfaceDeck.title, systemImage: SurfaceDeck.symbol)
                     .tag(SidebarDestination.surfaceDeck)
                     .accessibilityHint("The demo session, its receipts, and previews of its widget and Control")
+                Label(ShortcutWorkbench.title, systemImage: ShortcutWorkbench.symbol)
+                    .tag(SidebarDestination.shortcutWorkbench)
+                    .accessibilityHint("Curated recipes and manual instructions; no secret storage in Shortcuts")
             }
             Section("Experiments") {
                 row(.all, symbol: "square.grid.2x2")
