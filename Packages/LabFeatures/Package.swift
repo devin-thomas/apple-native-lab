@@ -15,6 +15,7 @@ let package = Package(
         // CORE-012: the journey's fixed values only. A product so that Xcode gives the journey's
         // tests a scheme, as every module's scheme holds its own tests. No host links it.
         .library(name: "FirstJourney", targets: ["FirstJourney"]),
+        .library(name: "DesktopNativePower", targets: ["DesktopNativePower"]),
     ],
     dependencies: [
         .package(path: "../LabSupport"),
@@ -123,6 +124,20 @@ let package = Package(
                 .product(name: "LabDomain", package: "LabDomain"),
                 .product(name: "LabStaging", package: "LabStaging"),
                 .product(name: "LabSupport", package: "LabSupport"),
+            ]
+        ),
+        // LAB-042 Desktop Native Power: command palette, documents that outlive their windows,
+        // a Services-style text import, and one allowlisted command. Mac-only scenes stay in the host.
+        .target(
+            name: "DesktopNativePower",
+            dependencies: [.product(name: "LabDomain", package: "LabDomain")],
+            resources: [.copy("Resources/sample-desk-note.txt")]
+        ),
+        .testTarget(
+            name: "DesktopNativePowerTests",
+            dependencies: [
+                "DesktopNativePower",
+                .product(name: "LabDomain", package: "LabDomain"),
             ]
         ),
     ]

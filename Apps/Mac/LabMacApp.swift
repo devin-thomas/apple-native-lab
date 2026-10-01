@@ -4,6 +4,7 @@ import SwiftUI
 struct LabMacApp: App {
     @State private var model = LabModel()
     @State private var library: LabLibrary
+    @State private var desktop: DesktopPowerSession
 
     init() {
         let library = LabLibrary()
@@ -11,18 +12,32 @@ struct LabMacApp: App {
         // App Intents use this same library, so their receipts join this session's list.
         ActionAtlasHost.connect(library)
         SurfaceDeckHost.connect(library)
+        let desktop = DesktopPowerHost.connect(library)
+        _desktop = State(initialValue: desktop)
     }
 
     var body: some Scene {
         WindowGroup("Native Lab", id: "catalog") {
             MainWindow(model: model)
                 .environment(library)
+                .environment(desktop)
                 .frame(minWidth: 900, minHeight: 560)
         }
         .defaultSize(width: 1280, height: 800)
         .windowToolbarStyle(.unified)
         .commands {
-            LabCommands(library: library)
+            LabCommands(library: library, desktop: desktop)
+        }
+
+        MenuBarExtra("Desktop Native Power", systemImage: "macwindow") {
+            DesktopMenuBarMenu(session: desktop)
+        }
+
+        WindowGroup("Desktop Note", id: "desktop-document", for: String.self) { documentID in
+            DesktopDocumentWindow(documentID: documentID.wrappedValue)
+                .environment(library)
+                .environment(desktop)
+                .frame(minWidth: 360, minHeight: 240)
         }
 
         // One Readiness window; its shortcut also appears in the Window menu.

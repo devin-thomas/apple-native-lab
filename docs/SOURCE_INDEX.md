@@ -425,6 +425,8 @@ Use in this plan: Native scene, document, and material evolution.
 
 Implementation evidence required: actual SDK symbol/availability, permissions or entitlement, and a named compile/device result.
 
+Installed SDK check (2026-09-30, Xcode 27.0 with the macOS 27.0 SDK): `MenuBarExtra` and `WindowGroup(id:for:content:)` availability are in the [installed SDK ledger](VERIFICATION_BOUNDARIES.md#desktop-scenes-and-services-lab-042). Desktop Native Power compiles them into the Mac host. No menu, document window, or menu-bar item was used from a running app, and none of this ran on a device.
+
 ## S39
 
 **MIT license reference** — reviewed
@@ -614,6 +616,8 @@ Source: [AppKit](https://developer.apple.com/documentation/appkit)
 Use in this plan: Desktop document, services, and scripting reference.
 
 Implementation evidence required: actual SDK symbol/availability, permissions or entitlement, and a named compile/device result.
+
+Installed SDK check (2026-09-30, Xcode 27.0 with the macOS 27.0 SDK): `NSApplication.servicesProvider` is in the [installed SDK ledger](VERIFICATION_BOUNDARIES.md#desktop-scenes-and-services-lab-042). The Services item is an Info.plist declaration. The system Services menu was not invoked, and this did not run on a device.
 
 ## S58
 

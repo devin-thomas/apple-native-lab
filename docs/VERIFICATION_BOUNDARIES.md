@@ -103,3 +103,13 @@ Recorded at [LAB-004-B](../tickets/LAB-004-B.md) from the [LAB-004-A](../tickets
 | [S59](SOURCE_INDEX.md#s59) | `Toggle(isOn:intent:label:)` in `_AppIntents_SwiftUI`, which the widget extension links | iOS 17.0, macOS 14.0, tvOS 17.0, watchOS 10.0 | The widget's toggle in the simulator. The release manifest records the link (LAB-004-A) | None beyond the widget's own |
 | [S59](SOURCE_INDEX.md#s59) | `View.privacySensitive(_:)` and `RedactionReasons.privacy` | iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0 | Drawn with the privacy redaction in a package test and read back by text recognition: the detail line is gone and the state stays readable. The deck's "Lock Screen, locked" preview uses the same redaction | That the system applies it to this widget on a locked device |
 
+### Desktop scenes and Services (LAB-042)
+
+Recorded at [LAB-042-A](../tickets/LAB-042-A.md). The symbols were read on 2026-09-30 from the macOS 27.0 SDK in Xcode 27.0 (27A266a): SwiftUI's `arm64e-apple-macos.swiftinterface`, and `NSApplication.h`. No new entitlement. The file dialog uses the user-selected file access LabMac already has. Nothing here was used from a running menu, a Services menu, or a device. The package tests are the LAB-042-A rows in [BUILD_STATUS](BUILD_STATUS.md).
+
+| Source | Installed symbol | Declared availability | Demonstrated | Remaining uncertainty |
+|---|---|---|---|---|
+| [S38](SOURCE_INDEX.md#s38) | `MenuBarExtra` | macOS 13.0; unavailable on iOS, watchOS, tvOS, and visionOS | Compiled into LabMac-Core. Package tests cover the status sentence, which quotes counts only | A running menu-bar item |
+| [S38](SOURCE_INDEX.md#s38) | `WindowGroup.init(id:for:content:)` | iOS 16.0, macOS 13.0; unavailable on watchOS and tvOS | Compiled into LabMac-Core. Package tests close windows without dropping the document, and a restored snapshot does not open a private note | A running document window |
+| [S57](SOURCE_INDEX.md#s57) | `NSApplication.servicesProvider` on `NSApplication(NSServicesHandling)` | No availability macro on that declaration | The Mac Info.plist declares `NSServices` with message `importSelectedText` and send type `public.utf8-plain-text`. Package tests import selected text through the station. The provider is installed when the main window appears | Whether the installed app's Services item appears and delivers the pasteboard |
+

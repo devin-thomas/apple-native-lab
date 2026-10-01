@@ -30,6 +30,24 @@
 	<string>$(LAB_BUNDLE_PREFIX).nativelab.object</string>
 	<key>LabSourceRevision</key>
 	<string>$(LAB_SOURCE_REVISION)</string>
+	<key>NSServices</key>
+	<array>
+		<dict>
+			<key>NSMenuItem</key>
+			<dict>
+				<key>default</key>
+				<string>Import Selected Text into Native Lab</string>
+			</dict>
+			<key>NSMessage</key>
+			<string>importSelectedText</string>
+			<key>NSPortName</key>
+			<string>Native Lab</string>
+			<key>NSSendTypes</key>
+			<array>
+				<string>public.utf8-plain-text</string>
+			</array>
+		</dict>
+	</array>
 	<key>UTExportedTypeDeclarations</key>
 	<array>
 		<dict>

@@ -90,6 +90,9 @@ targets:
       # LAB-004 Surface Deck: the demo session's deck, its intents, and the in-app widget previews.
       - package: LabFeatures
         product: SurfaceDeck
+      # LAB-042 Desktop Native Power: Mac command palette, documents, and the allowlisted intent.
+      - package: LabFeatures
+        product: DesktopNativePower
     info:
       path: Apps/Mac/Info.plist
       properties:
@@ -103,6 +106,14 @@ targets:
         LabDistributionLane: $(LAB_DISTRIBUTION_LANE)
         # LAB-008: the lab object type, named from the bundle prefix. Code reads the key, never the prefix.
         LabObjectTypeIdentifier: $(LAB_BUNDLE_PREFIX).nativelab.object
+        # LAB-042: Services menu item for selected text. The handler imports the string; it does not run it.
+        NSServices:
+          - NSMenuItem:
+              default: Import Selected Text into Native Lab
+            NSMessage: importSelectedText
+            NSPortName: Native Lab
+            NSSendTypes:
+              - public.utf8-plain-text
         UTExportedTypeDeclarations:
           - UTTypeIdentifier: $(LAB_BUNDLE_PREFIX).nativelab.object
             UTTypeDescription: Native Lab Object

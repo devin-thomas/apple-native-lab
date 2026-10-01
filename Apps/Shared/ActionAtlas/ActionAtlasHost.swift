@@ -2,12 +2,22 @@ import ActionAtlas
 import AppIntents
 import LabDomain
 import SurfaceDeck
+#if os(macOS)
+import DesktopNativePower
+#endif
 
 /// Includes Action Atlas's App Intents, entities, and queries in this app's App Intents metadata,
-/// and Surface Deck's toggle and launch action (LAB-004). The intents live in package targets;
+/// and Surface Deck's toggle and launch action (LAB-004). On the Mac it also includes Desktop
+/// Native Power's one allowlisted command (LAB-042). The intents live in package targets;
 /// Xcode extracts them into the host.
 struct NativeLabIntentsPackage: AppIntentsPackage {
-    static var includedPackages: [any AppIntentsPackage.Type] { [ActionAtlasIntentsPackage.self, SurfaceDeckIntentsPackage.self] }
+    static var includedPackages: [any AppIntentsPackage.Type] {
+        #if os(macOS)
+        [ActionAtlasIntentsPackage.self, SurfaceDeckIntentsPackage.self, DesktopNativePowerIntentsPackage.self]
+        #else
+        [ActionAtlasIntentsPackage.self, SurfaceDeckIntentsPackage.self]
+        #endif
+    }
 }
 
 /// Connects App Intents to this host's store.

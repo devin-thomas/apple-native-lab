@@ -49,6 +49,7 @@
 		7FCD81C07A37C7401F6D675C /* intelligence-ambiguous-note.txt in Resources */ = {isa = PBXBuildFile; fileRef = AE4F4AB8C2CC86E0A0AF350A /* intelligence-ambiguous-note.txt */; };
 		811E4F2E9F9F36796576B37D /* intelligence-injected-note.txt in Resources */ = {isa = PBXBuildFile; fileRef = D89DA08F5504526396A194FA /* intelligence-injected-note.txt */; };
 		8241A9AE0973790DCD57EE24 /* ShareIngress in Frameworks */ = {isa = PBXBuildFile; productRef = C0E3086832C7401036381F13 /* ShareIngress */; };
+		85AB9FBA224F864273906840 /* DesktopNativePower in Frameworks */ = {isa = PBXBuildFile; productRef = 799F4CAFFEC3C33B73985488 /* DesktopNativePower */; };
 		89E214F72A8F8E59C59B440C /* AccessSuperpower in Frameworks */ = {isa = PBXBuildFile; productRef = CC0630EDCCDE6FC7F7BF2FBC /* AccessSuperpower */; };
 		8FDE617CDA6BA219C4DA965D /* LabCatalog in Frameworks */ = {isa = PBXBuildFile; productRef = 59FA911654D48713C53F9816 /* LabCatalog */; };
 		96EA540221683FF1A975546B /* LabSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 9429B9706DB8D93A799FDA9F /* LabSupport */; };
@@ -471,6 +472,7 @@
 				526F4C3176A2E25CFBA613A9 /* ShareIngress in Frameworks */,
 				29496A5626839FD3F7D5287D /* PortableObjects in Frameworks */,
 				7BC2B01F79C7BDAE1AA50AC5 /* SurfaceDeck in Frameworks */,
+				85AB9FBA224F864273906840 /* DesktopNativePower in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -718,6 +720,7 @@
 				208ADB6FEE46A094CE66A041 /* ShareIngress */,
 				F9A656A9EA01777E437005A8 /* PortableObjects */,
 				CE841A8FB5E31C78D4112220 /* SurfaceDeck */,
+				799F4CAFFEC3C33B73985488 /* DesktopNativePower */,
 			);
 			productName = LabMac;
 			productReference = 2F62DB7E020E6BFDAC86BD42 /* LabMac.app */;
@@ -2092,6 +2095,10 @@
 		76F28CA76CDDB3E1BD522DA9 /* TypedIntelligence */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = TypedIntelligence;
+		};
+		799F4CAFFEC3C33B73985488 /* DesktopNativePower */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DesktopNativePower;
 		};
 		7EC14A55645358F739F46AC7 /* ActionAtlas */ = {
 			isa = XCSwiftPackageProductDependency;
