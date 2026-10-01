@@ -480,3 +480,7 @@ LAB-009-B reviewed `DocumentsEverywhereViews.swift` and `DocumentsEverywhereColu
 | E3 Duplicate and reset | Refusal is heard; Reset Demo preserves adopted user data | not-run | not-run | not-run |
 
 **Static findings, still open:** native labeled buttons and picker, combined sample rows, selectable text, and a preview heading are present. The sample row's accessibility label retains middle dots; Add Sample to Lab has no Mac menu command; outcomes do not post `LabAnnouncement`; the iPhone Actions section follows a potentially long preview instead of pinning the primary action; Quick Look HTML uses fixed foreground colors. The provider-disabled explanation is visible independently of the disabled activation control. These findings prevent a release accessibility claim. No screenshot or audit was produced.
+
+## Pick Up Here qualification (LAB-016-B)
+
+Static source review only, 2026-10-01. `PickUpActions`, `PickUpIncoming`, and `PickUpEditor` use native buttons, labeled text fields, a labeled section picker, and explicit accessibility hints. The phone draft button adds the selected trait. The Mac navigation menu exposes ⌥⌘1. No pointer or assistive-technology interaction was run. Individual actions have no Mac menu commands; the decision sentence is repeated in the action and incoming areas and may be announced twice. Manual VoiceOver, Voice Control, Full Keyboard Access, large text, reduced motion, and iPad layout remain not-run. See the [walkthrough](walkthroughs/LAB-016-pick-up-here.md).
