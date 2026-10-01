@@ -67,6 +67,14 @@ Observed with Xcode 27.0 and the macOS 27.0 SDK, read on research. These are pac
 - Closing a window removes the window. The document and its lab item stay. A private note can be open in the session that imported it. Its id is left out of the scene storage key, and a restored snapshot that names it does not open it.
 - Reset Fixture Notes removes the uncommitted fixture preview only.
 
+## Qualification notes (LAB-042-B)
+
+The experiment stays `implemented`. [Qualification](../tickets/LAB-042-B.md), [evidence](../evidence/LAB-042/), and the [walkthrough](../docs/walkthroughs/LAB-042-desktop-native-power.md) distinguish package and Mac hosted adapter fixtures from system interaction. No physical mobile device or manual assistive-technology pass is claimed.
+
+Stable import identity includes text, origin, and privacy. Menu and intent fixture imports share the script origin; a file import of those bytes is a separate item. Private notes are not encrypted and their titles remain listed; the boundary is automatic body presentation and scene restoration.
+
+Current source limitations: native document close is not forwarded to the station, repeated ordinary restore adds routes, the menu-bar Open command does not select the desktop destination, and file-picker cancellation reports invalid text. The Services error pointer covers immediate admission only; later asynchronous import failures remain in the session. These require live qualification or follow-up rather than a state promotion.
+
 ## Delivery
 
 [Implementation ticket](../tickets/LAB-042-A.md) → [qualification ticket](../tickets/LAB-042-B.md).

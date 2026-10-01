@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "subject": "LAB-042",
+  "check": "Desktop Native Power static accessibility, privacy, rights, and automation review",
+  "date": "2026-10-01T06:57:58Z",
+  "provenance": {
+    "sourceRevision": "37d225c",
+    "sdkName": "macosx27.0",
+    "xcodeVersion": "27.0",
+    "xcodeBuild": "27A266a",
+    "buildProfile": "CoreLocal",
+    "minimumOS": "26.0"
+  },
+  "execution": {
+    "path": "static-review"
+  },
+  "inputs": [
+    "Apps/Mac/Desktop/DesktopPowerColumns.swift@sha256:904f982577a05e0642c297b20c694f25e4a77edcba0ef772ece30c57a3483d16",
+    "Apps/Mac/Desktop/DesktopPowerSession.swift@sha256:6b4456a9af6153129241d0f037ad79a40dab27c5129fd4b32210f75fd06aed01",
+    "Apps/Mac/Desktop/DesktopServiceProvider.swift@sha256:bd39ced14831179850ec6dfaf258bd9f557b6343bd6a0c1d7b662a5ba92a6514",
+    "Apps/Mac/LabCommands.swift@sha256:5e2e770343ca8899d3c2a9726db294fb14ab92a3dccd82c10c29915dab9c0b42",
+    "Packages/LabFeatures/Sources/DesktopNativePower/DesktopIntent.swift@sha256:2ad020eef1440c2fef87507edd0d4cd0f63f0c955ccbc0356c8718fdbfb14eff"
+  ],
+  "steps": [
+    "Read the Mac views, session, Services provider, commands, intent, and bundled fixture.",
+    "Review the LAB-042 walkthrough and manual accessibility matrix.",
+    "Search DesktopNativePower and Apps/Mac/Desktop for Process, NSTask, posix_spawn, system, and executable paths."
+  ],
+  "outcome": {
+    "result": "passed",
+    "detail": "Review completed with open findings. Every declared gesture has a named menu command and shortcut in source. Intent accepts an enum with two commands; the implementation has no process execution API. Original fixture material only; no screenshot, video, user-document export, account, or real media retained. Private restoration excludes bodies and private IDs but is not encryption and does not hide titles. Native close lacks a station callback; repeated ordinary restore adds routes; menu-bar Open does not select the destination; file cancellation displays invalid text; asynchronous Services failures cannot reach the original error pointer; private row uses a middle dot and session results lack explicit announcements. The file handler reads all bytes in a detached task before text validation; no pre-read byte bound or in-flight read cancellation was demonstrated."
+  },
+  "limitations": [
+    "Static review only, with unresolved UI and accessibility findings; not a live or manual accessibility pass.",
+    "No VoiceOver, Voice Control, Full Keyboard Access, system Services delivery, Shortcuts/Siri, file dialog, or native document-window lifecycle qualification.",
+    "The qualification leaves the experiment implemented and does not establish release readiness."
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "subject": "LAB-042",
+  "check": "Desktop Native Power package contract qualification",
+  "date": "2026-10-01T06:57:58Z",
+  "provenance": {
+    "sourceRevision": "e35785c",
+    "sdkName": "macosx27.0",
+    "xcodeVersion": "27.0",
+    "xcodeBuild": "27A266a",
+    "buildProfile": "Swift package",
+    "minimumOS": "26.0"
+  },
+  "execution": {
+    "path": "fixture"
+  },
+  "inputs": [
+    "Packages/LabFeatures/Sources/DesktopNativePower/Resources/sample-desk-note.txt@sha256:eb879ad9533a76c9d064ad4ef44634ec87a7164d06c4609271f3801fd4abe50e"
+  ],
+  "steps": [
+    "swift test --package-path Packages/LabFeatures --filter \"DesktopStationTests|CommandCatalogTests|ScriptAdmissionTests\""
+  ],
+  "outcome": {
+    "result": "passed",
+    "detail": "24 tests in 3 suites passed. Menu alternatives, palette search, close without deleting documents, duplicate imports, App Intent adapter receipts, shell refusal, selected shell-like text treated as data, invalid text, model denial, cancellation, unavailable store, private scene restoration, reload, and preview-only reset passed through an in-memory OperationService."
+  },
+  "limitations": [
+    "Package fixture path on the development Mac, macOS 27.0 (26A425), Swift 6.4.0. No system menu, document scene, Services invocation, or file panel ran.",
+    "The allowlisted operation ran as the App Intent adapter, not through system intent parameter resolution or authentication.",
+    "No physical mobile device, manual assistive technology, or 26-SDK compile."
+  ]
+}

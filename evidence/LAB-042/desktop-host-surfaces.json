@@ -1,0 +1,41 @@
+{
+  "check": "Desktop Native Power Mac menu and palette accessibility inspection, and fresh-store intent receipt",
+  "date": "2026-10-01T02:29:50Z",
+  "execution": {
+    "path": "fixture"
+  },
+  "inputs": [
+    "Apps/Mac/LabCommands.swift@sha256:5e2e770343ca8899d3c2a9726db294fb14ab92a3dccd82c10c29915dab9c0b42",
+    "Apps/Mac/Desktop/DesktopPowerColumns.swift@sha256:904f982577a05e0642c297b20c694f25e4a77edcba0ef772ece30c57a3483d16",
+    "Packages/LabFeatures/Sources/DesktopNativePower/DesktopCommand.swift@sha256:7f39509c251840cc4de08a42c37a11f450ccf75deda9fb05fa3c034ae0ddb7f4"
+  ],
+  "limitations": [
+    "Fixture and in-process accessibility inspection only; no manual VoiceOver, Voice Control, Full Keyboard Access, keypress, pointer, or system intent authentication/parameter resolution.",
+    "The initial bare NSHostingView harness exposed an unnamed outline and failed; a method-level filtered retry selected zero tests and proves nothing. NSHostingController with native window integration passed the complete four-test suite.",
+    "The result bundle recorded recoverable toolbar constraint warnings in the off-screen window. This is not proof of visual layout, large text, contrast, or focus order.",
+    "No native document scene, system Services delivery, file panel, physical mobile device, or 26-SDK compile."
+  ],
+  "outcome": {
+    "result": "passed",
+    "detail": "Four tests executed and passed, zero failed/skipped/expected failures. Every desktop command was in the running app menu with a shortcut and matching menu name. All seven command titles and a Close button were exposed by the hosted palette accessibility tree. The actual intent runner committed a createItem receipt admitted as app-intent on a fresh SQLite store. The 23-observation hosted replay also passed."
+  },
+  "provenance": {
+    "appVersion": "0.1.0",
+    "buildNumber": "1",
+    "buildProfile": "CoreLocal",
+    "minimumOS": "26.0",
+    "sdkName": "macosx27.0",
+    "sourceRevision": "6c5167d-dirty",
+    "xcodeBuild": "27A266a",
+    "xcodeVersion": "27.0"
+  },
+  "schemaVersion": 1,
+  "steps": [
+    "xcodebuild -project AppleNativeLab.xcodeproj -scheme LabMac-Core -derivedDataPath build/DerivedData -resultBundlePath build/LAB-042-B-host-v8.xcresult -only-testing:LabMacTests/DesktopPowerQualificationHostTests LAB_SOURCE_REVISION=6c5167d-dirty test -quiet",
+    "Read running AppKit menu items, checking each command has its named menu, a nonempty key equivalent, and is not hidden.",
+    "Host DesktopPaletteSheet in an off-screen NSHostingController window; inspect legacy accessibility attributes with modern getter fallback.",
+    "Run the import-fixture-note intent runner on a fresh SQLite store and inspect its createItem receipt.",
+    "xcrun xcresulttool get test-results summary --path build/LAB-042-B-host-v8.xcresult"
+  ],
+  "subject": "LAB-042"
+}

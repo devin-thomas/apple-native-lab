@@ -573,3 +573,24 @@ Static review of the shared workshop views and Mac columns: safety controls have
 | A3 Preset, plugin and reset | Receipt, restored preset, reload result and reset boundary are understood | not-run | not-run | not-run |
 
 **Open findings:** offline completion/error and plugin outcomes have no explicit announcement; cancellation focus was not checked; offline/preset/plugin actions have no Mac menu shortcuts. The stats note claims the callback is checked by clang without naming unchecked Swift trampolines and 26-family builds. No manual accessibility, iPad, contrast, or screenshot pass is claimed.
+
+## Desktop Native Power qualification (LAB-042-B)
+
+Mac only. The automated checks read the running app's menus and an off-screen hosted palette's accessibility tree; they do not press keys in a document scene or invoke a system Services item. The [walkthrough](walkthroughs/LAB-042-desktop-native-power.md) separates the adapter replay from live interaction.
+
+| Flow | Required result | Automated coverage |
+|---|---|---|
+| DP1 | Open the desktop and palette; every command has a menu alternative | `CommandCatalogTests`; `DesktopPowerQualificationHostTests` menu and palette checks |
+| DP2 | Import original text/file data; read the receipt and failure | Package validation/authorization tests; hosted file and Services handler replay |
+| DP3 | Open and close document windows while retaining the note | Package station and hosted session close handlers only; native scene lifecycle not-run |
+| DP4 | Restore without opening private content | Package and hosted stale private-route checks |
+| DP5 | Reset previews beside imported user notes | Package reset test; hosted fixture reset and global Reset Demo |
+
+| Manual pass | Device | DP1 | DP2 | DP3 | DP4 | DP5 |
+|---|---|---|---|---|---|---|
+| VoiceOver | Mac | not-run | not-run | not-run | not-run | not-run |
+| Voice Control | Mac | not-run | not-run | not-run | not-run | not-run |
+| Full Keyboard Access | Mac | not-run | not-run | not-run | not-run | not-run |
+| Large text, contrast, reduced motion/transparency | Mac | not-run | not-run | not-run | not-run | not-run |
+
+Source findings: `DesktopNoteRow` combines title and origin and provides a Return hint; private rows still use “Private · …”. Palette command rows expose their menu paths and shortcuts; Close has the cancel shortcut. `DesktopPowerSession` keeps results/errors visible but does not post a `LabAnnouncement`. `DesktopDocumentWindow` does not forward native close to the station, so route counts can be stale. The menu-bar Open action opens the catalog scene without setting the desktop destination. These findings remain open; no manual pass is implied.
