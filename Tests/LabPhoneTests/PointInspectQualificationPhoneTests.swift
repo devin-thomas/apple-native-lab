@@ -19,6 +19,9 @@ import Testing
         session.prepare(library: library)
         session.replayFixture()
         #expect(session.status.contains("Fixture replay"))
+        let fixtureURL = try #require(Bundle.main.url(forResource: "swatch-card", withExtension: "png"))
+        let image = try SelectedImage(data: Data(contentsOf: fixtureURL), origin: .fixtureReplay)
+        print("LAB-012 bundled image: \(image.evidence.byteCount) bytes, SHA-256 \(image.evidence.digest)")
         let before = library.receipts.count
         session.title = "Original swatch"
         session.body = "Green and blue, typed by the reviewer"
@@ -34,7 +37,7 @@ import Testing
         let saved = try await service.items(filter, as: LabDataService.appUI)
         try #require(saved.count == 1)
         #expect(saved[0].namespace == .user)
-        #expect(saved[0].note.value.contains("5878b4eb086241d408b0ab74bcb3d48c42b035fa93d1766b5d3a43ee9f4a7105"))
+        #expect(saved[0].note.value.contains(image.evidence.digest))
         #expect(await library.resetDemo() != nil)
         let after = try await service.items(filter, as: LabDataService.appUI)
         #expect(after == saved)
