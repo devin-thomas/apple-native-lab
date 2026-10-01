@@ -351,7 +351,6 @@ Recorded at [LAB-040-A](../tickets/LAB-040-A.md) from the macOS 27.0 SDK's `Stor
 | [S46](SOURCE_INDEX.md#s46) | `Product.PurchaseResult`: `.success(VerificationResult<Transaction>)`, `.userCancelled`, `.pending` | Same family as `Product.purchase` | Mirrored by `SimulatedPurchaseScript` in the local simulator | Live Ask-to-Buy pending on a device |
 | [S46](SOURCE_INDEX.md#s46) | `VerificationResult`: `.verified(SignedType)`, `.unverified(SignedType, VerificationError)` | StoreKit 2 | Mirrored by `TransactionVerification`; unverified grants nothing in the package fixture tests | JWS verification against a real signed transaction |
 | [S46](SOURCE_INDEX.md#s46) | `Transaction.updates`, `Transaction.currentEntitlements`, `Transaction.finish()`, `revocationDate`, `revocationReason` | iOS 15.0 / macOS 12.0 family; some entitlement helpers deprecated in favor of `currentEntitlements(for:)` | Local simulator restore / refund / revoke paths only | Live `Transaction.updates` and App Store revocation |
-
 | [S46](SOURCE_INDEX.md#s46) | `SKTestSession(contentsOf:)`, imported from `initWithContentsOfURL:error:` | Developer-only StoreKitTest framework, compiled with the macOS 27.0 SDK | Standalone XCTest constructed the session, but the service refused saving configuration: `SKServiceErrorDomain` code 2 / `SKInternalErrorDomain` code 4. Driver treats this as blocked, despite XCTest’s passing constructor assertion | Application-hosted StoreKit Testing; local transaction lifecycle testing |
 
 ### Tactile Grammar qualification (LAB-030-B, 2026-10-01)
