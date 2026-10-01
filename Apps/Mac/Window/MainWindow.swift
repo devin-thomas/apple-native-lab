@@ -62,6 +62,7 @@ struct MainWindow: View {
         // Views in the window, such as an experiment page's Open button, change its destination (LAB-010, LAB-035).
         .environment(window)
         .environment(\.openPortableObjects, OpenPortableObjectsAction(window: ObjectIdentifier(window)) { window.destination = .portableObjects })
+        .pickUpContinuation(session: window.pickUp, library: library) { window.destination = .pickUpHere }
         .onChange(of: window.searchRequests) { focusedPane = .search }
         .onChange(of: window.destination) { old, new in
             if (old == .collection) != (new == .collection) { window.searchText = "" }
@@ -95,6 +96,8 @@ struct MainWindow: View {
             PortableObjectsListColumn(window: window)
         case .trustDesk:
             TrustDeskListColumn(window: window, session: window.trustDesk)
+        case .pickUpHere:
+            PickUpListColumn(window: window)
         case .surfaceDeck:
             SurfaceDeckListColumn(window: window)
         case .desktopPower:
@@ -127,6 +130,8 @@ struct MainWindow: View {
             PortableObjectsDetailColumn(window: window)
         case .trustDesk:
             TrustDeskDetailColumn(session: window.trustDesk)
+        case .pickUpHere:
+            PickUpDetailColumn(window: window)
         case .surfaceDeck:
             SurfaceDeckDetailColumn()
         case .desktopPower:
@@ -157,6 +162,7 @@ struct MainWindow: View {
         case .portableObjects: "Search objects"
         case .desktopPower: "Search notes"
         case .trustDesk: "Search the desk"
+        case .pickUpHere: "Search drafts"
         default: "Search experiments"
         }
     }

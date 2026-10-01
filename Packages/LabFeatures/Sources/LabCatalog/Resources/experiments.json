@@ -295,7 +295,7 @@
       "title": "Pick Up Here",
       "category": "Continuity",
       "milestone": "M2",
-      "state": "specified",
+      "state": "implemented",
       "dependsOn": [
         "LAB-008"
       ],

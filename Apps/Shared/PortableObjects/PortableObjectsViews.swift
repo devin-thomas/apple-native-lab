@@ -572,6 +572,8 @@ struct ExperimentModuleAction: View {
                 .help("Show Portable Objects in this window (⌘8)")
             }
             #endif
+        } else if experimentID == "LAB-016" {
+            PickUpCatalogAction()
         }
     }
 }
