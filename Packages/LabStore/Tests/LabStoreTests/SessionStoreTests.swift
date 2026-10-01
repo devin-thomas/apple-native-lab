@@ -88,9 +88,10 @@ import Testing
 
         let store = try await SQLiteOperationStore(url: directory.storeURL)
         #expect(try await store.sessions().isEmpty)
+        #expect(try await store.attentions().isEmpty)
         #expect(try DatabaseDump(directory.storeURL) == before)
         let raw = try SQLiteDatabase(url: directory.storeURL)
-        #expect(try raw.integer("PRAGMA user_version") == 3)
+        #expect(try raw.integer("PRAGMA user_version") == 4)
         #expect(try raw.strings("SELECT name FROM pragma_table_info('sessions')") == ["id", "is_running", "revision", "namespace", "extras"])
     }
 

@@ -16,6 +16,7 @@ enum StoreSchema {
         Migration(version: 1, sql: version1),
         Migration(version: 2, sql: version2),
         Migration(version: 3, sql: version3),
+        Migration(version: 4, sql: version4),
     ]
 
     static var currentVersion: Int { migrations[migrations.count - 1].version }
@@ -104,6 +105,28 @@ enum StoreSchema {
         CREATE TABLE sessions (
             id TEXT PRIMARY KEY NOT NULL CHECK (length(id) = 36),
             is_running INTEGER NOT NULL CHECK (is_running IN (0, 1)),
+            revision INTEGER NOT NULL CHECK (revision >= 1),
+            namespace TEXT NOT NULL DEFAULT 'demo' CHECK (namespace = 'demo'),
+            extras TEXT NOT NULL DEFAULT '{}' CHECK (json_valid(extras))
+        ) STRICT;
+        """
+
+    /// Version 4: lab alerts (LAB-043 Respectful Attention).
+    ///
+    /// A row is one lab-owned reminder, Focus filter, or alarm. The namespace is always `demo`,
+    /// so Reset Demo can remove these rows and can never remove a person's collections. The civil
+    /// time keeps its time zone identifier; nothing here reads the device's current zone.
+    static let version4 = """
+        CREATE TABLE attentions (
+            id TEXT PRIMARY KEY NOT NULL CHECK (length(id) = 36),
+            channel TEXT NOT NULL CHECK (channel IN ('reminder', 'focus-filter', 'alarm')),
+            reason TEXT NOT NULL CHECK (length(reason) BETWEEN 1 AND 120),
+            year INTEGER NOT NULL,
+            month INTEGER NOT NULL CHECK (month BETWEEN 1 AND 12),
+            day INTEGER NOT NULL CHECK (day BETWEEN 1 AND 31),
+            hour INTEGER NOT NULL CHECK (hour BETWEEN 0 AND 23),
+            minute INTEGER NOT NULL CHECK (minute BETWEEN 0 AND 59),
+            time_zone TEXT NOT NULL CHECK (length(time_zone) BETWEEN 1 AND 80),
             revision INTEGER NOT NULL CHECK (revision >= 1),
             namespace TEXT NOT NULL DEFAULT 'demo' CHECK (namespace = 'demo'),
             extras TEXT NOT NULL DEFAULT '{}' CHECK (json_valid(extras))

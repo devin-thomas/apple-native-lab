@@ -371,6 +371,7 @@ private struct StepContext {
         case .collectionArchived(let id): "collection \(id) is archived"
         case .demoCollection(let id): "collection \(id) is a demo collection, which holds only seed samples"
         case .noChanges(let reference): "the update would leave \(reference) unchanged"
+        case .nothingToCancel: "there are no lab alerts to cancel"
         }
     }
 }

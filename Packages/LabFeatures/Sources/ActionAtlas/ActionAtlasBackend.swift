@@ -29,6 +29,12 @@ public struct IntentConfirmation: Hashable, Sendable {
         self.operation = operation
     }
 
+    /// A confirmation the host records after its own intent dialog has returned for this operation.
+    /// The dialog has to return first. A payload cannot become one of these: there is no decoder.
+    public static func confirmed(_ operation: DomainOperation) -> IntentConfirmation {
+        IntentConfirmation(confirmed: operation)
+    }
+
     /// Whether this confirmation is for exactly `operation`.
     public func covers(_ operation: DomainOperation) -> Bool {
         self.operation == operation

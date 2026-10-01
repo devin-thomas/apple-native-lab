@@ -72,6 +72,7 @@ public actor OperationService {
                 collections: plan.collections,
                 items: plan.items,
                 sessions: plan.sessions,
+                attentions: plan.attentions,
                 removals: plan.removals
             )
             let outcome: CommitOutcome
@@ -139,6 +140,18 @@ public actor OperationService {
     public func findSession(_ id: SessionID, as actor: ActorScope) async throws(OperationError) -> LabSession? {
         try authorize(.read(.session(id)), for: actor)
         return try await read { try await $0.session(id) }
+    }
+
+    /// One lab alert, or `nil` when it was never scheduled (LAB-043).
+    public func findAttention(_ id: AttentionID, as actor: ActorScope) async throws(OperationError) -> LabAttention? {
+        try authorize(.read(.attention(id)), for: actor)
+        return try await read { try await $0.attention(id) }
+    }
+
+    /// Every lab alert. Cancel uses this list and then names only these IDs.
+    public func findAttentions(as actor: ActorScope) async throws(OperationError) -> [LabAttention] {
+        try authorize(.read(.attentions), for: actor)
+        return try await read { try await $0.attentions() }
     }
 
     /// The receipt recorded for a request, or `nil` if that request was never admitted.

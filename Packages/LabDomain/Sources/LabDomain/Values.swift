@@ -14,11 +14,20 @@ public enum ValidationError: Error, Hashable, Sendable {
     case emptyChanges
     case resultLimitOutOfRange(allowed: ClosedRange<Int>)
     case unsupportedSchemaVersion(Int)
+    /// A lab alert was built without the person's separate consent (LAB-043).
+    case consentRequired
+    case emptyReason
+    case reasonTooLong(limit: Int)
+    /// The civil time does not exist on the calendar, such as February 31.
+    case invalidMoment
+    /// The time zone identifier is not one the system recognizes.
+    case unknownTimeZone
 
     public enum Field: String, Hashable, Sendable, Codable {
         case title
         case note
         case searchText
+        case reason
     }
 }
 

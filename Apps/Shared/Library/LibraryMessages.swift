@@ -73,6 +73,7 @@ enum LibraryMessages {
         case .collectionArchived: "Its collection is archived."
         case .demoCollection: "Demo collections hold only the samples. Add items to your own collection."
         case .noChanges: "Nothing would change."
+        case .nothingToCancel: "There are no lab alerts to cancel."
         }
     }
 }

@@ -6,6 +6,7 @@ struct OperationPlan: Sendable {
     var collections: [LabCollection] = []
     var items: [LabItem] = []
     var sessions: [LabSession] = []
+    var attentions: [LabAttention] = []
     var removals: [EntityReference] = []
     var undo: DomainOperation?
     var phrase: Phrase
@@ -150,6 +151,12 @@ struct OperationPlanner: Sendable {
 
         case .setSession(let id, let expected, let running):
             return try await setSession(id, expected: expected, running: running)
+        case .scheduleAttention(let expected, let draft):
+            return try await scheduleAttention(expected: expected, draft: draft)
+        case .cancelLabAlerts(let pins):
+            return try await cancelLabAlerts(pins)
+        case .restoreLabAlerts(let drafts):
+            return try await restoreLabAlerts(drafts)
         }
     }
 
@@ -194,6 +201,98 @@ struct OperationPlanner: Sendable {
             undo: .setSession(id: id, expected: updated.revision, running: current.isRunning),
             phrase: Self.sessionPhrase(running: running)
         )
+    }
+
+    // MARK: Lab alerts (LAB-043 Respectful Attention)
+
+    /// Plans one consented lab alert. A matching stored alert is a no-change. A stale revision
+    /// conflicts and writes nothing. The undo cancels that one alert.
+    private func scheduleAttention(expected: Revision?, draft: AttentionDraft) async throws(OperationError) -> OperationPlan {
+        let reference = EntityReference.attention(draft.id)
+        let current = try await attention(draft.id)
+        guard let current else {
+            guard expected == nil else { throw .notFound(reference) }
+            let created = LabAttention(draft)
+            return OperationPlan(
+                changes: [EntityChange(entity: reference, previousRevision: nil, newRevision: created.revision)],
+                preconditions: [RevisionPrecondition(entity: reference, expected: nil)],
+                attentions: [created],
+                undo: .cancelLabAlerts(pins: [AttentionPin(id: draft.id, expected: created.revision)]),
+                phrase: Self.attentionPhrase(draft, verb: ("Scheduled", "Schedule"))
+            )
+        }
+        guard let expected else { throw .ruleViolation(.alreadyExists(reference)) }
+        guard current.revision == expected else {
+            let detail = "lab alert “\(current.reason)” changed: expected revision \(expected), found \(current.revision)."
+            return OperationPlan(
+                conflict: RevisionConflict(entity: reference, expected: expected, current: current.revision),
+                phrase: Phrase(past: "Not applied because \(detail)", imperative: "Out of date because \(detail)")
+            )
+        }
+        guard !current.matches(draft) else { throw .ruleViolation(.noChanges(reference)) }
+        let updated = current.revised(draft)
+        return OperationPlan(
+            changes: [EntityChange(entity: reference, previousRevision: current.revision, newRevision: updated.revision)],
+            preconditions: [RevisionPrecondition(entity: reference, expected: current.revision)],
+            attentions: [updated],
+            undo: .scheduleAttention(expected: updated.revision, draft: current.draftForUndo()),
+            phrase: Self.attentionPhrase(draft, verb: ("Rescheduled", "Reschedule"))
+        )
+    }
+
+    /// Removes only the named alerts. Any stored alert not named stays. An empty list changes nothing.
+    private func cancelLabAlerts(_ pins: [AttentionPin]) async throws(OperationError) -> OperationPlan {
+        guard !pins.isEmpty else { throw .ruleViolation(.nothingToCancel) }
+        var seen = Set<AttentionID>()
+        var matched: [LabAttention] = []
+        for pin in pins {
+            let reference = EntityReference.attention(pin.id)
+            guard seen.insert(pin.id).inserted else { throw .ruleViolation(.alreadyExists(reference)) }
+            guard let current = try await attention(pin.id) else { throw .notFound(reference) }
+            guard current.revision == pin.expected else {
+                let detail = "lab alert “\(current.reason)” changed: expected revision \(pin.expected), found \(current.revision)."
+                return OperationPlan(
+                    conflict: RevisionConflict(entity: reference, expected: pin.expected, current: current.revision),
+                    phrase: Phrase(past: "Not applied because \(detail)", imperative: "Out of date because \(detail)")
+                )
+            }
+            matched.append(current)
+        }
+        let drafts = matched.map { $0.draftForUndo() }
+        let count = counted(matched.count, "lab alert")
+        return OperationPlan(
+            preconditions: matched.map { RevisionPrecondition(entity: $0.reference, expected: $0.revision) },
+            removals: matched.map(\.reference),
+            undo: .restoreLabAlerts(drafts: drafts),
+            phrase: Phrase(past: "Cancelled \(count).", imperative: "Cancel \(count).")
+        )
+    }
+
+    /// Restores alerts a cancel removed. Each one must be absent. The undo cancels them again.
+    private func restoreLabAlerts(_ drafts: [AttentionDraft]) async throws(OperationError) -> OperationPlan {
+        guard !drafts.isEmpty else { throw .ruleViolation(.nothingToCancel) }
+        var seen = Set<AttentionID>()
+        var created: [LabAttention] = []
+        for draft in drafts {
+            let reference = EntityReference.attention(draft.id)
+            guard seen.insert(draft.id).inserted else { throw .ruleViolation(.alreadyExists(reference)) }
+            guard try await attention(draft.id) == nil else { throw .ruleViolation(.alreadyExists(reference)) }
+            created.append(LabAttention(draft))
+        }
+        let count = counted(created.count, "lab alert")
+        return OperationPlan(
+            changes: created.map { EntityChange(entity: $0.reference, previousRevision: nil, newRevision: $0.revision) },
+            preconditions: created.map { RevisionPrecondition(entity: $0.reference, expected: nil) },
+            attentions: created,
+            undo: .cancelLabAlerts(pins: created.map { AttentionPin(id: $0.id, expected: $0.revision) }),
+            phrase: Phrase(past: "Restored \(count).", imperative: "Restore \(count).")
+        )
+    }
+
+    private static func attentionPhrase(_ draft: AttentionDraft, verb: (String, String)) -> Phrase {
+        let when = draft.moment.label(deviceZone: draft.moment.timeZone)
+        let object = "the lab \(draft.channel.title.lowercased()) “\(draft.reason)” for \(when)"
+        return Phrase(verb.0, verb.1, object)
     }
 
     private static func sessionPhrase(running: Bool) -> Phrase {
@@ -272,6 +371,13 @@ struct OperationPlanner: Sendable {
             let paused = session.revised(isRunning: false)
             plan.sessions.append(paused)
             plan.changes.append(EntityChange(entity: session.reference, previousRevision: session.revision, newRevision: paused.revision))
+        }
+
+        // Lab alerts are demo state outside the seed. Reset Demo removes them and nothing else
+        // that a person keeps: user collections and items are not in this list.
+        for attention in try await allAttentions().sorted(by: { $0.id.rawValue.uuidString < $1.id.rawValue.uuidString }) {
+            plan.preconditions.append(RevisionPrecondition(entity: attention.reference, expected: attention.revision))
+            plan.removals.append(attention.reference)
         }
 
         plan.phrase = resetPhrase(seed, changes: plan.changes, removed: plan.removals.count)
@@ -391,6 +497,14 @@ struct OperationPlanner: Sendable {
 
     private func allSessions() async throws(OperationError) -> [LabSession] {
         do { return try await store.sessions() } catch { throw .storeFailure(.readFailed) }
+    }
+
+    private func attention(_ id: AttentionID) async throws(OperationError) -> LabAttention? {
+        do { return try await store.attention(id) } catch { throw .storeFailure(.readFailed) }
+    }
+
+    private func allAttentions() async throws(OperationError) -> [LabAttention] {
+        do { return try await store.attentions() } catch { throw .storeFailure(.readFailed) }
     }
 
     private func requireCollection(_ id: CollectionID) async throws(OperationError) -> LabCollection {

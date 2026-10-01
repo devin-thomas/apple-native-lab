@@ -25,6 +25,8 @@ public enum RuleViolation: Hashable, Sendable {
     case demoCollection(CollectionID)
     /// The update would leave every field as it is.
     case noChanges(EntityReference)
+    /// Cancel or restore was asked to change no lab alerts.
+    case nothingToCancel
 }
 
 /// A store problem, without the underlying detail, which may contain paths or content.

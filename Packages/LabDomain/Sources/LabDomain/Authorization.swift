@@ -54,6 +54,9 @@ public enum ReadTarget: Hashable, Sendable {
     case item(ItemID)
     case items(ItemFilter)
     case session(SessionID)
+    case attention(AttentionID)
+    /// Every lab alert. There is no filter: the table holds only lab-owned demo rows.
+    case attentions
     case receipt(RequestID)
 }
 
