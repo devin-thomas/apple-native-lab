@@ -414,23 +414,98 @@ final class WireCapture: Sendable {
     }
 
     /// A forgotten controller is told to pair again before any session data, and its held start
-    /// should go with it. Today the request stays, and Allow still commits it as the authorized
-    /// peer (see `PeerSessionContractQualification.forgettingAPeerWithdrawsItsHeldCommands`).
-    @Test func aForgottenControllerSeesNothingAndItsHeldStartShouldNotCommit() async throws {
+    /// is withdrawn with it. Allow, pressed on the request the conductor's screen still showed, is
+    /// refused with the reason and commits nothing. (LAB-019-B held this as a known issue: Allow
+    /// committed the start as the authorized peer.)
+    @Test func aForgottenControllersHeldStartIsWithdrawnAndAllowCommitsNothing() async throws {
         let stage = await Stage()
         try await stage.pair(stage.controller)
         let ask = await stage.controller.send(.start)
         _ = try await eventually { await stage.host.conductor.state.pending.first }
         await stage.host.conductor.forget(stage.controller.identity.id)
+        #expect(await stage.host.conductor.state.pending.isEmpty, "withdrawn with the pairing")
         try await until { if case .disconnected = await stage.controller.state.phase { true } else { false } }
         #expect(await stage.controller.state.host == nil, "the conductor's goodbye unpinned it on the phone too")
+        let answer = try await stage.finished(ask, on: stage.controller)
+        #expect(answer.disposition == .refused)
+        #expect(answer.summary == "Withdrawn: the conductor forgot the device that asked. Nothing changed.")
 
         let outcome = await stage.host.allow(ask)
-        let stored = try await stage.backend.showSession()
-        withKnownIssue("LAB-019-B finding: Forget leaves the peer's held start waiting, and Allow commits it") {
-            #expect(outcome.receipt == nil)
-            #expect(stored == nil)
+        #expect(outcome.receipt == nil && outcome.result == nil)
+        #expect(outcome.refusal == .peerForgotten)
+        #expect(outcome.message == "The device that asked was forgotten, so its request was withdrawn. Nothing changed.")
+        #expect(try await stage.backend.showSession() == nil, "nothing stored")
+        #expect(await stage.host.conductor.state.snapshot.isRunning == false)
+    }
+
+    /// The forgotten controller pairs again. Its withdrawn start is not sent under the new
+    /// pairing; a copy under the old ID is answered withdrawn and never held, and Allow on it is
+    /// refused. A new start from the new pairing is held and allowed with its receipt.
+    @Test func aControllerThatPairsAgainCannotReplayItsWithdrawnStart() async throws {
+        let stage = await Stage()
+        let key = LocalIdentity(name: "Pocket phone")
+        let ids = FixedMessageIDs()
+        let clock = stage.clock
+        let makePhone = {
+            Client<Constellation>(configuration: .init(
+                identity: key, role: .controller, trust: InMemoryTrustStore(), clock: clock, makeMessageID: ids.next
+            ))
         }
+        let phone = makePhone()
+        try await stage.pair(phone)
+        let ask = await phone.send(.start)
+        _ = try await eventually { await stage.host.conductor.state.pending.first }
+        await stage.host.conductor.forget(key.id)
+        try await until { await phone.state.host == nil }
+
+        let restored = makePhone()
+        try await stage.pair(restored)
+        ids.push(ask)
+        #expect(await restored.send(.start) == ask)
+        let replayed = try await stage.finished(ask, on: restored)
+        #expect(replayed.disposition == .refused)
+        #expect(await stage.host.conductor.state.pending.isEmpty)
+        let outcome = await stage.host.allow(ask)
+        #expect(outcome.refusal == .peerForgotten && outcome.receipt == nil)
+        #expect(try await stage.backend.showSession() == nil)
+
+        let fresh = await restored.send(.start)
+        _ = try await eventually { await stage.host.conductor.state.pending.first { $0.commandID == fresh } }
+        let allowed = await stage.host.allow(fresh)
+        #expect(allowed.receipt?.admitted.adapter == .authorizedPeer)
+        #expect(try await stage.backend.showSession()?.isRunning == true)
+    }
+
+    /// Allow and Forget pressed together, many times over. Each time either the start was
+    /// committed as the authorized peer, with its receipt, and the show runs; or Allow was
+    /// refused as forgotten and nothing is stored. Never a receipt for a refused Allow, and never
+    /// a stored start the show does not show.
+    @Test func anAllowRacingForgetCommitsCompletelyOrNotAtAll() async throws {
+        var outcomes: [String: Int] = [:]
+        for _ in 1...20 {
+            let stage = await Stage()
+            try await stage.pair(stage.controller)
+            let ask = await stage.controller.send(.start)
+            _ = try await eventually { await stage.host.conductor.state.pending.first }
+            let host = stage.host
+            let peer = stage.controller.identity.id
+            async let allowed = host.allow(ask)
+            async let forgot: Void = host.conductor.forget(peer)
+            let (outcome, _) = await (allowed, forgot)
+            let stored = try await stage.backend.showSession()
+            let shown = await host.conductor.state.snapshot
+            if let receipt = outcome.receipt {
+                #expect(receipt.admitted.adapter == .authorizedPeer)
+                #expect(stored?.isRunning == true && shown.isRunning)
+                outcomes["allowed first", default: 0] += 1
+            } else {
+                #expect(outcome.refusal == .peerForgotten)
+                #expect(stored == nil && !shown.isRunning)
+                outcomes["forgotten first", default: 0] += 1
+            }
+            #expect(await host.conductor.state.pending.isEmpty)
+        }
+        print("LAB-019 show Allow racing Forget, 20 runs: \(outcomes.sorted { $0.key < $1.key })")
     }
 
     // MARK: A disconnected client visibly becomes stale
@@ -524,5 +599,14 @@ final class WireCapture: Sendable {
         for object in objects {
             #expect(object.values.allSatisfy { !($0 is [String: Any]) && !($0 is [Any]) }, "\(object)")
         }
+    }
+}
+
+/// Message IDs for a client: the queued ones first, then new ones.
+final class FixedMessageIDs: Sendable {
+    private let queued = Mutex<[MessageID]>([])
+    func push(_ id: MessageID) { queued.withLock { $0.append(id) } }
+    var next: @Sendable () -> MessageID {
+        { [self] in queued.withLock { $0.isEmpty ? MessageID() : $0.removeFirst() } }
     }
 }
