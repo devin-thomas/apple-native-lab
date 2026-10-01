@@ -103,3 +103,15 @@ Recorded at [LAB-004-B](../tickets/LAB-004-B.md) from the [LAB-004-A](../tickets
 | [S59](SOURCE_INDEX.md#s59) | `Toggle(isOn:intent:label:)` in `_AppIntents_SwiftUI`, which the widget extension links | iOS 17.0, macOS 14.0, tvOS 17.0, watchOS 10.0 | The widget's toggle in the simulator. The release manifest records the link (LAB-004-A) | None beyond the widget's own |
 | [S59](SOURCE_INDEX.md#s59) | `View.privacySensitive(_:)` and `RedactionReasons.privacy` | iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0 | Drawn with the privacy redaction in a package test and read back by text recognition: the detail line is gone and the state stays readable. The deck's "Lock Screen, locked" preview uses the same redaction | That the system applies it to this widget on a locked device |
 
+### StoreKit (LAB-040)
+
+Recorded at [LAB-040-A](../tickets/LAB-040-A.md) from the macOS 27.0 SDK's `StoreKit.swiftinterface` (Xcode 27.0, 27A266a). No entitlement is needed for the symbols below. **None is called in the default build:** StoreKit is not linked; `TransactionStateSimulator` is the only purchase path, so no button creates a real charge.
+
+| Source | Installed symbol | Declared availability | Demonstrated | Remaining uncertainty |
+|---|---|---|---|---|
+| [S46](SOURCE_INDEX.md#s46) | `Product.purchase(options:) async throws -> Product.PurchaseResult`; Mac also has `purchase(confirmIn:options:)` | MainActor purchase: iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0; `confirmIn` overload: macOS 15.2, unavailable on the other platforms | Read from the installed SDK only. Not called. | StoreKit Testing with a `.storekit` file; a real storefront purchase |
+| [S46](SOURCE_INDEX.md#s46) | `Product.PurchaseResult`: `.success(VerificationResult<Transaction>)`, `.userCancelled`, `.pending` | Same family as `Product.purchase` | Mirrored by `SimulatedPurchaseScript` in the local simulator | Live Ask-to-Buy pending on a device |
+| [S46](SOURCE_INDEX.md#s46) | `VerificationResult`: `.verified(SignedType)`, `.unverified(SignedType, VerificationError)` | StoreKit 2 | Mirrored by `TransactionVerification`; unverified grants nothing in the package fixture tests | JWS verification against a real signed transaction |
+| [S46](SOURCE_INDEX.md#s46) | `Transaction.updates`, `Transaction.currentEntitlements`, `Transaction.finish()`, `revocationDate`, `revocationReason` | iOS 15.0 / macOS 12.0 family; some entitlement helpers deprecated in favor of `currentEntitlements(for:)` | Local simulator restore / refund / revoke paths only | Live `Transaction.updates` and App Store revocation |
+
+| [S46](SOURCE_INDEX.md#s46) | `SKTestSession(contentsOf:)`, imported from `initWithContentsOfURL:error:` | Developer-only StoreKitTest framework, compiled with the macOS 27.0 SDK | Standalone XCTest constructed the session, but the service refused saving configuration: `SKServiceErrorDomain` code 2 / `SKInternalErrorDomain` code 4. Driver treats this as blocked, despite XCTest’s passing constructor assertion | Application-hosted StoreKit Testing; local transaction lifecycle testing |

@@ -39,6 +39,9 @@ struct SidebarView: View {
                 Label(SurfaceDeck.title, systemImage: SurfaceDeck.symbol)
                     .tag(SidebarDestination.surfaceDeck)
                     .accessibilityHint("The demo session, its receipts, and previews of its widget and Control")
+                Label(CommerceExperiment.title, systemImage: CommerceExperiment.symbol)
+                    .tag(SidebarDestination.commerceWithoutTricks)
+                    .accessibilityHint("Buy, restore, refund, and offline states with no real charge")
             }
             Section("Experiments") {
                 row(.all, symbol: "square.grid.2x2")
