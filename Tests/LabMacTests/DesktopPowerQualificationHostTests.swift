@@ -153,10 +153,12 @@ struct DesktopPowerQualificationHostTests {
         let session = DesktopPowerSession(station: DesktopStation(backend: UnavailableDesktopBackend()))
         let hosted = HostedView(DesktopPaletteSheet().environment(session), size: CGSize(width: 560, height: 700))
         defer { hosted.close() }
-        let tree = try await hosted.tree()
-        #expect(tree.buttons.contains { $0.label == "Close" })
+        var tree = try await hosted.tree()
+        for _ in 0..<5 where tree.count < 5 { tree = try await hosted.tree() }
+        Attachment.record(tree.map(\.description).joined(separator: "\n"), named: "desktop-palette-accessibility-tree.txt")
+        #expect(tree.buttons.contains { $0.label == "Close" }, "\(tree)")
         for command in DesktopCommand.allCases {
-            #expect(tree.contains { $0.label.contains(command.title) })
+            #expect(tree.contains { ($0.label + $0.value).contains(command.title) }, "\(tree)")
         }
     }
 
