@@ -80,6 +80,8 @@ final class SpeechTimelineModel {
     @ObservationIgnored private var playheadTask: Task<Void, Never>?
     /// The save prepared for a revision and collection, kept so pressing Save again is a retry.
     @ObservationIgnored private var pendingSave: TranscriptSave?
+    /// A Record press is waiting for the gate.
+    @ObservationIgnored private var recordPressPending = false
 
     init(
         recognizer: any SpeechFileRecognizing = OnDeviceSpeechRecognizer(),
@@ -188,6 +190,7 @@ final class SpeechTimelineModel {
         audio = reference
         timeline = TranscriptTimeline()
         lastSave = nil
+        pendingSave = nil
         let run = await flow.transcribe(file: file, language: language) { [weak self] snapshot in
             await self?.show(snapshot, token: token)
         }
@@ -232,6 +235,7 @@ final class SpeechTimelineModel {
             timeline = imported
             source = .captions
             lastSave = nil
+            pendingSave = nil
             if audioURL == nil { audio = .none }
             message = "Imported \(Self.count(imported.segments.count)) from captions. They are not recognition."
         } catch let error as CaptionError {
@@ -248,6 +252,7 @@ final class SpeechTimelineModel {
         timeline = TranscriptTimeline()
         source = .manual
         lastSave = nil
+        pendingSave = nil
         message = nil
     }
 
@@ -287,7 +292,11 @@ final class SpeechTimelineModel {
 
     /// The person pressed Record. Only here may the microphone be asked for.
     func record() async {
-        guard !isBusy else { return }
+        // A second press while the first is still deciding (the system prompt can be open) would
+        // start a second capture, so it does nothing.
+        guard !isBusy, !recordPressPending else { return }
+        recordPressPending = true
+        defer { recordPressPending = false }
         switch await gate.decide() {
         case .fallback(let reason, let fallback):
             message = "\(reason) \(fallback.summary)"
@@ -303,6 +312,7 @@ final class SpeechTimelineModel {
             audioURL = nil
             audioDuration = nil
             lastSave = nil
+            pendingSave = nil
         }
         let token = runToken
         audio = AudioReference(origin: .recording, sha256: nil, durationMilliseconds: nil, fileType: nil)
@@ -314,8 +324,10 @@ final class SpeechTimelineModel {
         do {
             events = try await capture.start(language: language)
         } catch {
+            // A resume can fail when the route change left no microphone. The summary names the
+            // segments the session still holds, so the failure never reads as a lost transcript.
             recording.handle(.failed(error), timeline: &timeline)
-            finish(message: error.message)
+            finishRecording()
             return
         }
         work = Task {
@@ -324,7 +336,26 @@ final class SpeechTimelineModel {
                 recording.handle(event, timeline: &timeline)
             }
             guard token == runToken else { return }
-            finish(message: recording.summary(segments: timeline.segments.count))
+            finishRecording()
+        }
+    }
+
+    /// Ends the recording activity with the session's summary, and announces it when the
+    /// recording stopped on its own.
+    private func finishRecording() {
+        finish(message: recording.summary(segments: timeline.segments.count))
+        Self.announcement(for: recording, segments: timeline.segments.count)?.post()
+    }
+
+    /// What is spoken when a recording stops. A route change, an interruption, or a failure happens
+    /// away from the Record button, so its summary is spoken as well as shown, at high priority.
+    /// A stop the person pressed is not announced: the button they pressed changes back to Record.
+    static func announcement(for session: RecordingSession, segments: Int) -> LabAnnouncement? {
+        switch session.state {
+        case .paused(.routeChanged), .paused(.interrupted), .failed:
+            LabAnnouncement(text: session.summary(segments: segments), priority: .high)
+        case .idle, .recording, .paused(.stoppedByPerson):
+            nil
         }
     }
 

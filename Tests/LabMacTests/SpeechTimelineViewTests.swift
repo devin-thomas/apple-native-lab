@@ -80,4 +80,41 @@ import Testing
         #expect(text.contains("Imported captions (not recognition)"), "the source is named above the timeline")
         #expect(model.timeline.segments.count == 4)
     }
+    /// LAB-013-B: while a transcription runs, the guess reads as one element that says it is
+    /// provisional, apart from the segments; once it is finalized, it reads as a segment with its
+    /// times and source, and the guess is gone. A route change's pause is in the tree as text.
+    @Test func provisionalTextReadsApartFromTheSegmentsAndAPauseIsStated() async throws {
+        let folder = FileManager.default.temporaryDirectory.appending(path: "SpeechTimelineViewTests-\(UUID().uuidString)")
+        try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+        let library = try await SpeechHostLab.startedLibrary(in: folder)
+        let capture = ScriptedRuns([[.update(speechFinal(0, 1_200, "Spoken first.")), CaptureStop.routeChange(reason: 2)!]])
+        let model = SpeechHostLab.model(in: folder, recognizer: PacedRecognizer(pause: .milliseconds(1_500)),
+                                        capture: capture, stager: SpeechHostLab.microphoneAllowed())
+        let hosted = HostedView(
+            Form { SpeechTimelineSections(model: model) }
+                .formStyle(.grouped)
+                .task { await model.refreshSupport() }
+                .environment(library),
+            size: CGSize(width: 640, height: 2_400)
+        )
+        defer { hosted.close() }
+        let audio = folder.appending(path: "chosen.caf")
+        try Data("not decoded".utf8).write(to: audio)
+        await model.refreshSupport()
+        model.importAudio(from: audio)
+
+        let guessing = try await tree(of: hosted) { $0.labels.contains { $0.hasPrefix("Provisional, still changing: Blue tape") } }
+        #expect(!guessing.labels.contains { $0.hasPrefix("From ") }, "no segment yet, only the guess:\n\(guessing.dump)")
+
+        let finalized = try await tree(of: hosted) { $0.labels.contains("From 1 second to 3 seconds, Blue tape marks the 2nd shelf., On-device transcription") }
+        #expect(!finalized.labels.contains { $0.hasPrefix("Provisional") && $0.contains("Blue tape") }, "the finalized words are not also read as provisional")
+        model.cancel()
+        try await SpeechHostLab.waitUntilIdle(model)
+
+        await model.record()
+        try await SpeechHostLab.waitUntilIdle(model)
+        let paused = try await tree(of: hosted) { Self.text($0).contains("Recording paused because the audio route changed") }
+        #expect(Self.text(paused).contains("the audio device in use was disconnected. 1 segment kept."))
+        #expect(paused.labels.contains { $0.hasPrefix("From 0 seconds to 1 second, Spoken first.") })
+    }
 }
