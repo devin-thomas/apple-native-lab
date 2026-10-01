@@ -1,4 +1,5 @@
 import SwiftUI
+import TactileGrammar
 
 @main
 struct LabMacApp: App {
@@ -11,6 +12,7 @@ struct LabMacApp: App {
         // App Intents use this same library, so their receipts join this session's list.
         ActionAtlasHost.connect(library)
         SurfaceDeckHost.connect(library)
+        TactileGrammarCenter.shared.install(LiveTactileGrammar.makeEngine())
     }
 
     var body: some Scene {

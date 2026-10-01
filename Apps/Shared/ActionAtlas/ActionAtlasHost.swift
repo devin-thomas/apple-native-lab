@@ -2,12 +2,15 @@ import ActionAtlas
 import AppIntents
 import LabDomain
 import SurfaceDeck
+import TactileGrammar
 
 /// Includes Action Atlas's App Intents, entities, and queries in this app's App Intents metadata,
-/// and Surface Deck's toggle and launch action (LAB-004). The intents live in package targets;
-/// Xcode extracts them into the host.
+/// Surface Deck's toggle and launch action (LAB-004), and Play Tactile Cue (LAB-030). The intents
+/// live in package targets; Xcode extracts them into the host.
 struct NativeLabIntentsPackage: AppIntentsPackage {
-    static var includedPackages: [any AppIntentsPackage.Type] { [ActionAtlasIntentsPackage.self, SurfaceDeckIntentsPackage.self] }
+    static var includedPackages: [any AppIntentsPackage.Type] {
+        [ActionAtlasIntentsPackage.self, SurfaceDeckIntentsPackage.self, TactileGrammarIntentsPackage.self]
+    }
 }
 
 /// Connects App Intents to this host's store.

@@ -1,9 +1,14 @@
 import LabCatalog
 import LabSupport
 import SwiftUI
+import TactileGrammar
 
 @main
 struct LabWatchApp: App {
+    init() {
+        TactileGrammarCenter.shared.install(LiveTactileGrammar.makeEngine())
+    }
+
     var body: some Scene {
         WindowGroup {
             WatchHomeView()
@@ -38,6 +43,16 @@ struct WatchHomeView: View {
                         Label("Catalog unavailable", systemImage: "exclamationmark.triangle")
                     }
                 }
+                Section("Tactile Grammar") {
+                    if let catalog, let experiment = catalog.experiments.first(where: { $0.id == TactileGrammarExperiment.id }) {
+                        NavigationLink(value: experiment) {
+                            VStack(alignment: .leading) {
+                                Text(experiment.title).font(.headline)
+                                Text("Three cues").font(.caption2).foregroundStyle(.secondary)
+                            }
+                        }
+                    }
+                }
                 Section("This watch") {
                     LabeledContent("Model", value: device.modelIdentifier)
                     LabeledContent("OS", value: device.osVersion)
@@ -47,14 +62,18 @@ struct WatchHomeView: View {
             }
             .navigationTitle("Native Lab")
             .navigationDestination(for: ExperimentDescriptor.self) { experiment in
-                ScrollView {
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text(experiment.id).font(.caption).foregroundStyle(.secondary)
-                        Text(experiment.moment)
-                        Text("Not built yet.").font(.caption).foregroundStyle(.secondary)
+                if experiment.id == TactileGrammarExperiment.id {
+                    TactileGrammarWatchPage()
+                } else {
+                    ScrollView {
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text(experiment.id).font(.caption).foregroundStyle(.secondary)
+                            Text(experiment.moment)
+                            Text("Not built yet.").font(.caption).foregroundStyle(.secondary)
+                        }
                     }
+                    .navigationTitle(experiment.title)
                 }
-                .navigationTitle(experiment.title)
             }
         }
     }
