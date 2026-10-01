@@ -23,7 +23,10 @@ import Testing
     @Test func twoReplaysFromCleanStoresAgreeOnEveryEnvelopeAndOutcome() async throws {
         let first = try await InteractionReplay().run()
         let second = try await InteractionReplay().run()
-        #expect(first.transcript == second.transcript)
+        #expect(first.transcript.count == second.transcript.count)
+        for (one, other) in zip(first.transcript, second.transcript) where one != other {
+            Issue.record("The replays differ: \(one) | \(other)")
+        }
         #expect(first.fingerprint == second.fingerprint)
         // The fingerprint goes into the evidence log; print it where the command's output shows it.
         print("LAB-019 interaction replay: \(first.transcript.count) lines, fingerprint sha256:\(first.fingerprint)")
@@ -230,6 +233,10 @@ final class InteractionReplay: Sendable {
 
         // 11. The conductor relaunches in a new epoch. A command the controller queued before is refused.
         await controller.vanish()
+        // The conductor notices first, so its goodbye goes to the display alone.
+        try await until { [host] in
+            if case .disconnected = await host.conductor.state.peers.first(where: { $0.role == .controller })?.presence { true } else { false }
+        }
         let early = await controller.send(.next)
         await host.conductor.stop()
         hub.stop()

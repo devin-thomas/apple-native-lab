@@ -42,7 +42,7 @@ struct ConstellationScreen: View {
         }
         // A full-screen cover draws over the detail page; without its own background the page
         // shows through and the two overlap (found by LAB-019-B's remote screenshots).
-        .background(Color(uiColor: .systemBackground).ignoresSafeArea())
+        .background(Color.black.ignoresSafeArea())
         .task { await model.startSimulation() }
     }
 
