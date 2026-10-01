@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "subject": "LAB-015",
+  "check": "Fixture scoring, pre-loader memory and license refusal, cancellation, authorization, stale reset and duplicate requests",
+  "date": "2026-10-01T05:47:48Z",
+  "execution": {
+    "path": "fixture"
+  },
+  "inputs": [
+    "lab-015-fixture-v1@sha256:529194c1d7b4ac56e975472adfd70e394b03995d8e82e0fd13966a5bef6a11ac",
+    "scripts:WRONG-at-1ns; oversized-model:4000000000-bytes; budget:1000-bytes"
+  ],
+  "provenance": {
+    "appVersion": "not-applicable",
+    "buildNumber": "not-applicable",
+    "buildProfile": "SwiftPackage",
+    "minimumOS": "26.0",
+    "sdkName": "macosx27.0",
+    "sourceRevision": "22a9cf0",
+    "xcodeBuild": "27A266a",
+    "xcodeVersion": "27.0"
+  },
+  "steps": [
+    "swift test --package-path Packages/LabFeatures --filter LocalModelBenchTests",
+    "22 tests in six suites; fixture-os supplied to report; in-memory OperationService with GrantAuthorizationPolicy",
+    "Inspect BenchScoreTests, ModelGateTests, FixtureExecutorTests, BenchRecorderTests, BoundaryTests, BenchQualificationTests output"
+  ],
+  "outcome": {
+    "result": "passed",
+    "detail": "All 22 tests passed. Cold 31000000 ns and warm 9000000 ns stay separate; mixed reports throw mixedThermal. A wrong answer at 1 ns throws failedTask and cannot change the passing score. A 4000000000-byte model against 1000 bytes throws exceedsMemory with zero loader calls. Unreviewed license and cancellation before allocation also call the loader zero times. A model tool cannot record; a missing reset grant leaves the report. Duplicate recording returns the original receipt. Stale reset returns conflict and preserves the changed item; fresh reset succeeds. Retry after reset returns the original receipt and does not restore the archived item. LiveModelBench throws liveModelUnavailable; fixture completes."
+  },
+  "limitations": [
+    "Package fixture tests on arm64 macOS 27.0 (26A425), Swift 6.4 (swiftlang-6.4.0.34.1). The SDK was measured separately through labr; this record was transcribed from actual test output, not attached by the app.",
+    "No physical mobile device, simulator experiment interaction, assistive technology or model inference ran. Scripted latencies are not hardware performance.",
+    "Memory gate validates caller-declared model bytes and budget, not real memory pressure. Cancellation is a sleeping injected loader.",
+    "Initial uncommitted test compile failed on a ValidationError crossing a typed BenchError boundary; corrected before the passing run at 22a9cf0."
+  ]
+}

@@ -423,3 +423,17 @@ LAB-035-B qualified the experiment with automated checks and by reading the code
 | 2 | 5 | The deck's revision line reads the middle dot: its accessibility label is "Demo session · revision 2", and "Demo session · never started" before the first start. | `SessionStateCard.revisionText` in `Apps/Shared/SurfaceDeck/SurfaceDeckViews.swift` | simulator audit (the element's label), static review | Join the spoken parts with a comma, as Action Atlas finding 1 asks. |
 | 3 | 2 | On the Mac, Start and Pause answer ⌘Return while the deck shows, but have no menu command. The deck itself has View › Surface Deck (⌘7). | `SessionToggleButton` in `SurfaceDeckViews.swift` | static review | The same question as Action Atlas finding 4 and Access as a Superpower finding 2. The Full Keyboard Access pass decides. |
 | 4 | 8, 9 | At the default text size the audit reported 13 issues on the deck as the Control opened it, and 25 with the deck scrolled to its previews. Contrast "nearly passed" or failed on secondary text: section headers and footers, the revision line, the receipt's time and status, and the previews' captions and text. Dynamic Type was "partially unsupported" on the Receipts header, the empty-receipts sentence, the receipt's summary, Undo Start Session, and the sheet's Done button. Text was clipped on Undo Start Session and on one unnamed element, and 2 "potentially inaccessible text" issues had no element. At the largest size the audit reported 2 issues, both on Done: Dynamic Type and contrast. | iPhone deck | simulator audit | Secondary text and content under the translucent bar follow the core triage. The previews draw on a tertiary fill, which may explain the failed contrast there; confirm in the Increase Contrast pass. Done is the system's sheet button. |
+
+## Local Model Bench (LAB-015-B)
+
+Static review on 2026-10-01 of `LocalModelBenchPage`, `LocalModelBenchExport`, `LocalModelBenchSession`, and the Mac navigation hook. This is not a rendered accessibility audit or a manual pass.
+
+| Flow | Static observation | Remaining check |
+|---|---|---|
+| Open bench | Mac sidebar and View menu (⌥⌘3); iPhone named navigation link | Keyboard invocation, VoiceOver navigation, Voice Control |
+| Run phases and read scores | Four named standard buttons; textual cold/warm scores; corpus rows combine children; no custom motion | Focus movement, spoken units, largest text and rendered contrast |
+| Record and inspect result | Named button disabled until a report exists; visible message | Session does not explicitly announce results; manual speech and focus not-run |
+| Reset: cancel, confirm, inspect receipts | Standard destructive confirmation and Cancel | Manual cancellation and Full Keyboard Access not-run; conflict receipts must be inspected separately |
+| Copy export | Mac selectable monospaced text | Copying by keyboard or assistive technology not-run; no iPhone export surface |
+
+Open findings: run/record/reset have no dedicated Mac menu commands; record/reset messages do not post `LabAnnouncement`; on iPhone record/reset appear after the corpus rather than in a pinned action bar. These source observations do not establish clipping or a failed assistive-technology interaction. All manual VoiceOver, Voice Control, Full Keyboard Access, largest-text, Increase Contrast, Reduce Motion, Reduce Transparency, and grayscale passes stay `not-run` on Mac and iPhone. No screenshots were published.

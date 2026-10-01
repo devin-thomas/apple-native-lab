@@ -738,6 +738,8 @@ Installed SDK check (2026-09-30, Xcode 27.0 (27A266a), from the macOS 27.0 SDK's
 
 No symbol in that interface reports a byte size before `load`. Foundation Models, read for the same ticket, has no evaluation harness; `DynamicProfileBuilder` uses "evaluate" only as a compiler diagnostic. The bench does not import that framework.
 
+LAB-015-B source refresh (2026-10-01): read Apple's [async model load](https://developer.apple.com/documentation/coreml/mlmodel/load(contentsof:configuration:)) and [MLComputePlan](https://developer.apple.com/documentation/coreml/mlcomputeplan) reference content through the official documentation JSON endpoints. Availability matches the installed macOS 27.0 SDK, re-read through `labr`. The load page's return-value prose mentions `nil` despite a nonoptional async declaration; use the installed `async throws` signature. The compute-plan overview concerns estimates before predictions, not a guaranteed byte budget before loading. No symbols were called by LAB-015-B.
+
 ## S64
 
 **Siri AI availability** — reviewed

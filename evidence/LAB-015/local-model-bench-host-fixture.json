@@ -1,0 +1,38 @@
+{
+  "check" : "Four fixture phases, separate scores, hosted record retry and reset preserve imported data",
+  "date" : "2026-10-01T05:49:58Z",
+  "execution" : {
+    "path" : "fixture"
+  },
+  "inputs" : [
+    "lab-015-fixture-v1@sha256:529194c1d7b4ac56e975472adfd70e394b03995d8e82e0fd13966a5bef6a11ac",
+    "cold-report@sha256:7cc58957bec008d6671012f2da30ffacf9a5cf571fca1874dd655ea09723aa73"
+  ],
+  "limitations" : [
+    "Fixture executor, not inference. No model, download, hardware latency, memory-pressure or thermal measurement.",
+    "Hosted model/session calls only; no window, pointer, keyboard or assistive technology was driven.",
+    "Mac hosted test only; no physical mobile device or experiment screen in a simulator. All four hosts are checked separately by script/test.sh.",
+    "Memory admission uses a caller-declared budget; the session supplies physicalMemory, not free-memory telemetry."
+  ],
+  "outcome" : {
+    "detail" : "Four reports each passed four original cases. Cold median 31000000 ns and warm median 9000000 ns are fixture scripts. Mixed thermal throws; download and warm-up have no score. Recording twice returned one item with app-UI authority and no new retry receipt. Reset archived one report, preserved the imported sample and demo items, and added no receipt on repetition. In-memory reports remain available after reset.",
+    "result" : "passed"
+  },
+  "provenance" : {
+    "appVersion" : "0.1.0",
+    "buildNumber" : "1",
+    "buildProfile" : "CoreLocal",
+    "minimumOS" : "26.0",
+    "sdkName" : "macosx27.0",
+    "sourceRevision" : "22a9cf0",
+    "xcodeBuild" : "27A266a",
+    "xcodeVersion" : "27.0"
+  },
+  "schemaVersion" : 1,
+  "steps" : [
+    "LocalModelBenchEvidenceTests on a clean SQLite store in the sandboxed Mac host",
+    "Create an original user sample; run Download, Warm-up, Measured cold, Measured warm through LocalModelBenchSession",
+    "Score each phase; reject combined cold/warm; record cold twice through LibraryBenchBackend; reset twice; compare retained data"
+  ],
+  "subject" : "LAB-015"
+}
