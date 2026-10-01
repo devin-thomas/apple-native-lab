@@ -66,6 +66,7 @@ import Testing
               "the GPU drew and checked all 48 frames")
         check(gpuReport.runway == .whileAppRuns && gpuReport.facts.frameCount == 48, "the Mac worker published 48 frames")
         check(model.output?.job?.id == gpuJob.id, "the published file's digest is the one the GPU job recorded")
+        let gpuDigest = try #require(model.output?.sha256)
         model.preferGPU = false
         let cpuJob = try await Self.runToEnd(model)
         let cpuReport = try #require(model.reports[cpuJob.id])
@@ -146,6 +147,10 @@ import Testing
         check(try await service.collection(own, as: LabDataService.appUI).title.value == "Kiln notes",
               "the person's own collection is unchanged")
 
+        let comparison = gpuDigest == cpuDigest
+            ? "they were identical."
+            : "the files differ, though both hold 48 frames of one recipe: the encoder's bytes are not repeatable."
+        let digests = "The GPU short render's file SHA-256 began \(gpuDigest.prefix(16)) and the CPU one's \(cpuDigest.prefix(16)); " + comparison
         let record = try EvidenceRecord(
             subject: "LAB-032",
             check: Self.check,
@@ -169,7 +174,7 @@ import Testing
                 "Reset Demo; the store and the folder read back",
             ],
             outcome: differences.isEmpty
-                ? .passed(observed: "All \(observations.count) checks matched. " + observations.joined(separator: "; ") + ". The GPU and CPU short renders recorded different file digests for the same frames (the encoder's bytes are not repeatable); the last short digest was \(cpuDigest.prefix(16))….")
+                ? .passed(observed: "All \(observations.count) checks matched: " + observations.joined(separator: "; ") + ". " + digests)
                 : .failed(observed: "\(differences.count) of \(observations.count + differences.count) checks failed: " + differences.joined(separator: "; ") + "."),
             limitations: [
                 "Fixture path: hosted tests in the sandboxed Mac app on the development Mac, on a fresh store in the app container. It supports implemented at most.",
