@@ -72,12 +72,9 @@ final class WalletMomentSession {
             let artifact = try await signer.signedPass(for: definition)
             signedNote = artifact.note
             signingMessage = "Received \(artifact.bytes.count) bytes (\(artifact.provenance.rawValue))."
-        } catch let error as WalletMomentError {
-            signedNote = nil
-            signingMessage = error.userMessage
         } catch {
             signedNote = nil
-            signingMessage = WalletMomentError.signingFailed.userMessage
+            signingMessage = error.userMessage
         }
     }
 
@@ -98,7 +95,7 @@ final class WalletMomentSession {
                 for: preview, collectionID: collectionID, itemID: itemID
             )
         } catch {
-            message = (error as? WalletMomentError)?.userMessage ?? "The pass was refused."
+            message = error.userMessage
             return nil
         }
         let requestID = saveRequest ?? RequestID()
@@ -173,7 +170,7 @@ final class WalletMomentSession {
         do {
             update = try PassValidator.validate(SampleEvent.seatUpdate, against: base)
         } catch {
-            message = (error as? WalletMomentError)?.userMessage ?? "The update was refused."
+            message = error.userMessage
             return nil
         }
         definition = base.applying(update)
@@ -193,7 +190,7 @@ final class WalletMomentSession {
                 at: clock
             )
         } catch {
-            message = (error as? WalletMomentError)?.userMessage ?? "The update was refused."
+            message = error.userMessage
             return nil
         }
         let requestID = updateRequest ?? RequestID()
