@@ -18,12 +18,16 @@ M1 should implement approximately 8–12 meaningful domain actions, not hundreds
 | Export lab document | Item ID, representation | User-approved file/reference | Preview private fields; no implicit upload |
 | Get session state | Session ID | Small immutable state | Read-only |
 | Set session state | Session ID, desired value | Applied state + receipt | Desired value, not blind toggle |
+| Schedule lab alert | Sample choice, explicit consent | Attention reference + receipt | Consent required; preview alone commits nothing |
+| Cancel lab alerts | Confirmation of named lab alerts | Receipt; other apps' alerts untouched | Destructive; lab-owned IDs only |
 | Preview import proposal | Staged import ID | Typed draft and validation issues | Never commits model output |
 | Commit reviewed proposal | Proposal ID, revision, review grant | Item/receipt | Grant validated at commit |
 
 These are domain-level contracts. Exact AppIntent return types, parameter presentation, dialogs, and system availability must be compiled and tested. Protected actions cannot trust a shortcut merely because it originated on the user's device.
 
 LAB-004-A implements the session rows for the demo session as Get Demo Session and Set Demo Session, plus the launch action Open Surface Deck ([LAB-004](../experiments/LAB-004-surface-deck.md)). Set Demo Session takes the desired value, not a toggle. A widget or Control also passes the revision it showed; if the session changed since, the service records a conflict and nothing moves. Its intent runs in the app's process, where the operation service is; from a widget or Control that needs its iOS `LiveActivityIntent` conformance (see the experiment's implementation notes).
+
+LAB-043-A adds Schedule Lab Alert and Cancel Lab Alerts, plus the Lab Agenda Focus filter ([LAB-043](../experiments/LAB-043-respectful-attention.md)). Schedule needs explicit consent (the confirmation dialog or Add to Agenda). Cancel is destructive and needs confirmation. The Focus filter's predicate keeps only `lab-alert.` notification identifiers.
 
 ## Recipe depth
 

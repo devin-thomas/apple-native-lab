@@ -33,10 +33,14 @@ import Testing
         // and simulator; widget and Control in the simulator), LAB-007 (paste and file-picker fallback on the
         // Mac and simulator; share extension in the simulator), LAB-008 (drag, export, and import on the Mac;
         // Files round trip in the simulator), LAB-010 (model on the development Mac and simulator, fallback on
-        // both), LAB-035 (four paths on the Mac and simulator).
-        #expect(catalog.experiments.filter { $0.state != .specified }.map(\.id) == ["LAB-001", "LAB-004", "LAB-007", "LAB-008", "LAB-010", "LAB-035"])
-        #expect(catalog.experiments.filter { $0.state == .implemented }.count == 6)
+        // both), LAB-035 (four paths on the Mac and simulator), LAB-043 (agenda and consented alerts on the Mac
+        // CoreLocal path; AlarmKit/UserNotifications only in SystemSurfaces, not device-verified).
+        #expect(catalog.experiments.filter { $0.state != .specified }.map(\.id) == [
+            "LAB-001", "LAB-004", "LAB-007", "LAB-008", "LAB-010", "LAB-035", "LAB-043",
+        ])
+        #expect(catalog.experiments.filter { $0.state == .implemented }.count == 7)
         #expect(catalog.progress(for: .m1) == (live: 6, total: 6))
+        #expect(catalog.progress(for: .m3).live >= 1)
     }
 
     @Test func searchMatchesTitlesAndAPIs() {
