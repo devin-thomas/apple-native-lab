@@ -90,6 +90,9 @@ targets:
       # LAB-004 Surface Deck: the demo session's deck, its intents, and the in-app widget previews.
       - package: LabFeatures
         product: SurfaceDeck
+      # LAB-041 Trust Desk: local authorization, a scoped keychain record, and a passkey simulation.
+      - package: LabFeatures
+        product: TrustDesk
     info:
       path: Apps/Mac/Info.plist
       properties:
@@ -131,6 +134,7 @@ targets:
         INFOPLIST_KEY_NSMicrophoneUsageDescription: $(LAB_PURPOSE_MICROPHONE)
         INFOPLIST_KEY_NSSpeechRecognitionUsageDescription: $(LAB_PURPOSE_SPEECH_RECOGNITION)
         INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription: $(LAB_PURPOSE_BLUETOOTH)
+        INFOPLIST_KEY_NSFaceIDUsageDescription: $(LAB_PURPOSE_FACE_ID)
 
   # CoreLocal: the iPhone and iPad host. It embeds no extension: a SystemSurfaces host variant
   # with its own scheme embeds extensions, so LabPhone-Core never needs their provisioning.
@@ -176,6 +180,9 @@ targets:
       # LAB-004 Surface Deck: the demo session's deck, its intents, and the in-app widget previews.
       - package: LabFeatures
         product: SurfaceDeck
+      # LAB-041 Trust Desk: local authorization, a scoped keychain record, and a passkey simulation.
+      - package: LabFeatures
+        product: TrustDesk
     info:
       path: Apps/Phone/Info.plist
       properties:
@@ -222,6 +229,7 @@ targets:
         INFOPLIST_KEY_NSSpeechRecognitionUsageDescription: $(LAB_PURPOSE_SPEECH_RECOGNITION)
         INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription: $(LAB_PURPOSE_BLUETOOTH)
         INFOPLIST_KEY_NSNearbyInteractionUsageDescription: $(LAB_PURPOSE_NEARBY_INTERACTION)
+        INFOPLIST_KEY_NSFaceIDUsageDescription: $(LAB_PURPOSE_FACE_ID)
 
   # SystemSurfaces: the iPhone host variant that embeds the share extension (LAB-007) and the widget
   # and Control extension (LAB-004). Same sources
@@ -267,6 +275,9 @@ targets:
       # LAB-004 Surface Deck: the deck, its intents, and the snapshot writer, as LabPhone.
       - package: LabFeatures
         product: SurfaceDeck
+      # LAB-041 Trust Desk: local authorization, a scoped keychain record, and a passkey simulation.
+      - package: LabFeatures
+        product: TrustDesk
       - target: ShareExtension
         embed: true
       # LAB-004: the widget and Control extension, embedded only in this SystemSurfaces variant.
@@ -314,6 +325,7 @@ targets:
         INFOPLIST_KEY_NSSpeechRecognitionUsageDescription: $(LAB_PURPOSE_SPEECH_RECOGNITION)
         INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription: $(LAB_PURPOSE_BLUETOOTH)
         INFOPLIST_KEY_NSNearbyInteractionUsageDescription: $(LAB_PURPOSE_NEARBY_INTERACTION)
+        INFOPLIST_KEY_NSFaceIDUsageDescription: $(LAB_PURPOSE_FACE_ID)
 
   # SystemSurfaces: the share extension (LAB-007). It stages what was shared into the App Group
   # folder and finishes; it never opens the store. Embedded only by LabPhoneSurfaces.

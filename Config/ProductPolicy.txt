@@ -62,6 +62,19 @@ entitlement  SystemSurfaces ios  com.apple.security.application-groups   # share
 # CoreLocal: Portable Objects (LAB-008). CoreFoundation is covered by the base line above.
 entitlement  CoreLocal  macos    com.apple.security.files.user-selected.read-write   # Import and Export file dialogs (the declared fallback); the sandbox shows no panel without it
 
+# CoreLocal and SystemSurfaces: Trust Desk (LAB-041). The keychain record is the app's own.
+# LocalAuthentication is device-owner confirmation, not an account. AuthenticationServices is
+# linked for the platform-passkey symbol; this build does not present a system passkey.
+link         CoreLocal      macos    LocalAuthentication     # device-owner confirmation for the sealed record
+link         CoreLocal      ios      LocalAuthentication     # same, iPhone host
+link         CoreLocal      ios      Security                # the scoped keychain record
+link         CoreLocal      macos    AuthenticationServices  # platform passkey provider symbol; the ceremony is a simulation
+link         CoreLocal      ios      AuthenticationServices  # same, iPhone host
+link         SystemSurfaces ios      LocalAuthentication     # host variant, as LabPhone
+link         SystemSurfaces ios      Security                # host variant, as LabPhone
+link         SystemSurfaces ios      AuthenticationServices  # host variant, as LabPhone
+purpose      LocalAuthentication NSFaceIDUsageDescription    # device-owner confirmation can use Face ID
+
 # SystemSurfaces: Surface Deck (LAB-004). The host variant writes the session snapshot into the same
 # App Group and asks WidgetKit to reload only when it changes. The widget and Control extension it
 # embeds links only Foundation, SwiftUI, UIKit, AppIntents, _AppIntents_SwiftUI, CryptoKit (through
