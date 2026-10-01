@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "subject": "LAB-031",
+  "check": "tvOS native theater and caption selection driven with the simulated Siri Remote",
+  "date": "2026-10-01T05:27:12Z",
+  "provenance": {
+    "sourceRevision": "5b4f935-dirty",
+    "sdkName": "appletvsimulator27.0",
+    "xcodeVersion": "27.0",
+    "xcodeBuild": "27A266a",
+    "minimumOS": "26.0",
+    "buildProfile": "Companions"
+  },
+  "execution": {
+    "path": "simulator",
+    "simulator": {
+      "platform": "tvOS",
+      "deviceClass": "Apple TV 4K (3rd generation)",
+      "osVersion": "27.0 (24J360)"
+    }
+  },
+  "inputs": [
+    "screening-test-card.mov@sha256:4308e0cb5a70b25e0e5a36ab0b7c0c69ffbbcc0f8a80aa734431eb138818af84",
+    "screening-unknown-codec.mov@sha256:05d4e4c192045c9feac141ac0cd29ca1ead08310b645baa57d145009970ca8c9",
+    "screening-truncated.mov@sha256:b0e43f374db20b52d208a655a0ff90690be8f59154fca14d1c57eaddc5a44bc5",
+    "docs/walkthroughs/images/LAB-031/tvos-theater.png@sha256:890989fb774f2dde7c005187c2c95aaf39c31070fc2f266663c43549822c2cab",
+    "docs/walkthroughs/images/LAB-031/tvos-spanish-return.png@sha256:998f5ef2b0ace6ac5f9c35ac03f4d3e9368b21db0790f39d608246c7546614ec"
+  ],
+  "steps": [
+    "Through labr: create a ticket-owned tvOS simulator, delete via EXIT trap.",
+    "xcodebuild -project AppleNativeLab.xcodeproj -scheme LabTV -destination id=<ticket simulator> -derivedDataPath build/DerivedData -collect-test-diagnostics never -resultBundlePath build/lab-031-b-tv.xcresult -only-testing:LabTVTests/ScreeningRoomTVTests -only-testing:ScreeningRoomTests -only-testing:ScreeningRoomPlaybackTests -only-testing:LabTVUITests/ScreeningRoomRemoteUITests test -quiet",
+    "Read xcresult summary, export test attachments, inspect the theater and return screenshots, remove PNG ancillary metadata for publication."
+  ],
+  "outcome": {
+    "result": "passed",
+    "detail": "63 tests passed, zero failed/skipped. The simulated remote opened the screening, selected Spanish, opened the real AVKit theater, and returned with Menu to Paused at 0:00 of 0:10, Spanish, In the page. Receipts contained both presentation commands. Hosted real-asset failures and all domain/playback tests (including the new confined reset replay) passed. Two reviewed simulator screenshots contain only the app and original generated Test Card."
+  },
+  "limitations": [
+    "Simulator only, no physical Apple TV. The remote UI test is paused at 0:00; selection retention is proved, not visible caption cues during playing media.",
+    "Package and hosted interruption/route/PiP/full-screen signals remain injected. No real interruption, lost output, PiP, AirPlay or protected media.",
+    "Default screenshot shows Spanish breaking as Span-ish; manual accessibility, large text and TV-device focus remain unverified."
+  ]
+}

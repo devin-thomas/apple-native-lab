@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "subject": "LAB-031",
+  "check": "Native Screening Room inside the sandboxed Mac host",
+  "date": "2026-10-01T05:09:42Z",
+  "provenance": {
+    "sourceRevision": "4a7385871b1fc79af46dac272f1f9595efc635a9-dirty",
+    "sdkName": "macosx27.0",
+    "xcodeVersion": "27.0",
+    "xcodeBuild": "27A266a",
+    "minimumOS": "26.0"
+  },
+  "execution": {
+    "path": "fixture"
+  },
+  "inputs": [
+    "screening-test-card.mov@sha256:4308e0cb5a70b25e0e5a36ab0b7c0c69ffbbcc0f8a80aa734431eb138818af84",
+    "screening-unknown-codec.mov@sha256:05d4e4c192045c9feac141ac0cd29ca1ead08310b645baa57d145009970ca8c9",
+    "screening-truncated.mov@sha256:b0e43f374db20b52d208a655a0ff90690be8f59154fca14d1c57eaddc5a44bc5"
+  ],
+  "steps": [
+    "Through labr: LAB_SIMULATOR_PREFIX=\"NL LAB-031-B\" script/test.sh, Mac hosted step, LabMac-Core on platform=macOS.",
+    "ScreeningRoomHostTests checks bundled clips, the menu shortcut, destination, experiment resume folder, and English SDH across theater/full-screen signals and file-backed relaunch.",
+    "Read the Mac xcresult summary with xcrun xcresulttool get test-results summary."
+  ],
+  "outcome": {
+    "result": "passed",
+    "detail": "Mac hosted step passed. xcresult summary: 184 passed tests, 0 failed, 1 expected failure, 3 skipped (188 total; dynamic parameter cases counted separately). ScreeningRoomHostTests ran inside the built sandboxed app. The fixture-backed screening kept English SDH and resumed at 3 seconds; the app bundle carries the clips and its View menu uses Control-Command-1."
+  },
+  "limitations": [
+    "Fixture path inside the real Mac host on macOS 27.0 (26A425), not a manual Mac UI or physical playback surface run. Tests disable system audio/remote-command integration and inject surface changes.",
+    "The integrated command subsequently failed on an unrelated iPhone speech crash; this passing Mac step is not a green full gate.",
+    "No actual full-screen/PiP/AirPlay activation, media key, imported user media, DRM or manual assistive-technology pass."
+  ]
+}

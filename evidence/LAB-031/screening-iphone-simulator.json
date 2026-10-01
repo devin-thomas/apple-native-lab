@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "subject": "LAB-031",
+  "check": "ScreeningRoomPhoneTests inside the built iPhone app in the iOS simulator",
+  "date": "2026-10-01T05:25:00Z",
+  "provenance": {
+    "sourceRevision": "5b4f935-dirty",
+    "sdkName": "iphonesimulator27.0",
+    "xcodeVersion": "27.0",
+    "xcodeBuild": "27A266a",
+    "minimumOS": "26.0",
+    "buildProfile": "CoreLocal"
+  },
+  "execution": {
+    "path": "simulator",
+    "simulator": {
+      "platform": "iOS",
+      "deviceClass": "iPhone 18 Pro",
+      "osVersion": "27.0 (24A434)"
+    }
+  },
+  "inputs": [
+    "screening-test-card.mov@sha256:4308e0cb5a70b25e0e5a36ab0b7c0c69ffbbcc0f8a80aa734431eb138818af84",
+    "screening-unknown-codec.mov@sha256:05d4e4c192045c9feac141ac0cd29ca1ead08310b645baa57d145009970ca8c9",
+    "screening-truncated.mov@sha256:b0e43f374db20b52d208a655a0ff90690be8f59154fca14d1c57eaddc5a44bc5"
+  ],
+  "steps": [
+    "Through labr: create a ticket-owned iOS simulator with script/simulator.py; delete it with an EXIT trap.",
+    "xcodebuild -project AppleNativeLab.xcodeproj -scheme LabPhone-Core -destination id=<ticket simulator> -derivedDataPath build/DerivedData -collect-test-diagnostics never -only-testing:LabPhoneTests/ScreeningRoomPhoneTests test -quiet"
+  ],
+  "outcome": {
+    "result": "passed",
+    "detail": "Focused iPhone hosted screening test passed (exit 0). The app carries all three clips inside its bundle and declares the audio background mode. The real player opened Test Card, kept English SDH through injected theater/full-screen/page signals, and refused the unknown codec and truncated clip with their expected real errors."
+  },
+  "limitations": [
+    "Simulator hosted test only, not a physical iPhone or iPad. A fresh temporary resume folder is used; system audio observation and remote commands are disabled.",
+    "Presentation changes are injected signals; no iPhone system full-screen, PiP, AirPlay, call, output removal or manual UI walkthrough ran.",
+    "The full integrated iPhone run failed in an unrelated speech test; this focused pass does not close that crash."
+  ]
+}

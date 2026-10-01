@@ -435,3 +435,18 @@ Static source review only. The cue buttons, intensity picker, Stop, and reset di
 | Stop; cancel reset; confirm reset | not-run | not-run | not-run | not-run | not-run |
 
 Open findings: `CuePulseRow` does not read Reduce Motion and identical consecutive values do not restart its task; `TactileGrammarModel` does not announce results; the Mac has only the navigation menu command, no cue commands; the Watch page has no reset or visual pulse. “Spoken” in a receipt is text, not evidence of speech. See the [walkthrough](walkthroughs/LAB-030-tactile-grammar.md) for adapter limits.
+
+## Native Screening Room review (LAB-031-B)
+
+Static review and tvOS simulator screenshots only; no manual assistive-technology or large-text pass. The shared transport uses labeled native buttons, a caption picker, a hint on companion Reset, and announcements for command receipts/refusals. Readiness and receipt rows combine their children. The theater offers Back to Page with the cancel shortcut on Mac. The TV remote test is an alternate-input simulator check, not VoiceOver evidence.
+
+| Finding | Source | Remaining check |
+|---|---|---|
+| Playback summaries and receipt metadata join phrases with middle dots; spoken punctuation has not been reviewed. | `ScreeningStatus`, `ScreeningReceiptList` | VoiceOver on each declared host. |
+| Mac playback controls have no explicit keyboard shortcuts or corresponding playback menu items. The destination has View › Native Screening Room. | `ScreeningTransport`, `LabCommands` | Manual keyboard and Full Keyboard Access pass. |
+| Mac controls sit in one horizontal row; phone transport also has a horizontal button row. No large-text or narrow-window evidence was collected. | `ScreeningRoomDetailColumn`, `ScreeningTransport` | Largest accessibility text, iPad and narrow Mac layouts. |
+| System caption preference is not applied on initial open. Explicit caption selection is required. | `CaptionAuthorityTests` | Confirm the initial caption affordance with a person using captions. |
+
+Essential manual flows (all `not-run`): open/play/pause/seek; select captions and return from theater; recover from a failing clip; cancel/confirm Reset; read companion denial. Automated model tests do not close these manual gates.
+
+LAB-031-B simulator finding: at the default tvOS layout, the Spanish caption button wraps its title as "Span-ish" in the [return screenshot](walkthroughs/images/LAB-031/tvos-spanish-return.png). The remote still selected it and the summary read Spanish. The TV surface owner should widen the caption row or prevent this word break; confirm with large text and VoiceOver.

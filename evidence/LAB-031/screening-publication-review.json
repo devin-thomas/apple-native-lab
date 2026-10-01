@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "subject": "LAB-031",
+  "check": "Publication-safe walkthrough, original fixture rights, privacy and accessibility boundaries",
+  "date": "2026-10-01T05:30:10Z",
+  "provenance": {
+    "sourceRevision": "5b4f935-dirty"
+  },
+  "execution": {
+    "path": "static-review"
+  },
+  "inputs": [
+    "Fixtures/LAB-031/README.md@sha256:fd6d5ab8f336559b06c2bdc4cad2be71a182971e5bf8b08b84ea5f371989f759",
+    "Fixtures/LAB-031/make_screening_clips.swift@sha256:16523d972c057f753edaf0e0d6acc43d13bafaec7ceb35d2e7a7421473c82355",
+    "docs/walkthroughs/LAB-031-native-screening-room.md@sha256:8cba3c6b6dcb384425234357ea19d55d5a7bec8c42a532c2968e50b1d68b2f70",
+    "Packages/LabFeatures/Sources/ScreeningRoomPlayback/ClipOpener.swift@sha256:a883c10ccfec1e07d05fd1b035d11a107d51632ea506a2d5649d1aa09f973e3f",
+    "Apps/Shared/ScreeningRoom/ScreeningRoomPage.swift@sha256:4c12959a32fbe7aec0fdb358fb58a779d1c5d5750f070c80b1d290fa5d73d9ac",
+    "docs/walkthroughs/images/LAB-031/tvos-theater.png@sha256:890989fb774f2dde7c005187c2c95aaf39c31070fc2f266663c43549822c2cab",
+    "docs/walkthroughs/images/LAB-031/tvos-spanish-return.png@sha256:998f5ef2b0ace6ac5f9c35ac03f4d3e9368b21db0790f39d608246c7546614ec"
+  ],
+  "steps": [
+    "Read the generator and fixture record: original rectangles, generated tone and project-written captions; MIT license.",
+    "Read the opener, model, page, shared views, native host tests and readiness descriptor.",
+    "Review the walkthrough claims against the actual package run and retain manual gates in ACCESSIBILITY_REVIEW.",
+    "Inspect the two tvOS simulator screenshots and remove ancillary PNG metadata; no personal content seen."
+  ],
+  "outcome": {
+    "result": "passed",
+    "detail": "The walkthrough names fixture and simulator limits and calls the companion an in-app simulation. The clip opener accepts bundled/local file assets, checks protection before player admission, and has no DRM extraction or cloud fallback. The reviewed fixture generator uses no captured or imported media. Two simulator screenshots were inspected: app and original Test Card only; PNG eXIf/iTXt metadata removed, original IDAT payload retained. No media exports. Accessibility review records native labels and announcements without claiming manual passes."
+  },
+  "limitations": [
+    "Static review is not a runtime privacy or assistive-technology audit.",
+    "No external receiver, protected media, real audio event or paired transport tested.",
+    "No manual VoiceOver, Voice Control, Full Keyboard Access, large-text or iPad run."
+  ]
+}
