@@ -51,7 +51,7 @@ public enum RoutingProbe {
     /// Builds PCC eligibility from a probe reading plus the account gates CoreLocal cannot claim.
     public static func eligibility(
         from reading: RoutingProbeReading,
-        programEnrolled: Bool = false,
+        programEligible: Bool = false,
         distributionPermitted: Bool = false
     ) -> PCCEligibility {
         let entitlement: RouteGate = reading.carriesPCCEntitlement
@@ -63,11 +63,11 @@ public enum RoutingProbe {
                 .entitlement, .closed,
                 "This CoreLocal build does not carry \(ModelRouting.pccEntitlement)."
             )
-        let program: RouteGate = programEnrolled
-            ? RouteGate(.program, .open, "App Store Small Business Program enrollment is recorded for this build.")
+        let program: RouteGate = programEligible
+            ? RouteGate(.program, .open, "Small Business Program enrollment and fewer than two million first-time App Store downloads are recorded for this build.")
             : RouteGate(
                 .program, .closed,
-                "App Store Small Business Program enrollment is not claimed for this source build."
+                "Small Business Program enrollment and download-threshold eligibility are not claimed for this source build."
             )
         let distribution: RouteGate = distributionPermitted
             ? RouteGate(.distribution, .open, "Distribution is one Apple permits for PCC.")

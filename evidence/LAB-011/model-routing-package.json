@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "subject": "LAB-011",
+  "check": "Model routing package acceptance and consent boundaries",
+  "date": "2026-10-01T04:13:58Z",
+  "provenance": {
+    "sourceRevision": "04e3327+dirty",
+    "sdkName": "macosx27.0",
+    "xcodeVersion": "27.0",
+    "xcodeBuild": "27A266a",
+    "minimumOS": "26.0"
+  },
+  "execution": {
+    "path": "fixture"
+  },
+  "inputs": [
+    "Fixtures/routing/routing-sample-prompt.txt@sha256:e2aa6121f7190ba72f2d38268b03589c6df2c0a4167d18b38580941ade83216c"
+  ],
+  "steps": [
+    "Through labr on research: swift test --package-path Packages/LabFeatures --filter ModelRoutingTests",
+    "Inject counting and cancelling transports with closed, unknown, and fully open fixture gates; no network adapter",
+    "Exercise local/manual completion and model-tool proposal followed by app-UI commit over an in-memory OperationService"
+  ],
+  "outcome": {
+    "result": "passed",
+    "detail": "23 tests in 9 suites passed. Cloud-off and closed/unknown gates made zero transport attempts. Exhausted quota retained fallback without a paid provider. Consent expiry, changed fields, and repeated sends were refused. Local receipts excluded prompt-derived text. Duplicate commits replayed their receipt, stale commits changed nothing, and the model-tool actor could not commit. A cancelling transport produced a cancelled usage receipt. Transport failure recorded unconfirmed delivery and consumed consent without exposing error text."
+  },
+  "limitations": [
+    "Fixture and package-test evidence only; no live PCC request, entitlement assignment, account connection, purchase, or physical-device qualification.",
+    "The counting transport accepts a synthetic envelope; this does not establish Apple wire fields or PCC delivery."
+  ]
+}

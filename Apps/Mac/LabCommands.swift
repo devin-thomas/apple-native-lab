@@ -1,4 +1,5 @@
 import LabCatalog
+import ModelRouting
 import SurfaceDeck
 import SwiftUI
 
@@ -43,6 +44,9 @@ struct LabCommands: Commands {
                 .disabled(window == nil)
             Button("Portable Objects") { window?.destination = .portableObjects }
                 .keyboardShortcut("8", modifiers: .command)
+                .disabled(window == nil)
+            Button(ModelRoutingExperiment.title) { window?.destination = .modelRouting }
+                .keyboardShortcut("9", modifiers: .command)
                 .disabled(window == nil)
         }
 

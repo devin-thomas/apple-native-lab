@@ -54,7 +54,7 @@ func openPCC(
 ) -> PCCEligibility {
     PCCEligibility(
         entitlement: RouteGate(.entitlement, .open, "Test build declares the PCC entitlement."),
-        program: RouteGate(.program, .open, "Test claims Small Business Program enrollment."),
+        program: RouteGate(.program, .open, "Fixture satisfies Small Business Program enrollment and the download threshold."),
         distribution: RouteGate(.distribution, .open, "Test claims permitted distribution."),
         availability: RouteGate(.availability, .open, "PrivateCloudComputeLanguageModel.availability is .available."),
         quota: quota.gate

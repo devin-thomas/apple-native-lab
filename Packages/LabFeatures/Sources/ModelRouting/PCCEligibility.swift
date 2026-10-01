@@ -4,7 +4,7 @@ public struct RouteGate: Hashable, Sendable, Identifiable {
         case policy
         /// `com.apple.developer.private-cloud-compute` on the signed build.
         case entitlement
-        /// App Store Small Business Program enrollment ([S07]).
+        /// Small Business Program enrollment and download-threshold eligibility ([S07]).
         case program
         /// App Store, TestFlight, or ad hoc distribution permitted for PCC ([S07]).
         case distribution
@@ -18,7 +18,7 @@ public struct RouteGate: Hashable, Sendable, Identifiable {
             switch self {
             case .policy: "Policy"
             case .entitlement: "Entitlement"
-            case .program: "Program enrollment"
+            case .program: "Program eligibility"
             case .distribution: "Distribution"
             case .availability: "PCC availability"
             case .quota: "Quota"
@@ -111,7 +111,7 @@ public struct PCCEligibility: Hashable, Sendable {
             ),
             program: RouteGate(
                 .program, .closed,
-                "App Store Small Business Program enrollment is not claimed for this source build."
+                "Small Business Program enrollment and download-threshold eligibility are not claimed for this source build."
             ),
             distribution: RouteGate(
                 .distribution, .closed,

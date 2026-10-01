@@ -1,5 +1,6 @@
 import LabCatalog
 import LabSupport
+import ModelRouting
 import SurfaceDeck
 import SwiftUI
 
@@ -39,6 +40,9 @@ struct SidebarView: View {
                 Label(SurfaceDeck.title, systemImage: SurfaceDeck.symbol)
                     .tag(SidebarDestination.surfaceDeck)
                     .accessibilityHint("The demo session, its receipts, and previews of its widget and Control")
+                Label(ModelRoutingExperiment.title, systemImage: ModelRoutingExperiment.symbol)
+                    .tag(SidebarDestination.modelRouting)
+                    .accessibilityHint("Where a request would run, outgoing fields, and Private Cloud Compute gates")
             }
             Section("Experiments") {
                 row(.all, symbol: "square.grid.2x2")

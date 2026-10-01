@@ -271,7 +271,7 @@ public actor ModelRoutingFlow {
         } catch is CancellationError {
             let receipt = UsageReceipt(
                 route: .privateCloudCompute,
-                policy: resolver.policy,
+                policy: requestPolicy,
                 outcome: .cancelled,
                 outgoing: preview,
                 summary: ModelRoutingError.cancelled.message

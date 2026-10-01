@@ -204,7 +204,7 @@
       "title": "Model Routing Observatory",
       "category": "Intelligence",
       "milestone": "M4",
-      "state": "specified",
+      "state": "implemented",
       "dependsOn": [
         "LAB-010"
       ],

@@ -66,6 +66,9 @@ targets:
         buildPhase: resources
       - path: Fixtures/intelligence/intelligence-injected-note.txt
         buildPhase: resources
+      # LAB-011 Model Routing Observatory: original routing prompt fixture.
+      - path: Fixtures/routing/routing-sample-prompt.txt
+        buildPhase: resources
     dependencies:
       - package: LabSupport
       - package: LabDomain
@@ -78,6 +81,9 @@ targets:
       # LAB-010 Typed Local Intelligence: typed proposals, the sample parser, and the Foundation Models extractor.
       - package: LabFeatures
         product: TypedIntelligence
+      # LAB-011 Model Routing Observatory: route policy, PCC eligibility, outgoing-field preview.
+      - package: LabFeatures
+        product: ModelRouting
       # LAB-035 Access as a Superpower: the task, its chart semantics, and the Audio Graph descriptor.
       - package: LabFeatures
         product: AccessSuperpower
@@ -152,6 +158,9 @@ targets:
         buildPhase: resources
       - path: Fixtures/intelligence/intelligence-injected-note.txt
         buildPhase: resources
+      # LAB-011 Model Routing Observatory: original routing prompt fixture.
+      - path: Fixtures/routing/routing-sample-prompt.txt
+        buildPhase: resources
     dependencies:
       - package: LabSupport
       - package: LabDomain
@@ -164,6 +173,9 @@ targets:
       # LAB-010 Typed Local Intelligence: typed proposals, the sample parser, and the Foundation Models extractor.
       - package: LabFeatures
         product: TypedIntelligence
+      # LAB-011 Model Routing Observatory: route policy, PCC eligibility, outgoing-field preview.
+      - package: LabFeatures
+        product: ModelRouting
       # LAB-035 Access as a Superpower: the task, its chart semantics, and the Audio Graph descriptor.
       - package: LabFeatures
         product: AccessSuperpower
@@ -248,6 +260,8 @@ targets:
         buildPhase: resources
       - path: Fixtures/intelligence/intelligence-injected-note.txt
         buildPhase: resources
+      - path: Fixtures/routing/routing-sample-prompt.txt
+        buildPhase: resources
     dependencies:
       - package: LabSupport
       - package: LabDomain
@@ -260,6 +274,8 @@ targets:
         product: ShareIngress
       - package: LabFeatures
         product: TypedIntelligence
+      - package: LabFeatures
+        product: ModelRouting
       - package: LabFeatures
         product: AccessSuperpower
       - package: LabFeatures

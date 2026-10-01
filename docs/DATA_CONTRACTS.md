@@ -82,6 +82,19 @@ Monotonic clocks are device-local and cannot be compared directly. A clock estim
 
 Reliable commands and replaceable samples are separate queues. A replayed message ID returns its previous admission result. Stale replaceable samples are dropped. When sequence continuity is lost or a peer reconnects, acquire a snapshot before admitting mutations. Bounded queues and expiration prevent a stale wrist input from unexpectedly changing a later session.
 
+## Model routing (LAB-011)
+
+Lab-owned types, not Apple symbols:
+
+- **`InferenceRoute`**: `on-device`, `private-cloud-compute`, or `local-fallback`.
+- **`RoutingPolicy`**: default `local-only` (zero cloud sends); `cloud-allowed` only after entitlement, program, distribution, availability, quota, and consent gates open.
+- **`ConsentGrant`**: single-attempt, short-lived consent bound to an `OutgoingFieldPreview` digest. Entering the observatory does not grant it. Distinct from domain `CommitGrant`.
+- **`OutgoingFieldPreview`**: exact proposed field names and values shown before any cloud attempt; not a captured Apple wire payload. A SHA-256 digest binds consent.
+- **`UsageReceipt`**: route, policy, outcome, outgoing field names and lengths, closed gate kinds, and a summary. Never the prompt, note, or model output.
+- **`PCCEligibility`**: entitlement, program eligibility (enrollment and download threshold), distribution, SDK availability, and quota as separate gates from on-device `SystemLanguageModel` availability.
+
+CoreLocal refuses PCC sends (`RefusingCloudTransport`) and does not declare `com.apple.developer.private-cloud-compute`. Exhausted quota falls back locally; no paid third-party provider is modeled.
+
 ## Evidence records
 
 An evidence record names experiment/ticket ID, commit/revision, build/toolchain, SDK/OS, device class, input fixture hash, adapter path, consent state, exact steps, expected/observed results, measurements with units, and limitations. Never fabricate an identifier when no run occurred. Store explicit `not-run` rather than an empty success value.
