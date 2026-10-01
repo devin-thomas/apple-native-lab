@@ -717,7 +717,7 @@
       "title": "Tiny Doorway",
       "category": "Commercial",
       "milestone": "M4",
-      "state": "specified",
+      "state": "implemented",
       "dependsOn": [
         "LAB-001",
         "LAB-008"

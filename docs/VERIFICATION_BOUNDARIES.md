@@ -103,3 +103,11 @@ Recorded at [LAB-004-B](../tickets/LAB-004-B.md) from the [LAB-004-A](../tickets
 | [S59](SOURCE_INDEX.md#s59) | `Toggle(isOn:intent:label:)` in `_AppIntents_SwiftUI`, which the widget extension links | iOS 17.0, macOS 14.0, tvOS 17.0, watchOS 10.0 | The widget's toggle in the simulator. The release manifest records the link (LAB-004-A) | None beyond the widget's own |
 | [S59](SOURCE_INDEX.md#s59) | `View.privacySensitive(_:)` and `RedactionReasons.privacy` | iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0 | Drawn with the privacy redaction in a package test and read back by text recognition: the detail line is gone and the state stays readable. The deck's "Lock Screen, locked" preview uses the same redaction | That the system applies it to this widget on a locked device |
 
+### App Clips (LAB-039)
+
+Recorded at [LAB-039-A](../tickets/LAB-039-A.md) from the iOS 27.0 SDK's `AppClip.framework` headers on 2026-09-30 (Xcode 27.0). CoreLocal does not link the framework and declares no associated domains. No App Clip target is embedded; invocation remains an external FrontierOptional gate.
+
+| Source | Installed symbol | Declared availability | Demonstrated | Remaining uncertainty |
+|---|---|---|---|---|
+| [S52](SOURCE_INDEX.md#s52) | `APActivationPayload` with `URL` and `confirmAcquiredInRegion:completionHandler:`; `APActivationPayloadErrorCodeDisallowed` / `DoesNotMatch`; `NSUserActivity.appClipActivationPayload` | iOS 14.0 | Symbols read from the installed SDK. Package tests validate the same https URL shape locally and refuse `InvocationContext.source == .appClip` while `DoorwayClipStatus` is not configured. | An embedded App Clip, associated domains, AASA hosting, NFC/visual-code invocation, and location confirmation on a device |
+

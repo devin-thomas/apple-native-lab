@@ -563,6 +563,8 @@ Source: [App Clips](https://developer.apple.com/app-clips/)
 
 Use in this plan: Small install/invocation experience reference.
 
+Installed SDK check (2026-09-30, Xcode 27.0 with the iOS 27.0 SDK, LAB-039-A): `AppClip.framework` declares `APActivationPayload` (`URL`, `confirmAcquiredInRegion:completionHandler:`), `APActivationPayloadErrorDomain` / `APActivationPayloadErrorCodeDisallowed` / `DoesNotMatch`, and `NSUserActivity.appClipActivationPayload` (iOS 14.0). CoreLocal does not link the framework. App Clip invocation needs a FrontierOptional target, associated domains, and deployment configuration; this build validates the same URL shape locally and reports the clip as not configured ([installed SDK ledger](VERIFICATION_BOUNDARIES.md#app-clips-lab-039)).
+
 Implementation evidence required: actual SDK symbol/availability, permissions or entitlement, and a named compile/device result.
 
 ## S53

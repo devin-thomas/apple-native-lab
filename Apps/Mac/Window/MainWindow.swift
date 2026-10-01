@@ -88,6 +88,8 @@ struct MainWindow: View {
             TypedIntelligenceListColumn(window: window)
         case .accessSuperpower:
             AccessSuperpowerListColumn(window: window, session: window.access)
+        case .tinyDoorway:
+            TinyDoorwayListColumn(window: window, session: window.doorway)
         case .shareInbox:
             ShareInboxListColumn(window: window)
         case .portableObjects:
@@ -116,6 +118,8 @@ struct MainWindow: View {
             TypedIntelligenceDetailColumn(window: window)
         case .accessSuperpower:
             AccessSuperpowerDetailColumn(window: window, session: window.access)
+        case .tinyDoorway:
+            TinyDoorwayDetailColumn(window: window, session: window.doorway)
         case .shareInbox:
             ShareInboxDetailColumn(window: window)
         case .portableObjects:
@@ -144,6 +148,7 @@ struct MainWindow: View {
         case .actionAtlas: "Search actions"
         case .typedIntelligence: "Search notes"
         case .accessSuperpower: "Search archived samples"
+        case .tinyDoorway: "Search fixtures"
         case .shareInbox: "Search the inbox"
         case .portableObjects: "Search objects"
         default: "Search experiments"

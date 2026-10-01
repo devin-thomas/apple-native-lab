@@ -16,6 +16,8 @@ enum SidebarDestination: Hashable {
     case typedIntelligence
     /// LAB-035: one task, finished by sight, VoiceOver, keyboard, or Audio Graph.
     case accessSuperpower
+    /// LAB-039: validate a doorway link and confirm one tightly scoped visit.
+    case tinyDoorway
     /// LAB-007: the share inbox, with the paste and file-picker fallbacks.
     case shareInbox
     /// LAB-008: drag, export, and import lab objects.
@@ -30,6 +32,7 @@ enum SidebarDestination: Hashable {
         case .actionAtlas: "Action Atlas"
         case .typedIntelligence: "Typed Local Intelligence"
         case .accessSuperpower: AccessSuperpowerExperiment.title
+        case .tinyDoorway: TinyDoorwayExperiment.title
         case .shareInbox: "Share Inbox"
         case .portableObjects: "Portable Objects"
         case .surfaceDeck: SurfaceDeck.title
@@ -44,6 +47,7 @@ enum SidebarDestination: Hashable {
         case .actionAtlas: "action-atlas"
         case .typedIntelligence: "typed-intelligence"
         case .accessSuperpower: "access-superpower"
+        case .tinyDoorway: "tiny-doorway"
         case .shareInbox: "share-inbox"
         case .portableObjects: "portable-objects"
         case .surfaceDeck: "surface-deck"
@@ -61,6 +65,7 @@ enum SidebarDestination: Hashable {
         case ("action-atlas", nil): self = .actionAtlas
         case ("typed-intelligence", nil): self = .typedIntelligence
         case ("access-superpower", nil): self = .accessSuperpower
+        case ("tiny-doorway", nil): self = .tinyDoorway
         case ("share-inbox", nil): self = .shareInbox
         case ("portable-objects", nil): self = .portableObjects
         case ("surface-deck", nil): self = .surfaceDeck
@@ -89,6 +94,8 @@ final class MainWindowState {
     var intelligenceNote: IntelligenceFixture?
     /// Access as a Superpower's selection and result in this window.
     let access = AccessTaskSession()
+    /// Tiny Doorway's link draft, validation, and visit result in this window.
+    let doorway = DoorwaySession()
     /// The share-inbox import the detail column shows.
     var inboxEntry: InboxEntry.ID?
     /// LAB-008: this window's objects, selection, and import under review.
