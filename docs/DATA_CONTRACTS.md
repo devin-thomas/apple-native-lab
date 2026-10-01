@@ -72,6 +72,15 @@ LAB-016-A. A continuation is a hint, not a copy of the draft and not a sync (ADR
 
 The explicit document is a separate copy a person makes. It is UTF-8 JSON, `"format": "native-lab-continuation"`, `"schemaVersion": 1`, with `documentID`, `revision`, `title`, and `sections` in that order and no other keys. A section may not itself contain a blank line, so joining on `\n\n` and splitting again agree. The canonical bytes end with a line break. Importing one creates the item through `OperationService` when the lab does not already hold that ID, and leaves an existing item unchanged. The destination clamps a section index into the draft it actually holds.
 
+## Durable sync ledger
+
+LAB-017-A fixes the manual-exchange document (`LedgerDocument` in `Packages/LabFeatures/Sources/DurableSyncLedger/`):
+
+- **Format.** UTF-8 JSON, `"kind": "native-lab-sync-ledger"`, `"schemaVersion": 1`. `account` is a UUID. `scope` is `private` or `shared`. A shared document names `share`; a private document does not. `envelopes` is the mutation log. Unknown fields, duplicate keys, a `public` scope, and a higher schema version are refused before any envelope is appended. The file is at most 2 MiB and at most 4,096 envelopes.
+- **Accounts.** A private document is applied only by the account it names. A shared document is one share, and the file profile admits members explicitly. Neither document is a public database.
+- **Merge.** Each envelope carries a version vector. An edit that happened after another wins. Edits that were made apart stay as a conflict until a person chooses. The choice is a new envelope. A tombstone that dominates an older edit does not recreate the record.
+- **Where it is written.** Each device appends its own write-ahead log, then materializes through `OperationService`. The optional profile is a directory of one JSON file per mutation. Reset Demo for this experiment removes only that experiment's folder.
+
 ## Import resource policy
 
 Initial defaults: at most 32 attachments per import; at most 2 MiB of metadata/text; at most 1 GiB total staged media; at most 2,000 archive entries; nesting depth at most 16. These are proposed protective defaults, not measured device limits. Media should stream to disk rather than allocate the declared total in memory. A smaller device/profile can impose stricter limits, and the UI must show the effective limit before import.

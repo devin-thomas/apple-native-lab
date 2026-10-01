@@ -33,6 +33,8 @@ enum SidebarDestination: Hashable {
     case desktopPower
     /// LAB-015: cold and warm fixture runs, recorded only when asked.
     case localModelBench
+    /// LAB-017: two devices, a local ledger, and a manual document.
+    case durableSync
     case catalog(CatalogScope)
 
     var title: String {
@@ -49,6 +51,7 @@ enum SidebarDestination: Hashable {
         case .surfaceDeck: SurfaceDeck.title
         case .desktopPower: "Desktop Native Power"
         case .localModelBench: LocalModelBenchExperiment.title
+        case .durableSync: DurableSyncExperiment.title
         case .catalog(let scope): scope.title
         }
     }
@@ -68,6 +71,7 @@ enum SidebarDestination: Hashable {
         case .surfaceDeck: "surface-deck"
         case .desktopPower: "desktop-power"
         case .localModelBench: "local-model-bench"
+        case .durableSync: "durable-sync"
         case .catalog(.all): "all"
         case .catalog(.milestone(let milestone)): "milestone:\(milestone.rawValue)"
         case .catalog(.category(let category)): "category:\(category)"
@@ -90,6 +94,7 @@ enum SidebarDestination: Hashable {
         case ("surface-deck", nil): self = .surfaceDeck
         case ("desktop-power", nil): self = .desktopPower
         case ("local-model-bench", nil): self = .localModelBench
+        case ("durable-sync", nil): self = .durableSync
         case ("all", nil): self = .catalog(.all)
         case ("milestone", let raw?): guard let milestone = Milestone(rawValue: raw) else { return nil }
             self = .catalog(.milestone(milestone))
@@ -127,6 +132,8 @@ final class MainWindowState {
     let contextCards = ContextCardsSession()
     /// LAB-015: this window's bench runs. Nothing is recorded until Record Selected Run.
     let bench = LocalModelBenchSession()
+    /// LAB-017: this window's two-device ledger replay.
+    let durableSync = DurableSyncSession()
     var searchText = ""
     /// Incremented to ask the window to focus its search field.
     var searchRequests = 0

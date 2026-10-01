@@ -105,6 +105,9 @@ targets:
       # LAB-015 Local Model Bench: the fixture executor. It does not link Core ML.
       - package: LabFeatures
         product: LocalModelBench
+      # LAB-017 Durable Sync Ledger: the write-ahead ledger, the file profile, and the manual document.
+      - package: LabFeatures
+        product: DurableSyncLedger
     info:
       path: Apps/Mac/Info.plist
       properties:
@@ -219,6 +222,9 @@ targets:
       # LAB-015 Local Model Bench: the fixture executor. It does not link Core ML.
       - package: LabFeatures
         product: LocalModelBench
+      # LAB-017 Durable Sync Ledger: the write-ahead ledger, the file profile, and the manual document.
+      - package: LabFeatures
+        product: DurableSyncLedger
     info:
       path: Apps/Phone/Info.plist
       properties:
@@ -330,6 +336,9 @@ targets:
       # LAB-015 Local Model Bench: the fixture executor, as LabPhone. It does not link Core ML.
       - package: LabFeatures
         product: LocalModelBench
+      # LAB-017 Durable Sync Ledger: the same ledger the iPhone host links.
+      - package: LabFeatures
+        product: DurableSyncLedger
       - target: ShareExtension
         embed: true
       # LAB-004: the widget and Control extension, embedded only in this SystemSurfaces variant.

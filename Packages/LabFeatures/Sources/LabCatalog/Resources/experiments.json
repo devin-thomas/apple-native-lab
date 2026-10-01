@@ -313,7 +313,7 @@
       "title": "Durable Sync Ledger",
       "category": "Continuity",
       "milestone": "M3",
-      "state": "specified",
+      "state": "implemented",
       "dependsOn": [
         "LAB-008"
       ],

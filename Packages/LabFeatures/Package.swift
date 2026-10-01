@@ -20,6 +20,7 @@ let package = Package(
         .library(name: "DesktopNativePower", targets: ["DesktopNativePower"]),
         .library(name: "TrustDesk", targets: ["TrustDesk"]),
         .library(name: "LocalModelBench", targets: ["LocalModelBench"]),
+        .library(name: "DurableSyncLedger", targets: ["DurableSyncLedger"]),
     ],
     dependencies: [
         .package(path: "../LabSupport"),
@@ -194,6 +195,16 @@ let package = Package(
                 "LocalModelBench",
                 .product(name: "LabDomain", package: "LabDomain"),
             ]
+        ),
+        // LAB-017 Durable Sync Ledger: a local write-ahead log, an optional private/shared profile,
+        // and manual document exchange. CloudKit is not imported; CoreLocal does not link it.
+        .target(
+            name: "DurableSyncLedger",
+            dependencies: [.product(name: "LabDomain", package: "LabDomain")]
+        ),
+        .testTarget(
+            name: "DurableSyncLedgerTests",
+            dependencies: ["DurableSyncLedger", .product(name: "LabDomain", package: "LabDomain")]
         ),
     ]
 )

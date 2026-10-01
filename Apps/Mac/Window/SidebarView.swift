@@ -55,6 +55,9 @@ struct SidebarView: View {
                 Label(LocalModelBenchExperiment.title, systemImage: LocalModelBenchExperiment.symbol)
                     .tag(SidebarDestination.localModelBench)
                     .accessibilityHint("Compare a fixed corpus. Cold and warm stay separate, and nothing is recorded until you ask.")
+                Label(DurableSyncExperiment.title, systemImage: DurableSyncExperiment.symbol)
+                    .tag(SidebarDestination.durableSync)
+                    .accessibilityHint("Two devices, a local ledger, and a document you can exchange by hand")
             }
             Section("Experiments") {
                 row(.all, symbol: "square.grid.2x2")

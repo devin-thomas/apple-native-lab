@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		039F6AC45ABDCB594CCCB743 /* DurableSyncLedger in Frameworks */ = {isa = PBXBuildFile; productRef = E08448913DADC94B523B6867 /* DurableSyncLedger */; };
 		049D235E474520D658AD3AD3 /* ActionAtlas in Frameworks */ = {isa = PBXBuildFile; productRef = D681B15E8F4FC00BCB2862EE /* ActionAtlas */; };
 		04A714E690365F240DA19ECC /* seed.json in Resources */ = {isa = PBXBuildFile; fileRef = 4C5126791B7E1A1A049AE090 /* seed.json */; };
 		0696065FF182D17B47C7385C /* TrustDesk in Frameworks */ = {isa = PBXBuildFile; productRef = DAA9D7AA6F4848C5373DE1B3 /* TrustDesk */; };
@@ -73,10 +74,12 @@
 		CBF185BA448CD3285E3F5BC8 /* LabSupport in Frameworks */ = {isa = PBXBuildFile; productRef = F5558900C8E1A34A220E60D3 /* LabSupport */; };
 		D4FFE59C3D108F7EEC03F76B /* SurfaceDeck in Frameworks */ = {isa = PBXBuildFile; productRef = 3CF19F7CC72BE703FC6929AD /* SurfaceDeck */; };
 		DC14139A63BD575B5A92D755 /* LabCatalog in Frameworks */ = {isa = PBXBuildFile; productRef = D848D3397291632E552B77A2 /* LabCatalog */; };
+		DEA91004D4A50A418656EE6C /* DurableSyncLedger in Frameworks */ = {isa = PBXBuildFile; productRef = 8073F2E8020227D6576B157F /* DurableSyncLedger */; };
 		E10047C202637983EF3886EE /* TypedIntelligence in Frameworks */ = {isa = PBXBuildFile; productRef = FA764C388624F65B1FE0AC12 /* TypedIntelligence */; };
 		E70BDD2C02F2994CBB681ED7 /* PickUpHere in Frameworks */ = {isa = PBXBuildFile; productRef = 9A18EBD4D341D0695E5F8C7B /* PickUpHere */; };
 		F4026F15E90968A3C198C0E5 /* AccessSuperpower in Frameworks */ = {isa = PBXBuildFile; productRef = C1686806D655F8ADADCF3268 /* AccessSuperpower */; };
 		FAB9761A4B3BA5EE6B7D4921 /* LabSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 0A4E65ACA3B88C9D6E09A91B /* LabSupport */; };
+		FB9D9D6AF4DA62B78C9A8F2C /* DurableSyncLedger in Frameworks */ = {isa = PBXBuildFile; productRef = 88DB2EE25490771C42F2A729 /* DurableSyncLedger */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -409,6 +412,7 @@
 				AA05060A1927DB052D03BA7E /* TrustDesk in Frameworks */,
 				823467FF125D225EC5477CA3 /* ContextCards in Frameworks */,
 				1971878BD77FD9FBB927D999 /* LocalModelBench in Frameworks */,
+				039F6AC45ABDCB594CCCB743 /* DurableSyncLedger in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -439,6 +443,7 @@
 				0696065FF182D17B47C7385C /* TrustDesk in Frameworks */,
 				4FDBD4A004E827140BE8A421 /* ContextCards in Frameworks */,
 				73AF93F8C738CF705BA9D0E5 /* LocalModelBench in Frameworks */,
+				FB9D9D6AF4DA62B78C9A8F2C /* DurableSyncLedger in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -497,6 +502,7 @@
 				AD455F75C2D216702A2B62CE /* TrustDesk in Frameworks */,
 				76C6A1AD242AA9CD5B90099D /* ContextCards in Frameworks */,
 				31AFEC7DFA568A155997BBC4 /* LocalModelBench in Frameworks */,
+				DEA91004D4A50A418656EE6C /* DurableSyncLedger in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -714,6 +720,7 @@
 				C5D34BAE1E274DDF6B129BCC /* TrustDesk */,
 				B07CF76A07881747B6BDDC65 /* ContextCards */,
 				59350CEF01CB3A0AC950B880 /* LocalModelBench */,
+				E08448913DADC94B523B6867 /* DurableSyncLedger */,
 			);
 			productName = LabPhoneSurfaces;
 			productReference = 9A57B8DBFF3F863D70D41513 /* LabPhoneSurfaces.app */;
@@ -753,6 +760,7 @@
 				ED6B5B90B0BE1BD3A5AE104F /* TrustDesk */,
 				0A1E283E59A2E6CE6A1FCEF2 /* ContextCards */,
 				47A98A400215FB089E3EDF93 /* LocalModelBench */,
+				8073F2E8020227D6576B157F /* DurableSyncLedger */,
 			);
 			productName = LabMac;
 			productReference = 2F62DB7E020E6BFDAC86BD42 /* LabMac.app */;
@@ -861,6 +869,7 @@
 				DAA9D7AA6F4848C5373DE1B3 /* TrustDesk */,
 				2170AE2584F7EF6C7CC11E04 /* ContextCards */,
 				3ACA181AD3B230C4BEB973C8 /* LocalModelBench */,
+				88DB2EE25490771C42F2A729 /* DurableSyncLedger */,
 			);
 			productName = LabPhone;
 			productReference = 28C2C1B8B040DD0D06AF070E /* LabPhone.app */;
@@ -2166,6 +2175,10 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = ActionAtlas;
 		};
+		8073F2E8020227D6576B157F /* DurableSyncLedger */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DurableSyncLedger;
+		};
 		872A3526A3C216A5301B05D2 /* TypedIntelligence */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = TypedIntelligence;
@@ -2173,6 +2186,10 @@
 		88023F30308C4118D4A07ABA /* ActionAtlas */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ActionAtlas;
+		};
+		88DB2EE25490771C42F2A729 /* DurableSyncLedger */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DurableSyncLedger;
 		};
 		9429B9706DB8D93A799FDA9F /* LabSupport */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -2261,6 +2278,10 @@
 		DAA9D7AA6F4848C5373DE1B3 /* TrustDesk */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = TrustDesk;
+		};
+		E08448913DADC94B523B6867 /* DurableSyncLedger */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DurableSyncLedger;
 		};
 		E71BE15BDC35B0EB85330C6A /* PickUpHere */ = {
 			isa = XCSwiftPackageProductDependency;

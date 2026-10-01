@@ -106,6 +106,8 @@ struct MainWindow: View {
             DesktopPowerListColumn()
         case .localModelBench:
             LocalModelBenchListColumn(window: window)
+        case .durableSync:
+            DurableSyncListColumn(window: window)
         case .catalog(let scope):
             if let registry = model.registry {
                 CatalogListColumn(registry: registry, scope: scope, window: window)
@@ -144,6 +146,8 @@ struct MainWindow: View {
             DesktopPowerDetailColumn()
         case .localModelBench:
             LocalModelBenchDetailColumn(window: window)
+        case .durableSync:
+            DurableSyncDetailColumn(window: window)
         case .catalog:
             if let registry = model.registry {
                 CatalogDetailColumn(registry: registry, experimentID: window.experimentID)
@@ -173,6 +177,7 @@ struct MainWindow: View {
         case .pickUpHere: "Search drafts"
         case .contextCards: "Search samples"
         case .localModelBench: "Search bench cases"
+        case .durableSync: "Search devices"
         default: "Search experiments"
         }
     }

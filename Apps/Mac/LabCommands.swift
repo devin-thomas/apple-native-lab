@@ -63,6 +63,9 @@ struct LabCommands: Commands {
             Button(LocalModelBenchExperiment.title) { window?.destination = .localModelBench }
                 .keyboardShortcut("3", modifiers: [.command, .option])
                 .disabled(window == nil)
+            Button(DurableSyncExperiment.title) { window?.destination = .durableSync }
+                .keyboardShortcut("4", modifiers: [.command, .option])
+                .disabled(window == nil)
             Button(DesktopCommand.showPalette.title) { desktop.showsPalette = true }
                 .keyboardShortcut("k", modifiers: .command)
             Button(DesktopCommand.showStatus.title) {
