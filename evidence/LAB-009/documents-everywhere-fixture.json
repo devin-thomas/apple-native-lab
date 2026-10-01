@@ -1,0 +1,39 @@
+{
+  "check": "Preview, revision, authority preservation, denial, cancellation, and duplicate adoption fixture qualification",
+  "date": "2026-10-01T06:13:36Z",
+  "execution": {
+    "path": "fixture"
+  },
+  "inputs": [
+    "Fixtures/LAB-009/harbor-note.anlab@sha256:ea85fe0b903566862a3ba9ea8a291cc8e3beff0cb352f3175d5a360e0bce1655",
+    "Fixtures/LAB-009/newer-schema.anlab@sha256:316cf871c03c356a569e98c1a302251c3804f74b890d95ef6569426de3bfc1e3",
+    "Fixtures/LAB-009/not-an-object.txt@sha256:e57b458196f994e6cb094cea2fff5c58d87a723fb05b1abed54812c48d380491",
+    "Fixtures/LAB-009/tide-card.anlab@sha256:5a9aacc5a8cec916e98537a9f1a23754302b1ca71349e9e9561d6668f744d20e"
+  ],
+  "limitations": [
+    "Package fixture path on macOS with Xcode 27.0; provenance toolchain fields match the separately measured hosted build, not a packaged fixture executable.",
+    "ProviderSession is an in-memory model; no File Provider domain, external editor, coordination, or entitlement was exercised.",
+    "Shared preview-builder tests do not prove Quick Look system extension dispatch.",
+    "Pre-start cancellation is deterministic; service interruption during a live preview or provider fetch is not tested. No physical-device or manual accessibility run.",
+    "Record date is evidence capture time; the package test output reports elapsed time but no UTC start time.",
+    "Duplicate refusal preserves the store but does not clean its staged review; this is recorded as existing behavior, not repaired in qualification."
+  ],
+  "outcome": {
+    "result": "passed",
+    "detail": "23 tests in 5 suites passed. Matching edits advanced the appropriate revision; stale edits left the mirror unchanged. Original catalog bytes survived every mirror edit, eviction, and disconnect. Denied and pre-cancelled adoption committed no item; retry created once and duplicate adoption preserved state. Both samples previewed without a provider connection; hostile input and embedded markup were refused or escaped. Current behavior finding: refusing the duplicate leaves one staged review; the browser has no Close Review action."
+  },
+  "provenance": {
+    "sourceRevision": "0bb92ce+duplicate-staging-assertion-working-tree",
+    "xcodeBuild": "27A266a",
+    "xcodeVersion": "27.0"
+  },
+  "schemaVersion": 1,
+  "steps": [
+    "swift test --package-path Packages/LabFeatures --filter DocumentsEverywhereTests",
+    "23 tests in 5 suites, including 4 LAB-009-B qualification tests; fresh in-memory operation stores and temporary staging folders",
+    "Compare authoritative bytes before and after metadata/content edits, conflict, eviction, repeated disconnect, and reconnect; refuse duplicate connection without changing state",
+    "Read/propose-only actor cannot adopt; self-cancelled task before adoption leaves no item or pending import; retry creates once; duplicate adoption refuses",
+    "Malformed/newer-schema fixtures refuse; HTML escapes markup from a synthetic edited sample"
+  ],
+  "subject": "LAB-009"
+}

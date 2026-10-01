@@ -1,0 +1,31 @@
+{
+  "check": "Live integration configuration review",
+  "date": "2026-10-01T05:55:20Z",
+  "execution": {
+    "path": "static-review"
+  },
+  "inputs": [
+    "project.yml@sha256:4ecc2ba0629924353e6d2305a32d3461d388260a6a443f53780a8153c3685a29",
+    "Extensions/QuickLookPreview/Info.plist@sha256:0af0a33a85968182a876bdc3daef35b0dff97f4909120892de183b28f6dbb149",
+    "Extensions/DocumentsProvider/SampleFixtureProvider.swift@sha256:9ee30ccc0b6aedd1a09860e039831e20fbe16cfba037af0390059c2ce0b39e5c"
+  ],
+  "limitations": [
+    "Static configuration review only; cannot establish runtime failure or successful service dispatch.",
+    "No provider activation, permissions, file edit, physical-device, or assistive-technology run. No screenshot or raw result bundle enters public evidence."
+  ],
+  "outcome": {
+    "result": "blocked",
+    "detail": "No provider executable/host exists to run live qualification. Quick Look compiles for iOS only, with no observed Files dispatch and a missing documented data-based preview key. Live edit acceptance cannot be inferred from the mirror model because the shell refuses edits. Original bundled fixtures match the tracked public-safe samples."
+  },
+  "provenance": {
+    "sourceRevision": "0bb92ce+documentation-working-tree"
+  },
+  "schemaVersion": 1,
+  "steps": [
+    "Inspect targets and schemes in project.yml: QuickLookPreview is iOS SystemSurfaces only; no DocumentsProvider target or FrontierOptional scheme exists",
+    "Inspect preview extension metadata: principal class and content types present; documented QLIsDataBasedPreview key absent",
+    "Inspect provider shell: modifyItem always refuses with versionConflict; domain fixture model is not the live adapter",
+    "Review original fixture/resources equality, evidence fields, privacy and accessibility limitations"
+  ],
+  "subject": "LAB-009"
+}

@@ -269,6 +269,11 @@ Source: [AR Quick Look](https://developer.apple.com/quick-look-gallery/)
 
 Use in this plan: USDZ viewing, AR placement, and supported custom actions.
 
+LAB-009 uses document previews, not AR Quick Look. Its applicable reference is
+[QLPreviewProvider](https://developer.apple.com/documentation/quicklookui/qlpreviewprovider),
+reviewed during LAB-009-B with the installed Quick Look headers. The provider subclass
+returns a supported preview representation; its compilation is not proof the system loads it.
+
 Implementation evidence required: actual SDK symbol/availability, permissions or entitlement, and a named compile/device result.
 
 ## S23

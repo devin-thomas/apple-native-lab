@@ -1,0 +1,40 @@
+{
+  "check" : "Browser preview, adoption, duplicate refusal, and Reset Demo on a fresh host store",
+  "date" : "2026-10-01T05:48:41Z",
+  "execution" : {
+    "path" : "fixture"
+  },
+  "inputs" : [
+    "harbor-note.anlab@sha256:ea85fe0b903566862a3ba9ea8a291cc8e3beff0cb352f3175d5a360e0bce1655",
+    "tide-card.anlab@sha256:5a9aacc5a8cec916e98537a9f1a23754302b1ca71349e9e9561d6668f744d20e"
+  ],
+  "limitations" : [
+    "Hosted model replay: no rendered screen, gesture, assistive technology, file dialog, or Files/Finder Quick Look was driven.",
+    "The Quick Look extension is not loaded by this check. Shared preview-builder behavior is not proof of a system preview.",
+    "Provider remains disabled; no domain registration, external file edit, materialization, or real disconnect ran.",
+    "No physical iPhone or iPad; supports implemented at most."
+  ],
+  "outcome" : {
+    "detail" : "Both samples previewed with the provider disabled, committed once as user items with app-UI receipts, refused duplicate adoption without new receipts, and retained their items and canonical document bytes across Reset Demo. Unknown sample selection refused.",
+    "result" : "passed"
+  },
+  "provenance" : {
+    "appVersion" : "0.1.0",
+    "buildNumber" : "1",
+    "buildProfile" : "CoreLocal",
+    "minimumOS" : "26.0",
+    "sdkName" : "macosx27.0",
+    "sourceRevision" : "addbf39+LAB-009-B-working-tree",
+    "xcodeBuild" : "27A266a",
+    "xcodeVersion" : "27.0"
+  },
+  "schemaVersion" : 1,
+  "steps" : [
+    "Start LabLibrary on a fresh SQLite store; create one user collection through its operation service",
+    "Open DocumentsEverywhereSession; provider disabled; preview both bundled samples",
+    "Adopt each sample through the session; inspect app-UI receipts; adopt again and observe refusal without another receipt",
+    "Reset Demo; read the user items directly and compare exported documents to canonical original bytes",
+    "Select an unknown sample; no preview and a visible refusal outcome"
+  ],
+  "subject" : "LAB-009"
+}
