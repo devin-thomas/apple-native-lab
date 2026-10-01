@@ -555,6 +555,10 @@ targets:
       - package: LabSupport
       - package: LabFeatures
         product: LabCatalog
+      - package: LabFeatures
+        product: ScreeningRoom
+      - package: LabFeatures
+        product: ScreeningRoomPlayback
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: $(LAB_BUNDLE_PREFIX).nativelab.phonetests
