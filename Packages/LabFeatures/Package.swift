@@ -11,6 +11,7 @@ let package = Package(
         .library(name: "AccessSuperpower", targets: ["AccessSuperpower"]),
         .library(name: "ShareIngress", targets: ["ShareIngress"]),
         .library(name: "PortableObjects", targets: ["PortableObjects"]),
+        .library(name: "PickUpHere", targets: ["PickUpHere"]),
         .library(name: "SurfaceDeck", targets: ["SurfaceDeck"]),
     ],
     dependencies: [
@@ -94,6 +95,17 @@ let package = Package(
         .testTarget(
             name: "PortableObjectsTests",
             dependencies: ["PortableObjects", .product(name: "LabDomain", package: "LabDomain")]
+        ),
+        // LAB-016 Pick Up Here: a continuation hint (identifiers and a section position) and the
+        // explicit link or document a person copies when Handoff is not the transfer. Resolving
+        // and importing go through OperationService. NSUserActivity is Foundation, on every host.
+        .target(
+            name: "PickUpHere",
+            dependencies: [.product(name: "LabDomain", package: "LabDomain")]
+        ),
+        .testTarget(
+            name: "PickUpHereTests",
+            dependencies: ["PickUpHere", .product(name: "LabDomain", package: "LabDomain")]
         ),
         // LAB-004 Surface Deck: the demo session's actions and App Intents over the host's
         // OperationService, the immutable snapshot the app writes for surfaces, and the widget
