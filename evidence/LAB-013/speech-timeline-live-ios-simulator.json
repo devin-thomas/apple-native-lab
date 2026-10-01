@@ -1,0 +1,45 @@
+{
+  "check" : "Speech Timeline's on-device path: SpeechAnalyzer and SpeechTranscriber transcribed a clip this device's speech synthesizer spoke from the sample script, through SpeechTimelineFlow, with provisional text kept apart from finalized segments",
+  "date" : "2026-09-30T23:19:18Z",
+  "execution" : {
+    "path" : "simulator",
+    "simulator" : {
+      "deviceClass" : "iPhone19,2",
+      "osVersion" : "Version 27.0 (Build 24A434)",
+      "platform" : "iOS"
+    }
+  },
+  "inputs" : [
+    "script:speech-sample-script@sha256:c03523b47c45768c621061b257719e1b97e2a311a44dfc00f6ff69265e52cdf0",
+    "language:en-US"
+  ],
+  "limitations" : [
+    "Simulator path: the simulator runs the host Mac's speech stack. It is not device evidence.",
+    "The audio is synthesized speech, not a person speaking, and no microphone was opened. Recognition of real voices, rooms, and microphones is not covered.",
+    "On-device by construction, not by network monitoring: the module has no server route (FixtureAndRouteTests), and the analyzer runs in the system's speech service, whose network activity was not observed.",
+    "Timings are single intervals, not a benchmark. The synthesizer's voice and the recognizer's text are this machine's; other devices, voices, and OS builds may differ."
+  ],
+  "outcome" : {
+    "detail" : "SpeechTranscriber.isAvailable false; 0 supported and 0 installed languages; On-device transcription is not available on this device. No transcription was attempted, because the route is not open here. This test never downloads a model.",
+    "result" : "blocked"
+  },
+  "provenance" : {
+    "appVersion" : "unknown",
+    "buildNumber" : "unknown",
+    "buildProfile" : "unknown",
+    "minimumOS" : "unknown",
+    "sdkName" : "iphonesimulator27.0",
+    "sourceRevision" : "fc0580b",
+    "xcodeBuild" : "27A266a",
+    "xcodeVersion" : "27.0"
+  },
+  "schemaVersion" : 1,
+  "steps" : [
+    "LAB_LIVE_SPEECH=1 swift test --package-path Packages/LabFeatures --filter LiveSpeechEvidenceTests",
+    "Read SpeechTranscriber.isAvailable, supportedLocales, and installedLocales; stop as blocked if the en-US model is not installed (nothing is downloaded)",
+    "SampleClipRenderer: AVSpeechSynthesizer.write with this device's en-US voice, the script's lines joined, into a temporary CAF file",
+    "SpeechTimelineFlow.transcribe with OnDeviceSpeechRecognizer: SpeechAnalyzer.analyzeSequence(from:) then finalizeAndFinish(through:), SpeechTranscriber with volatileResults and audioTimeRange",
+    "Check every snapshot, the final timeline, word times, and a correction's range; delete the temporary clip"
+  ],
+  "subject" : "LAB-013"
+}

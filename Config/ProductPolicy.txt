@@ -92,6 +92,14 @@ link         SystemSurfaces ios      Security                # host variant, as 
 link         SystemSurfaces ios      AuthenticationServices  # host variant, as LabPhone
 purpose      LocalAuthentication NSFaceIDUsageDescription    # device-owner confirmation can use Face ID
 
+# CoreLocal: Speech Timeline (LAB-013). AVFAudio holds AVSpeechSynthesizer (the sample clip is spoken
+# on the device), AVAudioPlayer (scrubbing playback), and AVAudioEngine (live capture, which only the
+# Record action reaches and which falls back in Source builds: no microphone purpose string, and no
+# audio-input entitlement on the Mac). Speech is already allowed above. No entitlement is added.
+link         CoreLocal  macos    AVFAudio            # synthesizer, playback, and the capture engine
+link         CoreLocal  ios      AVFAudio            # same, iPhone host
+link         SystemSurfaces ios  AVFAudio            # host variant: Speech Timeline, as LabPhone
+
 # SystemSurfaces: Surface Deck (LAB-004). The host variant writes the session snapshot into the same
 # App Group and asks WidgetKit to reload only when it changes. The widget and Control extension it
 # embeds links only Foundation, SwiftUI, UIKit, AppIntents, _AppIntents_SwiftUI, CryptoKit (through

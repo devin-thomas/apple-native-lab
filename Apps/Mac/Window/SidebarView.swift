@@ -69,6 +69,9 @@ struct SidebarView: View {
                 Label("Point, Inspect, Propose", systemImage: "viewfinder")
                     .tag(SidebarDestination.pointInspect)
                     .accessibilityHint("Turn a chosen image into a record you review before it is saved")
+                Label("Speech Timeline", systemImage: "waveform.and.magnifyingglass")
+                    .tag(SidebarDestination.speechTimeline)
+                    .accessibilityHint("Transcribe on this device and scrub the text against its audio")
             }
             Section("Experiments") {
                 row(.all, symbol: "square.grid.2x2")

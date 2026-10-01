@@ -1,0 +1,45 @@
+{
+  "check" : "Speech Timeline's on-device path: SpeechAnalyzer and SpeechTranscriber transcribed a clip this device's speech synthesizer spoke from the sample script, through SpeechTimelineFlow, with provisional text kept apart from finalized segments",
+  "date" : "2026-09-30T23:14:35Z",
+  "execution" : {
+    "device" : {
+      "deviceClass" : "Mac17,14",
+      "osVersion" : "Version 27.0 (Build 26A425)",
+      "platform" : "macOS"
+    },
+    "path" : "physical"
+  },
+  "inputs" : [
+    "script:speech-sample-script@sha256:c03523b47c45768c621061b257719e1b97e2a311a44dfc00f6ff69265e52cdf0",
+    "language:en-US"
+  ],
+  "limitations" : [
+    "Physical path only in that the transcriber ran on this machine's own hardware (DeviceSnapshot). A test process drove it, not a person in the app, and it says nothing about an iPhone or iPad.",
+    "The audio is synthesized speech, not a person speaking, and no microphone was opened. Recognition of real voices, rooms, and microphones is not covered.",
+    "On-device by construction, not by network monitoring: the module has no server route (FixtureAndRouteTests), and the analyzer runs in the system's speech service, whose network activity was not observed.",
+    "Timings are single intervals, not a benchmark. The synthesizer's voice and the recognizer's text are this machine's; other devices, voices, and OS builds may differ."
+  ],
+  "outcome" : {
+    "detail" : "SpeechTranscriber.isAvailable true; 45 supported and 9 installed languages; English (United States): the on-device model is installed. The synthesizer spoke the 4-line script as a 7373 ms clip in 1417 ms (sha256 69f14851966dca9d28a19a24b2a06268fb439f27999139e9336fa2ff5b22d111). SpeechTimelineFlow with OnDeviceSpeechRecognizer took 390 ms: 41 provisional snapshots, 0 stale guesses dropped, 0 finals refused or repeated, 4 finalized segments: 0:00.0–0:01.6 “The kettle clicked off at 7.” (6 word times); 0:01.6–0:03.9 “Blue tape marks the 2nd shelf.” (6 word times); 0:03.9–0:05.4 “Water the fern on Thursday.” (5 word times); 0:05.4–0:07.3 “The spare key is in the green tin.” (8 word times). Key words heard: kettle, tape, fern, tin. No snapshot showed a guess over finalized audio: true.",
+    "result" : "passed"
+  },
+  "provenance" : {
+    "appVersion" : "unknown",
+    "buildNumber" : "unknown",
+    "buildProfile" : "unknown",
+    "minimumOS" : "unknown",
+    "sdkName" : "macosx27.0",
+    "sourceRevision" : "fc0580b",
+    "xcodeBuild" : "27A266a",
+    "xcodeVersion" : "27.0"
+  },
+  "schemaVersion" : 1,
+  "steps" : [
+    "LAB_LIVE_SPEECH=1 swift test --package-path Packages/LabFeatures --filter LiveSpeechEvidenceTests",
+    "Read SpeechTranscriber.isAvailable, supportedLocales, and installedLocales; stop as blocked if the en-US model is not installed (nothing is downloaded)",
+    "SampleClipRenderer: AVSpeechSynthesizer.write with this device's en-US voice, the script's lines joined, into a temporary CAF file",
+    "SpeechTimelineFlow.transcribe with OnDeviceSpeechRecognizer: SpeechAnalyzer.analyzeSequence(from:) then finalizeAndFinish(through:), SpeechTranscriber with volatileResults and audioTimeRange",
+    "Check every snapshot, the final timeline, word times, and a correction's range; delete the temporary clip"
+  ],
+  "subject" : "LAB-013"
+}

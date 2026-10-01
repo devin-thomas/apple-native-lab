@@ -241,7 +241,7 @@
       "title": "Speech Timeline",
       "category": "Audio",
       "milestone": "M2",
-      "state": "specified",
+      "state": "implemented",
       "dependsOn": [
         "LAB-008"
       ],

@@ -49,6 +49,7 @@ struct ExperimentDetailView: View {
                 TypedIntelligenceEntry(experiment: experiment)
                 LocalModelBenchEntry(experiment: experiment)
                 PointInspectEntry(experiment: experiment)
+                SpeechTimelineEntry(experiment: experiment)
                 ExperimentModuleAction(experimentID: experiment.id)
                 #if os(macOS)
                 SpecificationAction(link: experiment.specification)

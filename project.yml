@@ -69,6 +69,11 @@ targets:
       # LAB-012 Point, Inspect, Propose: the original swatch, bundled as data.
       - path: Fixtures/point-inspect/swatch-card.png
         buildPhase: resources
+      # LAB-013 Speech Timeline: the sample script the device speaks, and its caption fixture.
+      - path: Fixtures/speech/speech-sample-script.txt
+        buildPhase: resources
+      - path: Fixtures/speech/speech-sample-captions.vtt
+        buildPhase: resources
     dependencies:
       - package: LabSupport
       - package: LabDomain
@@ -120,6 +125,9 @@ targets:
       # LAB-043 Respectful Attention: the agenda, its intents, and lab-owned alerts.
       - package: LabFeatures
         product: RespectfulAttention
+      # LAB-013 Speech Timeline: the timeline, caption import and export, the save operation, and the on-device adapters.
+      - package: LabFeatures
+        product: SpeechTimeline
     info:
       path: Apps/Mac/Info.plist
       properties:
@@ -201,6 +209,11 @@ targets:
       # LAB-012 Point, Inspect, Propose: the original swatch, bundled as data.
       - path: Fixtures/point-inspect/swatch-card.png
         buildPhase: resources
+      # LAB-013 Speech Timeline: the sample script the device speaks, and its caption fixture.
+      - path: Fixtures/speech/speech-sample-script.txt
+        buildPhase: resources
+      - path: Fixtures/speech/speech-sample-captions.vtt
+        buildPhase: resources
     dependencies:
       - package: LabSupport
       - package: LabDomain
@@ -249,6 +262,9 @@ targets:
       # LAB-043 Respectful Attention: the agenda, its intents, and lab-owned alerts.
       - package: LabFeatures
         product: RespectfulAttention
+      # LAB-013 Speech Timeline: the timeline, caption import and export, the save operation, and the on-device adapters.
+      - package: LabFeatures
+        product: SpeechTimeline
     info:
       path: Apps/Phone/Info.plist
       properties:
@@ -331,6 +347,11 @@ targets:
         buildPhase: resources
       - path: Fixtures/point-inspect/swatch-card.png
         buildPhase: resources
+      # LAB-013 Speech Timeline: the sample script the device speaks, and its caption fixture.
+      - path: Fixtures/speech/speech-sample-script.txt
+        buildPhase: resources
+      - path: Fixtures/speech/speech-sample-captions.vtt
+        buildPhase: resources
     dependencies:
       - package: LabSupport
       - package: LabDomain
@@ -373,6 +394,9 @@ targets:
       # LAB-043 Respectful Attention: the agenda, its intents, and lab-owned alerts.
       - package: LabFeatures
         product: RespectfulAttention
+      # LAB-013 Speech Timeline: the timeline, caption import and export, the save operation, and the on-device adapters.
+      - package: LabFeatures
+        product: SpeechTimeline
       - target: ShareExtension
         embed: true
       # LAB-004: the widget and Control extension, embedded only in this SystemSurfaces variant.

@@ -1,7 +1,7 @@
 ---
 id: "LAB-013"
 title: "Speech Timeline"
-state: "specified"
+state: "implemented"
 milestone: "M2"
 category: "Audio"
 depends_on: ["LAB-008"]
@@ -55,6 +55,34 @@ A fixture replay is labeled as a replay. It can prove the domain/UI contract but
 ## Build ownership
 
 Proposed module: `Packages/LabFeatures/speech-timeline/`, with native adapters only in supported hosts/extensions. Shared operations and imported document structures belong in the domain/store packages rather than a view. Record any narrower module split during implementation.
+
+Implemented split (LAB-013-A):
+
+- `Packages/LabFeatures/Sources/SpeechTimeline/` holds everything except the views:
+  - the domain types `MediaTimeRange`, `TranscriptSegment`, `ProvisionalText`, and `TranscriptTimeline`, which keeps provisional text apart from finalized segments and makes corrections that never move a segment's time;
+  - `CaptionDocument` (WebVTT in and out), `TimelineExport` (`native-lab-speech-timeline`, schema version 1) with its content-addressed `AudioReference`, and `TranscriptSave`, the one `createItem` a save commits;
+  - `RecordingGate` over LabSupport's `PermissionStager`, and `RecordingSession`, which pauses on a route change or an interruption and resumes on the same timeline;
+  - `SpeechTimelineFlow`, and the on-device adapters: `OnDeviceSpeechRecognizer` (files), `OnDeviceSpeechCapture` (microphone), `OnDeviceModelInstaller` (the Download action), and `SampleClipRenderer` (the device's speech synthesizer).
+
+  It depends on LabDomain and LabSupport, never holds the store, and imports Speech and AVFoundation on iOS and macOS only.
+- `Apps/Shared/SpeechTimeline/` holds the one session model for the app (`SpeechTimelineModel.shared`), the host backend over `LabLibrary`, and the views.
+  - The Mac reaches it from the sidebar and from this experiment's catalog page, with its columns in `Apps/Mac/Window/SpeechTimelineColumns.swift`.
+  - iPhone reaches it from the catalog page only. It has no tab.
+- `Fixtures/speech/` holds the script, the caption fixture, and two refused caption files. No audio is committed; see its README.
+
+## Implementation notes (LAB-013-A)
+
+Observed with Xcode 27.0 (27A266a), the macOS 27.0 and iOS 27.0 SDKs, and this experiment's tests on the development Mac (Apple M5 Max, macOS 27.0) and an iOS 27.0 simulator. These are compile, test, and simulator facts, not device proof.
+
+- **Recognition path.** `SpeechAnalyzer(modules:)` with one `SpeechTranscriber(locale:transcriptionOptions:reportingOptions:attributeOptions:)`, reporting `.volatileResults` with `.audioTimeRange`. A file goes through `analyzeSequence(from:)` and `finalizeAndFinish(through:)`. Every API used is available from 26.0, so nothing is behind `LAB_SDK_27`. The 27.0 additions (`AnalyzerInputConverter`, `AssetInputSequenceProvider`, `CaptureInputSequenceProvider`) are not used.
+- **Provisional and final.** On a synthesized clip the transcriber sent growing guesses over a range, then a final result for the first part of that range, then a new guess starting at the finalization time. A final result therefore removes the guess it overlaps, even when the guess ran past the final's end: the guess's text contains the finalized words. A guess that ends at or before the finalized time is dropped. The live Mac run showed no snapshot with a guess over finalized audio.
+- **Numbers.** The transcriber wrote "seven" as "7" and "second" as "2nd". That is what the correction path is for; the recognized text stays beside the correction.
+- **No prompt for files.** Transcribing a file needed no permission prompt: `SFSpeechRecognizer.authorizationStatus()` read "not determined" in the test process, and the sandboxed Mac app transcribed with no purpose string. Only the microphone is staged, and only from Record.
+- **Assets.** `SpeechTranscriber.installedLocales` listed en-US on the development Mac, while `AssetInventory.status(forModules:)` for the same transcriber returned `.supported`, not `.installed`, and transcription worked. Readiness therefore reads `installedLocales`, as the CORE-004 probe does, and `AssetInventory` is used only for the Download action's `assetInstallationRequest(supporting:)`. No download was run.
+- **The iOS 27.0 simulator.** It reports `SpeechTranscriber.isAvailable` false, so the unavailable path runs there live, while `AVSpeechSynthesizer.write` works and speaks the sample.
+- **Recording.** The source builds declare no microphone purpose string, and the Mac build has no `com.apple.security.device.audio-input` entitlement, so Record falls back with that reason and never prompts. `OnDeviceSpeechCapture` compiles and has never run. It keeps no audio.
+- **Sample audio.** No audio is committed. The device's own synthesizer speaks the committed script into the experiment's folder, because the system voices are not licensed for redistributing their output.
+- **Navigation.** The session lives in one model for the app, not in a view, so leaving the experiment and returning keeps it.
 
 ## Delivery
 

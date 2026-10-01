@@ -24,6 +24,7 @@ let package = Package(
         .library(name: "TactileGrammar", targets: ["TactileGrammar"]),
         .library(name: "RespectfulAttention", targets: ["RespectfulAttention"]),
         .library(name: "PointInspect", targets: ["PointInspect"]),
+        .library(name: "SpeechTimeline", targets: ["SpeechTimeline"]),
     ],
     dependencies: [
         .package(path: "../LabSupport"),
@@ -244,6 +245,25 @@ let package = Package(
             dependencies: [
                 "PointInspect",
                 .product(name: "LabDomain", package: "LabDomain"),
+            ]
+        ),
+        // LAB-013 Speech Timeline: the timeline of provisional and finalized segments, caption
+        // import and export, the save operation, the recording gate over LabSupport's permission
+        // stager, and the on-device adapters. Speech and AVFoundation are imported on iOS and
+        // macOS only; nothing here holds the store.
+        .target(
+            name: "SpeechTimeline",
+            dependencies: [
+                .product(name: "LabDomain", package: "LabDomain"),
+                .product(name: "LabSupport", package: "LabSupport"),
+            ]
+        ),
+        .testTarget(
+            name: "SpeechTimelineTests",
+            dependencies: [
+                "SpeechTimeline",
+                .product(name: "LabDomain", package: "LabDomain"),
+                .product(name: "LabSupport", package: "LabSupport"),
             ]
         ),
     ]

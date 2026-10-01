@@ -114,6 +114,8 @@ struct MainWindow: View {
             AttentionPage()
         case .pointInspect:
             PointInspectListColumn()
+        case .speechTimeline:
+            SpeechTimelineListColumn()
         case .catalog(let scope):
             if let registry = model.registry {
                 CatalogListColumn(registry: registry, scope: scope, window: window)
@@ -161,6 +163,8 @@ struct MainWindow: View {
             Color.clear
         case .pointInspect:
             PointInspectScreen()
+        case .speechTimeline:
+            SpeechTimelineDetailColumn(window: window)
         case .catalog:
             if let registry = model.registry {
                 CatalogDetailColumn(registry: registry, experimentID: window.experimentID)
