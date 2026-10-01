@@ -537,3 +537,15 @@ LAB-009-B reviewed `DocumentsEverywhereViews.swift` and `DocumentsEverywhereColu
 | 6 | 8 | On Apple TV the screen, presented full screen over the experiment's page, had no background of its own: the page showed through and its text overlapped every line. **Fixed in this ticket**: the screen now draws the system background. | `ConstellationScreen` in `Apps/TV/Constellation/ConstellationScreen.swift` | tvOS UI-test screenshots | Closed; the walkthrough's Apple TV screenshots are from after the fix. |
 | 7 | 2 | On Apple TV, focus first lands on Join a Live Show as the Display. One press of Select there starts browsing, which can raise the system's local network prompt. It is still an explicit action, but the simulation is one press further away. | `ConstellationScreen` | tvOS UI test | Consider default focus on the simulation's first control. |
 
+## Shortcut Workbench review (LAB-003-B)
+
+Static review only of `ShortcutWorkbenchViews.swift`, `ShortcutWorkbenchColumns.swift` and the model. No manual VoiceOver, Voice Control, Full Keyboard Access, large-text, reduced-motion or UI-audit pass ran. Hosted backend tests are not an accessibility result.
+
+| Finding | Observed in source | Follow-up |
+|---|---|---|
+| Native controls carry visible labels and system fonts; Mac navigation has ⌥⌘8 | Shared List, NavigationLink and Button views; Mac View menu | Verify focus, spoken names, contrast and wrapping in the running views |
+| Run Recipe creates a Task without retaining cancellation ownership; no Cancel button exists | RecipeDetailPage | Provide a reachable cancellation path before claiming user cancellation in the UI |
+| Latest result and export text live on the overview, while actions run on the detail page | ShortcutWorkbenchPage / RecipeDetailPage | Check whether users receive and can reach action feedback |
+| Mac manual fallback column contains only card titles when a recipe is selected | ShortcutWorkbenchListColumn | Confirm how keyboard and assistive users return to the full instruction cards |
+
+See the [walkthrough](walkthroughs/LAB-003-shortcut-workbench.md) for the fixture path and unverified system surfaces. These are open review findings, not measured UI failures.

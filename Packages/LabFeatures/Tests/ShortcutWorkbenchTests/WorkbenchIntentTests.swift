@@ -21,7 +21,7 @@ import Testing
             names: [.item(TestSeed.amber): "Still amber by ID"]
         )
 
-        var intent = ResolveLabItemIntent()
+        let intent = ResolveLabItemIntent()
         intent.item = LabItemEntity(before, collectionTitle: "Pigments")
         let output = try await intent.run(with: WorkbenchLink(backend: backend))
         #expect(output.value.title == "Still amber by ID")
@@ -29,7 +29,7 @@ import Testing
         #expect(output.dialog.contains("identifier is unchanged"))
     }
 
-    @Test func exportRecipeIntentRedactsSecrets() throws {
+    @Test func exportRecipeIntentWithholdsTypedText() throws {
         let secret = "live-secret-value"
         let catalog = WorkbenchRecipeCatalog(seed: [])
         let id = RecipeID(rawValue: UUID(uuidString: "A3C00300-0001-4000-8000-000000000099")!)
@@ -45,11 +45,12 @@ import Testing
             catalog: catalog
         )
         let export = try actions.exportRecipe(id: id)
-        #expect(!export.containsRawSecret([secret]))
-        #expect(export.redactedKeys == ["api_key"])
+        #expect(!export.containsRawSecret([secret, "api_key"]))
+        #expect(export.withheld.unnamedModelStepFields == 1)
+        #expect(export.withheld.modelStepValues == ["prompt"])
     }
 
-    @Test func inspectModelStepIntentReportsRedaction() async throws {
+    @Test func inspectModelStepIntentReportsWithheldText() async throws {
         let catalog = WorkbenchRecipeCatalog(seed: [])
         let id = RecipeID(rawValue: UUID(uuidString: "A3C00300-0001-4000-8000-000000000088")!)
         catalog.save(RecipeDefinition(
@@ -65,12 +66,15 @@ import Testing
             steps: [RecipeStep(order: 1, kind: .export)],
             modelStep: ModelStepPayload(fields: ["prompt": "Summarize", "clientSecret": "nope"])
         ))
-        var intent = InspectModelStepIntent()
+        let intent = InspectModelStepIntent()
         intent.recipeID = id.rawValue.uuidString
         let output = try await intent.run(with: WorkbenchLink(backend: UnavailableWorkbenchBackend(reason: "unused")))
-        #expect(output.value.contains(SecretRedaction.placeholder))
+        // The result goes to Shortcuts: typed names and values are withheld, and the count is said.
+        #expect(output.value.contains("prompt: \(RecipeExport.withheldPlaceholder)"))
         #expect(!output.value.contains("nope"))
-        #expect(output.dialog.contains("clientSecret") || output.value.contains("clientSecret"))
+        #expect(!output.value.contains("Summarize"))
+        #expect(!output.value.contains("clientSecret"))
+        #expect(output.dialog.contains("2 contain text you typed"))
         _ = catalog
     }
 

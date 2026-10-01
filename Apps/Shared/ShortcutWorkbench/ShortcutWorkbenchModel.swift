@@ -74,11 +74,9 @@ final class ShortcutWorkbenchModel {
     func export(_ recipe: RecipeDefinition) {
         let exported = RecipeExport(recipe: recipe)
         lastExportText = exported.text
-        if exported.redactedKeys.isEmpty {
-            lastMessage = "Exported “\(recipe.title)” (\(exported.data.count) bytes)."
-        } else {
-            lastMessage = "Exported “\(recipe.title)”. Redacted: \(exported.redactedKeys.joined(separator: ", "))."
-        }
+        lastMessage = ["Exported “\(recipe.title)” (\(exported.data.count) bytes).", exported.withheld.summary]
+            .compactMap(\.self)
+            .joined(separator: " ")
     }
 
     func runImportExport(into collectionID: CollectionID?, sourceItemID: ItemID?) async {

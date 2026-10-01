@@ -72,8 +72,14 @@ See [data contracts](../docs/DATA_CONTRACTS.md), [permission boundaries](../docs
 
 **Curated vs atomic.** Six curated App Shortcuts via `NativeLabAppShortcuts` / `AppShortcutsProvider` (Open Workbench, Run Import–Export Recipe, Resolve Lab Item, Inspect Model Step, Export Recipe, Find Lab Items). Atomic Create/Archive/Export remain Action Atlas-only. Cap is ten; this build uses six.
 
-**Recipes.** `RecipeDefinition` holds stable `ItemID`s. Rename leaves the ID; resolve and recipe runs still find the item. Import drafts live in `RecipeImportStaging`; cancel removes the draft before any commit. `RecipeExport` and `ModelStepInspection` redact secret-shaped fields (`apiKey`, `password`, `token`, …) to `[redacted]`.
+**Recipes.** `RecipeDefinition` holds stable `ItemID`s. Rename leaves the ID; resolve and recipe runs still find the item. Import drafts live in `RecipeImportStaging`; cancel removes the draft before any commit. `RecipeExport` writes text only when the lab wrote it (the CORE-006 literal-only rule); every typed title, step detail, and model-step name or value is withheld and reported. The in-app `ModelStepInspection` masks secret-shaped field names as a display courtesy.
 
 **Storage actions (S04).** Recipe and entity state are lab-owned (catalog + store identifiers). Shortcuts Storage is not used for secrets; the fallback copy forbids it. Concrete 27-generation Shortcuts Storage symbols were probed on the installed SDK during this ticket (see verification ledger).
 
 **Fallback.** Manual recipe cards and the Action Atlas browser; no secret storage inside Shortcuts. Proven in package tests and the in-app workbench UI.
+
+## Qualification notes (LAB-003-B)
+
+State stays `implemented`; see the [qualification walkthrough](../docs/walkthroughs/LAB-003-shortcut-workbench.md). Local fixture and hosted backend invocations do not qualify Shortcuts, Siri, system Storage, a model, or cross-device entity resolution.
+
+Qualification first reproduced two defects: a fresh unbound four-step recipe committed its import, then refused its transform; and export redaction keyed on secret-shaped field names, so a secret under `prompt` left in the file. Both were repaired within LAB-003-B. A run is now planned in full before it stages or commits anything, commits at most one operation, and folds an import's transform into its `createItem`, binding the new item as the recipe's source. An export writes text only when it is exactly text the lab ships in its bundled recipes; anything typed is written as `[withheld]` or counted, and the export says where. Authored recipes remain process-local; no platform support changed.

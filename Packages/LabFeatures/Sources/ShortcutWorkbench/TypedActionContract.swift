@@ -63,14 +63,14 @@ public struct TypedActionContract: Hashable, Sendable, Identifiable, Codable {
             title: "Inspect Model Step",
             layer: .curated,
             mutation: .readOnly,
-            summary: "Shows what an optional model step would receive, with secret-shaped fields redacted."
+            summary: "Shows what an optional model step would receive. Typed text stays in the app; only lab-written text is returned."
         ),
         TypedActionContract(
             id: "export-recipe",
             title: "Export Recipe",
             layer: .curated,
             mutation: .readOnly,
-            summary: "Exports a recipe definition. Raw secret values never appear in the file."
+            summary: "Exports a recipe definition. Only lab-written text is included; typed text is marked withheld."
         ),
         TypedActionContract(
             id: "find-lab-items",

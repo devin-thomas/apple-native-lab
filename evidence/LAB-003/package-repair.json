@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "subject": "LAB-003",
+  "date": "2026-10-01T07:20:00Z",
+  "provenance": {
+    "sourceRevision": "ed4a1e1-dirty",
+    "sdkName": "macosx27.0",
+    "xcodeVersion": "27.0",
+    "xcodeBuild": "27A266a",
+    "minimumOS": "14.0"
+  },
+  "execution": {
+    "path": "fixture"
+  },
+  "inputs": [
+    "Packages/LabFeatures/Sources/ShortcutWorkbench/RecipeExport.swift@sha256:11cfd8d144d38f93baf2d48e91019f49cd4fa35eba069a009fd21ff0eb22d8dc",
+    "Packages/LabFeatures/Sources/ShortcutWorkbench/WorkbenchActions.swift@sha256:8b0b67fc2b9256924d08db970fdea94174ec807d829d8b8899ee670d125794b4",
+    "Packages/LabFeatures/Tests/ShortcutWorkbenchTests/WorkbenchQualificationTests.swift@sha256:e32e5abc8f5128e9936076d6fc6179f5f79c52a0c46cca40ff842073157ef210",
+    "Packages/LabFeatures/Tests/ShortcutWorkbenchTests/TestSupport.swift@sha256:4077f5277f0e7c07edef974a946d68f9adfe4e623ac52fc2f6680c28e9294a47"
+  ],
+  "check": "Repaired runner and export rule: fresh four-step recipe, refusal before commit, and typed text withheld from exports",
+  "outcome": {
+    "result": "passed",
+    "detail": "25 tests in 3 suites passed, including 8 refusal shapes and 22 export placements as arguments. The unbound bundled recipe completed four steps with exactly one appUI createItem whose note carries the transform; the new ID was bound in the catalog and export; a same-request retry replayed the first receipt. Transform without a source, transform before import, two imports, no or unknown collection, oversized note, invalid query and a missing bound item were each refused with no commit, no item change, no staged draft and an unchanged catalog. A commit refused by the operation service left no draft and the previous binding. A pre-cancelled run committed nothing. An invented sentinel under secret-shaped, ordinary, new and renamed model-step names, as a field name, nested in JSON, embedded in a lab-written prompt, and in a title, query or transform note was absent from every export, filename, withholding summary and Inspect Model Step result. Bundled recipes exported with nothing withheld."
+  },
+  "steps": [
+    "Run swift test --package-path Packages/LabFeatures --filter ShortcutWorkbench through labr, and again inside the full script/test.sh gate",
+    "freshFourStepRunBindsItsImportAndCompletesInOneCommit, unrunnableRecipeIsRefusedBeforeAnythingIsStagedOrCommitted, refusedImportCommitLeavesNoDraftAndKeepsThePreviousBinding, cancelledFreshRunCommitsNothing",
+    "exportWithholdsTypedTextWhateverItsFieldIsCalled, bundledRecipesExportInFullBecauseTheLabWroteThem, exportIntentHelperReturnsWithheldBytes, inspectModelStepIntentReportsWithheldText"
+  ],
+  "limitations": [
+    "In-memory OperationService with GrantAuthorizationPolicy on macOS 27.0 (26A425); no SQLite, UI, Shortcuts app, system authentication or physical mobile device in this check. The -dirty suffix is research's mirror reporting its untracked build symlink; the mirrored sources were exactly commit ed4a1e1.",
+    "Supersedes fresh-recipe-failure.json and secret-export-limit.json, which remain as the record of the defects at addbf39-dirty.",
+    "The sentinel is invented, never a credential. The rule withholds all typed text, so person-authored recipes export as structure and IDs only."
+  ]
+}

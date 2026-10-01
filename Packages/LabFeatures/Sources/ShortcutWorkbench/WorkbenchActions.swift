@@ -160,6 +160,20 @@ public struct WorkbenchActions: Sendable {
         request: WorkbenchRequest,
         staging: RecipeImportStaging
     ) async throws(WorkbenchError) -> WorkbenchOutcome<LabItem> {
+        let receipt = try await commitStaged(draft, note: draft.note, into: collectionID, request: request, staging: staging)
+        return WorkbenchOutcome(receipt: receipt, entity: try await resolveItem(request.newItemID))
+    }
+
+    /// The one commit behind `commitImport` and a recipe run's import: a `createItem` for the
+    /// staged title with `note`. The draft is finished on success and discarded on any failure,
+    /// so staging never holds a draft whose commit was refused.
+    private func commitStaged(
+        _ draft: RecipeImportDraft,
+        note noteText: String,
+        into collectionID: CollectionID,
+        request: WorkbenchRequest,
+        staging: RecipeImportStaging
+    ) async throws(WorkbenchError) -> ActionReceipt {
         guard !Task.isCancelled else {
             await staging.cancel(draft.stagingToken)
             throw .cancelled
@@ -167,31 +181,43 @@ public struct WorkbenchActions: Sendable {
         guard await staging.has(draft.stagingToken) else {
             throw .importIncomplete(reason: "That import was cancelled or already finished.")
         }
-        let parent = try await backend.collection(collectionID, via: entryPoint)
-        let title: EntityTitle
-        let note: ItemNote
-        do {
-            title = try EntityTitle(draft.title)
-            note = try ItemNote(draft.note)
+        do throws(WorkbenchError) {
+            let parent = try await backend.collection(collectionID, via: entryPoint)
+            let title: EntityTitle
+            let note: ItemNote
+            do {
+                title = try EntityTitle(draft.title)
+                note = try ItemNote(noteText)
+            } catch {
+                throw WorkbenchError.invalidInput("The staged title or note is not valid.")
+            }
+            let draftItem = ItemDraft(id: request.newItemID, in: parent.id, title: title, note: note)
+            let receipt = try await commit(
+                .createItem(draft: draftItem),
+                request: request,
+                names: [.item(draftItem.id): title.value, .collection(parent.id): parent.title.value]
+            )
+            await staging.finish(draft.stagingToken)
+            return receipt
         } catch {
             await staging.cancel(draft.stagingToken)
-            throw .invalidInput("The staged title or note is not valid.")
+            throw error
         }
-        let draftItem = ItemDraft(id: request.newItemID, in: parent.id, title: title, note: note)
-        let receipt = try await commit(
-            .createItem(draft: draftItem),
-            request: request,
-            names: [.item(draftItem.id): title.value, .collection(parent.id): parent.title.value]
-        )
-        await staging.finish(draft.stagingToken)
-        return WorkbenchOutcome(receipt: receipt, entity: try await resolveItem(draftItem.id))
     }
 
     // MARK: Recipe run
 
-    /// Walks the recipe's steps. Import uses `staging`; a cancel mid-import discards the draft and
-    /// commits nothing. Query and resolve use stable IDs. Transform updates through the service.
-    /// Export returns a redacted `RecipeExport`.
+    /// Walks the recipe's steps, committing at most one operation, and only after every step has
+    /// been checked.
+    ///
+    /// A run is planned in full before it changes anything: the import's collection, title, and
+    /// note; each query; the transform's source and resulting note; and the step order. A recipe
+    /// that cannot complete is refused there, with nothing staged or committed. A recipe that
+    /// imports transforms the item it imports, so the transform is folded into the import's one
+    /// `createItem`; the new item is then bound as the recipe's source. A recipe without an import
+    /// transforms its first bound source with one `updateItem`. Either way the run's change is
+    /// atomic: all of it commits, or none of it does. Cancelling before that commit discards the
+    /// staged draft; after it, the remaining steps only read and export.
     public func runRecipe(
         _ recipe: RecipeDefinition,
         importTitle: String? = nil,
@@ -207,78 +233,72 @@ public struct WorkbenchActions: Sendable {
             totalUnits: recipe.steps.count,
             summary: "Running “\(recipe.title)”…"
         )
+        func cancelled() -> RecipeRunResult {
+            job.state = .cancelled
+            job.summary = WorkbenchError.cancelled.message
+            return RecipeRunResult(job: job, importReceipt: nil, transformReceipt: nil, matched: [], export: nil)
+        }
+        guard !Task.isCancelled else { return cancelled() }
+
+        let plan = try await planRun(recipe, importTitle: importTitle, importNote: importNote, into: collectionID)
+        var running = recipe
+        var committed = false
         var importReceipt: ActionReceipt?
         var transformReceipt: ActionReceipt?
         var matched: [LabItem] = []
         var export: RecipeExport?
 
         for step in recipe.steps {
-            guard !Task.isCancelled else {
-                job.state = .cancelled
-                job.summary = WorkbenchError.cancelled.message
-                return RecipeRunResult(job: job, importReceipt: importReceipt, transformReceipt: transformReceipt, matched: matched, export: export)
-            }
+            // Once the run's one commit has happened, it finishes: the rest only reads.
+            if !committed, Task.isCancelled { return cancelled() }
             switch step.kind {
             case .importDocument:
-                guard let collectionID else {
-                    throw .invalidInput("This recipe's import step needs one of your collections.")
-                }
-                let draft = try await beginImport(
-                    title: importTitle ?? "Recipe import",
-                    note: importNote,
-                    into: collectionID,
-                    staging: staging
-                )
+                guard let importing = plan.importing else { break }
+                let draft = try await staging.begin(title: importing.title, note: importNote)
                 if Task.isCancelled {
                     await cancelImport(draft, staging: staging)
-                    job.state = .cancelled
-                    job.summary = WorkbenchError.cancelled.message
-                    return RecipeRunResult(job: job, importReceipt: nil, transformReceipt: nil, matched: [], export: nil)
+                    return cancelled()
                 }
-                let outcome = try await commitImport(draft, into: collectionID, request: request, staging: staging)
-                importReceipt = outcome.receipt
-                // Bind the new item so later steps and future runs resolve by ID after a rename.
-                var bound = recipe
-                if !bound.sourceItemIDs.contains(outcome.entity.id) {
-                    bound.sourceItemIDs.append(outcome.entity.id)
-                    catalog.save(bound)
-                }
+                let receipt = try await commitStaged(
+                    draft,
+                    note: importing.committedNote,
+                    into: importing.collectionID,
+                    request: request,
+                    staging: staging
+                )
+                committed = true
+                importReceipt = receipt
+                if plan.transformsImport { transformReceipt = receipt }
+                // Bind the new item before anything else can fail, so the store and the recipe
+                // agree even if a later read does not: later steps and future runs resolve it by ID.
+                running.sourceItemIDs = [request.newItemID]
+                catalog.save(running)
             case .query:
-                let text = step.detail
-                let filter: ItemFilter
-                do {
-                    filter = try ItemFilter(text: text, includeArchived: false, limit: 50)
-                } catch {
-                    throw .invalidInput("The query text is not valid.")
-                }
-                matched = try await backend.items(filter, via: entryPoint)
-                // Prefer recipe-bound sources when present: prove rename survival.
-                if !recipe.sourceItemIDs.isEmpty {
-                    matched = try await resolveSources(of: recipe)
+                if running.sourceItemIDs.isEmpty, let filter = plan.queries[step.order] {
+                    matched = try await backend.items(filter, via: entryPoint)
+                } else {
+                    // Prefer recipe-bound sources: proves rename survival.
+                    matched = try await resolveSources(of: running)
                 }
             case .transform:
-                let sources = try await resolveSources(of: recipe)
-                guard let first = sources.first else {
-                    throw .invalidInput("This recipe has no source item to transform.")
+                if plan.transformsImport {
+                    // Already applied by the import's commit; report the item it left.
+                    matched = [try await resolveItem(request.newItemID)]
+                } else if let bound = plan.boundTransform, transformReceipt != nil {
+                    // Every transform suffix rode on the first transform step's one commit.
+                    matched = [try await resolveItem(bound.source.id)]
+                } else if let bound = plan.boundTransform {
+                    let receipt = try await commit(
+                        .updateItem(id: bound.source.id, expected: bound.source.revision, changes: bound.changes),
+                        request: WorkbenchRequest(RequestID()),
+                        names: [.item(bound.source.id): bound.source.title.value]
+                    )
+                    committed = true
+                    transformReceipt = receipt
+                    matched = [try await resolveItem(bound.source.id)]
                 }
-                let suffix = step.detail ?? ""
-                let newNote = first.note.value + suffix
-                let changes: ItemChanges
-                do {
-                    changes = try ItemChanges(note: try ItemNote(newNote))
-                } catch {
-                    throw .invalidInput("The transformed note is not valid.")
-                }
-                let transformRequest = WorkbenchRequest(RequestID())
-                let receipt = try await commit(
-                    .updateItem(id: first.id, expected: first.revision, changes: changes),
-                    request: transformRequest,
-                    names: [.item(first.id): first.title.value]
-                )
-                transformReceipt = receipt
-                matched = [try await resolveItem(first.id)]
             case .export:
-                export = exportRecipe(catalog.recipe(recipe.id) ?? recipe)
+                export = exportRecipe(running)
             }
             job.completedUnits += 1
             job.checkpoint = step.order
@@ -292,6 +312,81 @@ public struct WorkbenchActions: Sendable {
             transformReceipt: transformReceipt,
             matched: matched,
             export: export
+        )
+    }
+
+    /// Checks every step of a run before anything is staged or committed. Each refusal leaves the
+    /// store, staging, and catalog exactly as they were.
+    func planRun(
+        _ recipe: RecipeDefinition,
+        importTitle: String?,
+        importNote: String,
+        into collectionID: CollectionID?
+    ) async throws(WorkbenchError) -> RecipeRunPlan {
+        let imports = recipe.steps.filter { $0.kind == .importDocument }
+        let transforms = recipe.steps.filter { $0.kind == .transform }
+        guard imports.count <= 1 else {
+            throw .invalidInput("A recipe can import at most one item.")
+        }
+        let suffix = transforms.map { $0.detail ?? "" }.joined()
+
+        var queries: [Int: ItemFilter] = [:]
+        for step in recipe.steps where step.kind == .query {
+            do {
+                queries[step.order] = try ItemFilter(text: step.detail, includeArchived: false, limit: 50)
+            } catch {
+                throw .invalidInput("The query text in step \(step.order) is not valid.")
+            }
+        }
+
+        if let importStep = imports.first {
+            guard let collectionID else {
+                throw .invalidInput("This recipe's import step needs one of your collections.")
+            }
+            if let early = transforms.first(where: { $0.order < importStep.order }) {
+                throw .invalidInput("Step \(early.order) transforms before the recipe imports its item. Move the transform after the import.")
+            }
+            let title = (importTitle ?? "Recipe import").trimmingCharacters(in: .whitespacesAndNewlines)
+            guard !title.isEmpty else { throw .invalidInput("A title cannot be empty.") }
+            do {
+                _ = try EntityTitle(title)
+            } catch {
+                throw .invalidInput("The import title is not valid.")
+            }
+            let committedNote = importNote + suffix
+            do {
+                _ = try ItemNote(committedNote)
+            } catch {
+                throw .invalidInput(transforms.isEmpty ? "The import note is not valid." : "The transformed note is not valid.")
+            }
+            // Prove the collection exists before staging.
+            _ = try await backend.collection(collectionID, via: entryPoint)
+            return RecipeRunPlan(
+                importing: .init(collectionID: collectionID, title: title, committedNote: committedNote),
+                transformsImport: !transforms.isEmpty,
+                boundTransform: nil,
+                queries: queries
+            )
+        }
+
+        guard !transforms.isEmpty else {
+            return RecipeRunPlan(importing: nil, transformsImport: false, boundTransform: nil, queries: queries)
+        }
+        let sources = try await resolveSources(of: recipe)
+        guard let first = sources.first else {
+            throw .invalidInput("This recipe has no source item to transform. Bind an item, or add an import step before the transform.")
+        }
+        let changes: ItemChanges
+        do {
+            changes = try ItemChanges(note: try ItemNote(first.note.value + suffix))
+        } catch {
+            throw .invalidInput("The transformed note is not valid.")
+        }
+        return RecipeRunPlan(
+            importing: nil,
+            transformsImport: false,
+            boundTransform: .init(source: first, changes: changes),
+            queries: queries
         )
     }
 
@@ -322,7 +417,29 @@ public struct WorkbenchActions: Sendable {
     }
 }
 
-/// The outcome of one recipe walkthrough.
+/// What a recipe run will do, fixed before it stages or commits anything.
+struct RecipeRunPlan: Sendable {
+    struct Import: Sendable {
+        let collectionID: CollectionID
+        let title: String
+        /// The imported note with every transform suffix already applied.
+        let committedNote: String
+    }
+
+    struct BoundTransform: Sendable {
+        let source: LabItem
+        let changes: ItemChanges
+    }
+
+    let importing: Import?
+    /// The transform rides on the import's commit.
+    let transformsImport: Bool
+    let boundTransform: BoundTransform?
+    let queries: [Int: ItemFilter]
+}
+
+/// The outcome of one recipe walkthrough. A run commits at most one operation; when it imports
+/// and transforms, `importReceipt` and `transformReceipt` are that same commit.
 public struct RecipeRunResult: Sendable {
     public let job: JobHandle
     public let importReceipt: ActionReceipt?

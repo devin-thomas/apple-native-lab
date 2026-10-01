@@ -16,8 +16,8 @@ public struct ManualRecipeCard: Hashable, Sendable, Identifiable {
                 "Open Shortcut Workbench (or Action Atlas) in Native Lab.",
                 "Import or create the item this recipe should bind. The workbench stores its stable identifier, not its title.",
                 "Run Find Lab Items with your query, or let the recipe resolve the bound identifier.",
-                "Apply the transform (a note suffix in the demo recipe). The change leaves a receipt with an undo.",
-                "Export the recipe. Secret-shaped fields appear only as [redacted].",
+                "Apply the transform (a note suffix in the demo recipe). The change leaves a receipt with an undo. A run that imports commits the import and transform together, or nothing.",
+                "Export the recipe. Only text Native Lab wrote is included; titles, queries, and model-step fields you typed appear as [withheld].",
             ],
             notes: "Renaming the source item does not break the recipe. Cancelling during import discards the draft and writes nothing. Do not put passwords or API keys into Shortcuts Storage."
         ),
@@ -27,7 +27,7 @@ public struct ManualRecipeCard: Hashable, Sendable, Identifiable {
             steps: [
                 "Open the Action Atlas action browser (the declared fallback).",
                 "Run Find Lab Items with the text the recipe names.",
-                "Inspect the optional model step in the workbench to see what would be sent, with secrets redacted.",
+                "Inspect the optional model step in the workbench to see what would be sent. Secret-shaped fields are masked in the app, and typed text never leaves in an export.",
                 "Export the recipe or the matching items.",
             ],
             notes: "The Action Atlas browser runs without Siri or Shortcuts. Curated App Shortcuts are a separate, smaller set."
