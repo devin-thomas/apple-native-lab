@@ -12,6 +12,7 @@ let package = Package(
         .library(name: "ShareIngress", targets: ["ShareIngress"]),
         .library(name: "PortableObjects", targets: ["PortableObjects"]),
         .library(name: "SurfaceDeck", targets: ["SurfaceDeck"]),
+        .library(name: "DesktopNativePower", targets: ["DesktopNativePower"]),
     ],
     dependencies: [
         .package(path: "../LabSupport"),
@@ -106,6 +107,20 @@ let package = Package(
         .testTarget(
             name: "SurfaceDeckTests",
             dependencies: ["SurfaceDeck", .product(name: "LabDomain", package: "LabDomain")]
+        ),
+        // LAB-042 Desktop Native Power: command palette, documents that outlive their windows,
+        // a Services-style text import, and one allowlisted command. Mac-only scenes stay in the host.
+        .target(
+            name: "DesktopNativePower",
+            dependencies: [.product(name: "LabDomain", package: "LabDomain")],
+            resources: [.copy("Resources/sample-desk-note.txt")]
+        ),
+        .testTarget(
+            name: "DesktopNativePowerTests",
+            dependencies: [
+                "DesktopNativePower",
+                .product(name: "LabDomain", package: "LabDomain"),
+            ]
         ),
     ]
 )
