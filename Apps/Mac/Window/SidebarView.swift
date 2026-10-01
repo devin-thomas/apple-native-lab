@@ -66,6 +66,9 @@ struct SidebarView: View {
                 Label(RespectfulAttention.title, systemImage: RespectfulAttention.symbol)
                     .tag(SidebarDestination.respectfulAttention)
                     .accessibilityHint("A reminder, a Focus filter, and an alarm, scheduled only when you ask")
+                Label("Point, Inspect, Propose", systemImage: "viewfinder")
+                    .tag(SidebarDestination.pointInspect)
+                    .accessibilityHint("Turn a chosen image into a record you review before it is saved")
             }
             Section("Experiments") {
                 row(.all, symbol: "square.grid.2x2")

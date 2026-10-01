@@ -264,11 +264,13 @@ import Testing
         #expect(intents(from: "ContextCards") == ["AskAboutVisibleSampleIntent", "SetAsideSampleIntent"])
         // LAB-030 Play Tactile Cue.
         #expect(intents(from: "TactileGrammar") == ["PlayTactileCueIntent"])
-        // LAB-043 Respectful Attention's schedule, cancel, and Focus filter. Nothing else joins them.
+        // LAB-043 Respectful Attention's schedule, cancel, and Focus filter.
         #expect(intents(from: "RespectfulAttention") == [
             "ScheduleLabAlertIntent", "CancelLabAlertsIntent", "LabFocusFilterIntent",
         ])
-        #expect(actions.count == 18)
+        // LAB-012's visual-search handoff. Nothing else joins them.
+        #expect(intents(from: "PointInspect") == ["PointInspectVisualSearchIntent"])
+        #expect(actions.count == 19)
         let entities = try #require(metadata["entities"] as? [String: Any])
         #expect(Set(entities.keys) == ["LabItemEntity", "LabCollectionEntity"])
         let queries = try #require(metadata["queries"] as? [String: Any])

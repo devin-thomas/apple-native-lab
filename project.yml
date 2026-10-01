@@ -66,6 +66,9 @@ targets:
         buildPhase: resources
       - path: Fixtures/intelligence/intelligence-injected-note.txt
         buildPhase: resources
+      # LAB-012 Point, Inspect, Propose: the original swatch, bundled as data.
+      - path: Fixtures/point-inspect/swatch-card.png
+        buildPhase: resources
     dependencies:
       - package: LabSupport
       - package: LabDomain
@@ -78,6 +81,9 @@ targets:
       # LAB-010 Typed Local Intelligence: typed proposals, the sample parser, and the Foundation Models extractor.
       - package: LabFeatures
         product: TypedIntelligence
+      # LAB-012 Point, Inspect, Propose: a chosen image, OCR, and a reviewable record.
+      - package: LabFeatures
+        product: PointInspect
       # LAB-035 Access as a Superpower: the task, its chart semantics, and the Audio Graph descriptor.
       - package: LabFeatures
         product: AccessSuperpower
@@ -192,6 +198,9 @@ targets:
         buildPhase: resources
       - path: Fixtures/intelligence/intelligence-injected-note.txt
         buildPhase: resources
+      # LAB-012 Point, Inspect, Propose: the original swatch, bundled as data.
+      - path: Fixtures/point-inspect/swatch-card.png
+        buildPhase: resources
     dependencies:
       - package: LabSupport
       - package: LabDomain
@@ -204,6 +213,9 @@ targets:
       # LAB-010 Typed Local Intelligence: typed proposals, the sample parser, and the Foundation Models extractor.
       - package: LabFeatures
         product: TypedIntelligence
+      # LAB-012 Point, Inspect, Propose: a chosen image, OCR, and a reviewable record.
+      - package: LabFeatures
+        product: PointInspect
       # LAB-035 Access as a Superpower: the task, its chart semantics, and the Audio Graph descriptor.
       - package: LabFeatures
         product: AccessSuperpower
@@ -317,6 +329,8 @@ targets:
         buildPhase: resources
       - path: Fixtures/intelligence/intelligence-injected-note.txt
         buildPhase: resources
+      - path: Fixtures/point-inspect/swatch-card.png
+        buildPhase: resources
     dependencies:
       - package: LabSupport
       - package: LabDomain
@@ -329,6 +343,8 @@ targets:
         product: ShareIngress
       - package: LabFeatures
         product: TypedIntelligence
+      - package: LabFeatures
+        product: PointInspect
       - package: LabFeatures
         product: AccessSuperpower
       - package: LabFeatures

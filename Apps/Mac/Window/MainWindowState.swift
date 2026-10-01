@@ -41,6 +41,8 @@ enum SidebarDestination: Hashable {
     case tactileGrammar
     /// LAB-043: the agenda, its timers, and lab-owned alerts.
     case respectfulAttention
+    /// LAB-012: a chosen image becomes a reviewable record.
+    case pointInspect
     case catalog(CatalogScope)
 
     var title: String {
@@ -60,6 +62,7 @@ enum SidebarDestination: Hashable {
         case .durableSync: DurableSyncExperiment.title
         case .tactileGrammar: TactileGrammarExperiment.title
         case .respectfulAttention: RespectfulAttention.title
+        case .pointInspect: "Point, Inspect, Propose"
         case .catalog(let scope): scope.title
         }
     }
@@ -82,6 +85,7 @@ enum SidebarDestination: Hashable {
         case .durableSync: "durable-sync"
         case .tactileGrammar: "tactile-grammar"
         case .respectfulAttention: "respectful-attention"
+        case .pointInspect: "point-inspect"
         case .catalog(.all): "all"
         case .catalog(.milestone(let milestone)): "milestone:\(milestone.rawValue)"
         case .catalog(.category(let category)): "category:\(category)"
@@ -107,6 +111,7 @@ enum SidebarDestination: Hashable {
         case ("durable-sync", nil): self = .durableSync
         case ("tactile-grammar", nil): self = .tactileGrammar
         case ("respectful-attention", nil): self = .respectfulAttention
+        case ("point-inspect", nil): self = .pointInspect
         case ("all", nil): self = .catalog(.all)
         case ("milestone", let raw?): guard let milestone = Milestone(rawValue: raw) else { return nil }
             self = .catalog(.milestone(milestone))

@@ -112,6 +112,8 @@ struct MainWindow: View {
             TactileGrammarListColumn(model: window.tactile)
         case .respectfulAttention:
             AttentionPage()
+        case .pointInspect:
+            PointInspectListColumn()
         case .catalog(let scope):
             if let registry = model.registry {
                 CatalogListColumn(registry: registry, scope: scope, window: window)
@@ -157,6 +159,8 @@ struct MainWindow: View {
         case .respectfulAttention:
             // The agenda fills the content column; the detail stays empty so the page is not doubled.
             Color.clear
+        case .pointInspect:
+            PointInspectScreen()
         case .catalog:
             if let registry = model.registry {
                 CatalogDetailColumn(registry: registry, experimentID: window.experimentID)
@@ -188,6 +192,7 @@ struct MainWindow: View {
         case .localModelBench: "Search bench cases"
         case .durableSync: "Search devices"
         case .tactileGrammar: "Search cues"
+        case .pointInspect: "Search the record"
         default: "Search experiments"
         }
     }

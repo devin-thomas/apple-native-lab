@@ -23,6 +23,7 @@ let package = Package(
         .library(name: "DurableSyncLedger", targets: ["DurableSyncLedger"]),
         .library(name: "TactileGrammar", targets: ["TactileGrammar"]),
         .library(name: "RespectfulAttention", targets: ["RespectfulAttention"]),
+        .library(name: "PointInspect", targets: ["PointInspect"]),
     ],
     dependencies: [
         .package(path: "../LabSupport"),
@@ -230,6 +231,20 @@ let package = Package(
         .testTarget(
             name: "RespectfulAttentionTests",
             dependencies: ["RespectfulAttention", .product(name: "LabDomain", package: "LabDomain")]
+        ),
+        // LAB-012 Point, Inspect, Propose: a chosen image becomes a reviewable item. Vision OCR
+        // and barcodes, an on-device description where the system can attach an image, and manual
+        // fields. The model-tool adapter proposes; the app UI commits.
+        .target(
+            name: "PointInspect",
+            dependencies: [.product(name: "LabDomain", package: "LabDomain")]
+        ),
+        .testTarget(
+            name: "PointInspectTests",
+            dependencies: [
+                "PointInspect",
+                .product(name: "LabDomain", package: "LabDomain"),
+            ]
         ),
     ]
 )

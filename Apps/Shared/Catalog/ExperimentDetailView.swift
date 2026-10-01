@@ -48,6 +48,7 @@ struct ExperimentDetailView: View {
                 stateNote
                 TypedIntelligenceEntry(experiment: experiment)
                 LocalModelBenchEntry(experiment: experiment)
+                PointInspectEntry(experiment: experiment)
                 ExperimentModuleAction(experimentID: experiment.id)
                 #if os(macOS)
                 SpecificationAction(link: experiment.specification)

@@ -1,7 +1,7 @@
 ---
 id: "LAB-012"
 title: "Point, Inspect, Propose"
-state: "specified"
+state: "implemented"
 milestone: "M3"
 category: "Intelligence"
 depends_on: ["LAB-007", "LAB-010"]
@@ -54,7 +54,16 @@ A fixture replay is labeled as a replay. It can prove the domain/UI contract but
 
 ## Build ownership
 
-Proposed module: `Packages/LabFeatures/point-inspect-propose/`, with native adapters only in supported hosts/extensions. Shared operations and imported document structures belong in the domain/store packages rather than a view. Record any narrower module split during implementation.
+Implemented split (LAB-012-A):
+
+- `Packages/LabFeatures/Sources/PointInspect/` holds the record, the Vision and model adapters, the review gate, and `PointInspectFlow`. Views stay in the hosts.
+- `Apps/Shared/PointInspect/` is the image picker, the fields, and the catalog entry. Mac and iPhone link the product. Watch and Apple TV do not.
+
+Shared operations stay in LabDomain. The Inspections collection is a user collection created when a person applies a record.
+
+## Implementation notes (LAB-012-A)
+
+A chosen PNG, JPEG, or GIF stays on the device. Its SHA-256 is the provenance stored in the item note. Vision's `RecognizeTextRequest` and `DetectBarcodesRequest` read the bytes on iOS and macOS. A barcode payload is text in that note. The on-device model describes the image only where `Attachment` can take a `CGImage` (iOS 27 and macOS 27, compiled out of a 26-family build). If Vision or the model cannot run, the fields still complete the record. System visual search, when the system offers it, contributes labels only. The model-tool adapter proposes. Apply commits through the app UI. Reset Demo does not remove Inspections, because those items are not in the demo namespace.
 
 ## Delivery
 
