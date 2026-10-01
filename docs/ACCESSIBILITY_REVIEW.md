@@ -480,3 +480,24 @@ LAB-009-B reviewed `DocumentsEverywhereViews.swift` and `DocumentsEverywhereColu
 | E3 Duplicate and reset | Refusal is heard; Reset Demo preserves adopted user data | not-run | not-run | not-run |
 
 **Static findings, still open:** native labeled buttons and picker, combined sample rows, selectable text, and a preview heading are present. The sample row's accessibility label retains middle dots; Add Sample to Lab has no Mac menu command; outcomes do not post `LabAnnouncement`; the iPhone Actions section follows a potentially long preview instead of pinning the primary action; Quick Look HTML uses fixed foreground colors. The provider-disabled explanation is visible independently of the disabled activation control. These findings prevent a release accessibility claim. No screenshot or audit was produced.
+
+## Desktop Native Power qualification (LAB-042-B)
+
+Mac only. The automated checks read the running app's menus and an off-screen hosted palette's accessibility tree; they do not press keys in a document scene or invoke a system Services item. The [walkthrough](walkthroughs/LAB-042-desktop-native-power.md) separates the adapter replay from live interaction.
+
+| Flow | Required result | Automated coverage |
+|---|---|---|
+| DP1 | Open the desktop and palette; every command has a menu alternative | `CommandCatalogTests`; `DesktopPowerQualificationHostTests` menu and palette checks |
+| DP2 | Import original text/file data; read the receipt and failure | Package validation/authorization tests; hosted file and Services handler replay |
+| DP3 | Open and close document windows while retaining the note | Package station and hosted session close handlers only; native scene lifecycle not-run |
+| DP4 | Restore without opening private content | Package and hosted stale private-route checks |
+| DP5 | Reset previews beside imported user notes | Package reset test; hosted fixture reset and global Reset Demo |
+
+| Manual pass | Device | DP1 | DP2 | DP3 | DP4 | DP5 |
+|---|---|---|---|---|---|---|
+| VoiceOver | Mac | not-run | not-run | not-run | not-run | not-run |
+| Voice Control | Mac | not-run | not-run | not-run | not-run | not-run |
+| Full Keyboard Access | Mac | not-run | not-run | not-run | not-run | not-run |
+| Large text, contrast, reduced motion/transparency | Mac | not-run | not-run | not-run | not-run | not-run |
+
+Source findings: `DesktopNoteRow` combines title and origin and provides a Return hint; private rows still use “Private · …”. Palette command rows expose their menu paths and shortcuts; Close has the cancel shortcut. `DesktopPowerSession` keeps results/errors visible but does not post a `LabAnnouncement`. `DesktopDocumentWindow` does not forward native close to the station, so route counts can be stale. The menu-bar Open action opens the catalog scene without setting the desktop destination. These findings remain open; no manual pass is implied.

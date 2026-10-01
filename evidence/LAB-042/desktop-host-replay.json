@@ -1,0 +1,38 @@
+{
+  "check" : "Desktop Native Power hosted fixture replay through Mac file, Services, session, and intent adapters",
+  "date" : "2026-10-01T07:18:56Z",
+  "execution" : {
+    "path" : "fixture"
+  },
+  "inputs" : [
+    "sample-desk-note.txt@sha256:eb879ad9533a76c9d064ad4ef44634ec87a7164d06c4609271f3801fd4abe50e"
+  ],
+  "limitations" : [
+    "Fixture only: handlers invoked in the sandboxed Mac host, not a person or a system menu invocation.",
+    "No document window was actually opened or closed. The session close handler is tested; native window lifecycle is unverified.",
+    "No file dialog, menu-bar interaction, Shortcuts, Siri, VoiceOver, Voice Control, Full Keyboard Access, physical mobile device, or 26-SDK compile.",
+    "The cancelled file picker result is presented as invalid text by the current session. The Services handler completes asynchronously; its error pointer covers admission only."
+  ],
+  "outcome" : {
+    "detail" : "23 observations matched: fixture preview is not committed; file command requests the native file importer; chosen-file handler imports the original bytes; file import commits an app-UI receipt; reimporting the file keeps one item and adds no receipt; script-origin import is a separate item from file-origin import; menu replay adds no receipt; intent replay adds no receipt; intent status does not commit; session close handler keeps the document; alternate command requests the selected document scene; palette finds the file fallback; fixture reset removes only the preview; cancelled file result reports an error and commits nothing; empty selected text is refused; denial, cancellation, and shell refusal add no receipt; Services handler reads a dedicated pasteboard and commits through the host; Services handler reports missing text synchronously; scene storage omits the private document ID; fresh session refuses a stale private route; Reset Demo preserves all four imported notes; SQLite preserves the file import receipt; reload retains the document after close and reset",
+    "result" : "passed"
+  },
+  "provenance" : {
+    "appVersion" : "0.1.0",
+    "buildNumber" : "1",
+    "buildProfile" : "CoreLocal",
+    "minimumOS" : "26.0",
+    "sdkName" : "macosx27.0",
+    "sourceRevision" : "aa899c4",
+    "xcodeBuild" : "27A266a",
+    "xcodeVersion" : "27.0"
+  },
+  "schemaVersion" : 1,
+  "steps" : [
+    "DesktopPowerQualificationHostTests on LabMac-Core, fresh SQLite store and temporary original fixture file",
+    "Preview; chosen-file handler; menu and intent replay; close handler; alternate command; palette; fixture reset",
+    "Cancelled file result; empty text; model denial; cancellation; shell refusal; Services handler on dedicated pasteboard",
+    "Private note; fresh session reload; stale private route; Reset Demo; direct SQLite read"
+  ],
+  "subject" : "LAB-042"
+}
