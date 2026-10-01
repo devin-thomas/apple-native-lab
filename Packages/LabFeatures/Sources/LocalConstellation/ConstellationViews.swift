@@ -59,6 +59,7 @@ extension CommandStage {
         case .finished(let result): "\(result.disposition.title): \(result.summary)"
         case .expiredBeforeSending: "Never sent: it waited too long for a link. Nothing changed."
         case .queueFull: "Not queued: too many commands were waiting."
+        case .withdrawn: "Withdrawn: the conductor forgot this device before answering. It will not be sent again."
         }
     }
 }

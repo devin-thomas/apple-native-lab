@@ -431,7 +431,9 @@ let package = Package(
             name: "PeerSessionNetwork",
             dependencies: ["PeerSession"]
         ),
-        .testTarget(name: "PeerSessionNetworkTests", dependencies: ["PeerSessionNetwork", "PeerSession"]),
+        // LocalConstellation only for LAB-019-B's two-endpoint demonstration: a show conducted in
+        // this test process for the Apple TV app in a simulator, over loopback TCP.
+        .testTarget(name: "PeerSessionNetworkTests", dependencies: ["PeerSessionNetwork", "PeerSession", "LocalConstellation"]),
         // LAB-019 Local Constellation, the experiment: a conductor, a controller, and a display over
         // PeerSession, the original cue sheet, the single-device simulation over the loopback, and
         // the peer's sensitive request committed through the host's OperationService.

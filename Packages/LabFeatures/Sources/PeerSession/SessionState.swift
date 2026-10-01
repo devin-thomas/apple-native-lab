@@ -134,11 +134,14 @@ public enum CommandStage: Hashable, Sendable {
     case expiredBeforeSending
     /// Never sent: too many commands were already waiting.
     case queueFull
+    /// The conductor forgot this device before answering. It is never sent again, not even after
+    /// pairing anew; a command that was sent may or may not have been applied.
+    case withdrawn
 
     public var isFinal: Bool {
         switch self {
         case .queued, .sent, .received: false
-        case .finished, .expiredBeforeSending, .queueFull: true
+        case .finished, .expiredBeforeSending, .queueFull, .withdrawn: true
         }
     }
 }

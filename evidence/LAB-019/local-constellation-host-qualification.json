@@ -1,0 +1,47 @@
+{
+  "check" : "Local Constellation's fallback in the Mac host: the single-device simulation pairs with the code, refuses an unpaired device before any session data, reconciles a stale command, shows a silent link as stale then disconnected on both sides, commits an allowed start as the authorized peer, and Reset Demo pauses the show and leaves the person's data alone",
+  "date" : "2026-10-01T06:45:43Z",
+  "execution" : {
+    "path" : "fixture"
+  },
+  "inputs" : [
+    "cue-sheet:app-bundle@sha256:a2b9428f6b5253ce16ebf87b21b5fa38ce846fda585712492775af5ff9f20792",
+    "seed:app-bundle@sha256:d132b2dc787cea268736ac6a4ac4acc1f582b430bbb1a30f59dff2d02201041d",
+    "session:4C0C0019-5E55-4E1A-9C0B-0000000000C1"
+  ],
+  "limitations" : [
+    "Fixture path: hosted tests in the sandboxed Mac app on the development Mac, on a fresh store seeded from the bundled demo seed. It supports implemented at most.",
+    "The simulation is the declared fallback: the conductor, the controller, and the display run in this one process, joined by the in-process loopback, which carries the sealed frames a network would. No network, Bonjour browse, or local network permission took part.",
+    "The views were pressed through the accessibility press action; no pointer, keyboard, or VoiceOver was used. The pairing code was typed through the model.",
+    "The CoreLocal Mac build ran; the Companions build and its live controls did not.",
+    "No physical iPhone, iPad, or Apple TV, and no simulator, ran in this check."
+  ],
+  "outcome" : {
+    "detail" : "All 22 checks held. Both simulated devices paired with the six-digit code; an unpaired device was refused with no session data. The controller's Ask to Start waited for Allow, then committed through LabDataService as the authorized peer: \"Started the demo session.\" A Next based on an older revision was answered \"Based on revision 2, but the state is at 3. Nothing changed.\", and the controller then showed cue 3, Tide line. With the display's link silently down, its board said \"Nothing heard from the conductor\" and the roster read Stale; after 8 s both sides showed Disconnected. The display rejoined without a code. Reset Demo paused the show and changed nothing else; the person's collection and item were unchanged. After a restart the controller rejoined in the new epoch.",
+    "result" : "passed"
+  },
+  "provenance" : {
+    "appVersion" : "0.1.0",
+    "buildNumber" : "1",
+    "buildProfile" : "CoreLocal",
+    "minimumOS" : "26.0",
+    "sdkName" : "macosx27.0",
+    "sourceRevision" : "725bf49",
+    "xcodeBuild" : "27A266a",
+    "xcodeVersion" : "27.0"
+  },
+  "schemaVersion" : 1,
+  "steps" : [
+    "xcodebuild -scheme LabMac-Core -only-testing:LabMacTests/ConstellationHostEvidenceTests test",
+    "A fresh SQLite store in the app container, seeded by the host's first run; ConstellationSimulation over the host's LabLibrary",
+    "The simulation's controller, display, and conductor views hosted in the app and pressed through the accessibility press action",
+    "Unpaired Device Tries to Join",
+    "Ask to Join on the controller, then the display: the code read from the conductor, typed through the model, Allow pressed",
+    "The controller's Next, then Ask to Start, and Allow at the conductor",
+    "Walk Out of Range on the controller, the conductor's Next Cue, Bring Back in Range, the controller's Next",
+    "The display's link taken down in both directions for 8 s and more, then brought back, and Reconnect",
+    "A collection and an item created as the person's own, then Reset Demo",
+    "Restart the Conductor, then the controller's Reconnect"
+  ],
+  "subject" : "LAB-019"
+}

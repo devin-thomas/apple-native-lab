@@ -1,0 +1,47 @@
+{
+  "check" : "Local Constellation between two processes on one Mac: the Apple TV app in the tvOS simulator joins, as the display, a show a macOS test process conducts, over TCP on the loopback interface, pairing with the code, following the show, rejoining without a code, and refusing an unpaired identity",
+  "date" : "2026-10-01T06:46:23Z",
+  "execution" : {
+    "path" : "simulator",
+    "simulator" : {
+      "deviceClass" : "AppleTV14,1",
+      "osVersion" : "Version 27.0 (Build 24J360)",
+      "platform" : "tvOS"
+    }
+  },
+  "inputs" : [
+    "cue-sheet:app-bundle@sha256:a2b9428f6b5253ce16ebf87b21b5fa38ce846fda585712492775af5ff9f20792",
+    "transport:tcp-loopback"
+  ],
+  "limitations" : [
+    "Simulator path on the Apple TV side: the Apple TV app's hosted tests in the tvOS simulator. The conductor was a macOS test process on the same Mac, not the Mac app. It supports implemented at most.",
+    "Loopback only: TCP on the Mac's loopback interface, with nothing advertised or browsed. No Bonjour, no Wi-Fi or Ethernet, no local network permission prompt, and no physical Apple TV, iPhone, or Mac took part. Round trips over loopback are not network measurements.",
+    "The code reached the display through a file, standing in for a person who reads it from one screen and types it on another; the conductor's Allow was given by the test after the display said it matched.",
+    "The display's views and the remote did not take part: the joiner ran in the app's test process."
+  ],
+  "outcome" : {
+    "detail" : "the conductor's code is six digits and is typed here the pairing completes once the conductor's person allows it the display pinned the Mac conductor's identity the display shows cue 3, Tide line, running This side's estimate of the conductor's clock: offset 18346.7 ms, uncertainty 0.4 ms, best round trip 0.8 ms. the display resumes without a code an unpaired identity is told to pair first and receives no session data the display says the conductor ended the session The Mac side reported: Paired Apple TV simulator display as the display: its side typed the code this side showed, and this side allowed it after the display said it matched. Moved to cue 3 and started the show: app-ui. The conductor's estimate of the display's clock: offset -18346.6 ms, uncertainty 0.4 ms, best round trip 0.7 ms, from 6 round trips. The display's link closed without a goodbye; the roster showed it Disconnected. It resumed without a code: 1 reconnection, Live. An unpaired identity was told to pair first, before any session data. Admitted 0, refused 0; reliable gaps 0, samples lost 0, refused frames 0.",
+    "result" : "passed"
+  },
+  "provenance" : {
+    "appVersion" : "0.1.0",
+    "buildNumber" : "1",
+    "buildProfile" : "Companions",
+    "minimumOS" : "26.0",
+    "sdkName" : "appletvsimulator27.0",
+    "sourceRevision" : "725bf49",
+    "xcodeBuild" : "27A266a",
+    "xcodeVersion" : "27.0"
+  },
+  "schemaVersion" : 1,
+  "steps" : [
+    "On one Mac: LAB_019_DEMO_DIR=<folder> swift test --package-path Packages/LabFeatures --filter ConstellationTwoEndpointConductor, the conductor, on a LANListener with LANScope.loopbackOnly and no Bonjour name",
+    "xcodebuild -scheme LabTV -destination <tvOS simulator> -only-testing:LabTVTests/ConstellationTwoEndpointTests TEST_RUNNER_LAB_019_DEMO_DIR=<folder> test, the display, connecting to LANEndpoint.loopback(port:)",
+    "The port and the code passed through files in the folder; the display's side typed the code and wrote \"matched\" before the conductor's side allowed it",
+    "The conductor moved to cue 3 and started the show",
+    "The display closed its link without a goodbye, then resumed",
+    "A second identity in the Apple TV app asked to resume",
+    "The conductor stopped"
+  ],
+  "subject" : "LAB-019"
+}

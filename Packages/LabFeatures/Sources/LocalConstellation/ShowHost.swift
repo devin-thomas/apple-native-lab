@@ -9,6 +9,8 @@ public struct ShowOutcome: Hashable, Sendable {
     /// The operation service's receipt, when something was committed or a conflict recorded.
     public let receipt: ActionReceipt?
     public let message: String
+    /// Why the conductor would not let the request be allowed or declined, when it would not.
+    public var refusal: HeldCommandRefusal? = nil
 }
 
 /// The conductor's side of the show: a `Conductor` with the show's rules, and the path by which a
@@ -37,18 +39,42 @@ public actor ShowHost {
 
     /// Allows a held start or pause: commits it as the authorized peer with a grant for this
     /// change alone, then answers the peer with the receipt's result.
+    ///
+    /// The conductor takes the request before anything is committed and checks that the device
+    /// that asked is still paired, so an Allow for a forgotten or unknown device, a second Allow,
+    /// or an Allow pressed on a request the screen still showed is refused with its reason, and
+    /// nothing is committed (`settle`).
     public func allow(_ id: MessageID) async -> ShowOutcome {
-        guard let held = await conductor.state.pending.first(where: { $0.commandID == id }) else {
-            return ShowOutcome(result: nil, receipt: nil, message: "That request is no longer waiting.")
+        let backend = self.backend
+        let settled = await conductor.settle(id) { held in
+            await Self.commit(held, backend: backend)
         }
+        switch settled {
+        case .failure(let refusal):
+            return ShowOutcome(result: nil, receipt: nil, message: refusal.explanation, refusal: refusal)
+        case .success(let settled):
+            if settled.extra.resynchronize { await syncFromStore() }
+            return ShowOutcome(result: settled.result, receipt: settled.extra.receipt, message: settled.extra.message ?? settled.result.summary)
+        }
+    }
+
+    /// What an allowed request's commit did, for `allow` to report.
+    private struct Committed: Sendable {
+        var receipt: ActionReceipt?
+        var message: String?
+        var resynchronize = false
+    }
+
+    /// Commits an allowed request through the backend and returns the decision for the
+    /// conductor's state. Runs only after the conductor took the request and found its peer paired.
+    private static func commit(_ held: PendingCommand<ShowCommand>, backend: any ShowSessionBackend) async -> HeldDecision<ShowSnapshot, Committed> {
         let running = held.command == .start
-        let approval = PeerApproval(peer: held.from, commandID: id)
+        let approval = PeerApproval(peer: held.from, commandID: held.commandID)
         let session: LabSession?
         do {
             session = try await backend.showSession()
         } catch {
-            let result = await conductor.resolve(id) { _ in .refuse(summary: error.message) }
-            return ShowOutcome(result: result, receipt: nil, message: error.message)
+            return HeldDecision(extra: Committed(message: error.message)) { _ in .refuse(summary: error.message) }
         }
         let operation = DomainOperation.setSession(id: LocalConstellation.showSessionID, expected: session?.revision, running: running)
         let receipt: ActionReceipt
@@ -56,37 +82,34 @@ public actor ShowHost {
             receipt = try await backend.commit(operation, requestID: approval.requestID, authority: .allowedPeer(approval))
         } catch .refused(.ruleViolation(.noChanges)) {
             let stored = try? await backend.showSession()
-            let result = await conductor.resolve(id) { state in
+            return HeldDecision(extra: Committed()) { state in
                 .apply(
                     state.with(running: running, sessionRevision: stored?.revision.rawValue, note: state.note),
                     summary: running ? "The show is already running." : "The show is already paused."
                 )
             }
-            return ShowOutcome(result: result, receipt: nil, message: result?.summary ?? "")
         } catch {
-            let result = await conductor.resolve(id) { _ in .refuse(summary: error.message) }
-            await syncFromStore()
-            return ShowOutcome(result: result, receipt: nil, message: error.message)
+            return HeldDecision(extra: Committed(message: error.message, resynchronize: true)) { _ in .refuse(summary: error.message) }
         }
         if receipt.conflict != nil {
-            let result = await conductor.resolve(id) { _ in
+            return HeldDecision(extra: Committed(receipt: receipt, resynchronize: true)) { _ in
                 .refuse(summary: "The show changed at the conductor first. Nothing changed.")
             }
-            await syncFromStore()
-            return ShowOutcome(result: result, receipt: receipt, message: result?.summary ?? "")
         }
         let revision = receipt.changes.first?.newRevision.rawValue
         let verb = running ? "Started" : "Paused"
         let note = "\(verb) at \(held.from.name)'s request, allowed at the conductor."
-        let result = await conductor.resolve(id) { state in
+        return HeldDecision(extra: Committed(receipt: receipt, message: note)) { state in
             .apply(state.with(running: running, sessionRevision: revision, note: note), summary: "\(verb) the show. \(receipt.summary)")
         }
-        return ShowOutcome(result: result, receipt: receipt, message: note)
     }
 
     /// Declines a held request. Nothing is committed.
     public func decline(_ id: MessageID) async -> ShowOutcome {
         let result = await conductor.resolve(id) { _ in .refuse(summary: "The person at the conductor declined. Nothing changed.") }
+        guard let result else {
+            return ShowOutcome(result: nil, receipt: nil, message: HeldCommandRefusal.notWaiting.explanation, refusal: .notWaiting)
+        }
         return ShowOutcome(result: result, receipt: nil, message: "Declined.")
     }
 

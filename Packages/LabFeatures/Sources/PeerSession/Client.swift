@@ -139,10 +139,11 @@ public actor Client<V: SessionVocabulary> {
     public var pairedHost: PeerIdentity? { host }
 
     /// Unpins the conductor, as after it refused a resume because it forgot this device. The next
-    /// join pairs again with a code.
+    /// join pairs again with a code, and no command from this pairing is sent under the next.
     public func forgetHost() async {
         if let host { await configuration.trust.forget(host.id) }
         host = nil
+        withdrawUnfinished()
         publish()
     }
 
@@ -451,12 +452,26 @@ public actor Client<V: SessionVocabulary> {
             if reason == .forgotten {
                 if let host { await configuration.trust.forget(host.id) }
                 host = nil
+                withdrawUnfinished()
             }
             await dropLink(reason: text)
         case .command, .snapshotRequest:
             note("Dropped a message only a joiner sends.", .notice)
         }
         publish()
+    }
+
+    /// Ends every command the pairing that just ended had not finished. A command belongs to the
+    /// pairing it was issued under: one that waited, or was never answered, is never sent under a
+    /// new pairing, where the conductor would see it as a new request.
+    private func withdrawUnfinished() {
+        var count = 0
+        for index in commands.indices where !commands[index].stage.isFinal {
+            commands[index].stage = .withdrawn
+            lastSent[commands[index].id] = nil
+            count += 1
+        }
+        if count > 0 { note("\(count) unfinished command(s) were withdrawn with the pairing.", .notice) }
     }
 
     /// Sends every queued command, oldest first, once the link is synchronized.
