@@ -23,12 +23,17 @@ final class CommerceSession {
     var purchaseScript: SimulatedPurchaseScript = .verified
     var selectedProductID: ProductID = CommerceFixture.notebook.id
 
+    @ObservationIgnored private let makeBackend: @MainActor (LabLibrary) -> any CommerceBackend
     @ObservationIgnored private var purchaseRequest: RequestID?
     @ObservationIgnored private var restoreRequest: RequestID?
     @ObservationIgnored private var resetRequest: RequestID?
 
-    init(desk: CommerceDesk = CommerceDesk()) {
+    init(
+        desk: CommerceDesk = CommerceDesk(),
+        makeBackend: @escaping @MainActor (LabLibrary) -> any CommerceBackend = { LibraryCommerceBackend(library: $0) }
+    ) {
         self.desk = desk
+        self.makeBackend = makeBackend
     }
 
     var products: [CommerceProduct] { desk.products }
@@ -47,7 +52,7 @@ final class CommerceSession {
             switch try await desk.purchase(
                 selectedProductID,
                 script: purchaseScript,
-                through: LibraryCommerceBackend(library: library),
+                through: makeBackend(library),
                 requestID: requestID
             ) {
             case .committed(let receipt):
@@ -67,6 +72,7 @@ final class CommerceSession {
                 return nil
             }
         } catch {
+            if needsNewRequest(after: error) { purchaseRequest = nil }
             let sentence = describe(error)
             message = sentence
             LabAnnouncement(failure: sentence).post()
@@ -81,7 +87,7 @@ final class CommerceSession {
         do {
             switch try await desk.approvePending(
                 selectedProductID,
-                through: LibraryCommerceBackend(library: library),
+                through: makeBackend(library),
                 requestID: requestID
             ) {
             case .committed(let receipt):
@@ -105,7 +111,7 @@ final class CommerceSession {
         restoreRequest = requestID
         do {
             let receipts = try await desk.restore(
-                through: LibraryCommerceBackend(library: library),
+                through: makeBackend(library),
                 requestID: requestID
             )
             restoreRequest = nil
@@ -118,6 +124,7 @@ final class CommerceSession {
             }
             return finish(last, in: library, sentence: "Restored from local transaction history. No Apple Account was used. No real charge.")
         } catch {
+            if needsNewRequest(after: error) { restoreRequest = nil }
             let sentence = describe(error)
             message = sentence
             LabAnnouncement(failure: sentence).post()
@@ -131,7 +138,7 @@ final class CommerceSession {
         do {
             switch try await desk.refund(
                 selectedProductID,
-                through: LibraryCommerceBackend(library: library),
+                through: makeBackend(library),
                 requestID: RequestID()
             ) {
             case .committed(let receipt):
@@ -154,7 +161,7 @@ final class CommerceSession {
         do {
             switch try await desk.revoke(
                 selectedProductID,
-                through: LibraryCommerceBackend(library: library),
+                through: makeBackend(library),
                 requestID: RequestID()
             ) {
             case .committed(let receipt):
@@ -186,7 +193,7 @@ final class CommerceSession {
         resetRequest = requestID
         do {
             let receipts = try await desk.reset(
-                through: LibraryCommerceBackend(library: library),
+                through: makeBackend(library),
                 requestID: requestID
             )
             resetRequest = nil
@@ -195,6 +202,7 @@ final class CommerceSession {
             guard let last = receipts.last else { return nil }
             return finish(last, in: library, sentence: message ?? "")
         } catch {
+            if needsNewRequest(after: error) { resetRequest = nil }
             let sentence = describe(error)
             message = sentence
             LabAnnouncement(failure: sentence).post()
@@ -214,6 +222,16 @@ final class CommerceSession {
             "Purchase cancelled. Nothing was changed. No real charge."
         case .failed:
             "Purchase failed. Nothing was changed. No real charge."
+        }
+    }
+
+    /// Conflict receipts remain bound to their original request. A reviewed retry must get a
+    /// new ID, while an unrecorded refusal can safely retain its pending request.
+    private func needsNewRequest(after error: any Error) -> Bool {
+        guard let error = error as? CommerceError else { return false }
+        switch error {
+        case .stateChanged, .operation(.requestIDReused(_)): return true
+        default: return false
         }
     }
 
@@ -274,26 +292,22 @@ struct LibraryCommerceBackend: CommerceBackend {
         requestID: RequestID,
         names: [EntityReference: String]
     ) async throws(CommerceError) -> ActionReceipt {
-        do {
+        do throws(LabLibrary.SubmitFailure) {
             return try await library.submit(operation, requestID: requestID, authority: .userAction, names: names).receipt
-        } catch let failure as LabLibrary.SubmitFailure {
-            switch failure {
+        } catch {
+            switch error {
             case .unavailable(let reason): throw .labUnavailable(reason)
             case .refused(let error): throw .operation(error)
             }
-        } catch {
-            throw .labUnavailable("The lab could not commit the change.")
         }
     }
 
     private func opened() async throws(CommerceError) -> LabDataService {
-        do { return try await library.openedService() } catch let failure as LabLibrary.SubmitFailure {
-            switch failure {
+        do throws(LabLibrary.SubmitFailure) { return try await library.openedService() } catch {
+            switch error {
             case .unavailable(let reason): throw .labUnavailable(reason)
             case .refused(let error): throw .operation(error)
             }
-        } catch {
-            throw .labUnavailable("The lab store is still opening. Try again.")
         }
     }
 }

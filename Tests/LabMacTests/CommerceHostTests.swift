@@ -44,6 +44,37 @@ import Testing
         #expect(session.message?.contains("Unverified") == true)
     }
 
+    @Test func staleActionsCanBeRetriedAfterReview() async throws {
+        let library = try await library()
+        let backend = RacingLibraryCommerceBackend(library: library)
+        let session = CommerceSession(makeBackend: { _ in backend })
+        _ = try #require(await session.purchase(in: library))
+        let original = session.entitlement(for: CommerceFixture.notebook.id)
+        backend.raceNextUpdate = true
+        #expect(await session.purchase(in: library) == nil)
+        #expect(session.entitlement(for: CommerceFixture.notebook.id) == original)
+        #expect(session.message?.contains("changed before") == true)
+        // A conflict receipt binds its request forever. The next user action needs a new ID.
+        let retried = try #require(await session.purchase(in: library))
+        #expect(retried.receipt.status == .committed)
+        #expect(session.entitlement(for: CommerceFixture.notebook.id) != original)
+
+        backend.raceNextUpdate = true
+        let beforeRestore = session.entitlement(for: CommerceFixture.notebook.id)
+        #expect(await session.restore(in: library) == nil)
+        #expect(session.entitlement(for: CommerceFixture.notebook.id) == beforeRestore)
+        #expect(session.message?.contains("changed before") == true)
+        _ = try #require(await session.restore(in: library))
+        #expect(session.entitlement(for: CommerceFixture.notebook.id)?.source == .restore)
+
+        backend.raceNextUpdate = true
+        #expect(await session.reset(in: library) == nil)
+        #expect(session.entitlement(for: CommerceFixture.notebook.id) != nil)
+        #expect(session.message?.contains("changed before") == true)
+        _ = try #require(await session.reset(in: library))
+        #expect(session.entitlement(for: CommerceFixture.notebook.id) == nil)
+    }
+
     @Test func restoreUsesLocalHistoryWithoutAnAccount() async throws {
         let library = try await library()
         let session = CommerceSession()
@@ -53,5 +84,31 @@ import Testing
         #expect(restored.receipt.admitted.adapter == .appUI)
         #expect(session.message?.contains("No Apple Account") == true)
         #expect(session.entitlement(for: CommerceFixture.notebook.id)?.source == .restore)
+    }
+}
+
+
+/// One intervening app-UI edit, through the real library service, before the commerce update.
+@MainActor
+private final class RacingLibraryCommerceBackend: CommerceBackend {
+    private let base: LibraryCommerceBackend
+    var raceNextUpdate = false
+    private var editSequence = 0
+
+    init(library: LabLibrary) { base = LibraryCommerceBackend(library: library) }
+    func item(_ id: ItemID) async throws(CommerceError) -> LabItem? { try await base.item(id) }
+    func collection(_ id: CollectionID) async throws(CommerceError) -> LabCollection? { try await base.collection(id) }
+    func perform(_ operation: DomainOperation, requestID: RequestID,
+                 names: [EntityReference: String]) async throws(CommerceError) -> ActionReceipt {
+        if raceNextUpdate, case .updateItem(let id, let expected, _) = operation {
+            raceNextUpdate = false
+            editSequence += 1
+            let changes: ItemChanges
+            do { changes = try ItemChanges(title: EntityTitle("Changed fixture \(editSequence)"), note: nil) }
+            catch { throw .labUnavailable("The test fixture is invalid.") }
+            _ = try await base.perform(.updateItem(id: id, expected: expected, changes: changes),
+                                      requestID: RequestID(), names: [:])
+        }
+        return try await base.perform(operation, requestID: requestID, names: names)
     }
 }
