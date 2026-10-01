@@ -12,6 +12,7 @@ let package = Package(
         .library(name: "ShareIngress", targets: ["ShareIngress"]),
         .library(name: "PortableObjects", targets: ["PortableObjects"]),
         .library(name: "SurfaceDeck", targets: ["SurfaceDeck"]),
+        .library(name: "LocalModelBench", targets: ["LocalModelBench"]),
     ],
     dependencies: [
         .package(path: "../LabSupport"),
@@ -106,6 +107,19 @@ let package = Package(
         .testTarget(
             name: "SurfaceDeckTests",
             dependencies: ["SurfaceDeck", .product(name: "LabDomain", package: "LabDomain")]
+        ),
+        // LAB-015 Local Model Bench: a fixed corpus, a license and memory gate before any load,
+        // and a fixture executor that is not inference. No Core ML or Foundation Models import.
+        .target(
+            name: "LocalModelBench",
+            dependencies: [.product(name: "LabDomain", package: "LabDomain")]
+        ),
+        .testTarget(
+            name: "LocalModelBenchTests",
+            dependencies: [
+                "LocalModelBench",
+                .product(name: "LabDomain", package: "LabDomain"),
+            ]
         ),
     ]
 )
