@@ -1,0 +1,46 @@
+{
+  "identifier": "04004004-1040-4040-8040-040040040040",
+  "nonRenewingSubscriptions": [],
+  "products": [
+    {
+      "displayPrice": "0.00",
+      "familyShareable": false,
+      "internalID": "1",
+      "localizations": [
+        {
+          "description": "Original local test unlock. No real charge.",
+          "displayName": "Field Notebook Unlock",
+          "locale": "en_US"
+        }
+      ],
+      "productID": "lab.commerce.field-notebook",
+      "referenceName": "Field Notebook Unlock",
+      "type": "NonConsumable"
+    },
+    {
+      "displayPrice": "0.00",
+      "familyShareable": false,
+      "internalID": "2",
+      "localizations": [
+        {
+          "description": "Original local test unlock. No real charge.",
+          "displayName": "Sample Compass Overlay",
+          "locale": "en_US"
+        }
+      ],
+      "productID": "lab.commerce.sample-compass",
+      "referenceName": "Sample Compass Overlay",
+      "type": "NonConsumable"
+    }
+  ],
+  "settings": {
+    "_failTransactionsEnabled": false,
+    "_locale": "en_US",
+    "_storefront": "USA"
+  },
+  "subscriptionGroups": [],
+  "version": {
+    "major": 3,
+    "minor": 0
+  }
+}

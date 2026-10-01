@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "subject": "LAB-040",
+  "check": "Developer-only local StoreKit configuration loader",
+  "date": "2026-10-01T04:29:48Z",
+  "provenance": {
+    "sourceRevision": "b8815de+uncommitted",
+    "sdkName": "macosx27.0",
+    "xcodeVersion": "27.0",
+    "xcodeBuild": "27A266a"
+  },
+  "execution": {
+    "path": "fixture"
+  },
+  "inputs": [
+    "Fixtures/LAB-040/Commerce.storekit@sha256:f370f35c84fbec3fc372122995f8db83fc79060311e764b4a6da6223f6543c59"
+  ],
+  "steps": [
+    "On research through labr: Fixtures/LAB-040/check_configuration.sh",
+    "Compile a developer-only XCTest bundle; initialize SKTestSession(contentsOf:) with the original local configuration",
+    "Treat StoreKitTest service errors as a failed gate even if XCTest reports its constructor assertion passed"
+  ],
+  "outcome": {
+    "result": "blocked",
+    "detail": "The probe compiled. With developer framework/library paths, XCTest constructed SKTestSession, but the service refused saving its configuration: SKServiceErrorDomain code 2, underlying SKInternalErrorDomain code 4. The driver exited 1. Earlier iterations identified missing XCTest runtime and Swift support search paths; a bare executable aborted. No product purchase was requested."
+  },
+  "limitations": [
+    "A passing constructor assertion is not proof that StoreKit Testing activated this configuration.",
+    "The local state simulator is independent and passes its package tests. Application-hosted StoreKit Testing and real storefront transactions remain unrun.",
+    "No app target or default scheme links StoreKitTest or enables the configuration."
+  ]
+}
