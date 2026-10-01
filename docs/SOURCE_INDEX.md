@@ -189,6 +189,8 @@ Source: [CloudKit sync engine](https://developer.apple.com/documentation/cloudki
 
 Use in this plan: Periodic synchronization is not a real-time transport; private/shared database scope.
 
+Installed SDK (LAB-017-A, 2026-09-30, Xcode 27.0 27A266a, iOS 27.0): `CKSyncEngine`, `CKSyncEngine.Configuration.init(database:stateSerialization:delegate:)`, `fetchChanges(_:)`, and `sendChanges(_:)` are available from macOS 14.0 and iOS 17.0. `CKSyncEngine.Event.accountChange` includes `signIn`, `signOut`, and `switchAccounts`. `CKAccountStatus.temporarilyUnavailable` is available from macOS 12.0 and iOS 15.0. CoreLocal does not import or link CloudKit. The ledger's profile is a directory, and `RecordScope` has no public-database case.
+
 Implementation evidence required: actual SDK symbol/availability, permissions or entitlement, and a named compile/device result.
 
 ## S16

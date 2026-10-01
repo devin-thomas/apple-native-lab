@@ -103,3 +103,14 @@ Recorded at [LAB-004-B](../tickets/LAB-004-B.md) from the [LAB-004-A](../tickets
 | [S59](SOURCE_INDEX.md#s59) | `Toggle(isOn:intent:label:)` in `_AppIntents_SwiftUI`, which the widget extension links | iOS 17.0, macOS 14.0, tvOS 17.0, watchOS 10.0 | The widget's toggle in the simulator. The release manifest records the link (LAB-004-A) | None beyond the widget's own |
 | [S59](SOURCE_INDEX.md#s59) | `View.privacySensitive(_:)` and `RedactionReasons.privacy` | iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0 | Drawn with the privacy redaction in a package test and read back by text recognition: the detail line is gone and the state stays readable. The deck's "Lock Screen, locked" preview uses the same redaction | That the system applies it to this widget on a locked device |
 
+### CloudKit sync engine (LAB-017)
+
+Recorded at [LAB-017-A](../tickets/LAB-017-A.md). Symbols were read on 2026-09-30 from the iOS 27.0 SDK's `CloudKit.swiftinterface` and CloudKit headers in Xcode 27.0 (27A266a). Nothing here has run on a device, and this build does not open a CloudKit database.
+
+| Source | Installed symbol | Declared availability | Demonstrated | Remaining uncertainty |
+|---|---|---|---|---|
+| [S15](SOURCE_INDEX.md#s15) | `CKSyncEngine`, `CKSyncEngine.Configuration.init(database:stateSerialization:delegate:)`, `fetchChanges(_:)`, `sendChanges(_:)`, `automaticallySync` | macOS 14.0, iOS 17.0, tvOS 17.0, watchOS 10.0 | Not called. The ledger module does not import CloudKit. CoreLocal does not link it and does not declare `com.apple.developer.icloud-services`. `CloudKitSurface` records that a later adapter must leave `automaticallySync` false. | A CloudOptional host, a signed container, and an account |
+| [S15](SOURCE_INDEX.md#s15) | `CKSyncEngine.Event.accountChange` with `signIn`, `signOut`, and `switchAccounts` | macOS 14.0, iOS 17.0, tvOS 17.0, watchOS 10.0 | Not called. Package tests refuse another account's ledger directory and another account's private document (`AccountAndProfileTests`). | A live account change |
+| [S15](SOURCE_INDEX.md#s15) | `CKDatabase.Scope` (`public`, `private`, `shared`); `CKAccountStatus.temporarilyUnavailable` | Scope: macOS 10.12, iOS 10.0. `temporarilyUnavailable`: macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0 | `RecordScope` is only `private` and `shared`. A document whose scope is `public` is refused (`Fixtures/LAB-017/public-scope.json`). The file profile is not contacted when it is disabled. | What a live engine does while the account is temporarily unavailable |
+
+
