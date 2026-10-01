@@ -17,3 +17,4 @@ LAB_PURPOSE_MICROPHONE = Native Lab listens only while you run an audio or speec
 LAB_PURPOSE_SPEECH_RECOGNITION = Native Lab transcribes speech only in a speech experiment that you started.
 LAB_PURPOSE_BLUETOOTH = Native Lab uses Bluetooth only in an accessory experiment that you started, with a device you choose.
 LAB_PURPOSE_NEARBY_INTERACTION = Native Lab measures distance to a nearby device only while you run a proximity experiment that you started.
+LAB_PURPOSE_FACE_ID = Native Lab asks this device to confirm it is you only when you authorize a Trust Desk action you started.

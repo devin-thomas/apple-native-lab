@@ -16,6 +16,7 @@ let package = Package(
         // tests a scheme, as every module's scheme holds its own tests. No host links it.
         .library(name: "FirstJourney", targets: ["FirstJourney"]),
         .library(name: "DesktopNativePower", targets: ["DesktopNativePower"]),
+        .library(name: "TrustDesk", targets: ["TrustDesk"]),
     ],
     dependencies: [
         .package(path: "../LabSupport"),
@@ -139,6 +140,16 @@ let package = Package(
                 "DesktopNativePower",
                 .product(name: "LabDomain", package: "LabDomain"),
             ]
+        ),
+        // LAB-041 Trust Desk: local authorization, a scoped keychain record, and a labeled
+        // passkey simulation. The sealed-record open commits through OperationService.
+        .target(
+            name: "TrustDesk",
+            dependencies: [.product(name: "LabDomain", package: "LabDomain")]
+        ),
+        .testTarget(
+            name: "TrustDeskTests",
+            dependencies: ["TrustDesk", .product(name: "LabDomain", package: "LabDomain")]
         ),
     ]
 )

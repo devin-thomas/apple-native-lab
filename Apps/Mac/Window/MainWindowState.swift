@@ -20,6 +20,8 @@ enum SidebarDestination: Hashable {
     case shareInbox
     /// LAB-008: drag, export, and import lab objects.
     case portableObjects
+    /// LAB-041: local authorization, a scoped secret, and a passkey simulation.
+    case trustDesk
     /// LAB-004: the demo session, its receipts, and the widget and Control previews.
     case surfaceDeck
     /// LAB-042: command palette, notes, and menu-bar status. Mac only.
@@ -34,6 +36,7 @@ enum SidebarDestination: Hashable {
         case .accessSuperpower: AccessSuperpowerExperiment.title
         case .shareInbox: "Share Inbox"
         case .portableObjects: "Portable Objects"
+        case .trustDesk: TrustDeskExperiment.title
         case .surfaceDeck: SurfaceDeck.title
         case .desktopPower: "Desktop Native Power"
         case .catalog(let scope): scope.title
@@ -49,6 +52,7 @@ enum SidebarDestination: Hashable {
         case .accessSuperpower: "access-superpower"
         case .shareInbox: "share-inbox"
         case .portableObjects: "portable-objects"
+        case .trustDesk: "trust-desk"
         case .surfaceDeck: "surface-deck"
         case .desktopPower: "desktop-power"
         case .catalog(.all): "all"
@@ -67,6 +71,7 @@ enum SidebarDestination: Hashable {
         case ("access-superpower", nil): self = .accessSuperpower
         case ("share-inbox", nil): self = .shareInbox
         case ("portable-objects", nil): self = .portableObjects
+        case ("trust-desk", nil): self = .trustDesk
         case ("surface-deck", nil): self = .surfaceDeck
         case ("desktop-power", nil): self = .desktopPower
         case ("all", nil): self = .catalog(.all)
@@ -98,6 +103,8 @@ final class MainWindowState {
     var inboxEntry: InboxEntry.ID?
     /// LAB-008: this window's objects, selection, and import under review.
     let portableObjects = PortableObjectsSession()
+    /// LAB-041: this window's identity, grant, and passkey simulation.
+    let trustDesk = TrustDeskSession()
     var searchText = ""
     /// Incremented to ask the window to focus its search field.
     var searchRequests = 0

@@ -93,6 +93,8 @@ struct MainWindow: View {
             ShareInboxListColumn(window: window)
         case .portableObjects:
             PortableObjectsListColumn(window: window)
+        case .trustDesk:
+            TrustDeskListColumn(window: window, session: window.trustDesk)
         case .surfaceDeck:
             SurfaceDeckListColumn(window: window)
         case .desktopPower:
@@ -123,6 +125,8 @@ struct MainWindow: View {
             ShareInboxDetailColumn(window: window)
         case .portableObjects:
             PortableObjectsDetailColumn(window: window)
+        case .trustDesk:
+            TrustDeskDetailColumn(session: window.trustDesk)
         case .surfaceDeck:
             SurfaceDeckDetailColumn()
         case .desktopPower:
@@ -152,6 +156,7 @@ struct MainWindow: View {
         case .shareInbox: "Search the inbox"
         case .portableObjects: "Search objects"
         case .desktopPower: "Search notes"
+        case .trustDesk: "Search the desk"
         default: "Search experiments"
         }
     }

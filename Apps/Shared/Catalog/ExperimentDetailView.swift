@@ -37,6 +37,7 @@ struct ExperimentDetailView: View {
                 #if os(macOS)
                 DesktopPowerLaunch(experiment: experiment)
                 #endif
+                TrustDeskLaunch(experiment: experiment)
                 Text(experiment.moment)
                     .font(.title3)
                     .fixedSize(horizontal: false, vertical: true)

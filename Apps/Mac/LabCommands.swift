@@ -49,6 +49,9 @@ struct LabCommands: Commands {
             Button("Desktop Native Power") { window?.destination = .desktopPower }
                 .keyboardShortcut("9", modifiers: .command)
                 .disabled(window == nil)
+            Button(TrustDeskExperiment.title) { window?.destination = .trustDesk }
+                .keyboardShortcut("0", modifiers: .command)
+                .disabled(window == nil)
             Button(DesktopCommand.showPalette.title) { desktop.showsPalette = true }
                 .keyboardShortcut("k", modifiers: .command)
             Button(DesktopCommand.showStatus.title) {
