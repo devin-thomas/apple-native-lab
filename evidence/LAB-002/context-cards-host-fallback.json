@@ -1,0 +1,38 @@
+{
+  "check" : "Context Cards clean-store fallback replay, cancellation, stale screen, duplicate intent, and reset beside imported data",
+  "date" : "2026-10-01T05:45:58Z",
+  "execution" : {
+    "path" : "fixture"
+  },
+  "inputs" : [
+    "seed:app-bundle@sha256:d132b2dc787cea268736ac6a4ac4acc1f582b430bbb1a30f59dff2d02201041d",
+    "import:original-text@sha256:c8379b8781ab17ff5a8a887cf3de1a31ac01a691636ae38122531e527c9ede2a"
+  ],
+  "limitations" : [
+    "Fixture path in the sandboxed Mac host; no rendered UI or system dialog was driven.",
+    "Intent confirmation is a stand-in. No Siri, Shortcuts app, physical device, or Siri-disabled system configuration ran.",
+    "Package schema and card-equivalence checks are separate tests, not observations of system integration."
+  ],
+  "outcome" : {
+    "detail" : "Stale session refused with neither sample archived and no receipt. Confirmed app UI archive offered undo. Reset restored Amber and preserved imported item fields and its receipt. Declined intent had no receipt; retry and duplicate returned one identical app-intent receipt.",
+    "result" : "passed"
+  },
+  "provenance" : {
+    "appVersion" : "0.1.0",
+    "buildNumber" : "1",
+    "buildProfile" : "CoreLocal",
+    "minimumOS" : "26.0",
+    "sdkName" : "macosx27.0",
+    "sourceRevision" : "605a95d",
+    "xcodeBuild" : "27A266a",
+    "xcodeVersion" : "27.0"
+  },
+  "schemaVersion" : 1,
+  "steps" : [
+    "ContextCardsQualificationHostTests.theFallbackInteractionPreservesImportedDataAcrossReset",
+    "Fresh host SQLite store; import original text with a scoped share-extension grant",
+    "Session: prepare/cancel, prepare/replace/refuse, prepare/confirm, Reset Demo",
+    "Typed intent run(with:): decline, retry, duplicate same request"
+  ],
+  "subject" : "LAB-002"
+}
