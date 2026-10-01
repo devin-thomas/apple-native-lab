@@ -30,6 +30,12 @@
 	<array>
 		<string>audio</string>
 	</array>
+	<key>NSBonjourServices</key>
+	<array>
+		<string>_nativelab-lc._tcp</string>
+	</array>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>Native Lab looks for a Local Constellation conductor on your local network only when you choose to join one.</string>
 	<key>UILaunchScreen</key>
 	<dict/>
 	<key>UIRequiredDeviceCapabilities</key>

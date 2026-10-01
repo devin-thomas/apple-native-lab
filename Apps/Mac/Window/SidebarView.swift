@@ -7,6 +7,7 @@ import RespectfulAttention
 import ShortcutWorkbench
 import RenderThatSurvives
 import ScreeningRoom
+import LocalConstellation
 import SurfaceDeck
 import SwiftUI
 import TactileGrammar
@@ -99,6 +100,9 @@ struct SidebarView: View {
                 Label(TabletopExperiment.title, systemImage: TabletopExperiment.symbol)
                     .tag(SidebarDestination.tabletopReality)
                     .accessibilityHint("Place, move, and inspect objects on a virtual table")
+                Label(LocalConstellation.title, systemImage: LocalConstellation.symbol)
+                    .tag(SidebarDestination.localConstellation)
+                    .accessibilityHint("A conductor, a controller, and a display, simulated here or live on the local network")
             }
             Section("Experiments") {
                 row(.all, symbol: "square.grid.2x2")

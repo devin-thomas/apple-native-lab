@@ -16,3 +16,4 @@ These are the build pack's explicit defaults. Preserve their rationale when a la
 - [ADR-012 — SQLite local store with fixed demo and user namespaces](docs/adr/ADR-012.md)
 - [ADR-013 — Short-lived, scoped grants for destructive and external commits](docs/adr/ADR-013.md)
 - [ADR-014 — Every platform host exists before its experiments](docs/adr/ADR-014.md)
+- [ADR-015 — Local sessions pair explicitly, pin keys, seal every frame, and stay out of CoreLocal](docs/adr/ADR-015.md)

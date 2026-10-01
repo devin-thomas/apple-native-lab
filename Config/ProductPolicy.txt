@@ -30,12 +30,12 @@ link         CoreLocal  macos    VisualIntelligence  # optional system visual-se
 link         CoreLocal  macos    Combine             # pulled in by Vision / VisualIntelligence (LAB-012)
 link         CoreLocal  macos    Security            # reads the running build's own entitlements
 link         CoreLocal  macos    Speech              # speech recognition status and on-device assets
-link         CoreLocal  macos    CryptoKit           # LabStore demo fixture: SHA-256 of the bundled seed
+link         CoreLocal  macos    CryptoKit           # LabStore demo fixture: SHA-256 of the bundled seed; LAB-019's simulated identities and sealed frames
 link         CoreLocal  macos    AppKit              # accessibility announcements SwiftUI does not supply
 link         CoreLocal  ios      ARKit               # world tracking and scene reconstruction support
 link         CoreLocal  ios      AVFoundation        # camera and microphone status
 link         CoreLocal  ios      CoreBluetooth       # Bluetooth authorization status
-link         CoreLocal  ios      CryptoKit           # LabStore demo fixture: SHA-256 of the bundled seed
+link         CoreLocal  ios      CryptoKit           # LabStore demo fixture: SHA-256 of the bundled seed; LAB-019's simulated identities and sealed frames
 link         CoreLocal  ios      FoundationModels    # on-device language model availability
 link         CoreLocal  ios      Vision              # OCR and barcodes of a chosen image (LAB-012)
 link         CoreLocal  ios      ImageIO             # image bytes for an on-device description (LAB-012)
@@ -209,10 +209,97 @@ link         Companions watchos  NearbyInteraction   # Ultra Wideband device cap
 link         Companions watchos  WatchKit            # LAB-030 system haptics (WKInterfaceDevice.play); no custom waveform
 link         Companions watchos  CryptoKit           # LAB-030: TactileGrammar → LabDomain ContentDigest (SHA-256)
 
-# Companions: the Apple TV host (CORE-013). It links LabSupport, LabCatalog, and the Screening Room
-# products (LAB-031, above), and declares no entitlement: no `entitlement` line names tvOS, so any
-# entitlement fails the manifest.
+# Companions: the Apple TV host (CORE-013). It links LabSupport, LabCatalog, the Screening Room
+# products (LAB-031, above), and Local Constellation's products (LAB-019), and declares no
+# entitlement: no `entitlement` line names tvOS, so any entitlement fails the manifest.
 link         Companions tvos     CoreBluetooth       # Bluetooth authorization status (CBManager.authorization); no manager is created
+# (allowed above) Companions tvos CryptoKit — LAB-019: the session's identities, pairing code, and sealed frames; LabDomain's digests
+link         Companions tvos     Network             # LAB-019: browsing for a conductor and TCP on the local network, only after a person chooses Join
+
+# Companions: the Mac and iPhone host variants with Local Constellation's local-network adapter
+# (LAB-019). LabMacCompanions and LabPhoneCompanions are built from LabMac's and LabPhone's sources,
+# so they link what those link, for the same reasons, plus Network. CoreLocal never links Network
+# or carries a network entitlement.
+link         Companions macos    AVFoundation        # host variant: camera and microphone status, as LabMac
+link         Companions macos    Accessibility       # host variant: the Audio Graph chart descriptor, as LabMac
+link         Companions macos    AppIntents          # host variant: Action Atlas and Surface Deck intents, as LabMac
+link         Companions macos    AppKit              # host variant: accessibility announcements, as LabMac
+link         Companions macos    CoreBluetooth       # host variant: Bluetooth authorization status, as LabMac
+link         Companions macos    CoreTransferable    # host variant: ShareLink and Transferable, as LabMac
+link         Companions macos    CryptoKit           # host variant: digests, and the session's keys and sealed frames
+link         Companions macos    FoundationModels    # host variant: on-device language model availability, as LabMac
+link         Companions macos    Network             # LAB-019: Bonjour advertising and browsing and TCP on the local network
+link         Companions macos    Security            # host variant: reads the running build's own entitlements, as LabMac
+link         Companions macos    Speech              # host variant: speech recognition status, as LabMac
+entitlement  Companions macos    com.apple.security.app-sandbox   # the Mac host variant is sandboxed, as LabMac
+entitlement  Companions macos    com.apple.security.files.user-selected.read-write   # Import and Export file dialogs, as LabMac
+entitlement  Companions macos    com.apple.security.network.server   # LAB-019: the conductor accepts local connections (acceptLocalOnly)
+entitlement  Companions macos    com.apple.security.network.client   # LAB-019: a joiner connects to a conductor it found through Bonjour
+link         Companions ios      ARKit               # host variant: world tracking support, as LabPhone
+link         Companions ios      AVFoundation        # host variant: camera and microphone status, as LabPhone
+link         Companions ios      Accessibility       # host variant: the Audio Graph chart descriptor, as LabPhone
+link         Companions ios      AppIntents          # host variant: Action Atlas and Surface Deck intents, as LabPhone
+link         Companions ios      CoreBluetooth       # host variant: Bluetooth authorization status, as LabPhone
+link         Companions ios      CoreTransferable    # host variant: ShareLink and Transferable, as LabPhone
+link         Companions ios      CryptoKit           # host variant: digests, and the session's keys and sealed frames
+link         Companions ios      FoundationModels    # host variant: on-device language model availability, as LabPhone
+link         Companions ios      NearbyInteraction   # host variant: Ultra Wideband capabilities, as LabPhone
+link         Companions ios      Network             # LAB-019: Bonjour advertising and browsing and TCP on the local network
+link         Companions ios      Speech              # host variant: speech recognition status, as LabPhone
+
+# Companions host variants (integration): LabMacCompanions and LabPhoneCompanions build LabMac's and
+# LabPhone's sources, so they also link and carry what later experiments added to those hosts.
+# Each line mirrors a CoreLocal rule above, for the same reason.
+link         Companions macos    Vision              # as the CoreLocal Mac host
+link         Companions macos    ImageIO             # as the CoreLocal Mac host
+link         Companions macos    CoreGraphics        # as the CoreLocal Mac host
+link         Companions macos    VisualIntelligence  # as the CoreLocal Mac host
+link         Companions macos    Combine             # as the CoreLocal Mac host
+link         Companions ios      Vision              # as the CoreLocal iPhone host
+link         Companions ios      ImageIO             # as the CoreLocal iPhone host
+link         Companions ios      CoreGraphics        # as the CoreLocal iPhone host
+link         Companions ios      VisualIntelligence  # as the CoreLocal iPhone host
+link         Companions ios      Combine             # as the CoreLocal iPhone host
+link         Companions macos    _AppIntents_SwiftUI # as the CoreLocal Mac host
+link         Companions ios      _AppIntents_SwiftUI # as the CoreLocal iPhone host
+link         Companions macos    CoreSpotlight       # as the CoreLocal Mac host
+link         Companions ios      CoreSpotlight       # as the CoreLocal iPhone host
+link         Companions macos    LocalAuthentication # as the CoreLocal Mac host
+link         Companions ios      LocalAuthentication # as the CoreLocal iPhone host
+link         Companions ios      Security            # as the CoreLocal iPhone host
+link         Companions macos    AuthenticationServices # as the CoreLocal Mac host
+link         Companions ios      AuthenticationServices # as the CoreLocal iPhone host
+link         Companions macos    AVFAudio            # as the CoreLocal Mac host
+link         Companions ios      AVFAudio            # as the CoreLocal iPhone host
+link         Companions macos    RealityKit          # as the CoreLocal Mac host
+link         Companions macos    RealityFoundation   # as the CoreLocal Mac host
+link         Companions macos    _RealityKit_SwiftUI # as the CoreLocal Mac host
+link         Companions ios      RealityKit          # as the CoreLocal iPhone host
+link         Companions ios      RealityFoundation   # as the CoreLocal iPhone host
+link         Companions ios      _RealityKit_SwiftUI # as the CoreLocal iPhone host
+link         Companions macos    CoreHaptics         # as the CoreLocal Mac host
+link         Companions macos    GameController      # as the CoreLocal Mac host
+link         Companions ios      CoreHaptics         # as the CoreLocal iPhone host
+link         Companions ios      GameController      # as the CoreLocal iPhone host
+link         Companions macos    CoreImage           # as the CoreLocal Mac host
+link         Companions macos    Metal               # as the CoreLocal Mac host
+link         Companions macos    CoreVideo           # as the CoreLocal Mac host
+link         Companions macos    CoreMedia           # as the CoreLocal Mac host
+link         Companions macos    _AVKit_SwiftUI      # as the CoreLocal Mac host
+link         Companions ios      CoreImage           # as the CoreLocal iPhone host
+link         Companions ios      Metal               # as the CoreLocal iPhone host
+link         Companions ios      CoreVideo           # as the CoreLocal iPhone host
+link         Companions ios      CoreMedia           # as the CoreLocal iPhone host
+link         Companions ios      _AVKit_SwiftUI      # as the CoreLocal iPhone host
+link         Companions ios      BackgroundTasks     # as the CoreLocal iPhone host
+link         Companions macos    AVKit               # as the CoreLocal Mac host
+link         Companions macos    MediaPlayer         # as the CoreLocal Mac host
+link         Companions ios      AVKit               # as the CoreLocal iPhone host
+link         Companions ios      MediaPlayer         # as the CoreLocal iPhone host
+link         Companions macos    AudioToolbox        # as the CoreLocal Mac host
+link         Companions macos    CoreMIDI            # as the CoreLocal Mac host
+link         Companions ios      AudioToolbox        # as the CoreLocal iPhone host
+link         Companions ios      CoreMIDI            # as the CoreLocal iPhone host
 
 # SDK modules that exist but do not provide the lab's API on these platforms (CORE-004 notes)
 unsupported  macos      ARKit                        # the macOS SDK's ARKit has no ARWorldTrackingConfiguration

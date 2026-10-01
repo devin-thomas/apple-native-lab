@@ -37,6 +37,7 @@ import Testing
     @Test func theResumePointLivesInCaches() {
         #expect(TVScreening.resumeFolder.lastPathComponent == "ScreeningRoom")
         #expect(TVScreening.resumeFolder.deletingLastPathComponent().lastPathComponent == "Caches")
-        #expect(TVHost.runnableExperiments == [ScreeningRoom.experimentID])
+        // LAB-019 Local Constellation is the other module this Apple TV build runs.
+        #expect(TVHost.runnableExperiments == [ScreeningRoom.experimentID, "LAB-019"])
     }
 }

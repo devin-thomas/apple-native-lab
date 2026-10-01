@@ -1,0 +1,1 @@
+{"protocolVersion":1,"sessionID":"4C0C0019-0000-4000-8000-000000000019","sessionEpoch":7,"messageID":"0B1E0000-0000-4000-8000-000000000001","senderPeerID":"0123456789abcdef0123456789abcdef","sequence":1,"sentAt":1000,"role":"controller","channel":"replaceable","kind":"sample","payload":{"origin":"0123456789abcdef0123456789abcdef","streamSequence":1,"sample":{"x":4,"y":0.5}}}

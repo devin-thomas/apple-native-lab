@@ -34,6 +34,9 @@ let package = Package(
         .library(name: "ScreeningRoomPlayback", targets: ["ScreeningRoomPlayback"]),
         .library(name: "AudioWorkshop", targets: ["AudioWorkshop"]),
         .library(name: "TabletopReality", targets: ["TabletopReality"]),
+        .library(name: "PeerSession", targets: ["PeerSession"]),
+        .library(name: "PeerSessionNetwork", targets: ["PeerSessionNetwork"]),
+        .library(name: "LocalConstellation", targets: ["LocalConstellation"]),
     ],
     dependencies: [
         .package(path: "../LabSupport"),
@@ -404,6 +407,36 @@ let package = Package(
                 .product(name: "LabDomain", package: "LabDomain"),
                 .product(name: "LabSupport", package: "LabSupport"),
             ]
+        ),
+        // LAB-019 Local Constellation, the reusable layer: peer identities, explicit pairing with a
+        // short code and pinned identity, role and protocol negotiation, the sealed session
+        // envelope, reliable commands apart from replaceable samples, clock estimates, sequence
+        // gaps, and presence. Transport-independent: an in-process loopback carries the same bytes a
+        // network transport does. Foundation, CryptoKit, and LabDomain's StrictJSON only.
+        .target(
+            name: "PeerSession",
+            dependencies: [.product(name: "LabDomain", package: "LabDomain")]
+        ),
+        .testTarget(name: "PeerSessionTests", dependencies: ["PeerSession"]),
+        // LAB-019: the local-network transport for PeerSession over the Network framework (Bonjour
+        // browse and advertise, TCP on the local network only). Linked only by Companions hosts,
+        // never by a CoreLocal host. Compiled out of watchOS, which reaches peers through its phone.
+        .target(
+            name: "PeerSessionNetwork",
+            dependencies: ["PeerSession"]
+        ),
+        .testTarget(name: "PeerSessionNetworkTests", dependencies: ["PeerSessionNetwork", "PeerSession"]),
+        // LAB-019 Local Constellation, the experiment: a conductor, a controller, and a display over
+        // PeerSession, the original cue sheet, the single-device simulation over the loopback, and
+        // the peer's sensitive request committed through the host's OperationService.
+        .target(
+            name: "LocalConstellation",
+            dependencies: ["PeerSession", .product(name: "LabDomain", package: "LabDomain")],
+            resources: [.copy("Resources/cue-sheet.json")]
+        ),
+        .testTarget(
+            name: "LocalConstellationTests",
+            dependencies: ["LocalConstellation", "PeerSession", .product(name: "LabDomain", package: "LabDomain")]
         ),
     ]
 )

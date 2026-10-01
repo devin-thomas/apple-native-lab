@@ -3,6 +3,7 @@ import ContextCards
 import DesktopNativePower
 import FindTheThing
 import LabCatalog
+import LocalConstellation
 import RenderThatSurvives
 import RespectfulAttention
 import ScreeningRoom
@@ -101,6 +102,9 @@ struct LabCommands: Commands {
                 .disabled(window == nil)
             Button(TabletopExperiment.title) { window?.destination = .tabletopReality }
                 .keyboardShortcut("4", modifiers: [.command, .control])
+                .disabled(window == nil)
+            Button(LocalConstellation.title) { window?.destination = .localConstellation }
+                .keyboardShortcut("5", modifiers: [.command, .control])
                 .disabled(window == nil)
             Button(DesktopCommand.showPalette.title) { desktop.showsPalette = true }
                 .keyboardShortcut("k", modifiers: .command)

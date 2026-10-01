@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>BGTaskSchedulerPermittedIdentifiers</key>
+	<array>
+		<string>$(PRODUCT_BUNDLE_IDENTIFIER).render.*</string>
+	</array>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>CFBundleDisplayName</key>
+	<string>Native Lab</string>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleIdentifier</key>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>$(PRODUCT_NAME)</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>$(MARKETING_VERSION)</string>
+	<key>CFBundleVersion</key>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>LabBuildProfile</key>
+	<string>$(LAB_BUILD_PROFILE)</string>
+	<key>LabContextCardsActivityType</key>
+	<string>$(LAB_BUNDLE_PREFIX).nativelab.context-cards.visible-sample</string>
+	<key>LabDistributionLane</key>
+	<string>$(LAB_DISTRIBUTION_LANE)</string>
+	<key>LabObjectTypeIdentifier</key>
+	<string>$(LAB_BUNDLE_PREFIX).nativelab.object</string>
+	<key>LabSourceRevision</key>
+	<string>$(LAB_SOURCE_REVISION)</string>
+	<key>NSBonjourServices</key>
+	<array>
+		<string>_nativelab-lc._tcp</string>
+	</array>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>Native Lab hosts or joins a Local Constellation show on your local network only when you choose to.</string>
+	<key>NSUserActivityTypes</key>
+	<array>
+		<string>nativelab.pick-up-here</string>
+		<string>$(LAB_BUNDLE_PREFIX).nativelab.context-cards.visible-sample</string>
+	</array>
+	<key>UIApplicationSceneManifest</key>
+	<dict>
+		<key>UIApplicationSupportsMultipleScenes</key>
+		<true/>
+	</dict>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>audio</string>
+	</array>
+	<key>UILaunchScreen</key>
+	<dict/>
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	<key>UISupportedInterfaceOrientations~ipad</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	<key>UTExportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.json</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Native Lab Object</string>
+			<key>UTTypeIdentifier</key>
+			<string>$(LAB_BUNDLE_PREFIX).nativelab.object</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>anlab</string>
+				</array>
+			</dict>
+		</dict>
+	</array>
+</dict>
+</plist>

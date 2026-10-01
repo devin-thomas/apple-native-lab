@@ -3,6 +3,7 @@ import AudioWorkshop
 import LabCatalog
 import LabDomain
 import LabSupport
+import LocalConstellation
 import Observation
 import RenderThatSurvives
 import ScreeningRoom
@@ -65,6 +66,8 @@ enum SidebarDestination: Hashable {
     case audioWorkshop
     /// LAB-023: the virtual table, its object list, and the tracking gate.
     case tabletopReality
+    /// LAB-019: a conductor, a controller, and a display, simulated here or live on the network.
+    case localConstellation
     case catalog(CatalogScope)
 
     var title: String {
@@ -93,6 +96,7 @@ enum SidebarDestination: Hashable {
         case .screeningRoom: ScreeningRoom.title
         case .audioWorkshop: AudioWorkshop.title
         case .tabletopReality: TabletopExperiment.title
+        case .localConstellation: LocalConstellation.title
         case .catalog(let scope): scope.title
         }
     }
@@ -124,6 +128,7 @@ enum SidebarDestination: Hashable {
         case .screeningRoom: "screening-room"
         case .audioWorkshop: "audio-workshop"
         case .tabletopReality: "tabletop-reality"
+        case .localConstellation: "local-constellation"
         case .catalog(.all): "all"
         case .catalog(.milestone(let milestone)): "milestone:\(milestone.rawValue)"
         case .catalog(.category(let category)): "category:\(category)"
@@ -158,6 +163,7 @@ enum SidebarDestination: Hashable {
         case ("screening-room", nil): self = .screeningRoom
         case ("audio-workshop", nil): self = .audioWorkshop
         case ("tabletop-reality", nil): self = .tabletopReality
+        case ("local-constellation", nil): self = .localConstellation
         case ("all", nil): self = .catalog(.all)
         case ("milestone", let raw?): guard let milestone = Milestone(rawValue: raw) else { return nil }
             self = .catalog(.milestone(milestone))

@@ -5,7 +5,7 @@
 # Config/Profiles/<Profile>.xcconfig through `configFiles`, which sets LAB_BUILD_PROFILE and the
 # profile's compilation condition. Schemes by profile:
 #   CoreLocal         LabMac-Core, LabPhone-Core
-#   Companions        LabWatch, LabTV
+#   Companions        LabWatch, LabTV, LabMac-Companions, LabPhone-Companions (host variants with the LAN adapter)
 #   SystemSurfaces    LabPhone-Surfaces (the host variant, the share extension, the widget and Control extension, the Quick Look preview, the AUv3 extension)
 #   CloudOptional     none yet
 #   FrontierOptional  none yet (LAB-009 File Provider sources live under Extensions/DocumentsProvider/; host wiring waits on qualification)
@@ -154,6 +154,12 @@ targets:
       # LAB-023 Tabletop Reality: the kit, placement rules, tracking gate, and anchor operations.
       - package: LabFeatures
         product: TabletopReality
+      # LAB-019 Local Constellation: the session layer and the single-device simulation. No network
+      # adapter: CoreLocal links no network framework and carries no network entitlement.
+      - package: LabFeatures
+        product: PeerSession
+      - package: LabFeatures
+        product: LocalConstellation
     info:
       path: Apps/Mac/Info.plist
       properties:
@@ -316,6 +322,12 @@ targets:
       # LAB-023 Tabletop Reality: the kit, placement rules, tracking gate, and anchor operations.
       - package: LabFeatures
         product: TabletopReality
+      # LAB-019 Local Constellation: the session layer and the single-device simulation. No network
+      # adapter: CoreLocal links no network framework and carries no network entitlement.
+      - package: LabFeatures
+        product: PeerSession
+      - package: LabFeatures
+        product: LocalConstellation
     info:
       path: Apps/Phone/Info.plist
       properties:
@@ -480,6 +492,11 @@ targets:
       # LAB-023 Tabletop Reality, as LabPhone.
       - package: LabFeatures
         product: TabletopReality
+      # LAB-019 Local Constellation: the simulation, as LabPhone.
+      - package: LabFeatures
+        product: PeerSession
+      - package: LabFeatures
+        product: LocalConstellation
       - target: ShareExtension
         embed: true
       # LAB-004: the widget and Control extension, embedded only in this SystemSurfaces variant.
@@ -732,6 +749,375 @@ targets:
         TARGETED_DEVICE_FAMILY: "1,2"
         APPLICATION_EXTENSION_API_ONLY: YES
         SKIP_INSTALL: YES
+  # Companions: the Mac host variant with Local Constellation's local-network adapter (LAB-019).
+  # Same sources and bundle identifier as LabMac, so it replaces the CoreLocal app rather than
+  # adding one; its own scheme, LabMac-Companions, keeps the network entitlements and the Network
+  # framework out of LabMac-Core. Builds and signs to run locally with no team.
+  LabMacCompanions:
+    type: application
+    platform: macOS
+    configFiles:
+      Debug: Config/Profiles/Companions.xcconfig
+      Release: Config/Profiles/Companions.xcconfig
+    sources:
+      - Apps/Shared
+      # LabMac's Info.plist and entitlements are not sources here; this variant has its own.
+      - path: Apps/Mac
+        excludes:
+          - Info.plist
+          - LabMac.entitlements
+      - Apps/Icon
+      # The demo seed, bundled as data. Reset Demo commits it through the operation service.
+      - path: Fixtures/demo/seed.json
+        buildPhase: resources
+      # LAB-010 Typed Local Intelligence: the original fixture notes, bundled as data.
+      - path: Fixtures/intelligence/intelligence-ambiguous-note.txt
+        buildPhase: resources
+      - path: Fixtures/intelligence/intelligence-injected-note.txt
+        buildPhase: resources
+      # LAB-012 Point, Inspect, Propose: the original swatch, bundled as data.
+      - path: Fixtures/point-inspect/swatch-card.png
+        buildPhase: resources
+      # LAB-013 Speech Timeline: the sample script the device speaks, and its caption fixture.
+      - path: Fixtures/speech/speech-sample-script.txt
+        buildPhase: resources
+      - path: Fixtures/speech/speech-sample-captions.vtt
+        buildPhase: resources
+    dependencies:
+      - package: LabSupport
+      - package: LabDomain
+      - package: LabStore
+      - package: LabFeatures
+        product: LabCatalog
+      # LAB-001 Action Atlas: App Intents from a package target; their metadata is extracted into the app.
+      - package: LabFeatures
+        product: ActionAtlas
+      # LAB-010 Typed Local Intelligence: typed proposals, the sample parser, and the Foundation Models extractor.
+      - package: LabFeatures
+        product: TypedIntelligence
+      # LAB-012 Point, Inspect, Propose: a chosen image, OCR, and a reviewable record.
+      - package: LabFeatures
+        product: PointInspect
+      # LAB-035 Access as a Superpower: the task, its chart semantics, and the Audio Graph descriptor.
+      - package: LabFeatures
+        product: AccessSuperpower
+      # LAB-007 Share Ingress Station: the share inbox and its paste and file-picker fallbacks.
+      - package: LabFeatures
+        product: ShareIngress
+      # LAB-008 Portable Objects: the .anlab document, its Transferable representations, and staged imports.
+      - package: LabFeatures
+        product: PortableObjects
+      # LAB-016 Pick Up Here: continuation hints. Handoff carries an identifier and a section.
+      - package: LabFeatures
+        product: PickUpHere
+      # LAB-009 Documents Everywhere: sample catalog, previews, and provider lifecycle (provider disabled).
+      - package: LabFeatures
+        product: DocumentsEverywhere
+      # LAB-004 Surface Deck: the demo session's deck, its intents, and the in-app widget previews.
+      - package: LabFeatures
+        product: SurfaceDeck
+      # LAB-042 Desktop Native Power: Mac command palette, documents, and the allowlisted intent.
+      - package: LabFeatures
+        product: DesktopNativePower
+      # LAB-041 Trust Desk: local authorization, a scoped keychain record, and a passkey simulation.
+      - package: LabFeatures
+        product: TrustDesk
+      # LAB-002 Context Cards: the visible sample, the schema gate, and the set-aside intents.
+      - package: LabFeatures
+        product: ContextCards
+      # LAB-015 Local Model Bench: the fixture executor. It does not link Core ML.
+      - package: LabFeatures
+        product: LocalModelBench
+      # LAB-017 Durable Sync Ledger: the write-ahead ledger, the file profile, and the manual document.
+      - package: LabFeatures
+        product: DurableSyncLedger
+      # LAB-030 Tactile Grammar: the cues, their fallback, and Play Tactile Cue.
+      - package: LabFeatures
+        product: TactileGrammar
+      # LAB-043 Respectful Attention: the agenda, its intents, and lab-owned alerts.
+      - package: LabFeatures
+        product: RespectfulAttention
+      # LAB-013 Speech Timeline: the timeline, caption import and export, the save operation, and the on-device adapters.
+      - package: LabFeatures
+        product: SpeechTimeline
+      # LAB-006 Find the Thing: opted-in search, citations, and this app's indexed records.
+      - package: LabFeatures
+        product: FindTheThing
+      # LAB-003 Shortcut Workbench: curated App Shortcuts, recipes, and the manual fallback.
+      - package: LabFeatures
+        product: ShortcutWorkbench
+      # LAB-032 Render That Survives: the reusable job runtime and the render module.
+      - package: LabFeatures
+        product: LabJobs
+      - package: LabFeatures
+        product: RenderThatSurvives
+      # LAB-031 Native Screening Room: the playback session and its AVFoundation, AVKit, and Now Playing adapters, with the original clips.
+      - package: LabFeatures
+        product: ScreeningRoom
+      - package: LabFeatures
+        product: ScreeningRoomPlayback
+      # LAB-029 Audio Workshop: the C kernel, live playback, MIDI, offline processing, and the audio unit.
+      - package: LabFeatures
+        product: AudioWorkshop
+      # LAB-023 Tabletop Reality: the kit, placement rules, tracking gate, and anchor operations.
+      - package: LabFeatures
+        product: TabletopReality
+      # LAB-019 Local Constellation: the session layer and the simulation, as the CoreLocal host,
+      # and the local-network adapter, only in this Companions variant.
+      - package: LabFeatures
+        product: PeerSession
+      - package: LabFeatures
+        product: LocalConstellation
+      - package: LabFeatures
+        product: PeerSessionNetwork
+    info:
+      path: Apps/Companions/Mac/Info.plist
+      properties:
+        CFBundleDisplayName: Native Lab
+        CFBundleName: Native Lab
+        LSApplicationCategoryType: public.app-category.developer-tools
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        LabSourceRevision: $(LAB_SOURCE_REVISION)
+        LabBuildProfile: $(LAB_BUILD_PROFILE)
+        LabDistributionLane: $(LAB_DISTRIBUTION_LANE)
+        # LAB-008: the lab object type, named from the bundle prefix. Code reads the key, never the prefix.
+        LabObjectTypeIdentifier: $(LAB_BUNDLE_PREFIX).nativelab.object
+        # LAB-042: Services menu item for selected text. The handler imports the string; it does not run it.
+        NSServices:
+          - NSMenuItem:
+              default: Import Selected Text into Native Lab
+            NSMessage: importSelectedText
+            NSPortName: Native Lab
+            NSSendTypes:
+              - public.utf8-plain-text
+        # LAB-002: the activity type for the sample on screen. Code reads the key, never the prefix.
+        LabContextCardsActivityType: $(LAB_BUNDLE_PREFIX).nativelab.context-cards.visible-sample
+        # The system delivers an activity type only if it is listed. No entitlement.
+        # LAB-016: pick-up-here. LAB-002: the visible sample.
+        NSUserActivityTypes:
+          - nativelab.pick-up-here
+          - $(LAB_BUNDLE_PREFIX).nativelab.context-cards.visible-sample
+        UTExportedTypeDeclarations:
+          - UTTypeIdentifier: $(LAB_BUNDLE_PREFIX).nativelab.object
+            UTTypeDescription: Native Lab Object
+            UTTypeConformsTo: [public.json]
+            UTTypeTagSpecification:
+              public.filename-extension: [anlab]
+        # LAB-019: advertising and browsing for a Local Constellation show. The system may ask
+        # only when a person chooses Host or Join.
+        NSLocalNetworkUsageDescription: Native Lab hosts or joins a Local Constellation show on your local network only when you choose to.
+        NSBonjourServices: [_nativelab-lc._tcp]
+    entitlements:
+      path: Apps/Companions/Mac/LabMacCompanions.entitlements
+      properties:
+        com.apple.security.app-sandbox: true
+        com.apple.security.files.user-selected.read-write: true
+        # LAB-019: Local Constellation's conductor listens and its joiner connects, on the local
+        # network only (the adapter excludes cellular and accepts local connections only).
+        com.apple.security.network.server: true
+        com.apple.security.network.client: true
+    settings:
+      base:
+        PRODUCT_NAME: NativeLabCompanions
+        PRODUCT_BUNDLE_IDENTIFIER: $(LAB_BUNDLE_PREFIX).nativelab
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        DEVELOPMENT_TEAM: $(LAB_MAC_DEVELOPMENT_TEAM)
+        ENABLE_HARDENED_RUNTIME: YES
+        # Store lane only: merge purpose strings for the frameworks this host links
+        # (Config/PurposeStrings.xcconfig). Source builds keep the Info.plist above unchanged.
+        GENERATE_INFOPLIST_FILE: $(LAB_DECLARES_PURPOSE_STRINGS)
+        INFOPLIST_KEY_NSCameraUsageDescription: $(LAB_PURPOSE_CAMERA)
+        INFOPLIST_KEY_NSMicrophoneUsageDescription: $(LAB_PURPOSE_MICROPHONE)
+        INFOPLIST_KEY_NSSpeechRecognitionUsageDescription: $(LAB_PURPOSE_SPEECH_RECOGNITION)
+        INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription: $(LAB_PURPOSE_BLUETOOTH)
+        INFOPLIST_KEY_NSFaceIDUsageDescription: $(LAB_PURPOSE_FACE_ID)
+
+
+  # Companions: the iPhone and iPad host variant with Local Constellation's local-network adapter
+  # (LAB-019). Same sources and bundle identifier as LabPhone, so it replaces the CoreLocal app;
+  # its own scheme, LabPhone-Companions, keeps the Network framework and the local network purpose
+  # string out of LabPhone-Core. It declares no entitlement.
+  LabPhoneCompanions:
+    type: application
+    platform: iOS
+    configFiles:
+      Debug: Config/Profiles/Companions.xcconfig
+      Release: Config/Profiles/Companions.xcconfig
+    sources:
+      - Apps/Shared
+      # LabPhone's Info.plist is not a resource here; this variant has its own.
+      - path: Apps/Phone
+        excludes:
+          - Info.plist
+      - Apps/Icon
+      # The demo seed, bundled as data. Reset Demo commits it through the operation service.
+      - path: Fixtures/demo/seed.json
+        buildPhase: resources
+      # LAB-010 Typed Local Intelligence: the original fixture notes, bundled as data.
+      - path: Fixtures/intelligence/intelligence-ambiguous-note.txt
+        buildPhase: resources
+      - path: Fixtures/intelligence/intelligence-injected-note.txt
+        buildPhase: resources
+      # LAB-012 Point, Inspect, Propose: the original swatch, bundled as data.
+      - path: Fixtures/point-inspect/swatch-card.png
+        buildPhase: resources
+      # LAB-013 Speech Timeline: the sample script the device speaks, and its caption fixture.
+      - path: Fixtures/speech/speech-sample-script.txt
+        buildPhase: resources
+      - path: Fixtures/speech/speech-sample-captions.vtt
+        buildPhase: resources
+    dependencies:
+      - package: LabSupport
+      - package: LabDomain
+      - package: LabStore
+      - package: LabFeatures
+        product: LabCatalog
+      # LAB-001 Action Atlas: App Intents from a package target; their metadata is extracted into the app.
+      - package: LabFeatures
+        product: ActionAtlas
+      # LAB-010 Typed Local Intelligence: typed proposals, the sample parser, and the Foundation Models extractor.
+      - package: LabFeatures
+        product: TypedIntelligence
+      # LAB-012 Point, Inspect, Propose: a chosen image, OCR, and a reviewable record.
+      - package: LabFeatures
+        product: PointInspect
+      # LAB-035 Access as a Superpower: the task, its chart semantics, and the Audio Graph descriptor.
+      - package: LabFeatures
+        product: AccessSuperpower
+      # LAB-007 Share Ingress Station: the share inbox and its paste and file-picker fallbacks.
+      - package: LabFeatures
+        product: ShareIngress
+      # LAB-008 Portable Objects: the .anlab document, its Transferable representations, and staged imports.
+      - package: LabFeatures
+        product: PortableObjects
+      # LAB-016 Pick Up Here: continuation hints. Handoff carries an identifier and a section.
+      - package: LabFeatures
+        product: PickUpHere
+      # LAB-009 Documents Everywhere: sample catalog, previews, and provider lifecycle (provider disabled).
+      - package: LabFeatures
+        product: DocumentsEverywhere
+      # LAB-004 Surface Deck: the demo session's deck, its intents, and the in-app widget previews.
+      - package: LabFeatures
+        product: SurfaceDeck
+      # LAB-041 Trust Desk: local authorization, a scoped keychain record, and a passkey simulation.
+      - package: LabFeatures
+        product: TrustDesk
+      # LAB-002 Context Cards: the visible sample, the schema gate, and the set-aside intents.
+      - package: LabFeatures
+        product: ContextCards
+      # LAB-015 Local Model Bench: the fixture executor. It does not link Core ML.
+      - package: LabFeatures
+        product: LocalModelBench
+      # LAB-017 Durable Sync Ledger: the write-ahead ledger, the file profile, and the manual document.
+      - package: LabFeatures
+        product: DurableSyncLedger
+      # LAB-030 Tactile Grammar: the cues, their fallback, and Play Tactile Cue.
+      - package: LabFeatures
+        product: TactileGrammar
+      # LAB-043 Respectful Attention: the agenda, its intents, and lab-owned alerts.
+      - package: LabFeatures
+        product: RespectfulAttention
+      # LAB-013 Speech Timeline: the timeline, caption import and export, the save operation, and the on-device adapters.
+      - package: LabFeatures
+        product: SpeechTimeline
+      # LAB-006 Find the Thing: opted-in search, citations, and this app's indexed records.
+      - package: LabFeatures
+        product: FindTheThing
+      # LAB-003 Shortcut Workbench: curated App Shortcuts, recipes, and the manual fallback.
+      - package: LabFeatures
+        product: ShortcutWorkbench
+      # LAB-032 Render That Survives: the reusable job runtime and the render module.
+      - package: LabFeatures
+        product: LabJobs
+      - package: LabFeatures
+        product: RenderThatSurvives
+      # LAB-031 Native Screening Room: the playback session and its AVFoundation, AVKit, and Now Playing adapters, with the original clips.
+      - package: LabFeatures
+        product: ScreeningRoom
+      - package: LabFeatures
+        product: ScreeningRoomPlayback
+      # LAB-029 Audio Workshop: the C kernel, live playback, MIDI, offline processing, and the audio unit.
+      - package: LabFeatures
+        product: AudioWorkshop
+      # LAB-023 Tabletop Reality: the kit, placement rules, tracking gate, and anchor operations.
+      - package: LabFeatures
+        product: TabletopReality
+      # LAB-019 Local Constellation: the session layer and the simulation, as the CoreLocal host,
+      # and the local-network adapter, only in this Companions variant.
+      - package: LabFeatures
+        product: PeerSession
+      - package: LabFeatures
+        product: LocalConstellation
+      - package: LabFeatures
+        product: PeerSessionNetwork
+    info:
+      path: Apps/Companions/Phone/Info.plist
+      properties:
+        CFBundleDisplayName: Native Lab
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        LabSourceRevision: $(LAB_SOURCE_REVISION)
+        LabBuildProfile: $(LAB_BUILD_PROFILE)
+        LabDistributionLane: $(LAB_DISTRIBUTION_LANE)
+        # LAB-008: the lab object type, named from the bundle prefix. Code reads the key, never the prefix.
+        LabObjectTypeIdentifier: $(LAB_BUNDLE_PREFIX).nativelab.object
+        # LAB-002: the activity type for the sample on screen. Code reads the key, never the prefix.
+        LabContextCardsActivityType: $(LAB_BUNDLE_PREFIX).nativelab.context-cards.visible-sample
+        # The system delivers an activity type only if it is listed. No entitlement.
+        # LAB-016: pick-up-here. LAB-002: the visible sample.
+        NSUserActivityTypes:
+          - nativelab.pick-up-here
+          - $(LAB_BUNDLE_PREFIX).nativelab.context-cards.visible-sample
+        UTExportedTypeDeclarations:
+          - UTTypeIdentifier: $(LAB_BUNDLE_PREFIX).nativelab.object
+            UTTypeDescription: Native Lab Object
+            UTTypeConformsTo: [public.json]
+            UTTypeTagSpecification:
+              public.filename-extension: [anlab]
+        # LAB-032: continued processing for a render a person starts. Each request registers a new
+        # identifier under this wildcard. No background mode and no background-GPU entitlement.
+        BGTaskSchedulerPermittedIdentifiers:
+          - $(PRODUCT_BUNDLE_IDENTIFIER).render.*
+        UILaunchScreen: {}
+        # LAB-031: the playback audio session keeps playing in Picture in Picture and in the
+        # background, which Picture in Picture on iPhone and iPad requires.
+        UIBackgroundModes: [audio]
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: true
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        # LAB-019: advertising and browsing for a Local Constellation show. The system asks only
+        # when a person chooses Host or Join.
+        NSLocalNetworkUsageDescription: Native Lab hosts or joins a Local Constellation show on your local network only when you choose to.
+        NSBonjourServices: [_nativelab-lc._tcp]
+    settings:
+      base:
+        PRODUCT_NAME: NativeLabCompanions
+        PRODUCT_BUNDLE_IDENTIFIER: $(LAB_BUNDLE_PREFIX).nativelab
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        TARGETED_DEVICE_FAMILY: "1,2"
+        SUPPORTS_MACCATALYST: NO
+        SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD: NO
+        SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD: NO
+        # Store lane only: merge purpose strings for the frameworks this host links
+        # (Config/PurposeStrings.xcconfig). Source builds keep the Info.plist above unchanged.
+        GENERATE_INFOPLIST_FILE: $(LAB_DECLARES_PURPOSE_STRINGS)
+        INFOPLIST_KEY_NSCameraUsageDescription: $(LAB_PURPOSE_CAMERA)
+        INFOPLIST_KEY_NSMicrophoneUsageDescription: $(LAB_PURPOSE_MICROPHONE)
+        INFOPLIST_KEY_NSSpeechRecognitionUsageDescription: $(LAB_PURPOSE_SPEECH_RECOGNITION)
+        INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription: $(LAB_PURPOSE_BLUETOOTH)
+        INFOPLIST_KEY_NSNearbyInteractionUsageDescription: $(LAB_PURPOSE_NEARBY_INTERACTION)
+        INFOPLIST_KEY_NSFaceIDUsageDescription: $(LAB_PURPOSE_FACE_ID)
+
+
 
   # Companions: the Watch host installs directly to a paired Watch; it is not embedded in
   # the iPhone app yet, so CoreLocal never depends on Watch provisioning.
@@ -778,8 +1164,9 @@ targets:
   # Companions: the Apple TV host (CORE-013). It installs directly to a paired Apple TV. It uses the
   # iPhone host's bundle identifier, as one universal purchase, so a signing team registers no new
   # App ID for it; the TV and iPhone apps never share a device, so the two never collide. It links
-  # LabSupport and LabCatalog, which compile FoundationModels and Speech out of tvOS, and the
-  # Screening Room products (LAB-031), and it declares no entitlement. Its icon is the layered tvOS brand asset script/make_app_icon.py draws
+  # LabSupport and LabCatalog, which compile FoundationModels and Speech out of tvOS, the Screening
+  # Room products (LAB-031), and LAB-019's session layer, network adapter, and show, and it declares
+  # no entitlement. Its icon is the layered tvOS brand asset script/make_app_icon.py draws
   # from the same geometry as Apps/Icon, which Icon Composer does not produce for tvOS.
   LabTV:
     type: application
@@ -798,6 +1185,14 @@ targets:
         product: ScreeningRoom
       - package: LabFeatures
         product: ScreeningRoomPlayback
+      # LAB-019 Local Constellation: the TV is the display, live on the local network or in the
+      # single-device simulation. The first experiment module on Apple TV.
+      - package: LabFeatures
+        product: PeerSession
+      - package: LabFeatures
+        product: PeerSessionNetwork
+      - package: LabFeatures
+        product: LocalConstellation
     info:
       path: Apps/TV/Info.plist
       properties:
@@ -811,6 +1206,9 @@ targets:
         UIRequiredDeviceCapabilities: [arm64]
         # LAB-031: the playback audio session, for Picture in Picture and background audio.
         UIBackgroundModes: [audio]
+        # LAB-019: browsing for a conductor. The system asks only when a person chooses Join.
+        NSLocalNetworkUsageDescription: Native Lab looks for a Local Constellation conductor on your local network only when you choose to join one.
+        NSBonjourServices: [_nativelab-lc._tcp]
     settings:
       base:
         PRODUCT_NAME: NativeLabTV
@@ -985,6 +1383,24 @@ schemes:
     run:
       config: Debug
       executable: LabPhoneSurfaces
+    archive:
+      config: Release
+
+  LabMac-Companions:
+    build:
+      targets:
+        LabMacCompanions: all
+    run:
+      config: Debug
+    archive:
+      config: Release
+
+  LabPhone-Companions:
+    build:
+      targets:
+        LabPhoneCompanions: all
+    run:
+      config: Debug
     archive:
       config: Release
 

@@ -1,0 +1,13 @@
+{
+  "format": "native-lab-cue-sheet",
+  "formatVersion": 1,
+  "title": "An Evening of Small Lights",
+  "cues": [
+    {"id": "blue-hour", "title": "Blue hour", "detail": "The room settles. One cool wash, no motion.", "palette": "dusk"},
+    {"id": "lanterns", "title": "Lanterns", "detail": "Warm points appear one at a time along the edge.", "palette": "amber"},
+    {"id": "tide-line", "title": "Tide line", "detail": "A slow band of light moves across and back.", "palette": "sea"},
+    {"id": "northern-arc", "title": "Northern arc", "detail": "Green and violet curves drift overhead.", "palette": "aurora"},
+    {"id": "ember", "title": "Ember", "detail": "Everything dims to a low, steady glow.", "palette": "ember"},
+    {"id": "first-light", "title": "First light", "detail": "Pale gold rises until the room is plain again.", "palette": "dawn"}
+  ]
+}

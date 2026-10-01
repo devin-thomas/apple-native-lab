@@ -5,7 +5,10 @@
 // LabTVUITests (scheme LabTV). Each host installs directly to its paired device and is not
 // embedded in the iPhone app, so CoreLocal never depends on Watch or TV provisioning. The TV host
 // shares the iPhone host's bundle identifier, so it needs no App ID of its own, and declares no
-// entitlement.
+// entitlement. Also LabMacCompanions and LabPhoneCompanions (schemes LabMac-Companions and
+// LabPhone-Companions): LabMac and LabPhone built with Local Constellation's local-network adapter
+// (LAB-019), sharing their bundle identifiers. The Mac variant adds the sandbox's network client
+// and server entitlements, which need no team.
 //
 // Simulator builds need no team. Transport, haptics, and camera evidence need physical devices.
 // Swift code can check `#if LAB_PROFILE_COMPANIONS`.

@@ -132,6 +132,8 @@ struct MainWindow: View {
             AudioWorkshopListColumn(window: window)
         case .tabletopReality:
             TabletopListColumn(window: window, session: window.tabletop)
+        case .localConstellation:
+            ConstellationListColumn()
         case .catalog(let scope):
             if let registry = model.registry {
                 CatalogListColumn(registry: registry, scope: scope, window: window)
@@ -195,6 +197,8 @@ struct MainWindow: View {
             AudioWorkshopDetailColumn(window: window)
         case .tabletopReality:
             TabletopDetailColumn(session: window.tabletop)
+        case .localConstellation:
+            ConstellationDetailColumn()
         case .catalog:
             if let registry = model.registry {
                 CatalogDetailColumn(registry: registry, experimentID: window.experimentID)

@@ -1,5 +1,6 @@
 import LabCatalog
 import LabSupport
+import LocalConstellation
 import ScreeningRoom
 import SwiftUI
 
@@ -14,6 +15,8 @@ struct ExperimentDetailScreen: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 32) {
             header
+                .padding(.horizontal, 80)
+            ConstellationTVLaunch(experiment: experiment)
                 .padding(.horizontal, 80)
             ScrollView {
                 LazyVGrid(columns: [GridItem(.flexible(), spacing: 40, alignment: .top),
@@ -109,6 +112,9 @@ struct ExperimentDetailScreen: View {
 
     /// Why nothing runs here, in the terms of this experiment's declared hosts, or that it does.
     private var thisDeviceNote: String {
+        if experiment.id == LocalConstellation.experimentID {
+            return "This Apple TV is the display: it joins a conductor on the local network, or runs the whole show as a simulation. Its state describes the lab as a whole, not this Apple TV."
+        }
         if runsHere {
             return "This build carries the experiment's module for Apple TV: open it above. Its state describes the lab as a whole, not this Apple TV."
         }
