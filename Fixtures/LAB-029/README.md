@@ -28,3 +28,7 @@ The hostile WAVE files and presets are built byte by byte inside the tests rathe
 ## Saved presets
 
 A saved preset is an item in the person's own `Audio Workshop Presets` collection, in the `user` namespace, with the preset in the item's extras under `audioWorkshopPreset` ([DATA_CONTRACTS](../../docs/DATA_CONTRACTS.md#audio-workshop-presets)). Reset Demo does not touch it. The collection's ID, `76573EDC-03EC-43E3-B1EA-A1122CAA5CF6`, was generated once at random; never reuse it.
+
+## Qualification probe
+
+`check_realtime.py` compiles the actual C kernel with the installed SDK, then compiles two temporary copies with `malloc`/`free` and `fopen` added to a render helper. It requires clang to reject both with `nonblocking` diagnostics. Temporary files and diagnostics stay under `build/LAB-029-B-probe`; no allocation or file open executes. This is compile-time C enforcement, not a Swift-trampoline or device-deadline trace. Run it on the build host through `labr`.

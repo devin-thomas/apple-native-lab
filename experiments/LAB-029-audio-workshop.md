@@ -77,6 +77,10 @@ Observed with Xcode 27.0 (27A266a), Swift 6.4, and the 27.0 SDKs on macOS 27.0. 
 - The unit does not read MIDI from its render events; a host maps MIDI to its parameters. Its render also ignores ramped parameter events: the kernel's own smoothing ramps every change.
 - The Mac has no AUv3 extension: macOS needs the extension inside a Mac app, and CoreLocal may not embed one. The Mac app hosts the same unit in-process instead.
 
+## Qualification boundaries (LAB-029-B)
+
+The [walkthrough](../docs/walkthroughs/LAB-029-audio-workshop.md) distinguishes manual-rendering recovery and in-process state reload from physical route changes and AUv3 extension loading. [Realtime probe evidence](../evidence/LAB-029/audio-workshop-realtime-probe.json) repeats clang enforcement with both allocation and blocking-I/O mutations. Swift render closures and upstream pull callbacks are outside this check; the unit closure also prepares preallocated buffer descriptors. No runtime allocation trace or physical-device claim is made. Offline processing uses preset parameters and bypass, not live Panic Mute. Saved presets and selected source bytes are user-owned and survive reset.
+
 ## Delivery
 
 [Implementation ticket](../tickets/LAB-029-A.md) → [qualification ticket](../tickets/LAB-029-B.md).

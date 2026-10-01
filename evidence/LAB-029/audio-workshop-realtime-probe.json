@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "subject": "LAB-029",
+  "check": "C realtime function-effect qualification: allocation and blocking I/O rejected",
+  "date": "2026-10-01T06:56:04Z",
+  "provenance": {
+    "sourceRevision": "e35785c with LAB-029-B probe, committed unchanged as fc010a0",
+    "sdkName": "macosx27.0",
+    "xcodeVersion": "27.0",
+    "xcodeBuild": "27A266a",
+    "minimumOS": "26.0"
+  },
+  "execution": {
+    "path": "fixture"
+  },
+  "inputs": [
+    "Packages/LabFeatures/Sources/AudioWorkshopDSP/WorkshopKernel.c@sha256:e7e8a7ad6f5210e3f5f8df7c17e386bc208132be9d52f8b857af542a78b03fde",
+    "Packages/LabFeatures/Sources/AudioWorkshopDSP/include/AudioWorkshopDSP.h@sha256:b9b8163c2957ee770020db9c8486744b722ef167d538901c3452cd12abbf5ba6",
+    "Fixtures/LAB-029/check_realtime.py@sha256:86536ac9ea7137a0522da2124c944aa475efa8f025f18caa77c0f37e0974f75e"
+  ],
+  "steps": [
+    "Through labr: python3 Fixtures/LAB-029/check_realtime.py",
+    "Compile actual kernel with xcrun clang -Wall -Wextra -fsyntax-only against macosx SDK",
+    "Compile temporary allocation and fopen mutations in bitsOf, with function-effects diagnostics treated as errors",
+    "Read installed CoreAudioTypes, AudioToolbox and AVFAudio header declarations; consult Apple AVAudioEngine and AUAudioUnit.fullState documentation"
+  ],
+  "outcome": {
+    "result": "passed",
+    "detail": "Actual kernel compiled clean. Allocation mutant refused: function with 'nonblocking' attribute must not call non-'nonblocking' function 'malloc'. I/O mutant refused with the same diagnostic naming 'fopen'. No mutant executed. SDK CA_REALTIME_API expands to clang nonblocking; manual rendering availability macOS 10.13 / iOS 11 and configuration notification macOS 10.10 / iOS 8 match existing ledger."
+  },
+  "limitations": [
+    "C compile-time enforcement only. Swift source-node and audio-unit render closures and upstream pullInput are outside this probe. The unit closure performs bounded buffer preparation before calling the kernel.",
+    "No runtime allocation, blocking-I/O, audio deadline, load, physical route, speaker, MIDI, or device test. The 26-family compiler without nonblocking builds unchecked.",
+    "Host Apple M5 Max, macOS 27.0 (26A425), Swift 6.4. No private inputs or output media; mutations remain under build and source is unchanged."
+  ]
+}
