@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "subject": "LAB-037",
+  "check": "Fictional home scene domain operation and failure boundaries",
+  "date": "2026-10-01T04:21:12Z",
+  "execution": {
+    "path": "fixture"
+  },
+  "provenance": {
+    "appVersion": "0.1.0",
+    "buildNumber": "1",
+    "buildProfile": "CoreLocal",
+    "sourceRevision": "3d91ead (package source tested immediately before commit)",
+    "xcodeVersion": "27.0",
+    "xcodeBuild": "27A266a",
+    "sdkName": "macosx27.0",
+    "minimumOS": "26.0"
+  },
+  "inputs": [
+    "fictional-home:Fixtures/home/fictional-home.json@sha256:9fb376b93e495904a2ffc503b94df19617862128e11cbac1a84a412cdd9650c7",
+    "fixture-factory:Packages/LabFeatures/Sources/HomeSceneSandbox/FictionalHome.swift@sha256:d104ab2ae4d15290148db4f23b9700a2a5480b1afee9a1b762835b02f8b89194"
+  ],
+  "steps": [
+    "Through labr on research: swift test --package-path Packages/LabFeatures --filter HomeSceneSandboxTests",
+    "HomeSceneOperationTests: 17 tests; in-memory OperationService store; original fictional lights, scripted permission source, and stale-revision backend",
+    "Evaluate outcomes without mutation; commit run through OperationService; publish fictional lamp state only after successful admission",
+    "Tests construct FictionalHome.snapshot; the matching JSON is the published fixture, not decoded by this test run."
+  ],
+  "outcome": {
+    "result": "passed",
+    "detail": "17 tests in 1 suite passed. One disconnected lamp leaves the scene unsuccessful while the reachable lamp succeeds; lock/door/alarm/heating selection refused. Scripted revocation stops live mode. Denied and cancelled backends preserve lamp state; changed home refuses stale preview. Duplicate request reauthorizes and returns the original receipt. Missing outcomes cannot mark a whole scene successful. Reset restores the owned run note and lamp defaults. Invalid brightness and empty selection refused; fictional access requests remain simulated. A replay through a model-tool actor is denied; changed selections cannot reuse a completed request ID. Conflicting commit/reset receipts preserve lamp state and another window\u2019s newer note."
+  },
+  "limitations": [
+    "Fixture only: no real HomeKit manager, authorization prompt, home, accessories, entitlement, or network writes.",
+    "Live commits are unavailable; scripted permission revocation is a contract stand-in, not device proof.",
+    "No manual VoiceOver, Voice Control, Full Keyboard Access, iPad layout, physical-device, or 26-SDK compile result.",
+    "Lamp state is session-local. Duplicate report replay is session-local; durable OperationService request binding still rejects incompatible reuse."
+  ]
+}

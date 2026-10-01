@@ -160,6 +160,9 @@ targets:
         product: PeerSession
       - package: LabFeatures
         product: LocalConstellation
+      # LAB-037 Home Scene Sandbox: fictional home preview and selected light commits.
+      - package: LabFeatures
+        product: HomeSceneSandbox
     info:
       path: Apps/Mac/Info.plist
       properties:
@@ -328,6 +331,9 @@ targets:
         product: PeerSession
       - package: LabFeatures
         product: LocalConstellation
+      # LAB-037 Home Scene Sandbox: fictional home preview and selected light commits.
+      - package: LabFeatures
+        product: HomeSceneSandbox
     info:
       path: Apps/Phone/Info.plist
       properties:
@@ -497,6 +503,9 @@ targets:
         product: PeerSession
       - package: LabFeatures
         product: LocalConstellation
+      # LAB-037 Home Scene Sandbox: fictional home preview and selected light commits.
+      - package: LabFeatures
+        product: HomeSceneSandbox
       - target: ShareExtension
         embed: true
       # LAB-004: the widget and Control extension, embedded only in this SystemSurfaces variant.

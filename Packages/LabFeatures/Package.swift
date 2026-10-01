@@ -37,6 +37,7 @@ let package = Package(
         .library(name: "PeerSession", targets: ["PeerSession"]),
         .library(name: "PeerSessionNetwork", targets: ["PeerSessionNetwork"]),
         .library(name: "LocalConstellation", targets: ["LocalConstellation"]),
+        .library(name: "HomeSceneSandbox", targets: ["HomeSceneSandbox"]),
     ],
     dependencies: [
         .package(path: "../LabSupport"),
@@ -437,6 +438,16 @@ let package = Package(
         .testTarget(
             name: "LocalConstellationTests",
             dependencies: ["LocalConstellation", "PeerSession", .product(name: "LabDomain", package: "LabDomain")]
+        ),
+        // LAB-037 Home Scene Sandbox: fictional home, light-only scene preview/commit, partial
+        // failure, and permission-gated live mode. HomeKit stays out of CoreLocal.
+        .target(
+            name: "HomeSceneSandbox",
+            dependencies: [.product(name: "LabDomain", package: "LabDomain")]
+        ),
+        .testTarget(
+            name: "HomeSceneSandboxTests",
+            dependencies: ["HomeSceneSandbox", .product(name: "LabDomain", package: "LabDomain")]
         ),
     ]
 )

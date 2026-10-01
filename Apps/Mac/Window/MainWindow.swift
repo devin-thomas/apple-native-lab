@@ -134,6 +134,8 @@ struct MainWindow: View {
             TabletopListColumn(window: window, session: window.tabletop)
         case .localConstellation:
             ConstellationListColumn()
+        case .homeSceneSandbox:
+            HomeSceneListColumn(window: window, session: window.homeScene)
         case .catalog(let scope):
             if let registry = model.registry {
                 CatalogListColumn(registry: registry, scope: scope, window: window)
@@ -199,6 +201,8 @@ struct MainWindow: View {
             TabletopDetailColumn(session: window.tabletop)
         case .localConstellation:
             ConstellationDetailColumn()
+        case .homeSceneSandbox:
+            HomeSceneDetailColumn(session: window.homeScene)
         case .catalog:
             if let registry = model.registry {
                 CatalogDetailColumn(registry: registry, experimentID: window.experimentID)
@@ -234,6 +238,7 @@ struct MainWindow: View {
         case .findTheThing: "Search records"
         case .documentsEverywhere: "Search samples"
         case .tabletopReality: "Search the table"
+        case .homeSceneSandbox: "Search accessories"
         default: "Search experiments"
         }
     }

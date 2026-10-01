@@ -1,0 +1,53 @@
+{
+  "homeID": "03703703-7037-4037-8037-037037037001",
+  "name": "Cedar Fixture Home",
+  "label": "Deterministic fictional home. No real accessories.",
+  "accessories": [
+    {
+      "id": "03703703-7037-4037-8037-037037037101",
+      "name": "Living room lamp",
+      "room": "Living room",
+      "kind": "light",
+      "reachable": true,
+      "isOn": false,
+      "brightness": 40
+    },
+    {
+      "id": "03703703-7037-4037-8037-037037037102",
+      "name": "Hallway lamp",
+      "room": "Hallway",
+      "kind": "light",
+      "reachable": false,
+      "isOn": true,
+      "brightness": 80
+    },
+    {
+      "id": "03703703-7037-4037-8037-037037037201",
+      "name": "Front door lock",
+      "room": "Entry",
+      "kind": "lock",
+      "reachable": true
+    },
+    {
+      "id": "03703703-7037-4037-8037-037037037202",
+      "name": "Patio door",
+      "room": "Patio",
+      "kind": "door",
+      "reachable": true
+    },
+    {
+      "id": "03703703-7037-4037-8037-037037037203",
+      "name": "Entry alarm",
+      "room": "Entry",
+      "kind": "alarm",
+      "reachable": true
+    },
+    {
+      "id": "03703703-7037-4037-8037-037037037204",
+      "name": "Hall thermostat",
+      "room": "Hallway",
+      "kind": "heating",
+      "reachable": true
+    }
+  ]
+}

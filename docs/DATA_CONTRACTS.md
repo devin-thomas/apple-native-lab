@@ -34,6 +34,10 @@ An `AuthorizationGrant` (LAB-041) is not a `CommitGrant`. It names one purpose, 
 
 The passkey path is a labeled simulation against the relying party `fixture.trust-desk.invalid`. It is not `ASAuthorizationController`, not an account sign-in, and not an exportable app secret. Private material stays inside the simulator.
 
+## Home scene runs (LAB-037)
+
+A scene commit records one lab item under a fixed collection and item ID in the user namespace (`FictionalHome`). The item's note lists per-accessory outcomes and whether the scene as a whole succeeded. Partial failure still commits the note; `sceneSucceeded` is false when any selected light failed. Reset Demo for this experiment restores that item's note to the sealed fixture text and resets its in-memory lamps; it retains receipts and other records ([ADR-LAB-037](adr/ADR-LAB-037.md)). No HomeKit identifiers are persisted.
+
 ## Portable documents
 
 `.anlab` is a UTF-8 JSON metadata document with an app-defined UTType chosen during bundle-identifier configuration. JSON and native document representations preserve the same logical model; a text representation is deliberately lossy and labeled as such. A URL representation is offered only when a meaningful user-approved destination exists.

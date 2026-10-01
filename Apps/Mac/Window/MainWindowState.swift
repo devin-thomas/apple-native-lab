@@ -68,6 +68,8 @@ enum SidebarDestination: Hashable {
     case tabletopReality
     /// LAB-019: a conductor, a controller, and a display, simulated here or live on the network.
     case localConstellation
+    /// LAB-037: fictional home scene preview and selected light commits.
+    case homeSceneSandbox
     case catalog(CatalogScope)
 
     var title: String {
@@ -97,6 +99,7 @@ enum SidebarDestination: Hashable {
         case .audioWorkshop: AudioWorkshop.title
         case .tabletopReality: TabletopExperiment.title
         case .localConstellation: LocalConstellation.title
+        case .homeSceneSandbox: HomeSceneExperiment.title
         case .catalog(let scope): scope.title
         }
     }
@@ -129,6 +132,7 @@ enum SidebarDestination: Hashable {
         case .audioWorkshop: "audio-workshop"
         case .tabletopReality: "tabletop-reality"
         case .localConstellation: "local-constellation"
+        case .homeSceneSandbox: "home-scene-sandbox"
         case .catalog(.all): "all"
         case .catalog(.milestone(let milestone)): "milestone:\(milestone.rawValue)"
         case .catalog(.category(let category)): "category:\(category)"
@@ -164,6 +168,7 @@ enum SidebarDestination: Hashable {
         case ("audio-workshop", nil): self = .audioWorkshop
         case ("tabletop-reality", nil): self = .tabletopReality
         case ("local-constellation", nil): self = .localConstellation
+        case ("home-scene-sandbox", nil): self = .homeSceneSandbox
         case ("all", nil): self = .catalog(.all)
         case ("milestone", let raw?): guard let milestone = Milestone(rawValue: raw) else { return nil }
             self = .catalog(.milestone(milestone))
@@ -213,6 +218,8 @@ final class MainWindowState {
     let documentsEverywhere = DocumentsEverywhereSession()
     /// LAB-023: this window's table, selection, and tracking.
     let tabletop = TabletopSession()
+    /// LAB-037: this window's fictional home, preview, and scene run.
+    let homeScene = HomeSceneSession()
     var searchText = ""
     /// Incremented to ask the window to focus its search field.
     var searchRequests = 0

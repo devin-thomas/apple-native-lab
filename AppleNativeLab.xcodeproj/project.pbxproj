@@ -102,6 +102,7 @@
 		5971E4B6D5596414791531A0 /* TypedIntelligence in Frameworks */ = {isa = PBXBuildFile; productRef = 76F28CA76CDDB3E1BD522DA9 /* TypedIntelligence */; };
 		5B74398A19EB86C3087BDEED /* TypedIntelligence in Frameworks */ = {isa = PBXBuildFile; productRef = 872A3526A3C216A5301B05D2 /* TypedIntelligence */; };
 		5CDF75C467BB20F773986DD1 /* ShareIngress in Frameworks */ = {isa = PBXBuildFile; productRef = 5879A7CAEDD8078739ABF6D6 /* ShareIngress */; };
+		5D58F0C6997B471B25ED2E81 /* HomeSceneSandbox in Frameworks */ = {isa = PBXBuildFile; productRef = 00C9E4A95A19A392CE2A9802 /* HomeSceneSandbox */; };
 		5F8117A2D793190FC5F0B060 /* ShortcutWorkbench in Frameworks */ = {isa = PBXBuildFile; productRef = E977E30B60B7D9E20E4D2E91 /* ShortcutWorkbench */; };
 		5FE8E27B13BCF7A700A0CFDA /* LabCatalog in Frameworks */ = {isa = PBXBuildFile; productRef = 980162FF318C34A9B6AA4D5E /* LabCatalog */; };
 		6024E40F998C38FE4AEC73E8 /* AudioWorkshop in Frameworks */ = {isa = PBXBuildFile; productRef = 42B8AF50AA77D8F108BC94F9 /* AudioWorkshop */; };
@@ -185,6 +186,7 @@
 		C4EB19F91C9058B4E172D1FB /* TypedIntelligence in Frameworks */ = {isa = PBXBuildFile; productRef = 420FEC867E3D8AD017E49C21 /* TypedIntelligence */; };
 		C518F27DD869D1087ED96B1E /* LabSupport in Frameworks */ = {isa = PBXBuildFile; productRef = ECD021B68B4C48CC863BA8C6 /* LabSupport */; };
 		C5C7E15597C124FFA87914F4 /* LabStore in Frameworks */ = {isa = PBXBuildFile; productRef = 6CF6B1898735341A74FB3DA4 /* LabStore */; };
+		C65A8B8C8823EBA1FF6E7FF6 /* HomeSceneSandbox in Frameworks */ = {isa = PBXBuildFile; productRef = 2B66E3B6466C162D14CEFF1A /* HomeSceneSandbox */; };
 		C692FDF78A88D22FBDAE2C4F /* LabDomain in Frameworks */ = {isa = PBXBuildFile; productRef = 24DA22E10E5DFC981218176A /* LabDomain */; };
 		CA3D0148A48B7F97976C2C06 /* intelligence-ambiguous-note.txt in Resources */ = {isa = PBXBuildFile; fileRef = AE4F4AB8C2CC86E0A0AF350A /* intelligence-ambiguous-note.txt */; };
 		CB80ACDC68FE94D0F8CD2D18 /* PortableObjects in Frameworks */ = {isa = PBXBuildFile; productRef = 5138B46379EB0CDA5C7A520B /* PortableObjects */; };
@@ -196,6 +198,7 @@
 		D4FFE59C3D108F7EEC03F76B /* PickUpHere in Frameworks */ = {isa = PBXBuildFile; productRef = E71BE15BDC35B0EB85330C6A /* PickUpHere */; };
 		D6803B65A80A9519A8D809A6 /* PortableObjects in Frameworks */ = {isa = PBXBuildFile; productRef = 35948567D046224E5FDDEC6E /* PortableObjects */; };
 		D95F72CCB696ED6A574BD331 /* ContextCards in Frameworks */ = {isa = PBXBuildFile; productRef = D93BCD5813A405FDC1E34221 /* ContextCards */; };
+		D979377799E11B0623F1EFEE /* HomeSceneSandbox in Frameworks */ = {isa = PBXBuildFile; productRef = 4581D16633A2646EBEE36AAE /* HomeSceneSandbox */; };
 		DA8FA64970D79CF504A4B4C2 /* RenderThatSurvives in Frameworks */ = {isa = PBXBuildFile; productRef = 34ADCE5970E7AD9261946AFD /* RenderThatSurvives */; };
 		DB0EEC99D027016FD0052072 /* FindTheThing in Frameworks */ = {isa = PBXBuildFile; productRef = D6C031B31CED84F339102FE1 /* FindTheThing */; };
 		DBE25FF6B377671BE1C03843 /* TactileGrammar in Frameworks */ = {isa = PBXBuildFile; productRef = 324EFBAF6F4776B60F1A8261 /* TactileGrammar */; };
@@ -658,6 +661,7 @@
 				B32CA3D16A51A259E17BB689 /* TabletopReality in Frameworks */,
 				ED531C4681B53A6BC7C6A6BE /* PeerSession in Frameworks */,
 				35D0C66299C46C1E6DBCE6F7 /* LocalConstellation in Frameworks */,
+				D979377799E11B0623F1EFEE /* HomeSceneSandbox in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -706,6 +710,7 @@
 				06203CC8DFDDF8E9FBA48D7D /* TabletopReality in Frameworks */,
 				C0CFEBDC0BAE38AF8FE0C2E7 /* PeerSession in Frameworks */,
 				4AE5DEC204ED7D6462EB72ED /* LocalConstellation in Frameworks */,
+				C65A8B8C8823EBA1FF6E7FF6 /* HomeSceneSandbox in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -864,6 +869,7 @@
 				83702F450009633F3F420CB2 /* TabletopReality in Frameworks */,
 				783BFC52A544BC93580CBF94 /* PeerSession in Frameworks */,
 				689865F6943B9E09C4D02B29 /* LocalConstellation in Frameworks */,
+				5D58F0C6997B471B25ED2E81 /* HomeSceneSandbox in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1125,6 +1131,7 @@
 				FEED47FCE38AB55A2DA2773D /* TabletopReality */,
 				0283ECF9B35C366503D47829 /* PeerSession */,
 				1F2E1021B5612C0D253AFBC9 /* LocalConstellation */,
+				4581D16633A2646EBEE36AAE /* HomeSceneSandbox */,
 			);
 			productName = LabPhoneSurfaces;
 			productReference = 9A57B8DBFF3F863D70D41513 /* LabPhoneSurfaces.app */;
@@ -1180,6 +1187,7 @@
 				8BA168A41955665D8EA23DBE /* TabletopReality */,
 				388BBF143F18DF1A2996A8B3 /* PeerSession */,
 				11B650248E1F01D65D844FC2 /* LocalConstellation */,
+				00C9E4A95A19A392CE2A9802 /* HomeSceneSandbox */,
 			);
 			productName = LabMac;
 			productReference = 2F62DB7E020E6BFDAC86BD42 /* LabMac.app */;
@@ -1365,6 +1373,7 @@
 				79E47B24115DD1CF2657A201 /* TabletopReality */,
 				16F61C8FC17B425BBB686E6D /* PeerSession */,
 				011830F56A584F3374F0D0B6 /* LocalConstellation */,
+				2B66E3B6466C162D14CEFF1A /* HomeSceneSandbox */,
 			);
 			productName = LabPhone;
 			productReference = 28C2C1B8B040DD0D06AF070E /* LabPhone.app */;
@@ -3020,6 +3029,10 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = LabJobs;
 		};
+		00C9E4A95A19A392CE2A9802 /* HomeSceneSandbox */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = HomeSceneSandbox;
+		};
 		011830F56A584F3374F0D0B6 /* LocalConstellation */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = LocalConstellation;
@@ -3184,6 +3197,10 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = LabCatalog;
 		};
+		2B66E3B6466C162D14CEFF1A /* HomeSceneSandbox */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = HomeSceneSandbox;
+		};
 		313A41B2A33E906243201726 /* SpeechTimeline */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SpeechTimeline;
@@ -3231,6 +3248,10 @@
 		4529826CC5A2B22E37D11960 /* ScreeningRoom */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ScreeningRoom;
+		};
+		4581D16633A2646EBEE36AAE /* HomeSceneSandbox */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = HomeSceneSandbox;
 		};
 		47A98A400215FB089E3EDF93 /* LocalModelBench */ = {
 			isa = XCSwiftPackageProductDependency;

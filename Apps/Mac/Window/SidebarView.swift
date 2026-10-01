@@ -103,6 +103,9 @@ struct SidebarView: View {
                 Label(LocalConstellation.title, systemImage: LocalConstellation.symbol)
                     .tag(SidebarDestination.localConstellation)
                     .accessibilityHint("A conductor, a controller, and a display, simulated here or live on the local network")
+                Label(HomeSceneExperiment.title, systemImage: HomeSceneExperiment.symbol)
+                    .tag(SidebarDestination.homeSceneSandbox)
+                    .accessibilityHint("Preview light changes in a fictional home and commit selected actions")
             }
             Section("Experiments") {
                 row(.all, symbol: "square.grid.2x2")
