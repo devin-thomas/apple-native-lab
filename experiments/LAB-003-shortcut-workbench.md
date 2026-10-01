@@ -1,7 +1,7 @@
 ---
 id: "LAB-003"
 title: "Shortcut Workbench"
-state: "specified"
+state: "implemented"
 milestone: "M2"
 category: "System surfaces"
 depends_on: ["LAB-001", "LAB-008"]
@@ -20,7 +20,7 @@ Turn the lab into a small typed automation toolbox, not a collection of launch-a
 
 **Primary APIs:** AppIntents, Shortcuts, 27-generation Storage actions. API names are implementation leads; exact installed signatures and availability require a compile/probe.
 
-**Domain types:** RecipeDefinition, TypedActionContract, JobHandle. These are proposed lab-owned types, not undocumented Apple symbols.
+**Domain types:** RecipeDefinition, TypedActionContract, JobHandle. These are lab-owned types, not undocumented Apple symbols.
 
 ## Interaction contract
 
@@ -54,7 +54,7 @@ A fixture replay is labeled as a replay. It can prove the domain/UI contract but
 
 ## Build ownership
 
-Proposed module: `Packages/LabFeatures/shortcut-workbench/`, with native adapters only in supported hosts/extensions. Shared operations and imported document structures belong in the domain/store packages rather than a view. Record any narrower module split during implementation.
+Implemented module: `Packages/LabFeatures/Sources/ShortcutWorkbench/`, with host glue in `Apps/Shared/ShortcutWorkbench/` and Mac columns. Shared operations stay in LabDomain; Action Atlas supplies entities and the atomic library; curated App Shortcuts are declared here through `NativeLabAppShortcuts`.
 
 ## Delivery
 
@@ -65,3 +65,15 @@ Proposed module: `Packages/LabFeatures/shortcut-workbench/`, with native adapter
 **Primary-source references:** [S03](../docs/SOURCE_INDEX.md#s03), [S04](../docs/SOURCE_INDEX.md#s04). A source is not device proof.
 
 See [data contracts](../docs/DATA_CONTRACTS.md), [permission boundaries](../docs/EXTENSION_AND_PERMISSION_MATRIX.md), and [test strategy](../docs/TEST_STRATEGY.md) for shared requirements.
+
+## Implementation notes (LAB-003-A)
+
+**Module.** `ShortcutWorkbench` product in LabFeatures depends on LabDomain and ActionAtlas (for `LabItemEntity` and Find Lab Items as a curated phrase). Hosts link the product on Mac and iPhone (including LabPhoneSurfaces).
+
+**Curated vs atomic.** Six curated App Shortcuts via `NativeLabAppShortcuts` / `AppShortcutsProvider` (Open Workbench, Run Import–Export Recipe, Resolve Lab Item, Inspect Model Step, Export Recipe, Find Lab Items). Atomic Create/Archive/Export remain Action Atlas-only. Cap is ten; this build uses six.
+
+**Recipes.** `RecipeDefinition` holds stable `ItemID`s. Rename leaves the ID; resolve and recipe runs still find the item. Import drafts live in `RecipeImportStaging`; cancel removes the draft before any commit. `RecipeExport` and `ModelStepInspection` redact secret-shaped fields (`apiKey`, `password`, `token`, …) to `[redacted]`.
+
+**Storage actions (S04).** Recipe and entity state are lab-owned (catalog + store identifiers). Shortcuts Storage is not used for secrets; the fallback copy forbids it. Concrete 27-generation Shortcuts Storage symbols were probed on the installed SDK during this ticket (see verification ledger).
+
+**Fallback.** Manual recipe cards and the Action Atlas browser; no secret storage inside Shortcuts. Proven in package tests and the in-app workbench UI.
