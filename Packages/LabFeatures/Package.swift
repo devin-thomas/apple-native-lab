@@ -12,6 +12,9 @@ let package = Package(
         .library(name: "ShareIngress", targets: ["ShareIngress"]),
         .library(name: "PortableObjects", targets: ["PortableObjects"]),
         .library(name: "SurfaceDeck", targets: ["SurfaceDeck"]),
+        // LAB-011 Model Routing Observatory: route policy, PCC eligibility, outgoing-field
+        // preview, and usage receipts without raw prompt telemetry.
+        .library(name: "ModelRouting", targets: ["ModelRouting"]),
         // CORE-012: the journey's fixed values only. A product so that Xcode gives the journey's
         // tests a scheme, as every module's scheme holds its own tests. No host links it.
         .library(name: "FirstJourney", targets: ["FirstJourney"]),
@@ -109,6 +112,25 @@ let package = Package(
         .testTarget(
             name: "SurfaceDeckTests",
             dependencies: ["SurfaceDeck", .product(name: "LabDomain", package: "LabDomain")]
+        ),
+        // LAB-011 Model Routing Observatory: local-only default policy, PCC eligibility separate
+        // from on-device availability, outgoing-field preview, usage receipts without prompts.
+        // FoundationModels is imported on iOS and macOS only for availability and quota probes.
+        .target(
+            name: "ModelRouting",
+            dependencies: [
+                .product(name: "LabDomain", package: "LabDomain"),
+                .product(name: "LabSupport", package: "LabSupport"),
+            ],
+            resources: [.copy("Resources/routing-sample-prompt.txt")]
+        ),
+        .testTarget(
+            name: "ModelRoutingTests",
+            dependencies: [
+                "ModelRouting",
+                .product(name: "LabDomain", package: "LabDomain"),
+                .product(name: "LabSupport", package: "LabSupport"),
+            ]
         ),
         // CORE-012: the first six-lab journey across every M1 module over one OperationService.
         // `FirstJourney` holds only the journey's fixed values; no host links it.
