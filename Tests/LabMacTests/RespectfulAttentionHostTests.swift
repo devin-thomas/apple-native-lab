@@ -74,7 +74,7 @@ import Testing
         #expect(model.stored.isEmpty)
     }
 
-    @Test func theAgendaIsASidebarDestinationWithCommand9() {
+    @Test func theAgendaIsASidebarDestinationWithOptionCommand6() {
         #expect(SidebarDestination(storageKey: SidebarDestination.respectfulAttention.storageKey) == .respectfulAttention)
         #expect(SidebarDestination.respectfulAttention.title == "Respectful Attention")
     }

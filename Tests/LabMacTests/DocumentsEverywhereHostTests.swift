@@ -26,7 +26,7 @@ struct DocumentsEverywhereHostTests {
         return (library, session)
     }
 
-    @Test func theBrowserIsASidebarDestinationWithCommand9() {
+    @Test func theBrowserIsASidebarDestinationWithControlCommand2() {
         #expect(
             SidebarDestination(storageKey: SidebarDestination.documentsEverywhere.storageKey)
                 == .documentsEverywhere

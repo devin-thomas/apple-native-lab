@@ -22,7 +22,7 @@ import Testing
         }
     }
 
-    @Test func theScreeningRoomHasAMenuCommandWithCommand9() throws {
+    @Test func theScreeningRoomHasAMenuCommandWithControlCommand1() throws {
         func items(_ menu: NSMenu?) -> [NSMenuItem] {
             guard let menu else { return [] }
             menu.delegate?.menuNeedsUpdate?(menu)
@@ -30,8 +30,8 @@ import Testing
             return menu.items.flatMap { [$0] + items($0.submenu) }
         }
         let item = try #require(items(NSApp.mainMenu).first { $0.title == ScreeningRoom.title && !$0.keyEquivalent.isEmpty })
-        #expect(item.keyEquivalent == "9")
-        #expect(item.keyEquivalentModifierMask.intersection(.deviceIndependentFlagsMask) == .command)
+        #expect(item.keyEquivalent == "1")
+        #expect(item.keyEquivalentModifierMask.intersection(.deviceIndependentFlagsMask) == [.command, .control])
     }
 
     @Test func theWindowRemembersTheDestination() {

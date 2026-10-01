@@ -38,7 +38,9 @@ import Testing
             items.first { $0.title == title && !$0.keyEquivalent.isEmpty }
                 .map { ($0.keyEquivalent, $0.keyEquivalentModifierMask.intersection(.deviceIndependentFlagsMask)) }
         }
-        #expect(shortcut("Audio Workshop")?.0 == "9")
+        // ⌘0-⌘9 and ⌥⌘0-⌥⌘9 were taken when the experiments were integrated.
+        let view = try #require(shortcut("Audio Workshop"))
+        #expect(view.0 == "3" && view.1 == [.command, .control])
         let mute = try #require(shortcut("Panic Mute Audio Workshop") ?? shortcut("Unmute Audio Workshop"))
         #expect(mute.0 == "m" && mute.1 == [.command, .shift])
         let bypass = try #require(shortcut("Bypass Audio Workshop") ?? shortcut("Stop Bypassing Audio Workshop"))
