@@ -12,6 +12,7 @@ let package = Package(
         .library(name: "ShareIngress", targets: ["ShareIngress"]),
         .library(name: "PortableObjects", targets: ["PortableObjects"]),
         .library(name: "SurfaceDeck", targets: ["SurfaceDeck"]),
+        .library(name: "HomeSceneSandbox", targets: ["HomeSceneSandbox"]),
         // CORE-012: the journey's fixed values only. A product so that Xcode gives the journey's
         // tests a scheme, as every module's scheme holds its own tests. No host links it.
         .library(name: "FirstJourney", targets: ["FirstJourney"]),
@@ -109,6 +110,16 @@ let package = Package(
         .testTarget(
             name: "SurfaceDeckTests",
             dependencies: ["SurfaceDeck", .product(name: "LabDomain", package: "LabDomain")]
+        ),
+        // LAB-037 Home Scene Sandbox: fictional home, light-only scene preview/commit, partial
+        // failure, and permission-gated live mode. HomeKit stays out of CoreLocal.
+        .target(
+            name: "HomeSceneSandbox",
+            dependencies: [.product(name: "LabDomain", package: "LabDomain")]
+        ),
+        .testTarget(
+            name: "HomeSceneSandboxTests",
+            dependencies: ["HomeSceneSandbox", .product(name: "LabDomain", package: "LabDomain")]
         ),
         // CORE-012: the first six-lab journey across every M1 module over one OperationService.
         // `FirstJourney` holds only the journey's fixed values; no host links it.
