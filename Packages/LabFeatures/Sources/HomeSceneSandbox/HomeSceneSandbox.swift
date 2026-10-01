@@ -171,6 +171,7 @@ public final class HomeSceneSandbox: @unchecked Sendable {
         }
         let report = SceneCommitReport(proposal: proposal, outcomes: outcomes)
         let receipt = try await record(report, through: backend, requestID: requestID)
+        guard receipt.status == .committed else { throw .stateChanged }
         completed.withLock { $0[requestID] = (report, receipt) }
         // Only the reversible fictional source publishes state after admission succeeds.
         for action in proposal.selected {
@@ -210,6 +211,7 @@ public final class HomeSceneSandbox: @unchecked Sendable {
             requestID: requestID,
             names: names(title: item.title.value)
         )
+        guard receipt.status == .committed else { throw .stateChanged }
         await source.resetSimulation()
         return receipt
     }

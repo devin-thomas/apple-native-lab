@@ -133,6 +133,10 @@ final class HomeSceneSession {
             }
             return record
         } catch let error as HomeSceneError {
+            if case .stateChanged = error {
+                commitRequest = nil
+                await refresh()
+            }
             message = error.message
             LabAnnouncement(failure: error.message).post()
             return nil
@@ -167,6 +171,10 @@ final class HomeSceneSession {
             receipt = record
             return record
         } catch let error as HomeSceneError {
+            if case .stateChanged = error {
+                resetRequest = nil
+                await refresh()
+            }
             message = error.message
             return nil
         } catch {

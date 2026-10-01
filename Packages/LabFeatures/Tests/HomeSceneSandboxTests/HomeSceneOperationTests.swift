@@ -5,10 +5,15 @@ import Testing
 
 struct ServiceBackend: HomeSceneBackend {
     let service: OperationService
+    var staleItemRevision = false
     var actor = ActorScope(adapter: .appUI, grants: Set(Permission.allCases))
 
     func item(_ id: ItemID) async throws(HomeSceneError) -> LabItem? {
-        do { return try await service.findItem(id, as: actor) } catch {
+        do {
+            let item = try await service.findItem(id, as: actor)
+            guard staleItemRevision else { return item }
+            return LabItem(id: item.id, collectionID: item.collectionID, title: item.title, note: item.note, isArchived: item.isArchived, revision: .initial, namespace: item.namespace, extras: item.extras)
+        } catch {
             if case .notFound = error { return nil }
             throw .operation(error)
         }
@@ -307,6 +312,28 @@ private func lab(hallwayReachable: Bool = false) -> (HomeSceneSandbox, ServiceBa
         try sandbox.select(LightChange(isOn: false), for: FictionalHome.livingLamp)
         await #expect(throws: HomeSceneError.operation(.requestIDReused(request))) {
             try await sandbox.commit(through: backend, requestID: request)
+        }
+        #expect(try await sandbox.refreshHome().accessory(FictionalHome.livingLamp)?.isOn == true)
+    }
+
+    @Test func conflictingReceiptDoesNotPublishLampChanges() async throws {
+        let (sandbox, backend, _) = lab()
+        _ = try await sandbox.refreshHome()
+        try sandbox.select(LightChange(isOn: true), for: FictionalHome.livingLamp)
+        _ = try await sandbox.commit(through: backend, requestID: RequestID())
+        let item = try #require(await backend.item(FictionalHome.item))
+        let changes = try ItemChanges(note: ItemNote("Changed by another window"))
+        _ = try await backend.perform(.updateItem(id: item.id, expected: item.revision, changes: changes), requestID: RequestID(), names: [:])
+        var stale = backend
+        stale.staleItemRevision = true
+        try sandbox.select(LightChange(isOn: false), for: FictionalHome.livingLamp)
+        await #expect(throws: HomeSceneError.stateChanged) {
+            try await sandbox.commit(through: stale, requestID: RequestID())
+        }
+        #expect(try await sandbox.refreshHome().accessory(FictionalHome.livingLamp)?.isOn == true)
+        #expect(try await backend.item(FictionalHome.item)?.note.value == "Changed by another window")
+        await #expect(throws: HomeSceneError.stateChanged) {
+            try await sandbox.resetDemo(through: stale, requestID: RequestID())
         }
         #expect(try await sandbox.refreshHome().accessory(FictionalHome.livingLamp)?.isOn == true)
     }
