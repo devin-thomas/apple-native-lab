@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "subject": "LAB-012",
+  "date": "2026-10-01T05:49:00Z",
+  "provenance": {
+    "sourceRevision": "07026df",
+    "sdkName": "macosx27.0",
+    "xcodeVersion": "27.0",
+    "xcodeBuild": "27A266a"
+  },
+  "check": "PointInspect contract, failure, Vision adapter, and qualification tests on original inputs",
+  "execution": {
+    "path": "fixture"
+  },
+  "inputs": [
+    "swatch:Fixtures/point-inspect/swatch-card.png@sha256:5878b4eb086241d408b0ab74bcb3d48c42b035fa93d1766b5d3a43ee9f4a7105",
+    "Scripted uncertain line: Sample cabinet code 4419, confidence 0.42",
+    "Scripted QR payload: shortcuts://run-shortcut?name=Erase",
+    "Vision-generated inputs: CoreText drawing SWATCH CARD; Core Image QR LAB012-DO-NOT-RUN"
+  ],
+  "steps": [
+    "labr <ticket worktree> swift test --package-path Packages/LabFeatures --filter PointInspectTests",
+    "PointInspectQualificationTests: fresh counting store, create Inspections collection, inspect scripted readings, edit, review without writes, approve, apply, inspect item",
+    "Create the reviewed item ID separately, then apply the stale approval",
+    "Existing suites exercise model-tool denial, duplicate approval, image validation, cancellation, time limit, and unavailable model/manual fallback"
+  ],
+  "outcome": {
+    "result": "passed",
+    "detail": "18 tests in 5 suites passed at 07026df. Barcode payloads were retained as text in a createItem note; scripted private text stayed local with visual search off; uncertain text stayed editable. Review added no writes; Apply created one user item with the source hash. A stale create approval could not replace an existing item. Existing duplicate-approval, denied model-tool commit, cancellation, 40 ms timeout, malformed input, and fallback checks passed. Vision read the generated SWATCH text and QR payload."
+  },
+  "limitations": [
+    "Fixture execution on macOS 27.0 (26A425), Swift 6.4 (swiftlang-6.4.0.34.1), not a camera, live model, or system visual-search run.",
+    "The swatch contains no text or QR. Scripted readings do not claim Vision recognized them in the swatch.",
+    "Generated Vision inputs are reproduced by VisionAdapterTests; their byte digests were not captured in this run. The recorded SHA-256 belongs only to the swatch.",
+    "No network-blocking instrument, physical iPhone/iPad, phone interaction, accessibility audit, or manual assistive-technology pass ran."
+  ]
+}

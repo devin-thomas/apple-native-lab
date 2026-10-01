@@ -303,3 +303,15 @@ Recorded at [LAB-019-A](../tickets/LAB-019-A.md), read on 2026-09-30 from the `N
 | [S61](SOURCE_INDEX.md#s61) | `NWPath.UnsatisfiedReason.localNetworkDenied`, and `NWError.dns` carrying `kDNSServiceErr_PolicyDenied` (-65570) | `UnsatisfiedReason`: macOS 11.0, iOS 14.2, watchOS 7.1, tvOS 14.2 | Mapped to the adapter's denied status; the mapping is unit-tested | A real denial on a device |
 | — | CryptoKit `Curve25519.Signing`, `Curve25519.KeyAgreement`, `SharedSecret.hkdfDerivedSymmetricKey(using:salt:sharedInfo:outputByteCount:)`, `ChaChaPoly.seal(_:using:nonce:authenticating:)`, `ChaChaPoly.SealedBox(nonce:ciphertext:tag:)` | macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0 (HKDF on `SharedSecret`: macOS 11.0, iOS 14.0, watchOS 7.0, tvOS 14.0) | Pairing, resuming, sealing, and a tampered frame closing the link (`HandshakeTests`) | No password-authenticated key exchange is offered, so the code is derived from a committed transcript ([ADR-015](adr/ADR-015.md)) |
 
+
+### Point, Inspect, Propose (LAB-012)
+
+LAB-012-B re-read the macOS 27.0 SDK interfaces through `labr` on 2026-10-01: Xcode 27.0 (27A266a), Swift 6.4 (swiftlang-6.4.0.34.1), host macOS 27.0 (26A425). No entitlement or purpose-string change. The Apple RecognizeTextRequest documentation's structured response also names iOS/iPadOS 18.0 and macOS 15.0. The linked visual-intelligence and Foundation Models pages were requested, but the documentation reader could not retrieve their Markdown content; no new claim is based on that response.
+
+| Source | Installed symbol | Declared availability | Qualification boundary |
+|---|---|---|---|
+| [S55](SOURCE_INDEX.md#s55) | `RecognizeTextRequest`, `RecognizedTextObservation.transcript` | Request: macOS 15 / iOS 18; transcript: macOS/iOS 26 | Vision adapter tests use generated original text, not a photo or camera |
+| [S55](SOURCE_INDEX.md#s55) | `DetectBarcodesRequest` | macOS 15 / iOS 18 / watchOS 27 | Generated QR adapter test; host Watch and TV do not link PointInspect |
+| [S06](SOURCE_INDEX.md#s06) | `Attachment<ImageAttachmentContent>.init(_ cgImage:orientation:)` | macOS/iOS/visionOS/watchOS 27; tvOS unavailable | Compiled path only; live model description remains not-run |
+
+The first probe failed because `rg` is absent on the build host; the same interface probe with `grep` succeeded. No older SDK or OS-26 runtime was used. Evidence paths and limitations are in [LAB-012-B](../tickets/LAB-012-B.md).

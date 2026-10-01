@@ -423,3 +423,15 @@ LAB-035-B qualified the experiment with automated checks and by reading the code
 | 2 | 5 | The deck's revision line reads the middle dot: its accessibility label is "Demo session · revision 2", and "Demo session · never started" before the first start. | `SessionStateCard.revisionText` in `Apps/Shared/SurfaceDeck/SurfaceDeckViews.swift` | simulator audit (the element's label), static review | Join the spoken parts with a comma, as Action Atlas finding 1 asks. |
 | 3 | 2 | On the Mac, Start and Pause answer ⌘Return while the deck shows, but have no menu command. The deck itself has View › Surface Deck (⌘7). | `SessionToggleButton` in `SurfaceDeckViews.swift` | static review | The same question as Action Atlas finding 4 and Access as a Superpower finding 2. The Full Keyboard Access pass decides. |
 | 4 | 8, 9 | At the default text size the audit reported 13 issues on the deck as the Control opened it, and 25 with the deck scrolled to its previews. Contrast "nearly passed" or failed on secondary text: section headers and footers, the revision line, the receipt's time and status, and the previews' captions and text. Dynamic Type was "partially unsupported" on the Receipts header, the empty-receipts sentence, the receipt's summary, Undo Start Session, and the sheet's Done button. Text was clipped on Undo Start Session and on one unnamed element, and 2 "potentially inaccessible text" issues had no element. At the largest size the audit reported 2 issues, both on Done: Dynamic Type and contrast. | iPhone deck | simulator audit | Secondary text and content under the translucent bar follow the core triage. The previews draw on a tertiary fill, which may explain the failed contrast there; confirm in the Increase Contrast pass. Done is the system's sheet button. |
+
+## Point, Inspect, Propose (LAB-012-B)
+
+Source review only; the hosted session replay is not an accessibility-tree test. Title and Note are labeled TextFields; the essential actions are standard named buttons with explanatory hints on Replay Fixture, Read Text, Describe on this Device, and Apply. Uncertainty and results appear as words. No automated audit or manual assistive-technology pass ran for this experiment.
+
+| Flow | Mac VoiceOver / Voice Control / Full Keyboard Access | iPhone VoiceOver / Voice Control / large text |
+|---|---|---|
+| Open, select image or replay fixture | not-run | not-run |
+| Read, edit uncertain fields, apply and inspect receipt | not-run | not-run |
+| Unavailable model, refused image, cancel selection, Reset Demo | not-run | not-run |
+
+Findings retained for follow-up: no dedicated Mac menu commands or shortcuts; iPhone Apply is inside the scrolling Form; status changes have no explicit announcement. No visual accessibility claim follows from the session test. See the [walkthrough](walkthroughs/LAB-012-point-inspect-propose.md).

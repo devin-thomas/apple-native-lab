@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "subject": "LAB-012",
+  "date": "2026-10-01T06:50:37Z",
+  "provenance": {
+    "sourceRevision": "3f0db77-working-tree (test correction committed as 491f004)",
+    "sdkName": "iphonesimulator27.0",
+    "xcodeVersion": "27.0",
+    "xcodeBuild": "27A266a",
+    "buildProfile": "CoreLocal",
+    "minimumOS": "26.0"
+  },
+  "check": "Manual swatch replay through PointInspectSession in the iPhone simulator host",
+  "execution": {
+    "path": "simulator",
+    "simulator": {
+      "platform": "iOS",
+      "deviceClass": "iPhone 18 Pro",
+      "osVersion": "27.0 (24A434)"
+    }
+  },
+  "inputs": [
+    "swatch:Fixtures/point-inspect/swatch-card.png@sha256:5878b4eb086241d408b0ab74bcb3d48c42b035fa93d1766b5d3a43ee9f4a7105",
+    "bundled-iPhone-swatch@sha256:a4ef56265ebd8066a5c137987ac43445f2973879897e094389b03d33f2c23e2b"
+  ],
+  "steps": [
+    "labr <ticket worktree>: create an iOS simulator named NL LAB-012-B qualification with script/simulator.py and delete it in an EXIT trap",
+    "xcodebuild -project AppleNativeLab.xcodeproj -scheme LabPhone-Core -destination id=<created simulator> -derivedDataPath build/DerivedData -collect-test-diagnostics never LAB_SOURCE_REVISION=3f0db77-working-tree -only-testing:LabPhoneTests/PointInspectQualificationPhoneTests test -quiet",
+    "On a fresh SQLite store, call replayFixture, set fields, useFields, apply, read saved item, resetDemo, compare item",
+    "Compare saved note provenance with SelectedImage built from the actual bundled PNG, not the unprocessed source hash"
+  ],
+  "outcome": {
+    "result": "passed",
+    "detail": "Focused simulator host test exited 0. The session displayed Fixture replay and Manual fields (not a model). Use These Fields added no receipt; Apply added collection and item receipts, saved one user item with the actual bundled image digest, and Reset Demo preserved the item exactly."
+  },
+  "limitations": [
+    "Hosted session methods are called directly in the built iPhone app; no tap, view tree, file picker, permission dialog, camera, model, or system visual-search invocation ran.",
+    "The iOS build processes the original 115-byte PNG into 138 bytes. The note records the digest of those actual consumed bytes.",
+    "No physical iPhone/iPad or assistive-technology review. Simulator evidence supports implemented at most.",
+    "The earlier full gate failed at the incorrect fixed source-hash expectation and an unrelated RenderSurvives crash; this focused pass does not turn that whole gate into a pass."
+  ]
+}

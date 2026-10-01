@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "subject": "LAB-012",
+  "date": "2026-10-01T06:20:13Z",
+  "provenance": {
+    "sourceRevision": "3f0db77",
+    "sdkName": "iphonesimulator27.0",
+    "xcodeVersion": "27.0",
+    "xcodeBuild": "27A266a",
+    "buildProfile": "CoreLocal",
+    "minimumOS": "26.0"
+  },
+  "check": "Full automated gate stopped at iPhone hosted tests",
+  "execution": {
+    "path": "simulator",
+    "simulator": {
+      "platform": "iOS",
+      "deviceClass": "iPhone 18 Pro",
+      "osVersion": "27.0 (24A434)"
+    }
+  },
+  "inputs": [
+    "swatch:Fixtures/point-inspect/swatch-card.png@sha256:5878b4eb086241d408b0ab74bcb3d48c42b035fa93d1766b5d3a43ee9f4a7105",
+    "bundled-iPhone-swatch@sha256:a4ef56265ebd8066a5c137987ac43445f2973879897e094389b03d33f2c23e2b"
+  ],
+  "steps": [
+    "labr <ticket worktree> LAB_SIMULATOR_PREFIX=\"NL LAB-012-B\" script/test.sh",
+    "Read xcresult summary and compare source/bundled PNG lengths and SHA-256 without exporting the result bundle"
+  ],
+  "outcome": {
+    "result": "failed",
+    "detail": "Repository validators, validator self-tests, package tests, and the complete Mac host step passed. The iPhone result bundle reports 8 passed and 2 failed: PointInspectQualificationPhoneTests assumed the original 115-byte source hash, while the built PNG is 138 bytes with hash a4ef5626\u2026; RenderSurvivesPhoneTests.leavingTheForegroundWithoutBackgroundTimeStopsAtACheckpoint crashed NativeLab. Exit 65. Watch, TV, and release-manifest steps were not reached."
+  },
+  "limitations": [
+    "The PointInspect failure is an incorrect test expectation about build-processed PNG bytes, not a false image provenance emitted by the app. The original note correctly named the consumed bytes.",
+    "The unrelated RenderSurvives crash was not repaired by this qualification ticket.",
+    "The script created and deleted its iPhone simulator. No physical device ran.",
+    "This failed full gate is retained even if focused correction and remaining checks subsequently pass."
+  ]
+}
