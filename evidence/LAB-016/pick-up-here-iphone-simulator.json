@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "subject": "LAB-016",
+  "check": "Pick Up Here iPhone simulator session qualification",
+  "date": "2026-10-01T08:31:18Z",
+  "provenance": {
+    "sourceRevision": "20ff426-dirty",
+    "sdkName": "iphonesimulator27.0",
+    "xcodeVersion": "27.0",
+    "xcodeBuild": "27A266a",
+    "appVersion": "0.1.0",
+    "buildNumber": "1",
+    "buildProfile": "CoreLocal",
+    "minimumOS": "26.0"
+  },
+  "execution": {
+    "path": "simulator",
+    "simulator": {
+      "platform": "iOS"
+    }
+  },
+  "inputs": [
+    "Fixtures/LAB-016/workbench-draft.txt@sha256:1943d54e931084a45165709fb4d4e9e549e2df67a68d534e8b0eca3ab6d1049a",
+    "SampleDraft: original three-section draft",
+    "Sentinel: original rejection and revocation text"
+  ],
+  "steps": [
+    "Through labr: LAB_SIMULATOR_PREFIX=\"NL LAB-016-B\" script/test.sh",
+    "iPhone 18 Pro simulator, iOS 27.0 (24A434), created and deleted by script/test.sh",
+    "xcresult tests: PickUpHerePhoneQualificationTests, 2 Passed; fresh SQLite stores, explicit document passed in process"
+  ],
+  "outcome": {
+    "result": "passed",
+    "detail": "Both PickUpHerePhoneQualificationTests passed (0.208 s and 0.017 s). The clean destination asked to import and revealed no text, imported once through appUI, resumed section 1, and retained the user draft across Clear Continuation and Reset Demo. Revocation removed the offer and revealed text; a newer shorter draft clamped section 1 to 0; a malformed link cleared the earlier result. Overall phone stage: 12 passed and 2 failed, unrelated RenderSurvivesPhoneTests report expectation and SpeechTimelinePhoneTests app crash. This record qualifies only Pick Up Here."
+  },
+  "limitations": [
+    "Simulator session tests, not manual UI or real clipboard transfer. The explicit copy is passed in process.",
+    "No physical iPhone/iPad, two-device Handoff, Team ID delivery, system URL dispatch, or universal-link service.",
+    "The original full gate stopped at unrelated phone failures. Separate runs passed speech (1), the one actual render-suite retry (3), Watch (115), TV (181), and CoreLocal/SystemSurfaces/Companions release policy. The original full command is still recorded as failed.",
+    "Only original fixtures; no screenshots, user documents, real accounts, or recording.",
+    "Manual assistive technology, large text, reduced motion, iPad layout, and 26-SDK compile not run."
+  ]
+}
