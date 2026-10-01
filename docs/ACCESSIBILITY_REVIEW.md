@@ -423,3 +423,15 @@ LAB-035-B qualified the experiment with automated checks and by reading the code
 | 2 | 5 | The deck's revision line reads the middle dot: its accessibility label is "Demo session · revision 2", and "Demo session · never started" before the first start. | `SessionStateCard.revisionText` in `Apps/Shared/SurfaceDeck/SurfaceDeckViews.swift` | simulator audit (the element's label), static review | Join the spoken parts with a comma, as Action Atlas finding 1 asks. |
 | 3 | 2 | On the Mac, Start and Pause answer ⌘Return while the deck shows, but have no menu command. The deck itself has View › Surface Deck (⌘7). | `SessionToggleButton` in `SurfaceDeckViews.swift` | static review | The same question as Action Atlas finding 4 and Access as a Superpower finding 2. The Full Keyboard Access pass decides. |
 | 4 | 8, 9 | At the default text size the audit reported 13 issues on the deck as the Control opened it, and 25 with the deck scrolled to its previews. Contrast "nearly passed" or failed on secondary text: section headers and footers, the revision line, the receipt's time and status, and the previews' captions and text. Dynamic Type was "partially unsupported" on the Receipts header, the empty-receipts sentence, the receipt's summary, Undo Start Session, and the sheet's Done button. Text was clipped on Undo Start Session and on one unnamed element, and 2 "potentially inaccessible text" issues had no element. At the largest size the audit reported 2 issues, both on Done: Dynamic Type and contrast. | iPhone deck | simulator audit | Secondary text and content under the translucent bar follow the core triage. The previews draw on a tertiary fill, which may explain the failed contrast there; confirm in the Increase Contrast pass. Done is the system's sheet button. |
+
+## Tactile Grammar qualification (LAB-030-B)
+
+Static source review only. The cue buttons, intensity picker, Stop, and reset dialog are labeled. The result contains words and a symbol beside the pulse, so color and motion are not the only result. No accessibility tree, audit, or manual pass was run for this experiment.
+
+| Flow | VoiceOver Mac/iPhone | Voice Control Mac/iPhone | Full Keyboard Access Mac/iPhone | Largest text iPhone | Reduce Motion Mac/iPhone |
+|---|---|---|---|---|---|
+| Open LAB-030 and play all three cues | not-run | not-run | not-run | not-run | not-run |
+| Mute and repeat the task | not-run | not-run | not-run | not-run | not-run |
+| Stop; cancel reset; confirm reset | not-run | not-run | not-run | not-run | not-run |
+
+Open findings: `CuePulseRow` does not read Reduce Motion and identical consecutive values do not restart its task; `TactileGrammarModel` does not announce results; the Mac has only the navigation menu command, no cue commands; the Watch page has no reset or visual pulse. “Spoken” in a receipt is text, not evidence of speech. See the [walkthrough](walkthroughs/LAB-030-tactile-grammar.md) for adapter limits.
