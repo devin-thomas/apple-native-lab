@@ -96,7 +96,9 @@ import Testing
             Issue.record("expected one imported sample item")
             return
         }
-        let beforeImport = try await service.findItem(draft.id, as: ActorScope(adapter: .appUI, grants: Set(Permission.allCases)))
+        let reader = ActorScope(adapter: .appUI, grants: Set(Permission.allCases))
+        let beforeCollection = try await service.findCollection(collection, as: reader)
+        let beforeImport = try await service.findItem(draft.id, as: reader)
         defaults.removeObject(forKey: "RespectfulAttention.promptGate")
         let system = QualificationAttentionSystem(permission: .authorized)
         let model = AttentionModel(system: system, defaults: defaults, deviceZone: { TimeZone(identifier: "Asia/Tokyo")! })
@@ -122,13 +124,13 @@ import Testing
         #expect(await system.scheduled.isEmpty)
         #expect(await system.cancelled == Set(model.offers.map(\.id)))
         #expect(system.foreignSchedules == ["other.reminder", "clock.alarm"])
-        #expect(library.collections.contains { $0.id == collection })
+        #expect(try await service.findCollection(collection, as: reader) == beforeCollection)
         await model.schedule(model.offers[0])
         _ = try #require(await library.resetDemo())
         await model.refresh()
         #expect(model.stored.isEmpty)
-        #expect(library.collections.contains { $0.id == collection })
-        #expect(try await service.findItem(draft.id, as: ActorScope(adapter: .appUI, grants: Set(Permission.allCases))) == beforeImport)
+        #expect(try await service.findCollection(collection, as: reader) == beforeCollection)
+        #expect(try await service.findItem(draft.id, as: reader) == beforeImport)
         // Reset clears domain rows; it does not call this injected system adapter.
         #expect(await system.scheduled.count == 1)
     }
