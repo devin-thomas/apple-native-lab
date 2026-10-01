@@ -7,6 +7,9 @@ import LabSupport
 /// Every value is read once at launch from the bundle and the operating system. None of it is
 /// live: the catalog is a snapshot taken when this build was made, and the screens say so.
 struct TVHost: Sendable {
+    /// The experiments whose modules this Apple TV build runs: LAB-031 Native Screening Room.
+    static let runnableExperiments: Set<String> = ["LAB-031"]
+
     let provenance: BuildProvenance
     let device: DeviceSnapshot
     let featureLevel: TVFeatureLevel

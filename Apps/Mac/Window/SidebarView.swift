@@ -1,5 +1,6 @@
 import LabCatalog
 import LabSupport
+import ScreeningRoom
 import SurfaceDeck
 import SwiftUI
 
@@ -39,6 +40,9 @@ struct SidebarView: View {
                 Label(SurfaceDeck.title, systemImage: SurfaceDeck.symbol)
                     .tag(SidebarDestination.surfaceDeck)
                     .accessibilityHint("The demo session, its receipts, and previews of its widget and Control")
+                Label(ScreeningRoom.title, systemImage: ScreeningRoom.symbol)
+                    .tag(SidebarDestination.screeningRoom)
+                    .accessibilityHint("Watch an original clip, move it between surfaces, and resume with the same captions")
             }
             Section("Experiments") {
                 row(.all, symbol: "square.grid.2x2")

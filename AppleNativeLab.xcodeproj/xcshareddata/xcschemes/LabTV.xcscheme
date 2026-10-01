@@ -112,6 +112,28 @@
                ReferencedContainer = "container:Packages/LabFeatures">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "ScreeningRoomTests"
+               BuildableName = "ScreeningRoomTests"
+               BlueprintName = "ScreeningRoomTests"
+               ReferencedContainer = "container:Packages/LabFeatures">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "ScreeningRoomPlaybackTests"
+               BuildableName = "ScreeningRoomPlaybackTests"
+               BlueprintName = "ScreeningRoomPlaybackTests"
+               ReferencedContainer = "container:Packages/LabFeatures">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <CommandLineArguments>
       </CommandLineArguments>

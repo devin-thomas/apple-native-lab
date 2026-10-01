@@ -58,8 +58,8 @@ private struct CatalogSummary: View {
                     }
                 }
             }
-            SymbolLabel(title: "Unavailable here: this Apple TV runs no experiment yet. It shows \(snapshotDescription).",
-                        systemImage: "tv.slash")
+            SymbolLabel(title: "This Apple TV runs Native Screening Room; every other experiment is unavailable here. It shows \(snapshotDescription).",
+                        systemImage: "tv")
             .font(.callout)
             .foregroundStyle(.secondary)
         }

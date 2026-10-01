@@ -11,7 +11,8 @@
 #   FrontierOptional  none yet
 # Entitlements and purpose strings are declared per executable, on the target that uses them.
 # Every host scheme's test action runs a smoke test inside that host (script/test.sh). The LabWatch
-# and LabTV test actions also run the LabSupport and LabCatalog package tests on their platform.
+# and LabTV test actions also run the LabSupport and LabCatalog package tests on their platform, and
+# LabTV also runs the Screening Room package tests (LAB-031).
 name: AppleNativeLab
 
 options:
@@ -90,6 +91,11 @@ targets:
       # LAB-004 Surface Deck: the demo session's deck, its intents, and the in-app widget previews.
       - package: LabFeatures
         product: SurfaceDeck
+      # LAB-031 Native Screening Room: the playback session and its AVFoundation, AVKit, and Now Playing adapters, with the original clips.
+      - package: LabFeatures
+        product: ScreeningRoom
+      - package: LabFeatures
+        product: ScreeningRoomPlayback
     info:
       path: Apps/Mac/Info.plist
       properties:
@@ -176,6 +182,11 @@ targets:
       # LAB-004 Surface Deck: the demo session's deck, its intents, and the in-app widget previews.
       - package: LabFeatures
         product: SurfaceDeck
+      # LAB-031 Native Screening Room: the playback session and its AVFoundation, AVKit, and Now Playing adapters, with the original clips.
+      - package: LabFeatures
+        product: ScreeningRoom
+      - package: LabFeatures
+        product: ScreeningRoomPlayback
     info:
       path: Apps/Phone/Info.plist
       properties:
@@ -194,6 +205,9 @@ targets:
             UTTypeTagSpecification:
               public.filename-extension: [anlab]
         UILaunchScreen: {}
+        # LAB-031: the playback audio session keeps playing in Picture in Picture and in the
+        # background, which Picture in Picture on iPhone and iPad requires.
+        UIBackgroundModes: [audio]
         UIApplicationSceneManifest:
           UIApplicationSupportsMultipleScenes: true
         UISupportedInterfaceOrientations:
@@ -267,6 +281,11 @@ targets:
       # LAB-004 Surface Deck: the deck, its intents, and the snapshot writer, as LabPhone.
       - package: LabFeatures
         product: SurfaceDeck
+      # LAB-031 Native Screening Room, as LabPhone.
+      - package: LabFeatures
+        product: ScreeningRoom
+      - package: LabFeatures
+        product: ScreeningRoomPlayback
       - target: ShareExtension
         embed: true
       # LAB-004: the widget and Control extension, embedded only in this SystemSurfaces variant.
@@ -283,6 +302,9 @@ targets:
         LabDistributionLane: $(LAB_DISTRIBUTION_LANE)
         LabAppGroupIdentifier: $(LAB_APP_GROUP_IDENTIFIER)
         UILaunchScreen: {}
+        # LAB-031: the playback audio session keeps playing in Picture in Picture and in the
+        # background, which Picture in Picture on iPhone and iPad requires.
+        UIBackgroundModes: [audio]
         UIApplicationSceneManifest:
           UIApplicationSupportsMultipleScenes: true
         UISupportedInterfaceOrientations:
@@ -444,8 +466,8 @@ targets:
   # Companions: the Apple TV host (CORE-013). It installs directly to a paired Apple TV. It uses the
   # iPhone host's bundle identifier, as one universal purchase, so a signing team registers no new
   # App ID for it; the TV and iPhone apps never share a device, so the two never collide. It links
-  # only LabSupport and LabCatalog, which compile FoundationModels and Speech out of tvOS, and it
-  # declares no entitlement. Its icon is the layered tvOS brand asset script/make_app_icon.py draws
+  # LabSupport and LabCatalog, which compile FoundationModels and Speech out of tvOS, and the
+  # Screening Room products (LAB-031), and it declares no entitlement. Its icon is the layered tvOS brand asset script/make_app_icon.py draws
   # from the same geometry as Apps/Icon, which Icon Composer does not produce for tvOS.
   LabTV:
     type: application
@@ -459,6 +481,11 @@ targets:
       - package: LabSupport
       - package: LabFeatures
         product: LabCatalog
+      # LAB-031 Native Screening Room: the one experiment module this host runs.
+      - package: LabFeatures
+        product: ScreeningRoom
+      - package: LabFeatures
+        product: ScreeningRoomPlayback
     info:
       path: Apps/TV/Info.plist
       properties:
@@ -470,6 +497,8 @@ targets:
         LabDistributionLane: $(LAB_DISTRIBUTION_LANE)
         UILaunchScreen: {}
         UIRequiredDeviceCapabilities: [arm64]
+        # LAB-031: the playback audio session, for Picture in Picture and background audio.
+        UIBackgroundModes: [audio]
     settings:
       base:
         PRODUCT_NAME: NativeLabTV
@@ -480,6 +509,10 @@ targets:
         # (Config/PurposeStrings.xcconfig). Source builds keep the Info.plist above unchanged.
         GENERATE_INFOPLIST_FILE: $(LAB_DECLARES_PURPOSE_STRINGS)
         INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription: $(LAB_PURPOSE_BLUETOOTH)
+        # LAB-031 links AVFoundation for playback; Config/ProductPolicy.txt asks a Store build that
+        # links it for these two strings. The screening never uses the camera or microphone.
+        INFOPLIST_KEY_NSCameraUsageDescription: $(LAB_PURPOSE_CAMERA)
+        INFOPLIST_KEY_NSMicrophoneUsageDescription: $(LAB_PURPOSE_MICROPHONE)
 
   LabMacTests:
     type: bundle.unit-test
@@ -494,6 +527,10 @@ targets:
       - package: LabSupport
       - package: LabFeatures
         product: LabCatalog
+      - package: LabFeatures
+        product: ScreeningRoom
+      - package: LabFeatures
+        product: ScreeningRoomPlayback
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: $(LAB_BUNDLE_PREFIX).nativelab.tests
@@ -559,6 +596,10 @@ targets:
       - package: LabSupport
       - package: LabFeatures
         product: LabCatalog
+      - package: LabFeatures
+        product: ScreeningRoom
+      - package: LabFeatures
+        product: ScreeningRoomPlayback
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: $(LAB_BUNDLE_PREFIX).nativelab.tvtests
@@ -659,5 +700,8 @@ schemes:
         - LabTVUITests
         - package: LabSupport/LabSupportTests
         - package: LabFeatures/LabCatalogTests
+        # LAB-031: the screening's rules and its tvOS adapters, in the tvOS simulator.
+        - package: LabFeatures/ScreeningRoomTests
+        - package: LabFeatures/ScreeningRoomPlaybackTests
     archive:
       config: Release

@@ -1,7 +1,8 @@
 import SwiftUI
 
 /// The Apple TV host (CORE-013): the catalog, one experiment's record, and Readiness, driven by
-/// focus. It carries the catalog and the no-prompt probes, and no experiment module yet.
+/// focus. It carries the catalog, the no-prompt probes, and one experiment module, LAB-031 Native
+/// Screening Room, opened from its detail page.
 @main
 struct LabTVApp: App {
     @State private var host = TVHost.load()

@@ -26,6 +26,10 @@
 	<string>$(LAB_DISTRIBUTION_LANE)</string>
 	<key>LabSourceRevision</key>
 	<string>$(LAB_SOURCE_REVISION)</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>audio</string>
+	</array>
 	<key>UILaunchScreen</key>
 	<dict/>
 	<key>UIRequiredDeviceCapabilities</key>

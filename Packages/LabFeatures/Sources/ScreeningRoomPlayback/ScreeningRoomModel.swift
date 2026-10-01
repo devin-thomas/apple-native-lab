@@ -35,6 +35,10 @@ public final class ScreeningRoomModel {
     public private(set) var phase: Phase = .idle
     public private(set) var notice: Notice?
     public let readiness: PlaybackReadiness
+    /// Whether the host's theater presentation holds the player now. The page shows a note
+    /// instead of a second view on the same player while it does, including while Picture in
+    /// Picture started from the theater is showing.
+    public var theaterIsOpen = false
     @ObservationIgnored public let player = ScreeningPlayer()
 
     @ObservationIgnored private let store: any ResumePointStore

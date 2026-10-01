@@ -94,6 +94,8 @@ struct MainWindow: View {
             PortableObjectsListColumn(window: window)
         case .surfaceDeck:
             SurfaceDeckListColumn(window: window)
+        case .screeningRoom:
+            ScreeningRoomListColumn()
         case .catalog(let scope):
             if let registry = model.registry {
                 CatalogListColumn(registry: registry, scope: scope, window: window)
@@ -122,6 +124,8 @@ struct MainWindow: View {
             PortableObjectsDetailColumn(window: window)
         case .surfaceDeck:
             SurfaceDeckDetailColumn()
+        case .screeningRoom:
+            ScreeningRoomDetailColumn()
         case .catalog:
             if let registry = model.registry {
                 CatalogDetailColumn(registry: registry, experimentID: window.experimentID)
