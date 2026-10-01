@@ -828,7 +828,7 @@
       "title": "Ink Has Structure",
       "category": "Interaction",
       "milestone": "M4",
-      "state": "specified",
+      "state": "implemented",
       "dependsOn": [
         "LAB-008",
         "LAB-035"

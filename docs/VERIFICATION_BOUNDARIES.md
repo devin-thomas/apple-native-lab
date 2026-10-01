@@ -103,3 +103,13 @@ Recorded at [LAB-004-B](../tickets/LAB-004-B.md) from the [LAB-004-A](../tickets
 | [S59](SOURCE_INDEX.md#s59) | `Toggle(isOn:intent:label:)` in `_AppIntents_SwiftUI`, which the widget extension links | iOS 17.0, macOS 14.0, tvOS 17.0, watchOS 10.0 | The widget's toggle in the simulator. The release manifest records the link (LAB-004-A) | None beyond the widget's own |
 | [S59](SOURCE_INDEX.md#s59) | `View.privacySensitive(_:)` and `RedactionReasons.privacy` | iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0 | Drawn with the privacy redaction in a package test and read back by text recognition: the detail line is gone and the state stays readable. The deck's "Lock Screen, locked" preview uses the same redaction | That the system applies it to this widget on a locked device |
 
+### PencilKit ink (LAB-045)
+
+Recorded at [LAB-045-A](../tickets/LAB-045-A.md) from the installed PencilKit headers and `.swiftinterface` files of the iOS 27.0 and macOS 27.0 SDKs in Xcode 27.0 (27A266a). No entitlement is needed. Nothing here has run on a physical iPhone or iPad.
+
+| Source | Installed symbol | Declared availability | Demonstrated | Remaining uncertainty |
+|---|---|---|---|---|
+| [S53](SOURCE_INDEX.md#s53) | `PKDrawing`, `dataRepresentation()`, `init(data:)`, `strokes`, `image(from:scale:)`, `transformed(using:)` | iOS 13.0, macOS 10.15 (`strokes` from iOS 14 / macOS 11) | Compiled into the domain round-trip path as the iPhone host's canvas source; package tests persist lab-owned `InkDocument` strokes, not `PKDrawing` bytes | Device Pencil pressure and PK ↔ domain fidelity under real strokes |
+| [S53](SOURCE_INDEX.md#s53) | `PKCanvasView`, `drawing`, `drawingPolicy` (`.default`, `.anyInput`, `.pencilOnly`) | iOS 13.0 / 14.0; **not present** in the macOS 27.0 PencilKit headers | Wired on iPhone with `.anyInput` so finger completes the task. Mac uses SwiftUI pointer drawing instead | iPad, real Apple Pencil, and whether `.default` would prefer Pencil-only with a tool picker visible |
+| [S53](SOURCE_INDEX.md#s53) | Pencil squeeze / hover-only tools / double-tap customization | Present in broader Pencil / PencilKit docs; not adopted | Intentionally absent from the UI (not broken controls) | Whether a later OS surfaces them without an explicit adoption |
+
