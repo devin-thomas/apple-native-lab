@@ -56,6 +56,22 @@ LAB-008-A fixes these details (`LabDocument`, `DocumentMapping`, `ImportPlan`, a
 - **The item and the document.** The document's `documentID` is the item ID. The item holds the title and note. Everything else goes into the item's extras as one versioned entry: `{"portableObject": {"version": 1, "note": "text" | "null" | "absent", "document": {…}}}`. Here `document` is the document without `format`, `schemaVersion`, `documentID`, `revision`, `title`, and `fields.note`, and `note` records the note's form. Exporting the item rebuilds the document from that entry, with the item's current title, note, and revision. An imported object starts at revision 1 in its new store, so export, import into another lab, and export again give the same bytes when the source was at revision 1, and differ only in `revision` otherwise. A title with surrounding spaces is trimmed, and the review says so.
 - **Importing.** Every import is staged first under the fixed name `object.anlab`, never the sender's file name. Staging applies the 2 MiB and `StrictJSON` limits while the bytes stream. The staged bytes are read back and checked, decoded with every rule above, and planned against the lab by identity. An object the lab does not hold is created in a collection of the person's own. One it holds with the same title and note needs nothing, so a reimport never duplicates it. One it holds with a different title or note is changed only if the person applies the document's title and note: one `updateItem` at the stored revision, whose receipt offers an undo, and extras stay as stored. An archived stored copy is not changed. A document that lists attachments is refused, because this build has no attachment entity and would leave them behind. At commit, the staged bytes are verified again, their digest must equal the reviewed one, and the plan must still be the reviewed decision. The request ID derives from the digest and the target, so a retry replays its receipt. Imports commit through `OperationService` as the app UI after a person's press. That is a non-destructive app-UI commit, so ADR-013 issues no grant for it.
 
+## Audio Workshop presets
+
+LAB-029 saves a graph preset as an ordinary item, with a `createItem` receipt whose undo archives it. The item is in the person's `Audio Workshop Presets` collection, in the `user` namespace, whose ID is fixed (`76573EDC-03EC-43E3-B1EA-A1122CAA5CF6`), so every save finds the same collection. The first save creates it. Reset Demo never touches it. The item's title is the preset's name, and its note is a readable summary. Its extras hold the preset, and loading reads only the extras:
+
+```json
+{"audioWorkshopPreset":{"cutoffHertz":2400,"filterEnabled":true,"format":"native-lab-audio-preset","gainDecibels":-6,"loop":"pulse","midi":{"channel":null,"controller":74,"highHertz":12000,"lowHertz":80},"resonance":0.9,"schemaVersion":1}}
+```
+
+- `format` is `native-lab-audio-preset` and `schemaVersion` is 1. A newer version is refused, not guessed at.
+- `loop` is `pulse`, `chords`, or `noise`. `gainDecibels` is -60 to 6, `cutoffHertz` 20 to 20,000, and `resonance` (a filter Q) 0.5 to 8. `filterEnabled` is a JSON Boolean.
+- `midi.controller` is 0 to 119, since 120 to 127 are channel mode messages. `midi.channel` is 1 to 16, or `null` for any channel. `lowHertz` is below `highHertz`, and both are within the cutoff range. A controller value moves the cutoff exponentially between them.
+- Every field is required. An unknown field, a wrong type (a number for a Boolean, or the reverse), and an out-of-range value are refused, never clamped. So are a duplicate key (`StrictJSON`) and a preset over 4 KiB.
+- Bypass and panic mute are never saved. Loading a preset cannot unmute the output or change bypass.
+
+The AUv3 unit keeps the same canonical JSON in its `fullState` under `nativeLab.audioWorkshop.preset`, so a host saves it in its own project. The canonical form has sorted keys and no whitespace, so the same preset always gives the same bytes.
+
 ## Import resource policy
 
 Initial defaults: at most 32 attachments per import; at most 2 MiB of metadata/text; at most 1 GiB total staged media; at most 2,000 archive entries; nesting depth at most 16. These are proposed protective defaults, not measured device limits. Media should stream to disk rather than allocate the declared total in memory. A smaller device/profile can impose stricter limits, and the UI must show the effective limit before import.

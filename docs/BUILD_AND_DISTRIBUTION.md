@@ -11,7 +11,7 @@ The installed Xcode build, Swift compiler, SDK versions, deployment floor, and e
 | Profile | Intended contents | Configuration | Schemes today | External setup |
 |---|---|---|---|---|
 | CoreLocal | Mac/iPhone host, original fixtures, local persistence, manual/fallback experiments, eligible local inference | `Config/Profiles/CoreLocal.xcconfig` | `LabMac-Core`, `LabPhone-Core` | None for the Mac and simulators; any team, including a free Personal Team, for a device |
-| SystemSurfaces | Share/widget/Control extensions, App Group staging, App Intents metadata and integration tests | `Config/Profiles/SystemSurfaces.xcconfig` | `LabPhone-Surfaces` | Own paid team for on-device App Group staging; simulator builds need none |
+| SystemSurfaces | Share/widget/Control extensions, the AUv3 audio unit extension, App Group staging, App Intents metadata and integration tests | `Config/Profiles/SystemSurfaces.xcconfig` | `LabPhone-Surfaces` | Own paid team for on-device App Group staging; simulator builds need none |
 | Companions | Separate Watch and TV hosts plus LAN/Watch relay | `Config/Profiles/Companions.xcconfig` | `LabWatch`, `LabTV` | Physical devices for real transport/camera evidence |
 | CloudOptional | CloudKit, optional PCC/provider adapters | `Config/Profiles/CloudOptional.xcconfig` | none yet | Own paid team with iCloud, own container, explicit account/entitlement/route configuration |
 | FrontierOptional | File Provider, App Clip, Wallet signer integration, CarPlay/PTT/Screen Time/accessory spikes | `Config/Profiles/FrontierOptional.xcconfig` | none yet | Per-feature setup and managed approval where required |
@@ -47,7 +47,7 @@ Every host has a scheme whose test action runs a smoke test inside that host: th
 |---|---|---|---|
 | `LabMac-Core` | Mac | CoreLocal | `LabMacTests`, hosted in the Mac app |
 | `LabPhone-Core` | iPhone and iPad | CoreLocal | `LabPhoneTests`, hosted smoke tests |
-| `LabPhone-Surfaces` | iPhone variant with the share, widget, and Control extensions | SystemSurfaces | none yet |
+| `LabPhone-Surfaces` | iPhone variant with the share, widget, Control, and AUv3 audio unit extensions | SystemSurfaces | none yet |
 | `LabWatch` | Apple Watch | Companions | `LabWatchTests`, hosted smoke tests; the `LabSupport` and `LabCatalog` package tests on watchOS |
 | `LabTV` | Apple TV (tvOS 26.0 floor) | Companions | `LabTVTests`, hosted smoke tests; `LabTVUITests`, the host driven with the remote alone; the `LabSupport` and `LabCatalog` package tests on tvOS |
 
