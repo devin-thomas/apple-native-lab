@@ -595,6 +595,17 @@ Use in this plan: Image-analysis request reference.
 
 Implementation evidence required: actual SDK symbol/availability, permissions or entitlement, and a named compile/device result.
 
+Installed SDK check (2026-09-30, Xcode 27.0, from the macOS 27.0 SDK's `Vision.swiftinterface`, for LAB-012-A). No entitlement is required to recognize text or barcodes in image bytes a person chose. The camera is not used.
+
+| Symbol LAB-012 uses | Installed signature | Declared availability |
+|---|---|---|
+| `RecognizeTextRequest` | `ImageProcessingRequest` whose `Result` is `[RecognizedTextObservation]`. `perform(on:)` takes the image `Data`. | macOS 15.0, iOS 18.0, tvOS 18.0, visionOS 2.0 |
+| `RecognizedTextObservation.transcript` | `String` | macOS 26.0, iOS 26.0, tvOS 26.0, visionOS 26.0 |
+| `DetectBarcodesRequest` | `ImageProcessingRequest` whose `Result` is `[BarcodeObservation]` | macOS 15.0, iOS 18.0, tvOS 18.0, visionOS 2.0, watchOS 27.0 |
+| `BarcodeObservation.payloadString` | `String?` | Same as `BarcodeObservation`: macOS 15.0, iOS 18.0, tvOS 18.0, visionOS 2.0, watchOS 27.0 |
+
+Watch and Apple TV hosts do not link the module. A drawn image and a generated QR code were read in `VisionAdapterTests` on the development Mac. That is not a camera and not a device photograph.
+
 ## S56
 
 **Core MIDI** — reference
@@ -666,6 +677,16 @@ Source: [Visual Intelligence integration](https://developer.apple.com/documentat
 Use in this plan: App participation requires supported system queries; not arbitrary camera interception.
 
 Implementation evidence required: actual SDK symbol/availability, permissions or entitlement, and a named compile/device result.
+
+Installed SDK check (2026-09-30, Xcode 27.0, from the macOS 27.0 SDK, for LAB-012-A). No entitlement is declared for this participation. The intent reads labels only.
+
+| Symbol LAB-012 uses | Installed signature | Declared availability |
+|---|---|---|
+| `SemanticContentDescriptor` | `labels: [String]` and a pixel buffer. The intent does not read the buffer. | iOS 26.0, macOS 27.0, Mac Catalyst 27.0 |
+| `AppSchema.visualIntelligence.semanticContentSearch` | Resolves to the intent name `ShowVisualSearchResultsInAppIntent` | iOS 26.0, macOS 27.0; unavailable on tvOS, watchOS, and visionOS |
+| `Attachment` from a `CGImage` | `Attachment<Content>` and `ImageAttachment.init(_ cgImage: CGImage, orientation:)` in Foundation Models ([S06](#s06)) | iOS 27.0, macOS 27.0, visionOS 27.0, watchOS 27.0; unavailable on tvOS |
+
+The visual-search intent is compiled only for a 6.4 compiler, on iOS and macOS. A 26-family build does not include it. It has not been invoked by the system.
 
 ## S63
 
