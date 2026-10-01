@@ -12,6 +12,7 @@ let package = Package(
         .library(name: "ShareIngress", targets: ["ShareIngress"]),
         .library(name: "PortableObjects", targets: ["PortableObjects"]),
         .library(name: "SurfaceDeck", targets: ["SurfaceDeck"]),
+        .library(name: "DurableSyncLedger", targets: ["DurableSyncLedger"]),
     ],
     dependencies: [
         .package(path: "../LabSupport"),
@@ -106,6 +107,16 @@ let package = Package(
         .testTarget(
             name: "SurfaceDeckTests",
             dependencies: ["SurfaceDeck", .product(name: "LabDomain", package: "LabDomain")]
+        ),
+        // LAB-017 Durable Sync Ledger: a local write-ahead log, an optional private/shared profile,
+        // and manual document exchange. CloudKit is not imported; CoreLocal does not link it.
+        .target(
+            name: "DurableSyncLedger",
+            dependencies: [.product(name: "LabDomain", package: "LabDomain")]
+        ),
+        .testTarget(
+            name: "DurableSyncLedgerTests",
+            dependencies: ["DurableSyncLedger", .product(name: "LabDomain", package: "LabDomain")]
         ),
     ]
 )
