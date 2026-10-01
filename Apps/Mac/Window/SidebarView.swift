@@ -39,6 +39,9 @@ struct SidebarView: View {
                 Label(SurfaceDeck.title, systemImage: SurfaceDeck.symbol)
                     .tag(SidebarDestination.surfaceDeck)
                     .accessibilityHint("The demo session, its receipts, and previews of its widget and Control")
+                Label("Point, Inspect, Propose", systemImage: "viewfinder")
+                    .tag(SidebarDestination.pointInspect)
+                    .accessibilityHint("Turn a chosen image into a record you review before it is saved")
             }
             Section("Experiments") {
                 row(.all, symbol: "square.grid.2x2")

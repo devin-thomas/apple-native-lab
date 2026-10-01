@@ -23,6 +23,11 @@ link         *          tvos     UIKit               # linked by SwiftUI apps on
 link         CoreLocal  macos    AVFoundation        # camera and microphone status
 link         CoreLocal  macos    CoreBluetooth       # Bluetooth authorization status
 link         CoreLocal  macos    FoundationModels    # on-device language model availability
+link         CoreLocal  macos    Vision              # OCR and barcodes of a chosen image (LAB-012)
+link         CoreLocal  macos    ImageIO             # image bytes for an on-device description (LAB-012)
+link         CoreLocal  macos    CoreGraphics        # image bytes for an on-device description (LAB-012)
+link         CoreLocal  macos    VisualIntelligence  # optional system visual-search labels (LAB-012)
+link         CoreLocal  macos    Combine             # pulled in by Vision / VisualIntelligence (LAB-012)
 link         CoreLocal  macos    Security            # reads the running build's own entitlements
 link         CoreLocal  macos    Speech              # speech recognition status and on-device assets
 link         CoreLocal  macos    CryptoKit           # LabStore demo fixture: SHA-256 of the bundled seed
@@ -32,6 +37,11 @@ link         CoreLocal  ios      AVFoundation        # camera and microphone sta
 link         CoreLocal  ios      CoreBluetooth       # Bluetooth authorization status
 link         CoreLocal  ios      CryptoKit           # LabStore demo fixture: SHA-256 of the bundled seed
 link         CoreLocal  ios      FoundationModels    # on-device language model availability
+link         CoreLocal  ios      Vision              # OCR and barcodes of a chosen image (LAB-012)
+link         CoreLocal  ios      ImageIO             # image bytes for an on-device description (LAB-012)
+link         CoreLocal  ios      CoreGraphics        # image bytes for an on-device description (LAB-012)
+link         CoreLocal  ios      VisualIntelligence  # optional system visual-search labels (LAB-012)
+link         CoreLocal  ios      Combine             # pulled in by Vision / VisualIntelligence (LAB-012)
 link         CoreLocal  ios      NearbyInteraction   # Ultra Wideband device capabilities
 link         CoreLocal  ios      Speech              # speech recognition status and on-device assets
 entitlement  CoreLocal  macos    com.apple.security.app-sandbox   # the Mac host is sandboxed
@@ -56,6 +66,11 @@ link         SystemSurfaces ios  CoreBluetooth       # host variant: Bluetooth a
 link         SystemSurfaces ios  CoreTransferable    # host variant: the action browser's ShareLink, as LabPhone
 link         SystemSurfaces ios  CryptoKit           # host and extensions: SHA-256 of staged content and the demo seed (LabDomain)
 link         SystemSurfaces ios  FoundationModels    # host variant: on-device language model availability, as LabPhone
+link         SystemSurfaces ios  Vision              # host variant: OCR and barcodes of a chosen image, as LabPhone (LAB-012)
+link         SystemSurfaces ios  ImageIO             # host variant: image bytes for an on-device description, as LabPhone (LAB-012)
+link         SystemSurfaces ios  CoreGraphics        # host variant: image bytes for an on-device description, as LabPhone (LAB-012)
+link         SystemSurfaces ios  VisualIntelligence  # host variant: optional system visual-search labels, as LabPhone (LAB-012)
+link         SystemSurfaces ios  Combine             # host variant: pulled in by Vision / VisualIntelligence, as LabPhone (LAB-012)
 link         SystemSurfaces ios  NearbyInteraction   # host variant: Ultra Wideband capabilities, as LabPhone
 link         SystemSurfaces ios  Speech              # host variant: speech recognition status, as LabPhone
 entitlement  SystemSurfaces ios  com.apple.security.application-groups   # share inbox folder the extension writes and the host variant reads; a device needs a paid team
