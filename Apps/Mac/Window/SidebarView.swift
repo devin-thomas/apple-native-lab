@@ -5,6 +5,7 @@ import LabSupport
 import RespectfulAttention
 import ShortcutWorkbench
 import RenderThatSurvives
+import ScreeningRoom
 import SurfaceDeck
 import SwiftUI
 import TactileGrammar
@@ -84,6 +85,9 @@ struct SidebarView: View {
                 Label(RenderThatSurvives.title, systemImage: RenderThatSurvives.symbol)
                     .tag(SidebarDestination.renderSurvives)
                     .accessibilityHint("Render a fixture as a job that survives leaving the app")
+                Label(ScreeningRoom.title, systemImage: ScreeningRoom.symbol)
+                    .tag(SidebarDestination.screeningRoom)
+                    .accessibilityHint("Watch an original clip, move it between surfaces, and resume with the same captions")
             }
             Section("Experiments") {
                 row(.all, symbol: "square.grid.2x2")

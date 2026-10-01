@@ -26,6 +26,9 @@
 		1ABEE97B7C7ACB1EAF41ABC4 /* ShareIngress in Frameworks */ = {isa = PBXBuildFile; productRef = A7B30E9CC74D5DACCC486C60 /* ShareIngress */; };
 		1B0413E82622210BA72820FA /* LabDomain in Frameworks */ = {isa = PBXBuildFile; productRef = 0D6B57C2990B445E8BC56C3B /* LabDomain */; };
 		1C7CA3174A557512B2CC9E55 /* seed.json in Resources */ = {isa = PBXBuildFile; fileRef = 4C5126791B7E1A1A049AE090 /* seed.json */; };
+		1D0454867F58F2F2FCC15C53 /* ScreeningRoom in Frameworks */ = {isa = PBXBuildFile; productRef = 4529826CC5A2B22E37D11960 /* ScreeningRoom */; };
+		208089E6548B04B4FAD2D503 /* ScreeningRoom in Frameworks */ = {isa = PBXBuildFile; productRef = D936B53FB1447A86F5E17CB1 /* ScreeningRoom */; };
+		20CC763D9B597BD74A7E2248 /* ScreeningRoom in Frameworks */ = {isa = PBXBuildFile; productRef = 74C61848479A3E2EA028359B /* ScreeningRoom */; };
 		21F31C50AAC169B20AE2CF15 /* ActionAtlas in Frameworks */ = {isa = PBXBuildFile; productRef = 7EC14A55645358F739F46AC7 /* ActionAtlas */; };
 		226E33C6282D786FCC203015 /* speech-sample-captions.vtt in Resources */ = {isa = PBXBuildFile; fileRef = C4B33BA8A8374E544563EE90 /* speech-sample-captions.vtt */; };
 		25972D23C4D3197B1F3EB577 /* LabSupport in Frameworks */ = {isa = PBXBuildFile; productRef = C807DDF95D17BFC6553B448B /* LabSupport */; };
@@ -62,6 +65,8 @@
 		679EEDEC38DEFE36745AB4C7 /* ShortcutWorkbench in Frameworks */ = {isa = PBXBuildFile; productRef = 36BBB5CECC03D8EB03B2B8E3 /* ShortcutWorkbench */; };
 		682570876F660883019716DB /* seed.json in Resources */ = {isa = PBXBuildFile; fileRef = 4C5126791B7E1A1A049AE090 /* seed.json */; };
 		68EC02016C26F09D53BEA041 /* RenderThatSurvives in Frameworks */ = {isa = PBXBuildFile; productRef = 4111F1FCFF0D20919AC1435F /* RenderThatSurvives */; };
+		6AA9269C26437D2151922984 /* ScreeningRoomPlayback in Frameworks */ = {isa = PBXBuildFile; productRef = F1300675BF04E22A751AAA8A /* ScreeningRoomPlayback */; };
+		6C9BB14472B7F36AEC6C36CF /* ScreeningRoomPlayback in Frameworks */ = {isa = PBXBuildFile; productRef = FCC939009043AE3BBBFEAAD9 /* ScreeningRoomPlayback */; };
 		6DE4F776CBFE16A956072B91 /* AccessSuperpower in Frameworks */ = {isa = PBXBuildFile; productRef = CC0630EDCCDE6FC7F7BF2FBC /* AccessSuperpower */; };
 		6F93A9AD463D59BB11A8A5EC /* LabDomain in Frameworks */ = {isa = PBXBuildFile; productRef = CACF77BD90DF68CDE4C515EA /* LabDomain */; };
 		7231065BB4094B132F17740D /* DurableSyncLedger in Frameworks */ = {isa = PBXBuildFile; productRef = 88DB2EE25490771C42F2A729 /* DurableSyncLedger */; };
@@ -79,14 +84,18 @@
 		8241A9AE0973790DCD57EE24 /* ShareIngress in Frameworks */ = {isa = PBXBuildFile; productRef = C0E3086832C7401036381F13 /* ShareIngress */; };
 		84B3B61948F3C7DE691D8B56 /* speech-sample-captions.vtt in Resources */ = {isa = PBXBuildFile; fileRef = C4B33BA8A8374E544563EE90 /* speech-sample-captions.vtt */; };
 		85AB9FBA224F864273906840 /* PickUpHere in Frameworks */ = {isa = PBXBuildFile; productRef = D2925C43D1B2531E485720E6 /* PickUpHere */; };
+		86F8F6D1921317F228A28908 /* ScreeningRoom in Frameworks */ = {isa = PBXBuildFile; productRef = 6349782257D9D832781DCBD1 /* ScreeningRoom */; };
 		89E214F72A8F8E59C59B440C /* PointInspect in Frameworks */ = {isa = PBXBuildFile; productRef = 1AB36AC1BEC9879ABFC930C0 /* PointInspect */; };
 		8A6729B0DB6FC2773ADD61D0 /* FindTheThing in Frameworks */ = {isa = PBXBuildFile; productRef = 592FAE1A0F9F452B0C657DFD /* FindTheThing */; };
+		8C40BB2646A4DDD89846D930 /* ScreeningRoomPlayback in Frameworks */ = {isa = PBXBuildFile; productRef = EE4E0B95BA1C58D2D1D88F08 /* ScreeningRoomPlayback */; };
 		8D5B9929C2461FEBE0755266 /* TactileGrammar in Frameworks */ = {isa = PBXBuildFile; productRef = 142DDF1CDB91674FC377411B /* TactileGrammar */; };
 		8FDDF8EBEF317883CD104666 /* FindTheThing in Frameworks */ = {isa = PBXBuildFile; productRef = D6C031B31CED84F339102FE1 /* FindTheThing */; };
 		8FDE617CDA6BA219C4DA965D /* LabCatalog in Frameworks */ = {isa = PBXBuildFile; productRef = 59FA911654D48713C53F9816 /* LabCatalog */; };
 		93CB6F4DEFBC2F06BFC03D5A /* ShortcutWorkbench in Frameworks */ = {isa = PBXBuildFile; productRef = 0081520B6B9891B500090A1E /* ShortcutWorkbench */; };
 		96EA540221683FF1A975546B /* LabSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 9429B9706DB8D93A799FDA9F /* LabSupport */; };
+		9C7655FCC68FA0E2CBB6353B /* ScreeningRoom in Frameworks */ = {isa = PBXBuildFile; productRef = 0BCDA999B1C4E5FE428B26A7 /* ScreeningRoom */; };
 		A0AF3C92D36C68C1D64BE7D6 /* SurfaceDeck in Frameworks */ = {isa = PBXBuildFile; productRef = CE841A8FB5E31C78D4112220 /* SurfaceDeck */; };
+		A7263A9B473715BBE7677C52 /* ScreeningRoomPlayback in Frameworks */ = {isa = PBXBuildFile; productRef = 91013B5B2C9E82183BFB82CB /* ScreeningRoomPlayback */; };
 		A78294EBFE96BEA10AEF5BCD /* swatch-card.png in Resources */ = {isa = PBXBuildFile; fileRef = B0EE3CF6B78A0435A2E4F6EC /* swatch-card.png */; };
 		AA05060A1927DB052D03BA7E /* SurfaceDeck in Frameworks */ = {isa = PBXBuildFile; productRef = 3CF19F7CC72BE703FC6929AD /* SurfaceDeck */; };
 		AD455F75C2D216702A2B62CE /* DesktopNativePower in Frameworks */ = {isa = PBXBuildFile; productRef = 799F4CAFFEC3C33B73985488 /* DesktopNativePower */; };
@@ -94,13 +103,17 @@
 		AFC454E3BA10F271D73AC35A /* SpeechTimeline in Frameworks */ = {isa = PBXBuildFile; productRef = F6364CBD60BE2BEE0A31456F /* SpeechTimeline */; };
 		B55D587C861F0C54393A2BD7 /* LabDomain in Frameworks */ = {isa = PBXBuildFile; productRef = A6A3022C8795348044F49723 /* LabDomain */; };
 		B888B057D5B4B13CA4C86B32 /* LabSupport in Frameworks */ = {isa = PBXBuildFile; productRef = F44C6435C9B6A97B75C33F44 /* LabSupport */; };
+		BB699EEA120C158F2774463A /* ScreeningRoomPlayback in Frameworks */ = {isa = PBXBuildFile; productRef = DE07DAE9810D1A3BEC9A361A /* ScreeningRoomPlayback */; };
 		BD13FCF347A13D74C8BD2E77 /* SpeechTimeline in Frameworks */ = {isa = PBXBuildFile; productRef = 313A41B2A33E906243201726 /* SpeechTimeline */; };
+		C391743BD8D48ED847A43AEB /* ScreeningRoomPlayback in Frameworks */ = {isa = PBXBuildFile; productRef = 07643C9C8F9AAE5026317A8E /* ScreeningRoomPlayback */; };
 		C518F27DD869D1087ED96B1E /* LabSupport in Frameworks */ = {isa = PBXBuildFile; productRef = ECD021B68B4C48CC863BA8C6 /* LabSupport */; };
 		C5C7E15597C124FFA87914F4 /* LabStore in Frameworks */ = {isa = PBXBuildFile; productRef = 6CF6B1898735341A74FB3DA4 /* LabStore */; };
 		CB80ACDC68FE94D0F8CD2D18 /* PortableObjects in Frameworks */ = {isa = PBXBuildFile; productRef = 5138B46379EB0CDA5C7A520B /* PortableObjects */; };
 		CBF185BA448CD3285E3F5BC8 /* LabSupport in Frameworks */ = {isa = PBXBuildFile; productRef = F5558900C8E1A34A220E60D3 /* LabSupport */; };
+		CC2518A05966A3E4A729C240 /* ScreeningRoomPlayback in Frameworks */ = {isa = PBXBuildFile; productRef = 1BF03CA9A6DA75961B2F1ABF /* ScreeningRoomPlayback */; };
 		D078C387824227F073DA06D7 /* TactileGrammar in Frameworks */ = {isa = PBXBuildFile; productRef = EF27A03B7FC8CEEAC7B10B94 /* TactileGrammar */; };
 		D4FFE59C3D108F7EEC03F76B /* PickUpHere in Frameworks */ = {isa = PBXBuildFile; productRef = E71BE15BDC35B0EB85330C6A /* PickUpHere */; };
+		DA8FA64970D79CF504A4B4C2 /* ScreeningRoom in Frameworks */ = {isa = PBXBuildFile; productRef = A9F266E53907B2EEF4980EC7 /* ScreeningRoom */; };
 		DB0EEC99D027016FD0052072 /* ShortcutWorkbench in Frameworks */ = {isa = PBXBuildFile; productRef = E977E30B60B7D9E20E4D2E91 /* ShortcutWorkbench */; };
 		DBE25FF6B377671BE1C03843 /* RespectfulAttention in Frameworks */ = {isa = PBXBuildFile; productRef = 94A9495834CC96447469549B /* RespectfulAttention */; };
 		DC14139A63BD575B5A92D755 /* LabCatalog in Frameworks */ = {isa = PBXBuildFile; productRef = D848D3397291632E552B77A2 /* LabCatalog */; };
@@ -109,6 +122,7 @@
 		DFDD855525D781253FF7DE3E /* RenderThatSurvives in Frameworks */ = {isa = PBXBuildFile; productRef = 1E0AFD34A5739FC35B622C6E /* RenderThatSurvives */; };
 		E10047C202637983EF3886EE /* TypedIntelligence in Frameworks */ = {isa = PBXBuildFile; productRef = FA764C388624F65B1FE0AC12 /* TypedIntelligence */; };
 		E70BDD2C02F2994CBB681ED7 /* PortableObjects in Frameworks */ = {isa = PBXBuildFile; productRef = 4E31A68F4912B6784D878C4C /* PortableObjects */; };
+		E74023387AFE04DFFFB9ED21 /* ScreeningRoom in Frameworks */ = {isa = PBXBuildFile; productRef = CF93F978BEB2E06FB32052F1 /* ScreeningRoom */; };
 		EABEBBDC64006AF6DFF01764 /* speech-sample-captions.vtt in Resources */ = {isa = PBXBuildFile; fileRef = C4B33BA8A8374E544563EE90 /* speech-sample-captions.vtt */; };
 		F4026F15E90968A3C198C0E5 /* PointInspect in Frameworks */ = {isa = PBXBuildFile; productRef = FD202470B394E5BFBC497587 /* PointInspect */; };
 		FAB9761A4B3BA5EE6B7D4921 /* LabSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 0A4E65ACA3B88C9D6E09A91B /* LabSupport */; };
@@ -410,6 +424,8 @@
 			files = (
 				C518F27DD869D1087ED96B1E /* LabSupport in Frameworks */,
 				619B33546461D4857F8092B4 /* LabCatalog in Frameworks */,
+				1D0454867F58F2F2FCC15C53 /* ScreeningRoom in Frameworks */,
+				A7263A9B473715BBE7677C52 /* ScreeningRoomPlayback in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -459,6 +475,8 @@
 				DB0EEC99D027016FD0052072 /* ShortcutWorkbench in Frameworks */,
 				5F8117A2D793190FC5F0B060 /* LabJobs in Frameworks */,
 				133579F88E88722C1A567973 /* RenderThatSurvives in Frameworks */,
+				DA8FA64970D79CF504A4B4C2 /* ScreeningRoom in Frameworks */,
+				C391743BD8D48ED847A43AEB /* ScreeningRoomPlayback in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -468,6 +486,8 @@
 			files = (
 				06ED0D7F8928725A2A09905A /* LabSupport in Frameworks */,
 				45673BBE0F16F89FAE113021 /* LabCatalog in Frameworks */,
+				20CC763D9B597BD74A7E2248 /* ScreeningRoom in Frameworks */,
+				6C9BB14472B7F36AEC6C36CF /* ScreeningRoomPlayback in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -498,6 +518,8 @@
 				93CB6F4DEFBC2F06BFC03D5A /* ShortcutWorkbench in Frameworks */,
 				191EE6EDFFD979CB2B784507 /* LabJobs in Frameworks */,
 				DFDD855525D781253FF7DE3E /* RenderThatSurvives in Frameworks */,
+				9C7655FCC68FA0E2CBB6353B /* ScreeningRoom in Frameworks */,
+				CC2518A05966A3E4A729C240 /* ScreeningRoomPlayback in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -516,6 +538,8 @@
 			files = (
 				FAB9761A4B3BA5EE6B7D4921 /* LabSupport in Frameworks */,
 				5FE8E27B13BCF7A700A0CFDA /* LabCatalog in Frameworks */,
+				86F8F6D1921317F228A28908 /* ScreeningRoom in Frameworks */,
+				6AA9269C26437D2151922984 /* ScreeningRoomPlayback in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -525,6 +549,8 @@
 			files = (
 				2DC4325948CAC8E236586BB5 /* LabSupport in Frameworks */,
 				07A0496F553D9F8D4D40ED4E /* LabCatalog in Frameworks */,
+				E74023387AFE04DFFFB9ED21 /* ScreeningRoom in Frameworks */,
+				8C40BB2646A4DDD89846D930 /* ScreeningRoomPlayback in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -565,6 +591,8 @@
 				679EEDEC38DEFE36745AB4C7 /* ShortcutWorkbench in Frameworks */,
 				041571FBEDEE6D20DB01B173 /* LabJobs in Frameworks */,
 				68EC02016C26F09D53BEA041 /* RenderThatSurvives in Frameworks */,
+				208089E6548B04B4FAD2D503 /* ScreeningRoom in Frameworks */,
+				BB699EEA120C158F2774463A /* ScreeningRoomPlayback in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -811,6 +839,8 @@
 				E977E30B60B7D9E20E4D2E91 /* ShortcutWorkbench */,
 				55FA0BEAD79AB3A699310DD3 /* LabJobs */,
 				34ADCE5970E7AD9261946AFD /* RenderThatSurvives */,
+				A9F266E53907B2EEF4980EC7 /* ScreeningRoom */,
+				07643C9C8F9AAE5026317A8E /* ScreeningRoomPlayback */,
 			);
 			productName = LabPhoneSurfaces;
 			productReference = 9A57B8DBFF3F863D70D41513 /* LabPhoneSurfaces.app */;
@@ -859,6 +889,8 @@
 				36BBB5CECC03D8EB03B2B8E3 /* ShortcutWorkbench */,
 				223B8BCAF2A3CB2ABE340018 /* LabJobs */,
 				4111F1FCFF0D20919AC1435F /* RenderThatSurvives */,
+				D936B53FB1447A86F5E17CB1 /* ScreeningRoom */,
+				DE07DAE9810D1A3BEC9A361A /* ScreeningRoomPlayback */,
 			);
 			productName = LabMac;
 			productReference = 2F62DB7E020E6BFDAC86BD42 /* LabMac.app */;
@@ -905,6 +937,8 @@
 			packageProductDependencies = (
 				B0B980774D943168FEA7065A /* LabSupport */,
 				487F08AAFA8FFA4128830EF0 /* LabCatalog */,
+				CF93F978BEB2E06FB32052F1 /* ScreeningRoom */,
+				EE4E0B95BA1C58D2D1D88F08 /* ScreeningRoomPlayback */,
 			);
 			productName = LabTV;
 			productReference = FD325B2E657B098BC34D6B8E /* LabTV.app */;
@@ -976,6 +1010,8 @@
 				0081520B6B9891B500090A1E /* ShortcutWorkbench */,
 				71315AD3886CA002360CAB39 /* LabJobs */,
 				1E0AFD34A5739FC35B622C6E /* RenderThatSurvives */,
+				0BCDA999B1C4E5FE428B26A7 /* ScreeningRoom */,
+				1BF03CA9A6DA75961B2F1ABF /* ScreeningRoomPlayback */,
 			);
 			productName = LabPhone;
 			productReference = 28C2C1B8B040DD0D06AF070E /* LabPhone.app */;
@@ -1001,6 +1037,8 @@
 			packageProductDependencies = (
 				ECD021B68B4C48CC863BA8C6 /* LabSupport */,
 				F8C00E7480D74B30ED42E170 /* LabCatalog */,
+				4529826CC5A2B22E37D11960 /* ScreeningRoom */,
+				91013B5B2C9E82183BFB82CB /* ScreeningRoomPlayback */,
 			);
 			productName = LabTVTests;
 			productReference = BC72CF82FDE04F81C8D286C8 /* LabTVTests.xctest */;
@@ -1026,6 +1064,8 @@
 			packageProductDependencies = (
 				25231493CA26D8D2F61E46F5 /* LabSupport */,
 				0A608BA2376945AD3E608486 /* LabCatalog */,
+				74C61848479A3E2EA028359B /* ScreeningRoom */,
+				FCC939009043AE3BBBFEAAD9 /* ScreeningRoomPlayback */,
 			);
 			productName = LabMacTests;
 			productReference = 0D2046C228154D83652F5963 /* LabMacTests.xctest */;
@@ -1051,6 +1091,8 @@
 			packageProductDependencies = (
 				0A4E65ACA3B88C9D6E09A91B /* LabSupport */,
 				980162FF318C34A9B6AA4D5E /* LabCatalog */,
+				6349782257D9D832781DCBD1 /* ScreeningRoom */,
+				F1300675BF04E22A751AAA8A /* ScreeningRoomPlayback */,
 			);
 			productName = LabPhoneTests;
 			productReference = 8DBBAC0F883318002CAFB896 /* LabPhoneTests.xctest */;
@@ -1537,6 +1579,8 @@
 				GENERATE_INFOPLIST_FILE = "$(LAB_DECLARES_PURPOSE_STRINGS)";
 				INFOPLIST_FILE = Apps/TV/Info.plist;
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "$(LAB_PURPOSE_BLUETOOTH)";
+				INFOPLIST_KEY_NSCameraUsageDescription = "$(LAB_PURPOSE_CAMERA)";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "$(LAB_PURPOSE_MICROPHONE)";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1993,6 +2037,8 @@
 				GENERATE_INFOPLIST_FILE = "$(LAB_DECLARES_PURPOSE_STRINGS)";
 				INFOPLIST_FILE = Apps/TV/Info.plist;
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "$(LAB_PURPOSE_BLUETOOTH)";
+				INFOPLIST_KEY_NSCameraUsageDescription = "$(LAB_PURPOSE_CAMERA)";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "$(LAB_PURPOSE_MICROPHONE)";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2196,6 +2242,10 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = ShortcutWorkbench;
 		};
+		07643C9C8F9AAE5026317A8E /* ScreeningRoomPlayback */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ScreeningRoomPlayback;
+		};
 		0A1E283E59A2E6CE6A1FCEF2 /* ContextCards */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ContextCards;
@@ -2207,6 +2257,10 @@
 		0A608BA2376945AD3E608486 /* LabCatalog */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = LabCatalog;
+		};
+		0BCDA999B1C4E5FE428B26A7 /* ScreeningRoom */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ScreeningRoom;
 		};
 		0CC56DC092F1A632E1457223 /* TactileGrammar */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -2227,6 +2281,10 @@
 		1AB36AC1BEC9879ABFC930C0 /* PointInspect */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = PointInspect;
+		};
+		1BF03CA9A6DA75961B2F1ABF /* ScreeningRoomPlayback */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ScreeningRoomPlayback;
 		};
 		1E0AFD34A5739FC35B622C6E /* RenderThatSurvives */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -2288,6 +2346,10 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = RenderThatSurvives;
 		};
+		4529826CC5A2B22E37D11960 /* ScreeningRoom */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ScreeningRoom;
+		};
 		47A98A400215FB089E3EDF93 /* LocalModelBench */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = LocalModelBench;
@@ -2332,6 +2394,10 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = RespectfulAttention;
 		};
+		6349782257D9D832781DCBD1 /* ScreeningRoom */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ScreeningRoom;
+		};
 		642B301753124012D1855B8B /* FindTheThing */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = FindTheThing;
@@ -2347,6 +2413,10 @@
 		71315AD3886CA002360CAB39 /* LabJobs */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = LabJobs;
+		};
+		74C61848479A3E2EA028359B /* ScreeningRoom */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ScreeningRoom;
 		};
 		76F28CA76CDDB3E1BD522DA9 /* TypedIntelligence */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -2380,6 +2450,10 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = DurableSyncLedger;
 		};
+		91013B5B2C9E82183BFB82CB /* ScreeningRoomPlayback */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ScreeningRoomPlayback;
+		};
 		9429B9706DB8D93A799FDA9F /* LabSupport */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = LabSupport;
@@ -2407,6 +2481,10 @@
 		A89F084FC0938D0139A2042E /* LabCatalog */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = LabCatalog;
+		};
+		A9F266E53907B2EEF4980EC7 /* ScreeningRoom */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ScreeningRoom;
 		};
 		B07CF76A07881747B6BDDC65 /* ContextCards */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -2452,6 +2530,10 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = SurfaceDeck;
 		};
+		CF93F978BEB2E06FB32052F1 /* ScreeningRoom */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ScreeningRoom;
+		};
 		D251249EBC83B2887F7B36D3 /* SurfaceDeck */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SurfaceDeck;
@@ -2472,6 +2554,10 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = LabCatalog;
 		};
+		D936B53FB1447A86F5E17CB1 /* ScreeningRoom */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ScreeningRoom;
+		};
 		DAA9D7AA6F4848C5373DE1B3 /* TrustDesk */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = TrustDesk;
@@ -2479,6 +2565,10 @@
 		DD6B5A5D377A99A4E139C082 /* SpeechTimeline */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SpeechTimeline;
+		};
+		DE07DAE9810D1A3BEC9A361A /* ScreeningRoomPlayback */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ScreeningRoomPlayback;
 		};
 		E08448913DADC94B523B6867 /* DurableSyncLedger */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -2500,9 +2590,17 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = TrustDesk;
 		};
+		EE4E0B95BA1C58D2D1D88F08 /* ScreeningRoomPlayback */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ScreeningRoomPlayback;
+		};
 		EF27A03B7FC8CEEAC7B10B94 /* TactileGrammar */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = TactileGrammar;
+		};
+		F1300675BF04E22A751AAA8A /* ScreeningRoomPlayback */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ScreeningRoomPlayback;
 		};
 		F26F0DA29E5E4B99D5E4143F /* LabStore */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -2535,6 +2633,10 @@
 		FA764C388624F65B1FE0AC12 /* TypedIntelligence */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = TypedIntelligence;
+		};
+		FCC939009043AE3BBBFEAAD9 /* ScreeningRoomPlayback */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ScreeningRoomPlayback;
 		};
 		FD202470B394E5BFBC497587 /* PointInspect */ = {
 			isa = XCSwiftPackageProductDependency;

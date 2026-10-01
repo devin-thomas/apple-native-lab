@@ -61,8 +61,8 @@ import Testing
         let total = ImplementationState.allCases.map { registry.count(in: .state($0)) }.reduce(0, +)
         #expect(total == registry.experiments.count)
         // Update only when a spec's state changes with evidence behind it.
-        #expect(registry.count(in: .state(.specified)) == 29)
-        #expect(registry.count(in: .state(.implemented)) == 19)
+        #expect(registry.count(in: .state(.specified)) == 28)
+        #expect(registry.count(in: .state(.implemented)) == 20)
         #expect(registry.progress(for: .m1) == (live: 6, total: 6))
         #expect(registry.progress(for: .m3).live >= 1)
     }

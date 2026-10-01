@@ -45,6 +45,7 @@ struct ExperimentDetailView: View {
                 FindTheThingLaunch(experiment: experiment)
                 ShortcutWorkbenchLaunch(experiment: experiment)
                 RenderLaunch(experiment: experiment)
+                ScreeningRoomLaunch(experiment: experiment)
                 Text(experiment.moment)
                     .font(.title3)
                     .fixedSize(horizontal: false, vertical: true)

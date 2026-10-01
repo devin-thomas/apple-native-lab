@@ -1,5 +1,6 @@
 import LabCatalog
 import LabSupport
+import ScreeningRoom
 import SwiftUI
 
 /// One experiment's record: what it shows, its state, its fallback, and where its sources live.
@@ -18,6 +19,15 @@ struct ExperimentDetailScreen: View {
                 LazyVGrid(columns: [GridItem(.flexible(), spacing: 40, alignment: .top),
                                     GridItem(.flexible(), spacing: 40, alignment: .top)],
                           alignment: .leading, spacing: 40) {
+                    if experiment.id == ScreeningRoom.experimentID {
+                        NavigationLink {
+                            ScreeningRoomScreen(model: TVScreening.model)
+                        } label: {
+                            Label("Open \(ScreeningRoom.title)", systemImage: ScreeningRoom.symbol)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                        .accessibilityIdentifier("detail.open-screening-room")
+                    }
                     FocusCard(identifier: "detail.moment") {
                         VStack(alignment: .leading, spacing: 12) {
                             CardHeading(title: "What it shows")
@@ -27,7 +37,7 @@ struct ExperimentDetailScreen: View {
                     FocusCard(identifier: "detail.this-device") {
                         VStack(alignment: .leading, spacing: 12) {
                             CardHeading(title: "On this Apple TV")
-                            SymbolLabel(title: "Unavailable here", systemImage: "tv.slash")
+                            SymbolLabel(title: runsHere ? "Runs here" : "Unavailable here", systemImage: runsHere ? "tv" : "tv.slash")
                                 .font(.headline)
                             Text(thisDeviceNote)
                         }
@@ -95,13 +105,18 @@ struct ExperimentDetailScreen: View {
         .accessibilityIdentifier("detail.header")
     }
 
-    /// Why nothing runs here, in the terms of this experiment's declared hosts.
+    private var runsHere: Bool { TVHost.runnableExperiments.contains(experiment.id) }
+
+    /// Why nothing runs here, in the terms of this experiment's declared hosts, or that it does.
     private var thisDeviceNote: String {
+        if runsHere {
+            return "This build carries the experiment's module for Apple TV: open it above. Its state describes the lab as a whole, not this Apple TV."
+        }
         let hosts = experiment.hosts
         let namesTelevision = hosts.localizedCaseInsensitiveContains("Apple TV")
             || hosts.localizedCaseInsensitiveContains("tvOS")
         let reason = namesTelevision
-            ? "Apple TV is one of this experiment's hosts, but this build carries no experiment module yet."
+            ? "Apple TV is one of this experiment's hosts, but this build does not carry its module yet."
             : "Apple TV is not one of this experiment's hosts."
         return "\(reason) Its state describes the lab as a whole, not this Apple TV."
     }

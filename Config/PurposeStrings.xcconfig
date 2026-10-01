@@ -4,9 +4,10 @@
 // A Source build, the default, declares none of them.
 //
 // Why a Store build needs them: the hosts link AVFoundation, CoreBluetooth, and Speech (and on
-// iPhone ARKit and NearbyInteraction; on Watch AVFAudio and NearbyInteraction; on Apple TV only
-// CoreBluetooth) for the no-prompt status probes on the Readiness screen. App Store processing flags a binary that references
-// these privacy-sensitive APIs without the matching purpose string. The permission stager asks
+// iPhone ARKit and NearbyInteraction; on Watch AVFAudio and NearbyInteraction; on Apple TV
+// CoreBluetooth) for the no-prompt status probes on the Readiness screen, and AVFoundation for
+// Native Screening Room's playback, on Apple TV too (LAB-031). App Store processing flags a binary
+// that references these privacy-sensitive APIs without the matching purpose string. The permission stager asks
 // only when an experiment action needs the permission, so these strings describe that moment.
 // Before any upload, reread each string against the experiments that build actually contains.
 //

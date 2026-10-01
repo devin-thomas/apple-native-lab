@@ -123,6 +123,8 @@ struct MainWindow: View {
             ShortcutWorkbenchListColumn(window: window)
         case .renderSurvives:
             RenderListColumn(window: window)
+        case .screeningRoom:
+            ScreeningRoomListColumn()
         case .catalog(let scope):
             if let registry = model.registry {
                 CatalogListColumn(registry: registry, scope: scope, window: window)
@@ -178,6 +180,8 @@ struct MainWindow: View {
             ShortcutWorkbenchDetailColumn(window: window)
         case .renderSurvives:
             RenderDetailColumn()
+        case .screeningRoom:
+            ScreeningRoomDetailColumn()
         case .catalog:
             if let registry = model.registry {
                 CatalogDetailColumn(registry: registry, experimentID: window.experimentID)
