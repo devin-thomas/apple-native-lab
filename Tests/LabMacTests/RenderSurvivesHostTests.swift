@@ -73,7 +73,7 @@ import Testing
         let report = try #require(model.reports[job.id])
         #expect(report.runway == .whileAppRuns && report.facts.frameCount == 48)
         // The test host has a Metal device, so the GPU drew and checked every frame.
-        #expect(report.tally.gpu + report.tally.cpu == 48)
+        #expect(report.tally.gpu == 48 && report.tally.cpu == 0 && report.tally.gpuRedrawn == 0)
     }
 
     @Test func aJobLeftRunningByAnEarlierProcessReadsAsStoppedAfterLaunch() async throws {

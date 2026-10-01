@@ -51,6 +51,9 @@ public actor RenderStudio {
     private let onStage: @Sendable (JobID, RenderStage) async -> Void
 
     private var workers: [JobID: Worker] = [:]
+    /// How recent runs in this process ended, so a caller that asks after a fast run finished
+    /// still learns its outcome. Bounded to the latest few.
+    private var ended: [(JobID, RenderOutcome)] = []
     /// Running jobs and their runway, readable without awaiting the actor.
     private let live = LiveJobs()
 
@@ -141,15 +144,18 @@ public actor RenderStudio {
         )
         let task = Task { [weak self] in
             let outcome = await worker.run(recorder)
-            await self?.finished(id)
+            await self?.finished(id, outcome)
             return outcome
         }
         workers[id] = Worker(recipe: recipe, signal: signal, task: task)
     }
 
-    private func finished(_ id: JobID) {
+    private func finished(_ id: JobID, _ outcome: RenderOutcome) {
         workers[id] = nil
         live.state.withLock { $0[id] = nil }
+        ended.removeAll { $0.0 == id }
+        ended.append((id, outcome))
+        if ended.count > 16 { ended.removeFirst(ended.count - 16) }
     }
 
     // MARK: Stopping
@@ -181,11 +187,11 @@ public actor RenderStudio {
         }
     }
 
-    /// Waits for a running job's worker to finish and returns how it ended, or `nil` when no
-    /// worker runs it.
+    /// Waits for a running job's worker to finish and returns how it ended. A run that already
+    /// ended in this process returns its outcome; `nil` means no run of the job is known here.
     public func outcome(of id: JobID) async -> RenderOutcome? {
-        guard let task = workers[id]?.task else { return nil }
-        return await task.value
+        if let task = workers[id]?.task { return await task.value }
+        return ended.last { $0.0 == id }?.1
     }
 
     /// Whether a worker in this process runs the job. Safe to call from any thread.
