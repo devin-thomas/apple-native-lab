@@ -29,6 +29,8 @@ Use in this plan: Schema adoption, content transfer, and onscreen associations.
 
 Implementation evidence required: actual SDK symbol/availability, permissions or entitlement, and a named compile/device result.
 
+Installed SDK check (2026-09-30): the iOS 27.0 SDK's `AppSchema` domains were read and none was adopted for a lab sample. `View.appEntityIdentifier(_:)` associates one sample with its view ([installed SDK ledger](VERIFICATION_BOUNDARIES.md#installed-sdk-ledger)).
+
 ## S03
 
 **App Shortcuts HIG** — reviewed
@@ -686,3 +688,5 @@ Source: [Siri AI availability](https://support.apple.com/en-gw/127893)
 Use in this plan: Siri AI is beta; eligibility and rollout are independent of compiling an intent.
 
 Implementation evidence required: actual SDK symbol/availability, permissions or entitlement, and a named compile/device result.
+
+Installed SDK check (2026-09-30): LAB-002 declares no App Shortcut and does not call Siri. The decision card is the same when Siri is treated as disabled. Siri rollout stays a separate gate ([installed SDK ledger](VERIFICATION_BOUNDARIES.md#installed-sdk-ledger)).

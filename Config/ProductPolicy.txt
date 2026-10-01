@@ -39,6 +39,8 @@ entitlement  CoreLocal  macos    com.apple.security.app-sandbox   # the Mac host
 # CoreLocal: Action Atlas (LAB-001). App Intents need no entitlement; the in-app browser is the fallback
 link         CoreLocal  macos    AppIntents          # App Intents, entities, and queries over the operation service
 link         CoreLocal  ios      AppIntents          # same, iPhone host
+link         CoreLocal  macos    _AppIntents_SwiftUI # LAB-002: snippets and Button(intent:) from SwiftUI's App Intents overlay
+link         CoreLocal  ios      _AppIntents_SwiftUI # same, iPhone host
 link         CoreLocal  macos    CoreTransferable    # the action browser's Share button for an export (ShareLink)
 link         CoreLocal  ios      CoreTransferable    # same, iPhone host
 
@@ -68,7 +70,7 @@ entitlement  CoreLocal  macos    com.apple.security.files.user-selected.read-wri
 # LabDomain), and WidgetKit: it reads the snapshot file and never the store or a model. CoreLocal never
 # links WidgetKit.
 link         SystemSurfaces ios  WidgetKit           # the widget and Controls; the host variant's reloadTimelines and reloadControls
-link         SystemSurfaces ios  _AppIntents_SwiftUI # the widget's Toggle(isOn:intent:) comes from SwiftUI's App Intents overlay
+link         SystemSurfaces ios  _AppIntents_SwiftUI # the widget's Toggle(isOn:intent:); the host's Context Cards snippets (LAB-002)
 
 # Companions: the Watch host's capability status probes (CORE-004)
 link         Companions watchos  AVFAudio            # record permission and audio input

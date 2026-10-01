@@ -90,6 +90,9 @@ targets:
       # LAB-004 Surface Deck: the demo session's deck, its intents, and the in-app widget previews.
       - package: LabFeatures
         product: SurfaceDeck
+      # LAB-002 Context Cards: the visible sample, the schema gate, and the set-aside intents.
+      - package: LabFeatures
+        product: ContextCards
     info:
       path: Apps/Mac/Info.plist
       properties:
@@ -103,6 +106,10 @@ targets:
         LabDistributionLane: $(LAB_DISTRIBUTION_LANE)
         # LAB-008: the lab object type, named from the bundle prefix. Code reads the key, never the prefix.
         LabObjectTypeIdentifier: $(LAB_BUNDLE_PREFIX).nativelab.object
+        # LAB-002: the activity type for the sample on screen. Code reads the key, never the prefix.
+        LabContextCardsActivityType: $(LAB_BUNDLE_PREFIX).nativelab.context-cards.visible-sample
+        NSUserActivityTypes:
+          - $(LAB_BUNDLE_PREFIX).nativelab.context-cards.visible-sample
         UTExportedTypeDeclarations:
           - UTTypeIdentifier: $(LAB_BUNDLE_PREFIX).nativelab.object
             UTTypeDescription: Native Lab Object
@@ -176,6 +183,9 @@ targets:
       # LAB-004 Surface Deck: the demo session's deck, its intents, and the in-app widget previews.
       - package: LabFeatures
         product: SurfaceDeck
+      # LAB-002 Context Cards: the visible sample, the schema gate, and the set-aside intents.
+      - package: LabFeatures
+        product: ContextCards
     info:
       path: Apps/Phone/Info.plist
       properties:
@@ -187,6 +197,10 @@ targets:
         LabDistributionLane: $(LAB_DISTRIBUTION_LANE)
         # LAB-008: the lab object type, named from the bundle prefix. Code reads the key, never the prefix.
         LabObjectTypeIdentifier: $(LAB_BUNDLE_PREFIX).nativelab.object
+        # LAB-002: the activity type for the sample on screen. Code reads the key, never the prefix.
+        LabContextCardsActivityType: $(LAB_BUNDLE_PREFIX).nativelab.context-cards.visible-sample
+        NSUserActivityTypes:
+          - $(LAB_BUNDLE_PREFIX).nativelab.context-cards.visible-sample
         UTExportedTypeDeclarations:
           - UTTypeIdentifier: $(LAB_BUNDLE_PREFIX).nativelab.object
             UTTypeDescription: Native Lab Object
@@ -267,6 +281,9 @@ targets:
       # LAB-004 Surface Deck: the deck, its intents, and the snapshot writer, as LabPhone.
       - package: LabFeatures
         product: SurfaceDeck
+      # LAB-002 Context Cards: the same module LabPhone links. This host compiles Apps/Shared.
+      - package: LabFeatures
+        product: ContextCards
       - target: ShareExtension
         embed: true
       # LAB-004: the widget and Control extension, embedded only in this SystemSurfaces variant.
@@ -282,6 +299,10 @@ targets:
         LabBuildProfile: $(LAB_BUILD_PROFILE)
         LabDistributionLane: $(LAB_DISTRIBUTION_LANE)
         LabAppGroupIdentifier: $(LAB_APP_GROUP_IDENTIFIER)
+        # LAB-002: the activity type for the sample on screen. Code reads the key, never the prefix.
+        LabContextCardsActivityType: $(LAB_BUNDLE_PREFIX).nativelab.context-cards.visible-sample
+        NSUserActivityTypes:
+          - $(LAB_BUNDLE_PREFIX).nativelab.context-cards.visible-sample
         UILaunchScreen: {}
         UIApplicationSceneManifest:
           UIApplicationSupportsMultipleScenes: true
