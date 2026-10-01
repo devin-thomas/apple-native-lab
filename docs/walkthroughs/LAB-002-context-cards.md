@@ -6,6 +6,8 @@ Context Cards shows an original sample, lets you prepare a decision, and refuses
 
 **Context resolution is unavailable in this build.** No Apple schema is adopted for a pigment swatch. The checks run the fallback logic in package tests and the sandboxed Mac host with fresh SQLite stores. They do not prove Siri, a system snippet, the Shortcuts app, or a Siri-disabled device's system presentation. The experiment stays `implemented`.
 
+The full four-platform automated gate passed. Its iPhone 18 Pro / iOS 27.0 simulator host smoke passed 9 tests; a separate record preserves that result. It did not drive the Context Cards screen.
+
 The Siri-off check compares the same `DecisionCard` value with `siriEnabled` true and false. It is a fixture check, not a change to the Mac's or a phone's Siri settings. The host always requests the false value. Typed intents were called through `run(with:)`, with a stand-in for confirmation.
 
 ## Try the fallback

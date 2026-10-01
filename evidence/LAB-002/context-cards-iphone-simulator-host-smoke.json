@@ -1,0 +1,42 @@
+{
+  "check": "CoreLocal iPhone simulator host smoke after Context Cards qualification",
+  "date": "2026-10-01T06:18:55Z",
+  "execution": {
+    "path": "simulator",
+    "simulator": {
+      "deviceClass": "iPhone 18 Pro",
+      "osVersion": "27.0 (24A434)",
+      "platform": "iOS"
+    }
+  },
+  "inputs": [
+    "seed:app-bundle@sha256:d132b2dc787cea268736ac6a4ac4acc1f582b430bbb1a30f59dff2d02201041d"
+  ],
+  "limitations": [
+    "Simulator host smoke supports implemented at most; no physical device participated.",
+    "No Context Cards screen, Siri, Shortcuts, system snippet, or Siri-disabled system setting was driven. Acceptance behavior is proved separately by fixture tests.",
+    "Embedded source revision is 317b4b1-dirty; the mirror has its generated local neutral bundle-prefix configuration. No app code changes follow 605a95d.",
+    "No screenshots or recordings were retained."
+  ],
+  "outcome": {
+    "result": "passed",
+    "detail": "LabPhone-Core xcresult summary: 9 passed, 0 failed, 0 skipped. iPhone 18 Pro, iOS 27.0 (24A434). This is host smoke only, not a Context Cards interaction or system snippet check."
+  },
+  "provenance": {
+    "appVersion": "0.1.0",
+    "buildNumber": "1",
+    "buildProfile": "CoreLocal",
+    "minimumOS": "26.0",
+    "sdkName": "iphonesimulator27.0",
+    "sourceRevision": "317b4b1-dirty",
+    "xcodeBuild": "27A266a",
+    "xcodeVersion": "27.0"
+  },
+  "schemaVersion": 1,
+  "steps": [
+    "labr <LAB-002-B worktree> 'LAB_SIMULATOR_PREFIX=\"NL LAB-002-B\" script/test.sh'",
+    "LabPhone-Core test action on a newly created iOS simulator; the script deletes its own simulator afterwards",
+    "Read xcresulttool test-results summary and embedded LabSourceRevision; hash the built app seed.json"
+  ],
+  "subject": "LAB-002"
+}

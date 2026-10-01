@@ -54,7 +54,7 @@ Record changed files, actual tests run, evidence location, unresolved external g
 
 ## Completion record (2026-10-01)
 
-**State: LAB-002 stays `implemented`.** Qualification is of the fallback. Context resolution remains unavailable by design. One retained fixture record at 605a95d: [context-cards-host-fallback.json](../evidence/LAB-002/context-cards-host-fallback.json). Mac Studio, macOS 27.0 (26A425), Xcode 27.0 (27A266a), SDKs 27.0. No physical device run, Siri, Shortcuts app, or system snippet.
+**State: LAB-002 stays `implemented`.** Qualification is of the fallback. Context resolution remains unavailable by design. Two retained records: the hosted fixture at 605a95d and iPhone simulator host smoke at 317b4b1-dirty. Fixture: [context-cards-host-fallback.json](../evidence/LAB-002/context-cards-host-fallback.json). Mac Studio, macOS 27.0 (26A425), Xcode 27.0 (27A266a), SDKs 27.0. No physical device run, Siri, Shortcuts app, or system snippet.
 
 **Acceptance.**
 
@@ -71,7 +71,7 @@ Record changed files, actual tests run, evidence location, unresolved external g
 
 **Source correction:** the installed iOS 27.0 `_AppIntents_SwiftUI` interface puts `AppIntent.requestConfirmation(..., content:)` at macOS 15.0 / iOS 18.0 / watchOS 11.0 / tvOS 18.0. Earlier ledger wording conflated this with result-with-content's older availability. Spec and ledger corrected; deployment floor unchanged. S02, S03, and S64 primary pages consulted.
 
-**Commands and results:** the LAB-002-B rows in [BUILD_STATUS](../docs/BUILD_STATUS.md) record the actual narrow tests, hosted result bundle and exported attachment, SDK probe, catalog generation, validators, and full gate.
+**Commands and results:** full `script/test.sh` passed through `labr` at embedded revision 317b4b1-dirty (the mirror’s generated local bundle-prefix configuration). Mac, iPhone, Watch, TV, and release profiles passed. The iPhone xcresult reports 9 passed, 0 failed/skipped, on iPhone 18 Pro / iOS 27.0 (24A434); the second JSON is explicitly host smoke, not an experiment interaction. The LAB-002-B rows in [BUILD_STATUS](../docs/BUILD_STATUS.md) record the actual narrow tests, hosted result bundle and exported attachment, SDK probe, catalog generation, validators, and full gate.
 
 **Not run:** physical iPhone/iPad; experiment-specific iPhone simulator interaction; Siri or Shortcuts app; system snippet/confirmation/authentication; manual VoiceOver, Voice Control, Full Keyboard Access; large-text/contrast audit; iPad; 26-SDK compile. Simulator host smoke does not establish these gates.
 
