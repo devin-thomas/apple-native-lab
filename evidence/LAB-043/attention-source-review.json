@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "subject": "LAB-043",
+  "check": "Source, privacy, rights, accessibility, and live-route boundaries",
+  "date": "2026-10-01T06:56:55Z",
+  "provenance": {
+    "sourceRevision": "e35785c",
+    "sdkName": "iphoneos27.0",
+    "xcodeVersion": "27.0",
+    "xcodeBuild": "27A266a"
+  },
+  "execution": {
+    "path": "static-review"
+  },
+  "inputs": [
+    "Apps/Shared/RespectfulAttention/LiveAttentionSystem.swift@sha256:2e536b08e5cd880ae67c6eaa90e04e30bb6d23f9fa7b828d8466e8360cdaf3ec",
+    "Apps/Shared/RespectfulAttention/AttentionModel.swift@sha256:fb4a173c0635a2c18fc75f46f88207fd71cdb3faa86c6ba44d4a08337dc63fff",
+    "Apps/Shared/RespectfulAttention/AttentionPage.swift@sha256:abe71b2c9f76199f77e31c53776136ee666a3af48927e0c3f8eebb369f1ad8a5",
+    "Packages/LabFeatures/Sources/RespectfulAttention/AttentionIntents.swift@sha256:7435fdfcf1ce23a3e4c17de4cc48531e179c2c4bbb26fa12770797c0aa7905bf",
+    "Packages/LabFeatures/Sources/RespectfulAttention/RespectfulAttention.swift@sha256:81a7af4ddee464e37cf16d3a8768129db0835e5bb9053ad0e92fb24fe810d99a"
+  ],
+  "steps": [
+    "Read the shared page/model, live adapter, intent operation path, original offers, and qualification walkthrough.",
+    "Probe the installed iOS AlarmKit interface through labr and read Apple S33 and S01 primary sources.",
+    "Review publication inputs: test source, metadata records, and prose only; no screenshot, recording, or exported media.",
+    "Read Apple AlarmKit documentation JSON at https://developer.apple.com/tutorials/data/documentation/alarmkit.json after the HTML/Markdown reader failed."
+  ],
+  "outcome": {
+    "result": "passed",
+    "detail": "Review records the actual boundary: CoreLocal uses an unavailable system adapter; only SystemSurfaces compiles AlarmKit/UserNotifications. Original fixed-date offers contain neutral text. Cancel passes stored lab IDs only. Reset does not call system cancel; schedule discards errors; intents change domain rows without host system scheduling. Repeated Add button labels and unverified announcement/keyboard behavior remain accessibility findings. No live or accessibility pass is claimed."
+  },
+  "limitations": [
+    "Static review is not a permission, delivery, UI, or accessibility run.",
+    "Apple HTML exposed a JavaScript shell and the Markdown reader failed; the official documentation JSON was retrieved and read. Documentation is not live execution evidence.",
+    "Physical iPhone, system notification/alarm delivery, Focus in Settings, Watch experiment behavior, manual accessibility, and 26-SDK compilation are not-run."
+  ]
+}

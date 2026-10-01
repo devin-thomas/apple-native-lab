@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "subject": "LAB-043",
+  "check": "CoreLocal agenda fallback in the iPhone simulator host",
+  "date": "2026-10-01T08:01:00Z",
+  "provenance": {
+    "sourceRevision": "ac808c9-dirty",
+    "sdkName": "iphonesimulator27.0",
+    "xcodeVersion": "27.0",
+    "xcodeBuild": "27A266a",
+    "buildProfile": "CoreLocal",
+    "minimumOS": "26.0"
+  },
+  "execution": {
+    "path": "simulator",
+    "simulator": {
+      "platform": "iOS",
+      "deviceClass": "iPhone 18 Pro",
+      "osVersion": "27.0 (24A434)"
+    }
+  },
+  "inputs": [
+    "Tests/LabPhoneTests/RespectfulAttentionPhoneTests.swift@sha256:846c2b650ef357f07fc8562acdd839c6c62bffdfac01467c59c01692ea1d528e",
+    "Packages/LabFeatures/Sources/RespectfulAttention/RespectfulAttention.swift@sha256:81a7af4ddee464e37cf16d3a8768129db0835e5bb9053ad0e92fb24fe810d99a"
+  ],
+  "steps": [
+    "Through labr: create iOS \"NL LAB-043-B qualification\" with script/simulator.py; boot its returned ID and wait for xcrun simctl bootstatus -b.",
+    "xcodebuild -project AppleNativeLab.xcodeproj -scheme LabPhone-Core -destination \"id=$LAB_043_SIM\" -derivedDataPath build/DerivedData -resultBundlePath build/lab-043-phone.xcresult -collect-test-diagnostics never LAB_SOURCE_REVISION=ac808c9-dirty -only-testing:LabPhoneTests/RespectfulAttentionPhoneTests test -quiet",
+    "Inspect xcrun xcresulttool get test-results summary; EXIT trap deletes only the simulator this command created.",
+    "Fresh temporary SQLite store/defaults; connect UnavailableAttentionSystem; add all three original offers; cancel."
+  ],
+  "outcome": {
+    "result": "passed",
+    "detail": "xcresult: 1 passed, 0 failed, 0 skipped. The unavailable gate cannot prompt. All three offers commit agenda rows through app-UI receipts; the alarm remains unavailable to the system. Cancel empties the agenda and its receipt removes three lab attentions. The simulator boot completed after 15 seconds before the hosted check."
+  },
+  "limitations": [
+    "Simulator hosted model replay, not pointer/touch interaction, rendered UI, or accessibility proof.",
+    "UnavailableAttentionSystem only: no real notification/AlarmKit prompt, scheduling, delivery, or Focus filter.",
+    "The earlier full gate had two runner-launch failures; this is a separate successful explicitly booted simulator check, not a claim that script/test.sh passed.",
+    "No physical iPhone or other device; LAB-043 remains implemented."
+  ]
+}

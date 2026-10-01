@@ -1,0 +1,27 @@
+# Respectful Attention
+
+LAB-043 is `implemented`. This qualification covers original fixtures in the sandboxed Mac host. The CoreLocal iPhone simulator model replay passed separately on an explicitly booted simulator. It does not prove live AlarmKit authorization, notification delivery, a system Focus filter, or physical iPhone behavior.
+
+On Mac, open Respectful Attention from the sidebar or View › Respectful Attention (⌥⌘6). On iPhone, open LAB-043 in the catalog, then Open Respectful Attention. CoreLocal keeps system alarms and notifications off. Its in-app agenda needs no permission and updates timers only while the page is open.
+
+Read each sample's reason and date before choosing Add to Agenda. There are three original offers: Review the sample notebook, Show only the lab agenda, and Stand and stretch. Their dates are fixed at October 1, 2026, in America/Chicago. After that date the timer is due; it is not a new alarm relative to the current time. Opening or previewing creates no schedule. Each Add action commits through the authorization-checked operation service and leaves a receipt. Adding an existing offer addresses its stable ID rather than creating a second row.
+
+Choose Lab Sample Focus to filter the in-app agenda. This toggle does not switch the system Focus. Cancel Lab Alerts removes the lab rows and asks the host adapter to cancel those IDs only. It never manages Clock alarms or alerts owned by other apps. A recording adapter in the Mac test retained its foreign schedule sentinels; no real foreign alerts were created or inspected.
+
+In a SystemSurfaces iPhone build, Allow Lab Alerts is a separate permission action. The prompt gate retains a denial across model recreation and does not ask again. The qualification injects a denied adapter to count calls; it did not display or deny an OS prompt. The current refresh does not upgrade a persisted denial after Settings grants permission; that recovery path remains unqualified. The current combined gate requires both notification and alarm permissions; it does not offer independent routes.
+
+The stored civil time retains its named zone when the device zone changes. Tests compare Chicago with Tokyo and New York and reconstruct notification components with their explicit zone. A spring daylight-saving transition keeps 9 AM Chicago with a 23-hour interval between successive dates, and a nonexistent 2:30 AM is refused. These are calendar fixture checks, not observed system delivery after a device time-zone change.
+
+Reset Demo clears demo attention rows and preserves the original test import in the user collection. It does **not** call the system alert adapter; a recording schedule remains after reset. Use Cancel Lab Alerts before Reset Demo on a live route. Resetting first can lose the stored IDs needed by that cancel action. This limitation remains open for the implementation owner.
+
+Two other live limitations remain: scheduling discards AlarmKit/notification errors, so an operation receipt proves agenda storage only; the page passes `systemScheduled: false` and cannot confirm delivery. An App Intent schedules/cancels domain rows through the shared operation path but does not call the host's live system adapter. Do not use an intent receipt as proof of a system alert.
+
+Accessibility review was by source inspection. The page uses system fonts, a scroll view, labeled controls, a named permission message, and a text result. All three Add buttons have the same label; their hints do not name the offer. The Mac has a navigation shortcut but no individual add/cancel menu commands. VoiceOver, Voice Control, Full Keyboard Access, large text, contrast, and reduced-motion passes remain not-run.
+
+Publication material is limited to test source, metadata evidence, and this walkthrough. No screenshots, recordings, or media exports are included. No real alerts, accounts, or imported personal files were used. Inputs and limits are in [the evidence directory](../../evidence/LAB-043/) and [the ticket](../../tickets/LAB-043-B.md).
+
+For owner-run live qualification, use an independently configured SystemSurfaces build on an iPhone. This profile includes App Groups, so on-device installation needs an appropriate paid-team signing configuration (see the [build contract](../BUILD_AND_DISTRIBUTION.md)). Then: record both authorization states, deny and reopen to check no repeat prompt, then separately grant in Settings; schedule a future original reminder and alarm, verify actual delivery and failure reporting, change device zone, apply the Focus filter in Settings, and cancel while preserving independently created non-lab alerts. Capture only approved original material. Watch behavior has no dedicated experiment surface and remains unverified; the TV smoke gate is host compatibility only.
+
+API references: Apple's [AlarmKit documentation](https://developer.apple.com/documentation/alarmkit) and [App Intents foundations](https://developer.apple.com/videos/play/wwdc2025/244/). Installed declarations and actual builds belong to the [SDK ledger](../VERIFICATION_BOUNDARIES.md), not device proof.
+
+The broad `script/test.sh` run passed packages and Mac, then failed to launch the iOS host twice before tests. The separate booted-simulator checks passed iPhone 13/13, Watch 115/115, and TV 181/181, and the release manifest passed the three configured profiles. This does not reclassify the failed full-script invocation as passing.

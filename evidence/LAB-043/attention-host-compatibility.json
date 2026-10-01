@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "subject": "LAB-043",
+  "check": "Separate simulator smoke completion and release profile compatibility after the stopped full gate",
+  "date": "2026-10-01T08:27:56Z",
+  "provenance": {
+    "sourceRevision": "ac808c9-dirty",
+    "sdkName": "macosx27.0 / iphonesimulator27.0 / watchsimulator27.0 / appletvsimulator27.0",
+    "xcodeVersion": "27.0",
+    "xcodeBuild": "27A266a"
+  },
+  "execution": {
+    "path": "fixture"
+  },
+  "inputs": [
+    "Tests/LabPhoneTests/RespectfulAttentionPhoneTests.swift@sha256:846c2b650ef357f07fc8562acdd839c6c62bffdfac01467c59c01692ea1d528e",
+    "script/simulator.py@sha256:30d8650647714967274d921b97af2c359f24d9cc610d99806e031529c5afd2ed",
+    "script/build_manifest.py@sha256:463a12100735e04ced444455837e2fea9b355bcfc747538990a99c16342c1a05",
+    "Config/ProductPolicy.txt@sha256:cb1216bd7cc8d3b2951a84cd5328c453e5bf4f3ede7d25504f447d98a37011e9",
+    "project.yml@sha256:6e6ded7761dab8aa10c353d2152b020142d54adf5c0e586878ff1d2680ffa879"
+  ],
+  "steps": [
+    "Through labr, sequentially create iOS, watchOS, and tvOS simulators with prefix NL LAB-043-B remaining; boot each and wait for simctl bootstatus -b.",
+    "For each: xcodebuild -project AppleNativeLab.xcodeproj -scheme \"$LAB_043_SCHEME\" -destination \"id=$LAB_043_SIM\" -derivedDataPath build/DerivedData -resultBundlePath \"build/lab-043-$LAB_043_PLATFORM-smoke.xcresult\" -collect-test-diagnostics never LAB_SOURCE_REVISION=ac808c9-dirty test -quiet; schemes LabPhone-Core, LabWatch, LabTV.",
+    "Delete each created simulator before creating the next; EXIT trap cleans only the current owned simulator.",
+    "Through the same labr invocation: python3 script/build_manifest.py.",
+    "Read the three xcresult summaries and the manifest log; no build or simulator was started outside labr."
+  ],
+  "outcome": {
+    "result": "passed",
+    "detail": "Separate explicitly booted simulator checks: iPhone 18 Pro / iOS 27.0 (24A434), 13/13; Apple Watch Series 12 (46mm) / watchOS 27.0 (24R362), 115/115; Apple TV 4K (3rd generation) / tvOS 27.0 (24J360), 181/181. No failures or skips. Release Source-lane manifest: CoreLocal, SystemSurfaces, Companions built and passed policy; CloudOptional and FrontierOptional skipped because no scheme is attached. Invocation exited 0. The known render flake did not appear."
+  },
+  "limitations": [
+    "Aggregate compatibility evidence uses the fixture path; the individual experiment fallback is separately recorded as iPhone simulator evidence.",
+    "Watch/TV smoke results prove host compatibility, not Respectful Attention live behavior or a dedicated experiment surface.",
+    "The original script/test.sh invocation failed at two pre-test iOS launch errors; these are separate checks and do not convert that invocation into a pass.",
+    "Simulator binaries and a local Mac build are not physical-device, signing-team, distribution, delivery, or release-ready proof."
+  ]
+}

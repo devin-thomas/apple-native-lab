@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "subject": "LAB-043",
+  "check": "Clean Mac hosted replay and persisted denial using a recording system adapter",
+  "date": "2026-10-01T07:22:17Z",
+  "provenance": {
+    "sourceRevision": "ac808c9-dirty",
+    "sdkName": "macosx27.0",
+    "xcodeVersion": "27.0",
+    "xcodeBuild": "27A266a",
+    "buildProfile": "CoreLocal",
+    "minimumOS": "26.0"
+  },
+  "execution": {
+    "path": "fixture"
+  },
+  "inputs": [
+    "Tests/LabMacTests/RespectfulAttentionHostTests.swift@sha256:71dddb0b39fa15e0e7c1f0236fbd916ec6bcaf17abf72820599dc7cd49bbc1b6",
+    "Packages/LabFeatures/Sources/RespectfulAttention/RespectfulAttention.swift@sha256:81a7af4ddee464e37cf16d3a8768129db0835e5bb9053ad0e92fb24fe810d99a",
+    "original staged import@sha256:f60ddb446fe64c6020b80686eeba3c1ab9292f060061235ef9dde4ca29583401"
+  ],
+  "steps": [
+    "Through labr: xcodebuild -project AppleNativeLab.xcodeproj -scheme LabMac-Core -derivedDataPath build/DerivedData -resultBundlePath build/lab-043-mac-replay.xcresult -only-testing:LabMacTests/RespectfulAttentionHostTests test -quiet",
+    "Through labr: xcrun xcresulttool get test-results summary --path build/lab-043-mac-replay.xcresult",
+    "Fresh temporary SQLite store and defaults suite; stage/adopt original text with a scoped share-extension grant into a user collection.",
+    "Preview all three offers; explicitly allow a recording adapter, add all three offers, resolve timers at Chicago 8 AM with device zone Tokyo; cancel; add a reminder, Reset Demo, compare stored user collection/item.",
+    "Separate fresh defaults: request once and receive injected denial, retry, recreate model, retry, add an in-app alarm."
+  ],
+  "outcome": {
+    "result": "passed",
+    "detail": "xcresult: 5 passed, 0 failed, 0 skipped on arm64 macOS 27.0 (26A425), Mac Studio. Preview leaves receipt count unchanged. Three agenda rows yield two recording system schedules; alarm countdown is 27000 seconds. Cancel receives exactly the three lab IDs, empties those schedules, and retains foreign sentinels. Reset empties attention rows and preserves the user collection and imported item exactly; one recording system schedule remains, documenting the live-reset gap. Denial requests stay at one across retries/model recreation; denied scheduling creates one agenda row and zero system schedules. Existing page/intent receipt and navigation tests also pass."
+  },
+  "limitations": [
+    "Fixture execution inside the sandboxed Mac CoreLocal host; recording adapter and unavailable adapter only. No OS alert or permission prompt.",
+    "No pointer/keyboard UI interaction, screenshot, notification-center inspection, live AlarmKit, or system Focus behavior.",
+    "The first hosted compile failed on the test reader scope; the next run had 4/5 passing because preservation assertions incorrectly read the demo-only host snapshot. Those test assertions were corrected before this passing run.",
+    "Reset does not cancel live schedules; the UI and intent receipts cannot prove system delivery. Physical iPhone and manual accessibility remain not-run."
+  ]
+}

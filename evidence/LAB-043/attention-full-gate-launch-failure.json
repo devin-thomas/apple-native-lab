@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "subject": "LAB-043",
+  "check": "Full automated gate stopped at iPhone simulator runner launch",
+  "date": "2026-10-01T07:35:54Z",
+  "provenance": {
+    "sourceRevision": "ac808c9-dirty",
+    "sdkName": "iphonesimulator27.0",
+    "xcodeVersion": "27.0",
+    "xcodeBuild": "27A266a",
+    "buildProfile": "CoreLocal",
+    "minimumOS": "26.0"
+  },
+  "execution": {
+    "path": "simulator",
+    "simulator": {
+      "platform": "iOS",
+      "deviceClass": "iPhone 18 Pro",
+      "osVersion": "27.0 (24A434)"
+    }
+  },
+  "inputs": [
+    "compiled source:script/test.sh@sha256:2e40baadb7d24f2d4d7af9cf4a0d55c07c8c6874699a3e73eddc4f5efa3ff916",
+    "compiled source:Tests/LabPhoneTests/RespectfulAttentionPhoneTests.swift@sha256:846c2b650ef357f07fc8562acdd839c6c62bffdfac01467c59c01692ea1d528e",
+    "compiled source:Packages/LabFeatures/Sources/RespectfulAttention/RespectfulAttention.swift@sha256:81a7af4ddee464e37cf16d3a8768129db0835e5bb9053ad0e92fb24fe810d99a"
+  ],
+  "steps": [
+    "Through labr: LAB_SIMULATOR_PREFIX=\"NL LAB-043-B\" script/test.sh",
+    "Inspect the Mac and both iPhone xcresult summaries with xcrun xcresulttool get test-results summary.",
+    "The script created and deleted both iOS simulators, retrying a runner startup failure once on a new simulator."
+  ],
+  "outcome": {
+    "result": "failed",
+    "detail": "Validators 8/8 and 93 validator self-tests passed. Package tests passed: LabSupport 97, LabDomain 187, LabStore 61, LabStaging 40, LabDemo 119, LabFeatures 940 in 34 runs (existing ShareIngress 2 known issues). Full Mac hosted result: 199 total, 195 passed, 3 skipped, 1 expected failure, 0 failed. Both iOS attempts failed before any experiment test ran: Application launch did not return a process handle nor launch error. The script exited 65 and stopped before Watch, TV, and release manifest."
+  },
+  "limitations": [
+    "Runner-launch failure is not a failing Respectful Attention assertion and is not a simulator qualification pass.",
+    "No experiment interaction, system alert, Focus filter, or physical device was exercised by either failed iOS launch.",
+    "Watch, TV, and manifest stages were not run by this stopped full gate; any later checks have separate records.",
+    "LAB-032 Mac render flake did not occur in this run; no unrelated source was changed."
+  ]
+}
