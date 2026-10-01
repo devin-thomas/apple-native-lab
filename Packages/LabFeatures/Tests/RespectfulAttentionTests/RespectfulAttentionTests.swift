@@ -79,6 +79,24 @@ import Testing
         #expect(filtered.map(\.channel) == [.alarm])
     }
 
+    @Test func notificationComponentsKeepTheirZoneAcrossDaylightSaving() throws {
+        let tokyo = try #require(TimeZone(identifier: "Asia/Tokyo"))
+        let before = try CivilMoment(year: 2026, month: 3, day: 7, hour: 9, minute: 0, timeZoneIdentifier: "America/Chicago")
+        let after = try CivilMoment(year: 2026, month: 3, day: 8, hour: 9, minute: 0, timeZoneIdentifier: "America/Chicago")
+        for moment in [before, after] {
+            let components = moment.dateComponents
+            #expect(components.timeZone?.identifier == "America/Chicago")
+            #expect(components.hour == 9)
+            var calendar = Calendar(identifier: .gregorian)
+            calendar.timeZone = tokyo
+            #expect(calendar.date(from: components) == moment.instant(deviceZone: tokyo))
+        }
+        #expect(after.instant(deviceZone: tokyo).timeIntervalSince(before.instant(deviceZone: tokyo)) == 23 * 60 * 60)
+        #expect(throws: ValidationError.invalidMoment) {
+            try CivilMoment(year: 2026, month: 3, day: 8, hour: 2, minute: 30, timeZoneIdentifier: "America/Chicago")
+        }
+    }
+
     @Test func anUnavailableAlarmStaysInTheAgendaAndDoesNotLookScheduled() {
         #expect(AlarmRouting.state(channel: .alarm, routeAvailable: false, permission: .unavailable, systemScheduled: false) == .unavailable)
         #expect(AlarmRouting.state(channel: .alarm, routeAvailable: true, permission: .denied, systemScheduled: false) == .denied)
