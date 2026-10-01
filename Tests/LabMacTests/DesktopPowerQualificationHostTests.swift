@@ -151,14 +151,43 @@ struct DesktopPowerQualificationHostTests {
 
     @Test func thePaletteExposesItsAlternatePathsAndCloseButton() async throws {
         let session = DesktopPowerSession(station: DesktopStation(backend: UnavailableDesktopBackend()))
-        let hosted = HostedView(DesktopPaletteSheet().environment(session), size: CGSize(width: 560, height: 700))
-        defer { hosted.close() }
-        var tree = try await hosted.tree()
-        for _ in 0..<5 where tree.count < 5 { tree = try await hosted.tree() }
-        Attachment.record(tree.map(\.description).joined(separator: "\n"), named: "desktop-palette-accessibility-tree.txt")
-        #expect(tree.buttons.contains { $0.label == "Close" }, "\(tree)")
+        _ = NSApp.perform(NSSelectorFromString("accessibilitySetValue:forAttribute:"), with: NSNumber(value: true), with: "AXEnhancedUserInterface")
+        let controller = NSHostingController(rootView: DesktopPaletteSheet().environment(session))
+        let window = NSWindow(contentViewController: controller)
+        window.isReleasedWhenClosed = false
+        window.setContentSize(CGSize(width: 560, height: 700))
+        window.setFrameOrigin(NSPoint(x: -20_000, y: -20_000))
+        window.orderFrontRegardless()
+        defer { window.close() }
+
+        func attribute(_ object: NSObject, _ name: String, getter: String) -> Any? {
+            let legacy = NSSelectorFromString("accessibilityAttributeValue:")
+            if object.responds(to: legacy), let value = object.perform(legacy, with: name)?.takeUnretainedValue() { return value }
+            guard object.responds(to: NSSelectorFromString(getter)) else { return nil }
+            return object.value(forKey: getter)
+        }
+        func readTree() -> [(role: String, name: String)] {
+            var nodes: [(role: String, name: String)] = []
+            func visit(_ object: NSObject, depth: Int) {
+                guard depth < 40 else { return }
+                let role = attribute(object, "AXRole", getter: "accessibilityRole") as? String ?? ""
+                let names = [("AXTitle", "accessibilityTitle"), ("AXDescription", "accessibilityLabel"), ("AXValue", "accessibilityValue")]
+                    .compactMap { attribute(object, $0.0, getter: $0.1) as? String }
+                nodes.append((role, names.joined(separator: " ")))
+                for child in attribute(object, "AXChildren", getter: "accessibilityChildren") as? [NSObject] ?? [] { visit(child, depth: depth + 1) }
+            }
+            visit(window, depth: 0)
+            return nodes
+        }
+        var tree = readTree()
+        for _ in 0..<6 where !tree.contains(where: { $0.name.contains("Import Desktop Note") }) {
+            try await Task.sleep(for: .milliseconds(400))
+            tree = readTree()
+        }
+        Attachment.record(tree.map { "\($0.role): \($0.name)" }.joined(separator: "\n"), named: "desktop-palette-accessibility-tree.txt")
+        #expect(tree.contains { $0.role == "AXButton" && $0.name.contains("Close") }, "\(tree)")
         for command in DesktopCommand.allCases {
-            #expect(tree.contains { ($0.label + $0.value).contains(command.title) }, "\(tree)")
+            #expect(tree.contains { $0.name.contains(command.title) }, "\(tree)")
         }
     }
 
