@@ -754,7 +754,7 @@
       "title": "Trust Desk",
       "category": "Security",
       "milestone": "M2",
-      "state": "specified",
+      "state": "implemented",
       "dependsOn": [
         "LAB-001"
       ],

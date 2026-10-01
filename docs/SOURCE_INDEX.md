@@ -515,6 +515,8 @@ Use in this plan: Passkeys and authentication reference.
 
 Implementation evidence required: actual SDK symbol/availability, permissions or entitlement, and a named compile/device result.
 
+Installed SDK (LAB-041-A, Xcode 27.0 / 27A266a, macOS 27.0 and iOS 27.0, headers also present on watchOS and tvOS): `ASAuthorizationPlatformPublicKeyCredentialProvider` `initWithRelyingPartyIdentifier:`, `createCredentialRegistrationRequestWithChallenge:name:userID:`, and `createCredentialAssertionRequestWithChallenge:` are macOS 12.0, iOS 15.0, tvOS 16.0, and `API_UNAVAILABLE` on watchOS. `ASPublicKeyCredential` exposes `credentialID` and `rawClientDataJSON`, plus `rawAttestationObject` on a registration; it does not expose a private key. This build links the symbol and does not present a controller. `LAContext` and `SecItem` facts are in the installed SDK ledger.
+
 ## S48
 
 **Translation** — reference

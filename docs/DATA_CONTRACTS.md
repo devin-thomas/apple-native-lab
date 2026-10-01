@@ -22,6 +22,16 @@ Every entity is in exactly one namespace. **`user`**: everything a person create
 
 A demo seed file (`format: "native-lab-demo-seed"`, `formatVersion: 1`) is validated whole before anything is written: size at most 1 MiB, known fields only, valid values, unique IDs, and items in listed collections. A rejected file writes nothing, so it cannot block the next valid one. Seed IDs are stable UUIDs. Changing one is a data change that needs a new `seedVersion`.
 
+## Trust Desk credentials
+
+LAB-041-A keeps a desk identity, a sealed record, and a secret apart. The identity is a stable UUID (`DeskIdentityID`). The display name is an item title. Changing the title does not change the identity, the keychain account, or the passkey user handle. The fixture item and its collection live in the user namespace, so Reset Demo does not remove them, and resetting the desk does not touch demo data or any other user item.
+
+The fixture secret is bytes in a generic-password keychain item. The item's service and account are the scope: this desk's service, and the identity's UUID as the account. It is not synchronizable. A receipt, a note, and a `CredentialReference` do not contain those bytes. `CredentialReference.isExportableAppSecret` is false. Copying or exporting a passkey reference is refused.
+
+An `AuthorizationGrant` (LAB-041) is not a `CommitGrant`. It names one purpose, opening the sealed record, and one method, this device or a local confirmation. It expires after 60 seconds by default and 300 at most, on a monotonic clock, and revocation is a flag. Grants live only in memory. They have no decoder or public initializer. A passkey assertion does not issue one. The open itself is still an ordinary `updateItem` receipt through the app UI.
+
+The passkey path is a labeled simulation against the relying party `fixture.trust-desk.invalid`. It is not `ASAuthorizationController`, not an account sign-in, and not an exportable app secret. Private material stays inside the simulator.
+
 ## Portable documents
 
 `.anlab` is a UTF-8 JSON metadata document with an app-defined UTType chosen during bundle-identifier configuration. JSON and native document representations preserve the same logical model; a text representation is deliberately lossy and labeled as such. A URL representation is offered only when a meaningful user-approved destination exists.
