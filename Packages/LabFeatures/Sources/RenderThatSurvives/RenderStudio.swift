@@ -144,23 +144,36 @@ public actor RenderStudio {
         )
         let task = Task { [weak self] in
             let outcome = await worker.run(recorder)
-            await self?.finished(id, outcome)
-            return outcome
+            return await self?.finished(id, outcome, signal: signal) ?? outcome
         }
         workers[id] = Worker(recipe: recipe, signal: signal, task: task)
     }
 
-    private func finished(_ id: JobID, _ outcome: RenderOutcome) {
+    /// Ends a run. A Cancel that reached the worker after it had recorded its stop (a pause, or
+    /// leaving the foreground) would otherwise be lost while the job reads stopped; it applies to
+    /// the stopped job here, before the run is reported as ended.
+    private func finished(_ id: JobID, _ outcome: RenderOutcome, signal: JobStopSignal) async -> RenderOutcome {
+        var outcome = outcome
+        if case .interrupted(let job, _) = outcome, signal.current == .cancel {
+            let recorder = JobRecorder(job: job, backend: backend)
+            if (try? await recorder.advance(.cancel)) != nil {
+                workspace.discardWork(of: id)
+                outcome = .cancelled(await recorder.job)
+            }
+        }
         workers[id] = nil
         live.state.withLock { $0[id] = nil }
         ended.removeAll { $0.0 == id }
         ended.append((id, outcome))
         if ended.count > 16 { ended.removeFirst(ended.count - 16) }
+        return outcome
     }
 
     // MARK: Stopping
 
-    /// Asks a running job to stop at its next safe point, or cancels a stopped one directly.
+    /// Asks a running job to stop at its next safe point, or cancels a stopped one directly. A
+    /// Cancel that reaches a worker after it recorded a stop still cancels the job when the worker
+    /// ends.
     ///
     /// A pause or an interruption of a job that is not running does nothing.
     public func stop(_ id: JobID, _ request: JobStopSignal.Request) async throws(RenderRefusal) {

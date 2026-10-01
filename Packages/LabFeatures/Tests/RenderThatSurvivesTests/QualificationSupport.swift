@@ -116,6 +116,25 @@ struct CPUFramePainterOnGPUPath: FramePainter {
     }
 }
 
+/// A backend that runs a hook after each commit it passes on, before the committer hears back.
+final class HookedBackend: JobBackend {
+    let inner: any JobBackend
+    private let hook = Mutex<(@Sendable (DomainOperation) async -> Void)?>(nil)
+
+    init(_ inner: any JobBackend) { self.inner = inner }
+
+    func afterCommit(_ body: @escaping @Sendable (DomainOperation) async -> Void) { hook.withLock { $0 = body } }
+
+    func job(_ id: JobID) async throws(JobError) -> LabJob { try await inner.job(id) }
+    func jobs(of kind: JobKind) async throws(JobError) -> [LabJob] { try await inner.jobs(of: kind) }
+
+    func commit(_ operation: DomainOperation, requestID: RequestID) async throws(JobError) -> ActionReceipt {
+        let receipt = try await inner.commit(operation, requestID: requestID)
+        if let body = hook.withLock({ $0 }) { await body(operation) }
+        return receipt
+    }
+}
+
 /// A backend that can lose its store mid-run, as an app whose store closed would.
 final class SwitchableBackend: JobBackend {
     let inner: any JobBackend

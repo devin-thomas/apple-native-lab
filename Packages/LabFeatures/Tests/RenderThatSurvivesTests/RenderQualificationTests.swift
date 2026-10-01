@@ -235,6 +235,33 @@ import Testing
         #expect(bench.files().isEmpty)
     }
 
+    @Test func aCancelThatArrivesAfterTheWorkerRecordedItsStopStillCancels() async throws {
+        let bench = Bench()
+        let hooked = HookedBackend(bench.backend)
+        let studio = RenderStudio(
+            backend: hooked, workspace: bench.workspace, destination: DestinationCheck(capacity: FixedCapacity(bytes: 1 << 34)),
+            gpu: .unavailable, runway: bench.runway, onStage: { [hooks = bench.hooks] id, stage in await hooks.reached(id, stage) }
+        )
+        // The person presses Cancel just after the pause was recorded, while the worker is
+        // still ending: the job reads stopped, and the worker no longer looks at its signal.
+        bench.hooks.on(.segmentStarted(2)) { id in try? await studio.stop(id, .interrupt(.paused)) }
+        hooked.afterCommit { operation in
+            guard case .updateJob(let id, _, .interrupt) = operation else { return }
+            #expect(studio.isLive(id))
+            try? await studio.stop(id, .cancel)
+        }
+        let job = try await studio.start(Recipes.short, options: .init(preferGPU: false))
+        let outcome = try #require(await studio.outcome(of: job.id))
+        guard case .cancelled(let cancelled) = outcome else { Issue.record("\(outcome)"); return }
+        #expect(cancelled.phase == .cancelled && cancelled.progress.completed == 2)
+        #expect(try await bench.job(job.id).phase == .cancelled)
+        #expect(bench.files().isEmpty)
+        #expect(bench.summaries.suffix(2) == [
+            "Stopped render job “Short color bars” at 2 of 5 because it was paused. It can resume.",
+            "Cancelled render job “Short color bars”.",
+        ])
+    }
+
     @Test func aFailedPublishKeepsTheGoodOutputAndRecordsAClearFailure() async throws {
         let bench = Bench()
         _ = try await bench.render()
@@ -515,7 +542,10 @@ import Testing
         let refusals = results.compactMap { if case .failure(let refusal) = $0 { refusal } else { nil } }
         #expect(refusals.count == 1, "\(results)")
         if let refusal = refusals.first {
-            #expect(refusal == .alreadyRunning || refusal == .job(.changedElsewhere(.running)), "\(refusal)")
+            // Which refusal depends on how far the first press got: its worker exists, its resume
+            // is committed, or both presses read the stopped job and the second one's step conflicts.
+            let expected: Set<RenderRefusal> = [.alreadyRunning, .notResumable(.running), .job(.changedElsewhere(.running))]
+            #expect(expected.contains(refusal), "\(refusal)")
         }
         #expect(try #require(await bench.studio.outcome(of: job.id)).report != nil)
         #expect(bench.summaries.filter { $0.hasPrefix("Resumed") }.count == 1)

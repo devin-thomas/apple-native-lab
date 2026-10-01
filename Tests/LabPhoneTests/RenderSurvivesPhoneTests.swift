@@ -52,9 +52,12 @@ import UIKit
         model.selectedRecipeID = "short-bars"
         model.wantsBackground = true
         await model.start()
+        // Wait for the worker's outcome, which carries the report, not only for the store's phase:
+        // the store says finished a moment before the model hears the outcome.
         try #require(await eventually {
             await model.refresh()
-            return model.jobs.first.map(\.phase.isFinished) ?? false
+            guard let job = model.jobs.first, job.phase.isFinished else { return false }
+            return model.reports[job.id] != nil
         })
         let job = try #require(model.jobs.first)
         let report = try #require(model.reports[job.id], "\(job.phase)")
@@ -89,8 +92,13 @@ import UIKit
         #expect(job.progress.completed >= 1 && job.progress.completed < 9)
         NotificationCenter.default.post(name: UIApplication.willEnterForegroundNotification, object: UIApplication.shared)
 
+        // Cancel may land while the worker is still ending after it recorded the stop; the
+        // studio then cancels when the worker ends, so wait for the store to say so.
         await model.cancel(job)
-        await model.refresh()
-        #expect(model.jobs.first?.phase == .cancelled)
+        #expect(await eventually(seconds: 30) {
+            await model.refresh()
+            return model.jobs.first?.phase == .cancelled
+        })
+        #expect(!model.isLive(job))
     }
 }
