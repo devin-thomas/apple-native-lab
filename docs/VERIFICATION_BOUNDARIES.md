@@ -103,3 +103,16 @@ Recorded at [LAB-004-B](../tickets/LAB-004-B.md) from the [LAB-004-A](../tickets
 | [S59](SOURCE_INDEX.md#s59) | `Toggle(isOn:intent:label:)` in `_AppIntents_SwiftUI`, which the widget extension links | iOS 17.0, macOS 14.0, tvOS 17.0, watchOS 10.0 | The widget's toggle in the simulator. The release manifest records the link (LAB-004-A) | None beyond the widget's own |
 | [S59](SOURCE_INDEX.md#s59) | `View.privacySensitive(_:)` and `RedactionReasons.privacy` | iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0 | Drawn with the privacy redaction in a package test and read back by text recognition: the detail line is gone and the state stays readable. The deck's "Lock Screen, locked" preview uses the same redaction | That the system applies it to this widget on a locked device |
 
+
+### RealityKit and ARKit (LAB-023)
+
+Recorded at [LAB-023-A](../tickets/LAB-023-A.md) from the macOS and iOS 27.0 SDKs' RealityKit, RealityFoundation, and `_RealityKit_SwiftUI` `.swiftinterface` files and the iOS and iOS Simulator ARKit headers. No entitlement is needed. The live AR path needs `NSCameraUsageDescription`, which a source build does not declare, so it has not run anywhere.
+
+| Source | Installed symbol | Declared availability | Demonstrated | Remaining uncertainty |
+|---|---|---|---|---|
+| [S40](SOURCE_INDEX.md#s40) | `RealityView(make:update:)` over `RealityViewCameraContent`, with `cameraTarget` | iOS 18.0, macOS 15.0, tvOS 26.0; visionOS uses another content type | The virtual table in the Mac hosted tests (entities) and the iOS 27.0 simulator (drawn) | Rendering on a physical device; the Mac window was not driven with a pointer |
+| [S40](SOURCE_INDEX.md#s40) | `realityViewCameraControls(_:)` with `CameraControls.orbit` | iOS 18.0, macOS 15.0; tvOS unavailable | A drag orbited the scene in the iOS 27.0 simulator | Mouse and trackpad orbit on the Mac |
+| [S40](SOURCE_INDEX.md#s40) | `RealityViewCamera.virtual`; `.spatialTracking` | `.virtual` iOS 18.0, macOS 15.0, tvOS 26.0; `.spatialTracking` iOS 18.0 only | `.virtual` (the default) everywhere; a `PerspectiveCamera` entity sets the starting view | `.spatialTracking` is not used |
+| [S40](SOURCE_INDEX.md#s40) | `SpatialTapGesture().targetedToAnyEntity()`; `EntityTargetValue.hitTest(point:in:query:mask:)` | iOS 18.0, macOS 15.0; tvOS and visionOS unavailable | A tap on the drawn table placed an object at the hit in the iOS 27.0 simulator | A click on the Mac |
+| [S40](SOURCE_INDEX.md#s40) | `ARView(frame:cameraMode:automaticallyConfigureSession:)`, `ARView.session`, `raycast(from:allowing:alignment:)`, `entity(at:)` | iOS 13.0, tvOS 26.0; macOS has another `ARView` without AR | Compiled for the iOS device and simulator | Everything at run time |
+| [S40](SOURCE_INDEX.md#s40) | `ARWorldTrackingConfiguration` (`isSupported`, `planeDetection`, `sceneReconstruction`, `supportsFrameSemantics(_:)`, `initialWorldMap`), `ARCoachingOverlayView`, `ARSession.getCurrentWorldMap`, `ARFrame.worldMappingStatus`, `ARSessionObserver.sessionShouldAttemptRelocalization(_:)` | iOS 11.0 to 13.0 as declared; present in the iOS Simulator SDK too | Compiled; the iOS 27.0 simulator reports `isSupported` false, and the route says so | Tracking, coaching, relocalization, occlusion, and map save on a device |

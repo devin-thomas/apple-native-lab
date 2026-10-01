@@ -445,6 +445,8 @@ Use in this plan: Platform-specific AR configurations and runtime support checks
 
 Implementation evidence required: actual SDK symbol/availability, permissions or entitlement, and a named compile/device result.
 
+Installed SDK check (2026-09-30, Xcode 27.0 with the macOS and iOS 27.0 SDKs): the RealityKit and ARKit symbols Tabletop Reality uses, with their declared availability, are in the [installed SDK ledger](VERIFICATION_BOUNDARIES.md#realitykit-and-arkit-lab-023). The virtual table was drawn and driven in the iOS 27.0 simulator; the ARKit adapter was compiled for the iOS device and simulator and has not run.
+
 ## S41
 
 **AVFoundation** — reference
