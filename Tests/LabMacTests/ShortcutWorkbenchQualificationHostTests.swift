@@ -1,0 +1,86 @@
+import CryptoKit
+import Foundation
+import LabDomain
+import LabSupport
+import ShortcutWorkbench
+import Testing
+@testable import NativeLab
+
+/// Fresh SQLite state through the host backend and model. No Shortcuts process participates.
+@MainActor
+@Suite struct ShortcutWorkbenchQualificationHostTests {
+    @Test func boundRecipeRunsAfterRenameAndResetPreservesUserImport() async throws {
+        let folder = FileManager.default.temporaryDirectory.appending(path: "ShortcutWorkbenchQualification-\(UUID().uuidString)")
+        try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: folder) }
+        let url = folder.appending(path: LabStoreLocation.fileName)
+        let library = LabLibrary(locateStore: { url })
+        await library.start()
+        try #require(library.phase == .ready)
+        let backend = LibraryWorkbenchBackend(library: library)
+        let catalog = WorkbenchRecipeCatalog(seed: [])
+        let actions = WorkbenchActions(backend: backend, entryPoint: .appUI, catalog: catalog)
+        let collection = CollectionID(rawValue: UUID(uuidString: "A3C00300-0003-4000-8000-000000000001")!)
+        _ = try await library.submit(
+            .createCollection(draft: CollectionDraft(id: collection, title: EntityTitle("Qualification inbox"))),
+            requestID: RequestID(), authority: .userAction, names: [:]
+        )
+        let staging = RecipeImportStaging()
+        let request = WorkbenchRequest(RequestID(rawValue: UUID(uuidString: "A3C00300-0003-4000-8000-000000000002")!))
+        let draft = try await actions.beginImport(title: "Original workbench sample", note: "Original neutral text.", into: collection, staging: staging)
+        let imported = try await actions.commitImport(draft, into: collection, request: request, staging: staging)
+        var recipe = RecipeDefinition.importExportWalkthrough(sourceItemIDs: [imported.entity.id])
+        recipe.steps.removeAll { $0.kind == .importDocument }
+        actions.saveRecipe(recipe)
+        let input = RecipeExport(recipe: recipe).data
+        _ = try await library.submit(
+            .updateItem(id: imported.entity.id, expected: imported.entity.revision, changes: ItemChanges(title: EntityTitle("Renamed workbench sample"))),
+            requestID: RequestID(), authority: .userAction, names: [:]
+        )
+        let result = try await actions.runRecipe(recipe, into: nil, request: WorkbenchRequest(), staging: staging)
+        #expect(result.job.state == .completed)
+        #expect(result.matched.first?.title.value == "Renamed workbench sample")
+        #expect(result.matched.first?.note.value == "Original neutral text. · recipe transform")
+        #expect(result.export?.recipe.sourceItemIDs == [imported.entity.id])
+        #expect(result.transformReceipt?.admitted.adapter == .appUI)
+        let current = try await actions.resolveItem(imported.entity.id)
+        #expect(await library.resetDemo() != nil)
+        #expect(try await actions.resolveItem(imported.entity.id) == current)
+        #expect(catalog.recipe(recipe.id) == recipe)
+
+        let cancelled = try await actions.beginImport(title: "Cancelled original sample", into: collection, staging: staging)
+        await actions.cancelImport(cancelled, staging: staging)
+        await #expect(throws: WorkbenchError.self) {
+            try await actions.commitImport(cancelled, into: collection, request: WorkbenchRequest(), staging: staging)
+        }
+        #expect(await staging.pendingCount == 0)
+
+        let model = ShortcutWorkbenchModel()
+        model.connect(library)
+        model.export(recipe)
+        #expect(model.lastExportText == RecipeExport(recipe: recipe).text)
+        let record = try EvidenceRecord(
+            subject: "LAB-003",
+            check: "Host backend: staged import, stable-ID rename, bound query-transform-export, cancellation and Reset Demo",
+            date: Date(), provenance: .current, execution: .fixture,
+            inputs: ["bound-original-recipe@sha256:" + SHA256.hash(data: input).map { String(format: "%02x", $0) }.joined()],
+            steps: [
+                "Run ShortcutWorkbenchQualificationHostTests in the built host test action",
+                "Open a fresh SQLite store; create Qualification inbox; stage and commit Original workbench sample",
+                "Bind the imported ID to query-transform-export; rename through LabLibrary.submit; run through LibraryWorkbenchBackend",
+                "Reset Demo and compare the imported user item and session catalog; cancel a second staged import",
+                "Connect a fresh ShortcutWorkbenchModel and compare its export text"
+            ],
+            outcome: .passed(observed: "The bound recipe completed after rename with one appUI transform receipt; export retained the stable ID. Reset left the user item and session recipe unchanged. Cancellation removed the draft and refused commit. Host model export matched RecipeExport."),
+            limitations: [
+                "Fixture invocation inside the host, not a Shortcuts, Siri, Storage or model execution. No UI controls or assistive technology were driven.",
+                "The full unbound four-step recipe is not this passing path; qualification package tests record its post-import transform failure.",
+                "No physical mobile device, cross-device identity or durable recipe persistence was tested. Export hash identifies an original recipe with no credentials."
+            ]
+        )
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]
+        Attachment.record(String(decoding: try encoder.encode(record), as: UTF8.self), named: "LAB-003-host-bound-recipe.json")
+        #expect(record.provenance.xcodeBuild != "unknown")
+    }
+}

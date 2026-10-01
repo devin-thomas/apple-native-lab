@@ -1,0 +1,39 @@
+{
+  "check": "Host backend: staged import, stable-ID rename, bound query-transform-export, cancellation and Reset Demo",
+  "date": "2026-10-01T06:10:00Z",
+  "execution": {
+    "path": "fixture"
+  },
+  "inputs": [
+    "bound-original-recipe@sha256:b56d8deb688e0634b16a5bed6ad2d23f75b99ea16a069b3da94fd1d9515bf39c"
+  ],
+  "limitations": [
+    "Fixture invocation inside the host, not a Shortcuts, Siri, Storage or model execution. No UI controls or assistive technology were driven.",
+    "The full unbound four-step recipe is not this passing path; qualification package tests record its post-import transform failure.",
+    "No physical mobile device, cross-device identity or durable recipe persistence was tested. Export hash identifies an original recipe with no credentials.",
+    "Captured from the passing LabPhone-Core test in an iPhone 18 Pro simulator, iOS 27.0 (24A434). Simulator-hosted fixture invocation; no Shortcuts UI. Execution remains fixture because only in-process backend and model calls were exercised."
+  ],
+  "outcome": {
+    "detail": "The bound recipe completed after rename with one appUI transform receipt; export retained the stable ID. Reset left the user item and session recipe unchanged. Cancellation removed the draft and refused commit. Host model export matched RecipeExport.",
+    "result": "passed"
+  },
+  "provenance": {
+    "appVersion": "0.1.0",
+    "buildNumber": "1",
+    "buildProfile": "CoreLocal",
+    "minimumOS": "26.0",
+    "sdkName": "iphonesimulator27.0",
+    "sourceRevision": "addbf39-dirty",
+    "xcodeBuild": "27A266a",
+    "xcodeVersion": "27.0"
+  },
+  "schemaVersion": 1,
+  "steps": [
+    "Run ShortcutWorkbenchQualificationHostTests in the built host test action",
+    "Open a fresh SQLite store; create Qualification inbox; stage and commit Original workbench sample",
+    "Bind the imported ID to query-transform-export; rename through LabLibrary.submit; run through LibraryWorkbenchBackend",
+    "Reset Demo and compare the imported user item and session catalog; cancel a second staged import",
+    "Connect a fresh ShortcutWorkbenchModel and compare its export text"
+  ],
+  "subject": "LAB-003"
+}

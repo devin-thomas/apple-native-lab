@@ -77,3 +77,9 @@ See [data contracts](../docs/DATA_CONTRACTS.md), [permission boundaries](../docs
 **Storage actions (S04).** Recipe and entity state are lab-owned (catalog + store identifiers). Shortcuts Storage is not used for secrets; the fallback copy forbids it. Concrete 27-generation Shortcuts Storage symbols were probed on the installed SDK during this ticket (see verification ledger).
 
 **Fallback.** Manual recipe cards and the Action Atlas browser; no secret storage inside Shortcuts. Proven in package tests and the in-app workbench UI.
+
+## Qualification notes (LAB-003-B)
+
+State stays `implemented`; see the [qualification walkthrough](../docs/walkthroughs/LAB-003-shortcut-workbench.md). Local fixture and hosted backend invocations do not qualify Shortcuts, Siri, system Storage, a model, or cross-device entity resolution.
+
+Qualification reproduces two limits: a fresh unbound four-step recipe commits its import, then refuses transform because the running value has no source binding; and export redaction covers secret-shaped model field names only, not arbitrary text. The complete fresh interaction and unrestricted secret-export criterion remain unqualified. A staged import committed separately and bound to query → transform → export is the usable fixture fallback. Authored recipes remain process-local. No product behavior or platform support changes in this qualification.

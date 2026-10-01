@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "subject": "LAB-003",
+  "date": "2026-10-01T05:50:30Z",
+  "provenance": {
+    "sourceRevision": "addbf39-dirty",
+    "sdkName": "macosx27.0",
+    "xcodeVersion": "27.0",
+    "xcodeBuild": "27A266a",
+    "minimumOS": "14.0"
+  },
+  "execution": {
+    "path": "fixture"
+  },
+  "inputs": [
+    "Packages/LabFeatures/Tests/ShortcutWorkbenchTests/TestSupport.swift@sha256:4077f5277f0e7c07edef974a946d68f9adfe4e623ac52fc2f6680c28e9294a47",
+    "Packages/LabFeatures/Tests/ShortcutWorkbenchTests/WorkbenchQualificationTests.swift@sha256:c2279ff3dd453a35b348e00eb3b076ab1ee8b76cd76b56ad20332c53e029a29f",
+    "Packages/LabFeatures/Sources/ShortcutWorkbench/RecipeCatalog.swift@sha256:62d80a089e4cae6d244ff91e2f798ba35cdd0fc052b1902d394fc666c329d9d0"
+  ],
+  "check": "Fixture contract qualification: bound recipe, rename, cancellation, duplicate, stale, denied, reset and intent export",
+  "outcome": {
+    "result": "passed",
+    "detail": "21 tests in 3 suites passed. Bound query-transform-export completed; stable IDs survived rename; explicit and task cancellation before commit removed drafts; duplicate import replayed its receipt, changed payload was refused; stale and denied commits left the current item unchanged; Reset Demo preserved the imported user item and process catalog; ExportRecipeIntent.run returned redacted secret-shaped fields."
+  },
+  "steps": [
+    "Run swift test --package-path Packages/LabFeatures --filter ShortcutWorkbench through labr",
+    "Run the tests in RecipeOperationTests, WorkbenchIntentTests and WorkbenchQualificationTests"
+  ],
+  "limitations": [
+    "In-memory OperationService with GrantAuthorizationPolicy on macOS 27.0 (26A425); no SQLite, UI, Shortcuts app, system authentication, or physical mobile device in this check.",
+    "Passing characterization tests also reproduce the two failures recorded separately; suite success does not qualify the fresh four-step flow or arbitrary-text redaction.",
+    "Fixed seed and original neutral text only. Synthetic sentinels are invented; no credentials, model call or system Storage."
+  ]
+}
