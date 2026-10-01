@@ -39,6 +39,9 @@ struct SidebarView: View {
                 Label(SurfaceDeck.title, systemImage: SurfaceDeck.symbol)
                     .tag(SidebarDestination.surfaceDeck)
                     .accessibilityHint("The demo session, its receipts, and previews of its widget and Control")
+                Label(DurableSyncExperiment.title, systemImage: DurableSyncExperiment.symbol)
+                    .tag(SidebarDestination.durableSync)
+                    .accessibilityHint("Two devices, a local ledger, and a document you can exchange by hand")
             }
             Section("Experiments") {
                 row(.all, symbol: "square.grid.2x2")
