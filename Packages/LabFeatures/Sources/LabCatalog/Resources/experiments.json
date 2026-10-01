@@ -885,12 +885,12 @@
       "title": "Commercial Frontier Desk",
       "category": "Commercial",
       "milestone": "M4",
-      "state": "specified",
+      "state": "implemented",
       "dependsOn": [
         "LAB-041"
       ],
       "moment": "Learn how a public app reaches privileged system surfaces without treating entitlements as magic flags.",
-      "hosts": "iPhone primary; three isolated optional targets",
+      "hosts": "iPhone primary; Mac in-app fallback. Three isolated optional package targets contain compile-only SDK probes; optional signed system hosts are not implemented",
       "primaryAPIs": "PushToTalk, CarPlay, FamilyControls/DeviceActivity",
       "tickets": [
         "LAB-048-A",
