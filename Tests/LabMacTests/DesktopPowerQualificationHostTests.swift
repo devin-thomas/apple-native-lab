@@ -23,7 +23,7 @@ struct DesktopPowerQualificationHostTests {
         await library.start()
         try #require(library.phase == .ready)
         let session = DesktopPowerHost.connect(library)
-        let bytes = try DesktopFixture.data()
+        let bytes = Data(try session.station.presentFixture().body.utf8)
         let file = folder.appending(path: "sample-desk-note.txt")
         try bytes.write(to: file)
         var observations: [String] = []
@@ -51,7 +51,7 @@ struct DesktopPowerQualificationHostTests {
         let receiptCount = library.receipts.count
         await session.run(.importFixtureNote)
         check(library.receipts.count == receiptCount, "menu replay adds no receipt")
-        var intent = RunDesktopCommandIntent()
+        let intent = RunDesktopCommandIntent()
         intent.command = .importFixtureNote
         _ = try await intent.run(with: DesktopPowerLink(station: session.station))
         check(library.receipts.count == receiptCount, "intent replay adds no receipt")
@@ -168,7 +168,7 @@ struct DesktopPowerQualificationHostTests {
         await library.start()
         try #require(library.phase == .ready)
         let station = DesktopStation(backend: LibraryDesktopBackend(library: library))
-        var intent = RunDesktopCommandIntent()
+        let intent = RunDesktopCommandIntent()
         intent.command = .importFixtureNote
         _ = try await intent.run(with: DesktopPowerLink(station: station))
         let itemID = try #require(station.notes().first?.itemID)
