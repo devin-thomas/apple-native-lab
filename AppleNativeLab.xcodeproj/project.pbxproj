@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		01697CBE67799669E362312A /* PortableObjects in Frameworks */ = {isa = PBXBuildFile; productRef = 11808F5978214863BB84EDCD /* PortableObjects */; };
 		02E28279A82AE62D513DDD3B /* AudioWorkshop in Frameworks */ = {isa = PBXBuildFile; productRef = 42B8AF50AA77D8F108BC94F9 /* AudioWorkshop */; };
-		039F6AC45ABDCB594CCCB743 /* TrustDesk in Frameworks */ = {isa = PBXBuildFile; productRef = C5D34BAE1E274DDF6B129BCC /* TrustDesk */; };
+		039F6AC45ABDCB594CCCB743 /* SurfaceDeck in Frameworks */ = {isa = PBXBuildFile; productRef = 3CF19F7CC72BE703FC6929AD /* SurfaceDeck */; };
 		041571FBEDEE6D20DB01B173 /* SpeechTimeline in Frameworks */ = {isa = PBXBuildFile; productRef = 313A41B2A33E906243201726 /* SpeechTimeline */; };
 		0491F7676E76A1DD289D32E2 /* routing-sample-prompt.txt in Resources */ = {isa = PBXBuildFile; fileRef = 9DE29FD1EC6F61B4491CEADC /* routing-sample-prompt.txt */; };
 		049D235E474520D658AD3AD3 /* ActionAtlas in Frameworks */ = {isa = PBXBuildFile; productRef = D681B15E8F4FC00BCB2862EE /* ActionAtlas */; };
@@ -20,7 +20,7 @@
 		06ED0D7F8928725A2A09905A /* LabSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 25231493CA26D8D2F61E46F5 /* LabSupport */; };
 		079D191B42F50F4D3124CB83 /* WalletMoment in Frameworks */ = {isa = PBXBuildFile; productRef = 65BC9A5FBFCF1ED2949D63CD /* WalletMoment */; };
 		07A0496F553D9F8D4D40ED4E /* LabCatalog in Frameworks */ = {isa = PBXBuildFile; productRef = 487F08AAFA8FFA4128830EF0 /* LabCatalog */; };
-		07B83BC2A5F536D912FB5499 /* TactileGrammar in Frameworks */ = {isa = PBXBuildFile; productRef = 0CC56DC092F1A632E1457223 /* TactileGrammar */; };
+		07B83BC2A5F536D912FB5499 /* DurableSyncLedger in Frameworks */ = {isa = PBXBuildFile; productRef = E08448913DADC94B523B6867 /* DurableSyncLedger */; };
 		083B17FB5BA74565854DDC6E /* ShareIngress in Frameworks */ = {isa = PBXBuildFile; productRef = 6ED52C3B03767CE8033AFBB3 /* ShareIngress */; };
 		09EC82F6EB1F45D3BE918708 /* AudioWorkshop in Frameworks */ = {isa = PBXBuildFile; productRef = FFB158896EF7D0DBF713D031 /* AudioWorkshop */; };
 		0A76696BFB66718AF104AB2B /* SurfaceDeck in Frameworks */ = {isa = PBXBuildFile; productRef = D251249EBC83B2887F7B36D3 /* SurfaceDeck */; };
@@ -29,17 +29,17 @@
 		0D48F68917E7799B203ADB18 /* PointInspect in Frameworks */ = {isa = PBXBuildFile; productRef = 1855554D7663CD0A916F1BC6 /* PointInspect */; };
 		0D7549B4D4FC52CB1EB6A6EC /* TabletopReality in Frameworks */ = {isa = PBXBuildFile; productRef = 107E2E86B2CC37BB3F80EB64 /* TabletopReality */; };
 		1069A53081FE97F7B847B3D0 /* PortableObjects in Frameworks */ = {isa = PBXBuildFile; productRef = 35948567D046224E5FDDEC6E /* PortableObjects */; };
-		124E2B5FB4A68967374ADE97 /* ContextCards in Frameworks */ = {isa = PBXBuildFile; productRef = B07CF76A07881747B6BDDC65 /* ContextCards */; };
-		133579F88E88722C1A567973 /* ShortcutWorkbench in Frameworks */ = {isa = PBXBuildFile; productRef = E977E30B60B7D9E20E4D2E91 /* ShortcutWorkbench */; };
+		124E2B5FB4A68967374ADE97 /* TrustDesk in Frameworks */ = {isa = PBXBuildFile; productRef = C5D34BAE1E274DDF6B129BCC /* TrustDesk */; };
+		133579F88E88722C1A567973 /* FindTheThing in Frameworks */ = {isa = PBXBuildFile; productRef = D6C031B31CED84F339102FE1 /* FindTheThing */; };
 		13FA67ADA5FB62E36D2B1BD4 /* routing-sample-prompt.txt in Resources */ = {isa = PBXBuildFile; fileRef = 9DE29FD1EC6F61B4491CEADC /* routing-sample-prompt.txt */; };
 		1415B46EE33B94D514DD511E /* ModelRouting in Frameworks */ = {isa = PBXBuildFile; productRef = 17CBDB7807D39DD7C187B2F6 /* ModelRouting */; };
 		148E6BD01AE528F3CBDC5E2B /* CommerceWithoutTricks in Frameworks */ = {isa = PBXBuildFile; productRef = 48852F2AA376D77F91337ABB /* CommerceWithoutTricks */; };
-		14D3B3DFC30B0C1AA90BB2F2 /* LocalModelBench in Frameworks */ = {isa = PBXBuildFile; productRef = 59350CEF01CB3A0AC950B880 /* LocalModelBench */; };
+		14D3B3DFC30B0C1AA90BB2F2 /* ContextCards in Frameworks */ = {isa = PBXBuildFile; productRef = B07CF76A07881747B6BDDC65 /* ContextCards */; };
 		154C21111E02462DD0A59BE0 /* LabStore in Frameworks */ = {isa = PBXBuildFile; productRef = 6E71D4CE7F5EFA213F132511 /* LabStore */; };
 		16E34F6DB824AAE2259506EE /* swatch-card.png in Resources */ = {isa = PBXBuildFile; fileRef = B0EE3CF6B78A0435A2E4F6EC /* swatch-card.png */; };
 		1823C4AA1FBA4114227391F2 /* HomeSceneSandbox in Frameworks */ = {isa = PBXBuildFile; productRef = 00C9E4A95A19A392CE2A9802 /* HomeSceneSandbox */; };
 		191EE6EDFFD979CB2B784507 /* SpeechTimeline in Frameworks */ = {isa = PBXBuildFile; productRef = F6364CBD60BE2BEE0A31456F /* SpeechTimeline */; };
-		1971878BD77FD9FBB927D999 /* SurfaceDeck in Frameworks */ = {isa = PBXBuildFile; productRef = 3CF19F7CC72BE703FC6929AD /* SurfaceDeck */; };
+		1971878BD77FD9FBB927D999 /* DocumentsEverywhere in Frameworks */ = {isa = PBXBuildFile; productRef = 0E4C9D44FF07D7969E3AB12A /* DocumentsEverywhere */; };
 		1ABEE97B7C7ACB1EAF41ABC4 /* ShareIngress in Frameworks */ = {isa = PBXBuildFile; productRef = A7B30E9CC74D5DACCC486C60 /* ShareIngress */; };
 		1B0413E82622210BA72820FA /* LabDomain in Frameworks */ = {isa = PBXBuildFile; productRef = 0D6B57C2990B445E8BC56C3B /* LabDomain */; };
 		1C7CA3174A557512B2CC9E55 /* seed.json in Resources */ = {isa = PBXBuildFile; fileRef = 4C5126791B7E1A1A049AE090 /* seed.json */; };
@@ -52,12 +52,12 @@
 		226E33C6282D786FCC203015 /* speech-sample-captions.vtt in Resources */ = {isa = PBXBuildFile; fileRef = C4B33BA8A8374E544563EE90 /* speech-sample-captions.vtt */; };
 		244B9A1F2A6CC6DA4AD22049 /* CommerceWithoutTricks in Frameworks */ = {isa = PBXBuildFile; productRef = DDC833510748F8DC9E9634B0 /* CommerceWithoutTricks */; };
 		25972D23C4D3197B1F3EB577 /* LabSupport in Frameworks */ = {isa = PBXBuildFile; productRef = C807DDF95D17BFC6553B448B /* LabSupport */; };
-		285FF529BDB992F47842C145 /* ScreeningRoom in Frameworks */ = {isa = PBXBuildFile; productRef = A9F266E53907B2EEF4980EC7 /* ScreeningRoom */; };
+		285FF529BDB992F47842C145 /* RenderThatSurvives in Frameworks */ = {isa = PBXBuildFile; productRef = 34ADCE5970E7AD9261946AFD /* RenderThatSurvives */; };
 		29496A5626839FD3F7D5287D /* AccessSuperpower in Frameworks */ = {isa = PBXBuildFile; productRef = C1686806D655F8ADADCF3268 /* AccessSuperpower */; };
 		29B0E66EA497FC350A134BA5 /* AccessSuperpower in Frameworks */ = {isa = PBXBuildFile; productRef = 7BACC939D67B10AC8B95E5BC /* AccessSuperpower */; };
 		29F375CFDAE4A2E278EC3801 /* ScreeningRoom in Frameworks */ = {isa = PBXBuildFile; productRef = 0BCDA999B1C4E5FE428B26A7 /* ScreeningRoom */; };
 		2AA559863674CD4F5E1B2D77 /* CommerceWithoutTricks in Frameworks */ = {isa = PBXBuildFile; productRef = AF1F4A12AB561F941608E932 /* CommerceWithoutTricks */; };
-		2B7CE60245911BE30BCE0A59 /* DurableSyncLedger in Frameworks */ = {isa = PBXBuildFile; productRef = E08448913DADC94B523B6867 /* DurableSyncLedger */; };
+		2B7CE60245911BE30BCE0A59 /* LocalModelBench in Frameworks */ = {isa = PBXBuildFile; productRef = 59350CEF01CB3A0AC950B880 /* LocalModelBench */; };
 		2CB323DD53D8C2E10ABE0D95 /* speech-sample-captions.vtt in Resources */ = {isa = PBXBuildFile; fileRef = C4B33BA8A8374E544563EE90 /* speech-sample-captions.vtt */; };
 		2D8145B73D6662D5ADD3A92D /* PeerSession in Frameworks */ = {isa = PBXBuildFile; productRef = FC616D586FA2DE3925765738 /* PeerSession */; };
 		2DC4325948CAC8E236586BB5 /* LabSupport in Frameworks */ = {isa = PBXBuildFile; productRef = B0B980774D943168FEA7065A /* LabSupport */; };
@@ -68,17 +68,18 @@
 		321C69A617D641B7E1BCA9FC /* PeerSession in Frameworks */ = {isa = PBXBuildFile; productRef = ACE43BD1956918EDE04188A3 /* PeerSession */; };
 		330EBB105739FBBAFDAE5C28 /* ActionAtlas in Frameworks */ = {isa = PBXBuildFile; productRef = 88023F30308C4118D4A07ABA /* ActionAtlas */; };
 		34205B0D4B75B6C58B2006B2 /* intelligence-ambiguous-note.txt in Resources */ = {isa = PBXBuildFile; fileRef = AE4F4AB8C2CC86E0A0AF350A /* intelligence-ambiguous-note.txt */; };
-		35D0C66299C46C1E6DBCE6F7 /* PeerSession in Frameworks */ = {isa = PBXBuildFile; productRef = 0283ECF9B35C366503D47829 /* PeerSession */; };
+		35D0C66299C46C1E6DBCE6F7 /* TabletopReality in Frameworks */ = {isa = PBXBuildFile; productRef = FEED47FCE38AB55A2DA2773D /* TabletopReality */; };
 		370C645B2FAA7C0422749202 /* DocumentsEverywhere in Frameworks */ = {isa = PBXBuildFile; productRef = 5BF8C26F06F10FFB0AF1D6CB /* DocumentsEverywhere */; };
 		37193C3B1E0E1F9A6F803375 /* AudioWorkshopUnit.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 19AEF61297A4536352781990 /* AudioWorkshopUnit.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		3768E53664C8ECDC17E53B59 /* ScreeningRoomPlayback in Frameworks */ = {isa = PBXBuildFile; productRef = 0806708B955A0EFC628AA8B2 /* ScreeningRoomPlayback */; };
 		3771A9CEA0F9A4B6C0490C20 /* AccessSuperpower in Frameworks */ = {isa = PBXBuildFile; productRef = 239074BFB3596466B6A8D875 /* AccessSuperpower */; };
 		3801D1772B69CAE4CA93FDFE /* LabSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 23ACA699398C10114E0D39E7 /* LabSupport */; };
 		3812E98375DD0AD6ACB802BD /* ContextCards in Frameworks */ = {isa = PBXBuildFile; productRef = 2170AE2584F7EF6C7CC11E04 /* ContextCards */; };
+		38C5CCB7FF55121ECD70EB10 /* CommerceWithoutTricks in Frameworks */ = {isa = PBXBuildFile; productRef = 557A744736DD60E638B1B4A2 /* CommerceWithoutTricks */; };
 		39C40B7701FCFEA1884C32DF /* ScreeningRoom in Frameworks */ = {isa = PBXBuildFile; productRef = D936B53FB1447A86F5E17CB1 /* ScreeningRoom */; };
 		3A86E65183CD93935D73BED1 /* SurfaceDeck in Frameworks */ = {isa = PBXBuildFile; productRef = 8AAA491D40A1C932B88CCF18 /* SurfaceDeck */; };
 		3C5668CFD762C5B374A3842A /* LocalModelBench in Frameworks */ = {isa = PBXBuildFile; productRef = 47A98A400215FB089E3EDF93 /* LocalModelBench */; };
-		3D5C53F20DC419559CF59D86 /* HomeSceneSandbox in Frameworks */ = {isa = PBXBuildFile; productRef = 4581D16633A2646EBEE36AAE /* HomeSceneSandbox */; };
+		3D5C53F20DC419559CF59D86 /* LocalConstellation in Frameworks */ = {isa = PBXBuildFile; productRef = 1F2E1021B5612C0D253AFBC9 /* LocalConstellation */; };
 		3E19AE10651D54918E43B20D /* LabDomain in Frameworks */ = {isa = PBXBuildFile; productRef = 92EFF33B815C482C54686068 /* LabDomain */; };
 		3E267021F6B380AE78424F58 /* DocumentsEverywhere in Frameworks */ = {isa = PBXBuildFile; productRef = A0E5818DDA3621BD6C0BBDF1 /* DocumentsEverywhere */; };
 		3F3F947E26D4C7C8AFE4443C /* swatch-card.png in Resources */ = {isa = PBXBuildFile; fileRef = B0EE3CF6B78A0435A2E4F6EC /* swatch-card.png */; };
@@ -116,7 +117,7 @@
 		5B74398A19EB86C3087BDEED /* TypedIntelligence in Frameworks */ = {isa = PBXBuildFile; productRef = 872A3526A3C216A5301B05D2 /* TypedIntelligence */; };
 		5CDF75C467BB20F773986DD1 /* AccessSuperpower in Frameworks */ = {isa = PBXBuildFile; productRef = 540B210369D029C191E89BAB /* AccessSuperpower */; };
 		5D58F0C6997B471B25ED2E81 /* PeerSession in Frameworks */ = {isa = PBXBuildFile; productRef = 388BBF143F18DF1A2996A8B3 /* PeerSession */; };
-		5F8117A2D793190FC5F0B060 /* FindTheThing in Frameworks */ = {isa = PBXBuildFile; productRef = D6C031B31CED84F339102FE1 /* FindTheThing */; };
+		5F8117A2D793190FC5F0B060 /* SpeechTimeline in Frameworks */ = {isa = PBXBuildFile; productRef = DD6B5A5D377A99A4E139C082 /* SpeechTimeline */; };
 		5FE8E27B13BCF7A700A0CFDA /* LabCatalog in Frameworks */ = {isa = PBXBuildFile; productRef = 980162FF318C34A9B6AA4D5E /* LabCatalog */; };
 		6024E40F998C38FE4AEC73E8 /* ScreeningRoom in Frameworks */ = {isa = PBXBuildFile; productRef = CD0D38773E0BC197212B2A8B /* ScreeningRoom */; };
 		60D3A0BA3627D376C6BCA40D /* LocalModelBench in Frameworks */ = {isa = PBXBuildFile; productRef = F3C9BA946A1AA0780D22E7D9 /* LocalModelBench */; };
@@ -132,7 +133,7 @@
 		6AA9269C26437D2151922984 /* ScreeningRoomPlayback in Frameworks */ = {isa = PBXBuildFile; productRef = F1300675BF04E22A751AAA8A /* ScreeningRoomPlayback */; };
 		6B3C6C20FA88B8B74C6186FE /* LabJobs in Frameworks */ = {isa = PBXBuildFile; productRef = CCB12EBE1339F4385CB81A62 /* LabJobs */; };
 		6C9BB14472B7F36AEC6C36CF /* ScreeningRoomPlayback in Frameworks */ = {isa = PBXBuildFile; productRef = FCC939009043AE3BBBFEAAD9 /* ScreeningRoomPlayback */; };
-		6DE4F776CBFE16A956072B91 /* AccessSuperpower in Frameworks */ = {isa = PBXBuildFile; productRef = CC0630EDCCDE6FC7F7BF2FBC /* AccessSuperpower */; };
+		6DE4F776CBFE16A956072B91 /* ModelRouting in Frameworks */ = {isa = PBXBuildFile; productRef = 3B7A773EB81DF9DEAF28AABF /* ModelRouting */; };
 		6F93A9AD463D59BB11A8A5EC /* LabDomain in Frameworks */ = {isa = PBXBuildFile; productRef = CACF77BD90DF68CDE4C515EA /* LabDomain */; };
 		6FE51AF30EF912BA01B9CAD1 /* PeerSessionNetwork in Frameworks */ = {isa = PBXBuildFile; productRef = 1CB6A820A6ABBC43A600944F /* PeerSessionNetwork */; };
 		7231065BB4094B132F17740D /* TrustDesk in Frameworks */ = {isa = PBXBuildFile; productRef = DAA9D7AA6F4848C5373DE1B3 /* TrustDesk */; };
@@ -151,7 +152,7 @@
 		7FB3F8343A67C0DA7E22236A /* intelligence-injected-note.txt in Resources */ = {isa = PBXBuildFile; fileRef = D89DA08F5504526396A194FA /* intelligence-injected-note.txt */; };
 		7FCD81C07A37C7401F6D675C /* intelligence-ambiguous-note.txt in Resources */ = {isa = PBXBuildFile; fileRef = AE4F4AB8C2CC86E0A0AF350A /* intelligence-ambiguous-note.txt */; };
 		811E4F2E9F9F36796576B37D /* intelligence-injected-note.txt in Resources */ = {isa = PBXBuildFile; fileRef = D89DA08F5504526396A194FA /* intelligence-injected-note.txt */; };
-		823467FF125D225EC5477CA3 /* DocumentsEverywhere in Frameworks */ = {isa = PBXBuildFile; productRef = 0E4C9D44FF07D7969E3AB12A /* DocumentsEverywhere */; };
+		823467FF125D225EC5477CA3 /* PickUpHere in Frameworks */ = {isa = PBXBuildFile; productRef = E71BE15BDC35B0EB85330C6A /* PickUpHere */; };
 		8241A9AE0973790DCD57EE24 /* ShareIngress in Frameworks */ = {isa = PBXBuildFile; productRef = C0E3086832C7401036381F13 /* ShareIngress */; };
 		83702F450009633F3F420CB2 /* ScreeningRoomPlayback in Frameworks */ = {isa = PBXBuildFile; productRef = DE07DAE9810D1A3BEC9A361A /* ScreeningRoomPlayback */; };
 		84B3B61948F3C7DE691D8B56 /* speech-sample-captions.vtt in Resources */ = {isa = PBXBuildFile; fileRef = C4B33BA8A8374E544563EE90 /* speech-sample-captions.vtt */; };
@@ -159,12 +160,12 @@
 		85AB9FBA224F864273906840 /* ShareIngress in Frameworks */ = {isa = PBXBuildFile; productRef = 208ADB6FEE46A094CE66A041 /* ShareIngress */; };
 		86F8F6D1921317F228A28908 /* ScreeningRoom in Frameworks */ = {isa = PBXBuildFile; productRef = 6349782257D9D832781DCBD1 /* ScreeningRoom */; };
 		86F9B7E01434E26D8FAC2C53 /* PeerSessionNetwork in Frameworks */ = {isa = PBXBuildFile; productRef = 0520E6806CB727E10FEF60D1 /* PeerSessionNetwork */; };
-		89E214F72A8F8E59C59B440C /* ModelRouting in Frameworks */ = {isa = PBXBuildFile; productRef = 3B7A773EB81DF9DEAF28AABF /* ModelRouting */; };
+		89E214F72A8F8E59C59B440C /* PointInspect in Frameworks */ = {isa = PBXBuildFile; productRef = 1AB36AC1BEC9879ABFC930C0 /* PointInspect */; };
 		8A6729B0DB6FC2773ADD61D0 /* TactileGrammar in Frameworks */ = {isa = PBXBuildFile; productRef = 142DDF1CDB91674FC377411B /* TactileGrammar */; };
 		8C40BB2646A4DDD89846D930 /* ScreeningRoomPlayback in Frameworks */ = {isa = PBXBuildFile; productRef = EE4E0B95BA1C58D2D1D88F08 /* ScreeningRoomPlayback */; };
 		8D0E9DB412826AB5D6CB96BB /* seed.json in Resources */ = {isa = PBXBuildFile; fileRef = 4C5126791B7E1A1A049AE090 /* seed.json */; };
 		8D5B9929C2461FEBE0755266 /* ContextCards in Frameworks */ = {isa = PBXBuildFile; productRef = 0A1E283E59A2E6CE6A1FCEF2 /* ContextCards */; };
-		8FDDF8EBEF317883CD104666 /* RespectfulAttention in Frameworks */ = {isa = PBXBuildFile; productRef = 162A84CBFDB2A97151B9FE17 /* RespectfulAttention */; };
+		8FDDF8EBEF317883CD104666 /* TactileGrammar in Frameworks */ = {isa = PBXBuildFile; productRef = 0CC56DC092F1A632E1457223 /* TactileGrammar */; };
 		8FDE617CDA6BA219C4DA965D /* LabCatalog in Frameworks */ = {isa = PBXBuildFile; productRef = 59FA911654D48713C53F9816 /* LabCatalog */; };
 		9286352F9202817AEAD7E4BB /* SurfaceDeck in Frameworks */ = {isa = PBXBuildFile; productRef = 29BECC7127F6F14FA1EB4BAD /* SurfaceDeck */; };
 		93CB6F4DEFBC2F06BFC03D5A /* RespectfulAttention in Frameworks */ = {isa = PBXBuildFile; productRef = 94A9495834CC96447469549B /* RespectfulAttention */; };
@@ -183,14 +184,14 @@
 		A7263A9B473715BBE7677C52 /* ScreeningRoomPlayback in Frameworks */ = {isa = PBXBuildFile; productRef = 91013B5B2C9E82183BFB82CB /* ScreeningRoomPlayback */; };
 		A78294EBFE96BEA10AEF5BCD /* swatch-card.png in Resources */ = {isa = PBXBuildFile; fileRef = B0EE3CF6B78A0435A2E4F6EC /* swatch-card.png */; };
 		A99D8AD528CF67E97A1888EA /* routing-sample-prompt.txt in Resources */ = {isa = PBXBuildFile; fileRef = 9DE29FD1EC6F61B4491CEADC /* routing-sample-prompt.txt */; };
-		AA05060A1927DB052D03BA7E /* PickUpHere in Frameworks */ = {isa = PBXBuildFile; productRef = E71BE15BDC35B0EB85330C6A /* PickUpHere */; };
+		AA05060A1927DB052D03BA7E /* PortableObjects in Frameworks */ = {isa = PBXBuildFile; productRef = 5138B46379EB0CDA5C7A520B /* PortableObjects */; };
 		AB0721B78B4BC13F3552DFFE /* speech-sample-captions.vtt in Resources */ = {isa = PBXBuildFile; fileRef = C4B33BA8A8374E544563EE90 /* speech-sample-captions.vtt */; };
 		AB9156B86C65BF493ECB0924 /* LabStore in Frameworks */ = {isa = PBXBuildFile; productRef = 7B58976351B59336207FCE79 /* LabStore */; };
 		AD455F75C2D216702A2B62CE /* PickUpHere in Frameworks */ = {isa = PBXBuildFile; productRef = D2925C43D1B2531E485720E6 /* PickUpHere */; };
 		AEB17B224B9BD1CF6EE2746E /* LabDomain in Frameworks */ = {isa = PBXBuildFile; productRef = F41E96699628F4302D6E6EE4 /* LabDomain */; };
 		AFC454E3BA10F271D73AC35A /* DurableSyncLedger in Frameworks */ = {isa = PBXBuildFile; productRef = 88DB2EE25490771C42F2A729 /* DurableSyncLedger */; };
 		B004728FD24BEBBB07D79A49 /* PeerSession in Frameworks */ = {isa = PBXBuildFile; productRef = D448D7F29A7552BCB9C6BF8C /* PeerSession */; };
-		B32CA3D16A51A259E17BB689 /* AudioWorkshop in Frameworks */ = {isa = PBXBuildFile; productRef = 4ACDBFB0C2064CB07E2601B0 /* AudioWorkshop */; };
+		B32CA3D16A51A259E17BB689 /* ScreeningRoomPlayback in Frameworks */ = {isa = PBXBuildFile; productRef = 07643C9C8F9AAE5026317A8E /* ScreeningRoomPlayback */; };
 		B55D587C861F0C54393A2BD7 /* LabDomain in Frameworks */ = {isa = PBXBuildFile; productRef = A6A3022C8795348044F49723 /* LabDomain */; };
 		B66F85502546C8093C14832B /* HomeSceneSandbox in Frameworks */ = {isa = PBXBuildFile; productRef = 2B66E3B6466C162D14CEFF1A /* HomeSceneSandbox */; };
 		B6FACB2E26604EEA9931B490 /* LabStore in Frameworks */ = {isa = PBXBuildFile; productRef = BE38BCCE8EC4AF97FB22E5B5 /* LabStore */; };
@@ -201,27 +202,27 @@
 		BDC3D5B814EA1115459598AB /* RenderThatSurvives in Frameworks */ = {isa = PBXBuildFile; productRef = CB48AAC205BD770C5A28CB03 /* RenderThatSurvives */; };
 		C03D6C38FE03559204059C26 /* RenderThatSurvives in Frameworks */ = {isa = PBXBuildFile; productRef = 1E0AFD34A5739FC35B622C6E /* RenderThatSurvives */; };
 		C0CFEBDC0BAE38AF8FE0C2E7 /* AudioWorkshop in Frameworks */ = {isa = PBXBuildFile; productRef = A46B8E6242B29E121B879442 /* AudioWorkshop */; };
-		C391743BD8D48ED847A43AEB /* RenderThatSurvives in Frameworks */ = {isa = PBXBuildFile; productRef = 34ADCE5970E7AD9261946AFD /* RenderThatSurvives */; };
+		C391743BD8D48ED847A43AEB /* LabJobs in Frameworks */ = {isa = PBXBuildFile; productRef = 55FA0BEAD79AB3A699310DD3 /* LabJobs */; };
 		C4EB19F91C9058B4E172D1FB /* TypedIntelligence in Frameworks */ = {isa = PBXBuildFile; productRef = 420FEC867E3D8AD017E49C21 /* TypedIntelligence */; };
 		C518F27DD869D1087ED96B1E /* LabSupport in Frameworks */ = {isa = PBXBuildFile; productRef = ECD021B68B4C48CC863BA8C6 /* LabSupport */; };
 		C5C7E15597C124FFA87914F4 /* LabStore in Frameworks */ = {isa = PBXBuildFile; productRef = 6CF6B1898735341A74FB3DA4 /* LabStore */; };
 		C65A8B8C8823EBA1FF6E7FF6 /* PeerSession in Frameworks */ = {isa = PBXBuildFile; productRef = 16F61C8FC17B425BBB686E6D /* PeerSession */; };
 		C692FDF78A88D22FBDAE2C4F /* LabDomain in Frameworks */ = {isa = PBXBuildFile; productRef = 24DA22E10E5DFC981218176A /* LabDomain */; };
 		CA3D0148A48B7F97976C2C06 /* intelligence-ambiguous-note.txt in Resources */ = {isa = PBXBuildFile; fileRef = AE4F4AB8C2CC86E0A0AF350A /* intelligence-ambiguous-note.txt */; };
-		CB80ACDC68FE94D0F8CD2D18 /* WalletMoment in Frameworks */ = {isa = PBXBuildFile; productRef = 5717DED99C8D8CF7FBB003D1 /* WalletMoment */; };
+		CB80ACDC68FE94D0F8CD2D18 /* AccessSuperpower in Frameworks */ = {isa = PBXBuildFile; productRef = CC0630EDCCDE6FC7F7BF2FBC /* AccessSuperpower */; };
 		CBF185BA448CD3285E3F5BC8 /* LabSupport in Frameworks */ = {isa = PBXBuildFile; productRef = F5558900C8E1A34A220E60D3 /* LabSupport */; };
 		CC2518A05966A3E4A729C240 /* LabJobs in Frameworks */ = {isa = PBXBuildFile; productRef = 71315AD3886CA002360CAB39 /* LabJobs */; };
 		CCCD3F8AC93C0C786EC825D7 /* SpeechTimeline in Frameworks */ = {isa = PBXBuildFile; productRef = A3465280554686D863A13D92 /* SpeechTimeline */; };
 		CD9A5A30A8982271E15CD676 /* PickUpHere in Frameworks */ = {isa = PBXBuildFile; productRef = 94932610C053066DD920CDAD /* PickUpHere */; };
 		D078C387824227F073DA06D7 /* TactileGrammar in Frameworks */ = {isa = PBXBuildFile; productRef = EF27A03B7FC8CEEAC7B10B94 /* TactileGrammar */; };
 		D36F4642881FEA72C117D6AC /* routing-sample-prompt.txt in Resources */ = {isa = PBXBuildFile; fileRef = 9DE29FD1EC6F61B4491CEADC /* routing-sample-prompt.txt */; };
-		D4FFE59C3D108F7EEC03F76B /* PortableObjects in Frameworks */ = {isa = PBXBuildFile; productRef = 5138B46379EB0CDA5C7A520B /* PortableObjects */; };
-		D5B09B2B97097FF319ACEB14 /* CommerceWithoutTricks in Frameworks */ = {isa = PBXBuildFile; productRef = 557A744736DD60E638B1B4A2 /* CommerceWithoutTricks */; };
+		D4FFE59C3D108F7EEC03F76B /* WalletMoment in Frameworks */ = {isa = PBXBuildFile; productRef = 5717DED99C8D8CF7FBB003D1 /* WalletMoment */; };
+		D5B09B2B97097FF319ACEB14 /* HomeSceneSandbox in Frameworks */ = {isa = PBXBuildFile; productRef = 4581D16633A2646EBEE36AAE /* HomeSceneSandbox */; };
 		D6803B65A80A9519A8D809A6 /* WalletMoment in Frameworks */ = {isa = PBXBuildFile; productRef = F6D724981A15F7AFAD28E052 /* WalletMoment */; };
 		D95F72CCB696ED6A574BD331 /* DesktopNativePower in Frameworks */ = {isa = PBXBuildFile; productRef = F581B89E19ED72D617470288 /* DesktopNativePower */; };
-		D979377799E11B0623F1EFEE /* LocalConstellation in Frameworks */ = {isa = PBXBuildFile; productRef = 1F2E1021B5612C0D253AFBC9 /* LocalConstellation */; };
-		DA8FA64970D79CF504A4B4C2 /* LabJobs in Frameworks */ = {isa = PBXBuildFile; productRef = 55FA0BEAD79AB3A699310DD3 /* LabJobs */; };
-		DB0EEC99D027016FD0052072 /* SpeechTimeline in Frameworks */ = {isa = PBXBuildFile; productRef = DD6B5A5D377A99A4E139C082 /* SpeechTimeline */; };
+		D979377799E11B0623F1EFEE /* PeerSession in Frameworks */ = {isa = PBXBuildFile; productRef = 0283ECF9B35C366503D47829 /* PeerSession */; };
+		DA8FA64970D79CF504A4B4C2 /* ShortcutWorkbench in Frameworks */ = {isa = PBXBuildFile; productRef = E977E30B60B7D9E20E4D2E91 /* ShortcutWorkbench */; };
+		DB0EEC99D027016FD0052072 /* RespectfulAttention in Frameworks */ = {isa = PBXBuildFile; productRef = 162A84CBFDB2A97151B9FE17 /* RespectfulAttention */; };
 		DBE25FF6B377671BE1C03843 /* LocalModelBench in Frameworks */ = {isa = PBXBuildFile; productRef = 3ACA181AD3B230C4BEB973C8 /* LocalModelBench */; };
 		DC14139A63BD575B5A92D755 /* LabCatalog in Frameworks */ = {isa = PBXBuildFile; productRef = D848D3397291632E552B77A2 /* LabCatalog */; };
 		DCA110D987F264547CD429DF /* PointInspect in Frameworks */ = {isa = PBXBuildFile; productRef = 74678B559F691345E00CFF94 /* PointInspect */; };
@@ -238,8 +239,8 @@
 		EABEBBDC64006AF6DFF01764 /* speech-sample-captions.vtt in Resources */ = {isa = PBXBuildFile; fileRef = C4B33BA8A8374E544563EE90 /* speech-sample-captions.vtt */; };
 		EB1E1118971E772C605257D6 /* ShortcutWorkbench in Frameworks */ = {isa = PBXBuildFile; productRef = 8545092364534C7449E0325B /* ShortcutWorkbench */; };
 		EBA307EE3CFC535C3D52BE92 /* TactileGrammar in Frameworks */ = {isa = PBXBuildFile; productRef = E5293014D162778CDBF88B2C /* TactileGrammar */; };
-		ED531C4681B53A6BC7C6A6BE /* TabletopReality in Frameworks */ = {isa = PBXBuildFile; productRef = FEED47FCE38AB55A2DA2773D /* TabletopReality */; };
-		EDE645F217D58D63F06FD6E2 /* ScreeningRoomPlayback in Frameworks */ = {isa = PBXBuildFile; productRef = 07643C9C8F9AAE5026317A8E /* ScreeningRoomPlayback */; };
+		ED531C4681B53A6BC7C6A6BE /* AudioWorkshop in Frameworks */ = {isa = PBXBuildFile; productRef = 4ACDBFB0C2064CB07E2601B0 /* AudioWorkshop */; };
+		EDE645F217D58D63F06FD6E2 /* ScreeningRoom in Frameworks */ = {isa = PBXBuildFile; productRef = A9F266E53907B2EEF4980EC7 /* ScreeningRoom */; };
 		F12274D40FF51B6DC4FC8947 /* swatch-card.png in Resources */ = {isa = PBXBuildFile; fileRef = B0EE3CF6B78A0435A2E4F6EC /* swatch-card.png */; };
 		F4026F15E90968A3C198C0E5 /* PointInspect in Frameworks */ = {isa = PBXBuildFile; productRef = FD202470B394E5BFBC497587 /* PointInspect */; };
 		F409912D13BEB6760524ABCE /* ActionAtlas in Frameworks */ = {isa = PBXBuildFile; productRef = E93BF1C897E11DCD3B012877 /* ActionAtlas */; };
@@ -660,32 +661,33 @@
 				330EBB105739FBBAFDAE5C28 /* ActionAtlas in Frameworks */,
 				1ABEE97B7C7ACB1EAF41ABC4 /* ShareIngress in Frameworks */,
 				5971E4B6D5596414791531A0 /* TypedIntelligence in Frameworks */,
-				89E214F72A8F8E59C59B440C /* ModelRouting in Frameworks */,
-				6DE4F776CBFE16A956072B91 /* AccessSuperpower in Frameworks */,
-				CB80ACDC68FE94D0F8CD2D18 /* WalletMoment in Frameworks */,
-				D4FFE59C3D108F7EEC03F76B /* PortableObjects in Frameworks */,
-				AA05060A1927DB052D03BA7E /* PickUpHere in Frameworks */,
-				823467FF125D225EC5477CA3 /* DocumentsEverywhere in Frameworks */,
-				1971878BD77FD9FBB927D999 /* SurfaceDeck in Frameworks */,
-				039F6AC45ABDCB594CCCB743 /* TrustDesk in Frameworks */,
-				124E2B5FB4A68967374ADE97 /* ContextCards in Frameworks */,
-				14D3B3DFC30B0C1AA90BB2F2 /* LocalModelBench in Frameworks */,
-				2B7CE60245911BE30BCE0A59 /* DurableSyncLedger in Frameworks */,
-				07B83BC2A5F536D912FB5499 /* TactileGrammar in Frameworks */,
-				8FDDF8EBEF317883CD104666 /* RespectfulAttention in Frameworks */,
-				DB0EEC99D027016FD0052072 /* SpeechTimeline in Frameworks */,
-				5F8117A2D793190FC5F0B060 /* FindTheThing in Frameworks */,
-				133579F88E88722C1A567973 /* ShortcutWorkbench in Frameworks */,
-				DA8FA64970D79CF504A4B4C2 /* LabJobs in Frameworks */,
-				C391743BD8D48ED847A43AEB /* RenderThatSurvives in Frameworks */,
-				285FF529BDB992F47842C145 /* ScreeningRoom in Frameworks */,
-				EDE645F217D58D63F06FD6E2 /* ScreeningRoomPlayback in Frameworks */,
-				B32CA3D16A51A259E17BB689 /* AudioWorkshop in Frameworks */,
-				ED531C4681B53A6BC7C6A6BE /* TabletopReality in Frameworks */,
-				35D0C66299C46C1E6DBCE6F7 /* PeerSession in Frameworks */,
-				D979377799E11B0623F1EFEE /* LocalConstellation in Frameworks */,
-				3D5C53F20DC419559CF59D86 /* HomeSceneSandbox in Frameworks */,
-				D5B09B2B97097FF319ACEB14 /* CommerceWithoutTricks in Frameworks */,
+				89E214F72A8F8E59C59B440C /* PointInspect in Frameworks */,
+				6DE4F776CBFE16A956072B91 /* ModelRouting in Frameworks */,
+				CB80ACDC68FE94D0F8CD2D18 /* AccessSuperpower in Frameworks */,
+				D4FFE59C3D108F7EEC03F76B /* WalletMoment in Frameworks */,
+				AA05060A1927DB052D03BA7E /* PortableObjects in Frameworks */,
+				823467FF125D225EC5477CA3 /* PickUpHere in Frameworks */,
+				1971878BD77FD9FBB927D999 /* DocumentsEverywhere in Frameworks */,
+				039F6AC45ABDCB594CCCB743 /* SurfaceDeck in Frameworks */,
+				124E2B5FB4A68967374ADE97 /* TrustDesk in Frameworks */,
+				14D3B3DFC30B0C1AA90BB2F2 /* ContextCards in Frameworks */,
+				2B7CE60245911BE30BCE0A59 /* LocalModelBench in Frameworks */,
+				07B83BC2A5F536D912FB5499 /* DurableSyncLedger in Frameworks */,
+				8FDDF8EBEF317883CD104666 /* TactileGrammar in Frameworks */,
+				DB0EEC99D027016FD0052072 /* RespectfulAttention in Frameworks */,
+				5F8117A2D793190FC5F0B060 /* SpeechTimeline in Frameworks */,
+				133579F88E88722C1A567973 /* FindTheThing in Frameworks */,
+				DA8FA64970D79CF504A4B4C2 /* ShortcutWorkbench in Frameworks */,
+				C391743BD8D48ED847A43AEB /* LabJobs in Frameworks */,
+				285FF529BDB992F47842C145 /* RenderThatSurvives in Frameworks */,
+				EDE645F217D58D63F06FD6E2 /* ScreeningRoom in Frameworks */,
+				B32CA3D16A51A259E17BB689 /* ScreeningRoomPlayback in Frameworks */,
+				ED531C4681B53A6BC7C6A6BE /* AudioWorkshop in Frameworks */,
+				35D0C66299C46C1E6DBCE6F7 /* TabletopReality in Frameworks */,
+				D979377799E11B0623F1EFEE /* PeerSession in Frameworks */,
+				3D5C53F20DC419559CF59D86 /* LocalConstellation in Frameworks */,
+				D5B09B2B97097FF319ACEB14 /* HomeSceneSandbox in Frameworks */,
+				38C5CCB7FF55121ECD70EB10 /* CommerceWithoutTricks in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1155,6 +1157,7 @@
 				88023F30308C4118D4A07ABA /* ActionAtlas */,
 				A7B30E9CC74D5DACCC486C60 /* ShareIngress */,
 				76F28CA76CDDB3E1BD522DA9 /* TypedIntelligence */,
+				1AB36AC1BEC9879ABFC930C0 /* PointInspect */,
 				3B7A773EB81DF9DEAF28AABF /* ModelRouting */,
 				CC0630EDCCDE6FC7F7BF2FBC /* AccessSuperpower */,
 				5717DED99C8D8CF7FBB003D1 /* WalletMoment */,
@@ -3200,6 +3203,10 @@
 		1A33B2BD3F8DEECF514CDD32 /* ModelRouting */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ModelRouting;
+		};
+		1AB36AC1BEC9879ABFC930C0 /* PointInspect */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PointInspect;
 		};
 		1BF03CA9A6DA75961B2F1ABF /* ScreeningRoomPlayback */ = {
 			isa = XCSwiftPackageProductDependency;

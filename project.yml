@@ -465,6 +465,7 @@ targets:
         product: TypedIntelligence
       - package: LabFeatures
         product: PointInspect
+      - package: LabFeatures
         product: ModelRouting
       - package: LabFeatures
         product: AccessSuperpower
