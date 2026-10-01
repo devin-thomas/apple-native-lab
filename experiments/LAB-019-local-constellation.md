@@ -76,6 +76,16 @@ Observed with Xcode 27.0 (27A266a) and the 27.0 SDKs, on the development Mac. Th
 - **Sensitive changes.** Moving between cues changes only the live show. Starting or pausing changes the stored session, so a peer can only ask: the conductor holds the request, and the person there allows or declines it. Allowing commits `setSession` through the host's `OperationService` as the authorized-peer adapter, with a 30-second grant for that operation alone, under a request ID derived from the peer and its command, so a resend returns the same receipt. The host's own Start and Pause commit as the app UI.
 - **Not yet shown:** a real network. Loopback round trips are microseconds, so the clock estimates and delays measured here are not network measurements, and no latency is claimed.
 
+## Qualification notes (LAB-019-B)
+
+The state stays `implemented`: the fallback is qualified on the Mac host and in the tvOS Simulator, and the live path has not run between devices. Corrections and limits the qualification found, for the experiments that reuse `PeerSession`:
+
+- **Key checking stops at the vocabulary's own objects.** The envelope, its payload, and the command, sample, and snapshot objects are checked key by key; an object nested inside them is checked only by its own decoder. Local Constellation's payloads are flat. [DATA_CONTRACTS](../docs/DATA_CONTRACTS.md) now says so.
+- **The conductor's age check starts with a link's first clock round trip.** Until then the joiner's own 5-second limit bounds a command, which is what bounds commands flushed right after a reconnect.
+- **A command queued before any snapshot names revision 0 and no epoch.** It applies only while the conductor is still at revision 0. The show's controls stay disabled until a snapshot arrives; a later experiment's must too.
+- **Known issue: Forget keeps the forgotten peer's held requests,** so Allow can still commit one as the authorized peer. Held as a known issue in `PeerSessionContractQualification` and `ConstellationQualification`.
+- **Fixed: the Apple TV screen had no background** of its own and overlapped the page it covers.
+
 ## Delivery
 
 [Implementation ticket](../tickets/LAB-019-A.md) → [qualification ticket](../tickets/LAB-019-B.md).

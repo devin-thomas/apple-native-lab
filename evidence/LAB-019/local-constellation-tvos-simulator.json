@@ -1,0 +1,48 @@
+{
+  "check" : "Local Constellation's fallback in the Apple TV app in the tvOS simulator: an unpaired device is refused, the display and the controller pair with the code, a stale command is reconciled, a silent display goes stale on both sides and recovers, and an allowed start commits as the authorized peer",
+  "date" : "2026-10-01T06:46:20Z",
+  "execution" : {
+    "path" : "simulator",
+    "simulator" : {
+      "deviceClass" : "AppleTV14,1",
+      "osVersion" : "Version 27.0 (Build 24J360)",
+      "platform" : "tvOS"
+    }
+  },
+  "inputs" : [
+    "cue-sheet:app-bundle@sha256:a2b9428f6b5253ce16ebf87b21b5fa38ce846fda585712492775af5ff9f20792",
+    "session:4C0C0019-5E55-4E1A-9C0B-0000000000C1"
+  ],
+  "limitations" : [
+    "Simulator path: the Apple TV app's hosted tests in the tvOS simulator on the development Mac. It supports implemented at most.",
+    "The simulation is the declared fallback: the conductor, the controller, and the display run in this one app, joined by the in-process loopback. No network, Bonjour, or local network permission took part.",
+    "Driven through the simulation's model, not the remote; the screen is driven with the remote by ConstellationRemoteUITests.",
+    "The show was stored in memory, as the Apple TV app stores it; the Apple TV has no lab store.",
+    "No physical Apple TV ran."
+  ],
+  "outcome" : {
+    "detail" : "All 9 checks held. The unpaired device received no session data; the display showed Lanterns, then Ember; a stale Next was answered \"Based on revision 1, but the state is at 2. Nothing changed.\"; the silent display read Stale on both sides and Live again in range; the allowed start committed and the display showed the show running.",
+    "result" : "passed"
+  },
+  "provenance" : {
+    "appVersion" : "0.1.0",
+    "buildNumber" : "1",
+    "buildProfile" : "Companions",
+    "minimumOS" : "26.0",
+    "sdkName" : "appletvsimulator27.0",
+    "sourceRevision" : "725bf49",
+    "xcodeBuild" : "27A266a",
+    "xcodeVersion" : "27.0"
+  },
+  "schemaVersion" : 1,
+  "steps" : [
+    "xcodebuild -scheme LabTV -destination <tvOS simulator> -only-testing:LabTVTests/ConstellationTVEvidenceTests test",
+    "TVConstellationModel starts the simulation with the show stored in memory, as the Apple TV app does",
+    "An unpaired device tries to rejoin",
+    "The display, then the controller, pair: the code read from the conductor's request and submitted through the model, then Allow",
+    "The controller's Next; the controller out of range while the conductor goes to cue 5; its Next back in range",
+    "The display's link down in both directions for over 2 s, then back",
+    "The controller's start request, allowed at the conductor"
+  ],
+  "subject" : "LAB-019"
+}

@@ -65,6 +65,7 @@ These support the manual passes and never replace them. The last run is in the C
 | Share Ingress on iPhone and in the running Mac app (LAB-007) | A UI-test harness in a throwaway copy on an iPhone 17 Pro simulator (iOS 27.0), and the accessibility API against a Debug Mac build under a separate bundle prefix | iPhone: Paste, the review screen, New Collection…, Add, and the receipt by accessibility label; Choose Files… through the document picker; a Photos share into the extension. Xcode's accessibility audit results at the default text size. Mac: View › Share Inbox, Choose Files…, and the open panel, by accessibility element | A physical iPhone, VoiceOver, Voice Control, large text |
 | Surface Deck through the accessibility API (LAB-004) | `SurfaceDeckAccessibilityTests` in `script/test.sh` | The state card reads "Demo session, Paused" or "Running", and the toggle names what it does, with a hint, and works through the accessibility press action under every display override. Each of the 5 previews is one element that says it is a preview drawn by Native Lab, and its value is the state, never the private line, even with details shown. Show Details on Widgets is a named switch, off by default. A receipt row reads its status, and its Undo is found by name and works. View › Surface Deck has ⌘7. | VoiceOver speech, Voice Control, Full Keyboard Access, the system settings, or the system-drawn widget and Controls |
 | Surface Deck widget, Controls, and deck on iPhone (LAB-004) | A UI-test harness in a throwaway project, iOS Simulator, at the default and largest accessibility text sizes | The widget's and the Controls' elements and values as SpringBoard exposes them. The deck opened by the Open Surface Deck Control, with Xcode's accessibility audit at both sizes and whether the deck's toggle is on screen at the largest size | A physical iPhone, VoiceOver, Voice Control, a Lock Screen widget |
+| Local Constellation through the accessibility API and the remote (LAB-019) | `ConstellationAccessibilityTests` and `ConstellationHostEvidenceTests` in `script/test.sh` (Mac hosted tests); `ConstellationRemoteUITests` (tvOS Simulator, Siri Remote alone) in the same script's Apple TV step | Mac: the simulation's controls work through the accessibility press action from first pairing to a restart (Ask to Join, Allow, Next, Ask to Start, Walk Out of Range, Next Cue, Bring Back in Range, Reconnect, Restart the Conductor, Unpaired Device Tries to Join). The conductor reads the pairing code digit by digit. Each board is one element that reads its cue, its title, whether the show runs, and, when stale, "Nothing heard from the conductor" in words; the roster row reads Stale or Disconnected. Apple TV: focus reaches Open Local Constellation, the display's Ask to Join, and Cancel; the code and Allow appear; Menu leaves the screen | VoiceOver speech, Voice Control, Full Keyboard Access, the system settings, typing the code with the Apple TV keyboard, or the iPhone page |
 
 ## Manual passes
 
@@ -253,6 +254,37 @@ What to check in the Surface Deck flows, beyond the core list:
 - **Voice Control.** "Tap Start Session", "Tap Undo Start Session", and "Tap Show Details on Widgets" work. On the Mac, record whether ⌘Return in the deck is enough, or a menu command is wanted (finding 3 below).
 - **Largest text size (iPhone).** The deck's toggle stays on screen without scrolling, and the widget's text does not truncate mid-word.
 
+| ID | Experiment | Flow | Done when |
+|---|---|---|---|
+| C1 | [LAB-019](../experiments/LAB-019-local-constellation.md) Local Constellation | Open the experiment (Mac: the sidebar, ⌃⌘5, or the Open button on its catalog page; iPhone and Apple TV: the Open button on its catalog page) | The page reads the simulation's three devices, each device's state in words, and the conductor's roster |
+| C2 | LAB-019 | Pair the controller: Ask to Join, read the code at the conductor, type it on the controller, then Allow | The code is read digit by digit, the code field is named, Pair says what it does, and the result is heard |
+| C3 | LAB-019 | Move the show from the controller and point at the display (the pointer pad's arrow buttons) | Each board reads its cue and title after the move; the pointer has a path without a drag |
+| C4 | LAB-019 | Ask to Start on the controller, then Allow at the conductor | The request is read at the conductor with its device; Allow's result and the receipt are heard or focused |
+| C5 | LAB-019 | Walk Out of Range, wait, then Bring Back in Range and Reconnect | "Stale" and "Nothing heard from the conductor" are read on the board and in the roster without relying on color, then Disconnected, then Live |
+
+| Pass | Device | C1 | C2 | C3 | C4 | C5 |
+|---|---|---|---|---|---|---|
+| VoiceOver | Mac | not-run | not-run | not-run | not-run | not-run |
+| VoiceOver | iPhone | not-run | not-run | not-run | not-run | not-run |
+| Voice Control | Mac | not-run | not-run | not-run | not-run | not-run |
+| Voice Control | iPhone | not-run | not-run | not-run | not-run | not-run |
+| Full Keyboard Access | Mac | not-run | not-run | not-run | not-run | not-run |
+| Full Keyboard Access (hardware keyboard) | iPhone | not-run | not-run | not-run | not-run | not-run |
+| Siri Remote and VoiceOver | Apple TV | not-run | not-run | not-run | not-run | not-run |
+| Largest accessibility text size | iPhone | not-run | not-run | not-run | not-run | not-run |
+| Increase Contrast | Mac, iPhone | not-run | not-run | not-run | not-run | not-run |
+| Reduce Motion | Mac, iPhone | not-run | not-run | not-run | not-run | not-run |
+| Reduce Transparency | Mac, iPhone | not-run | not-run | not-run | not-run | not-run |
+| Differentiate Without Color, grayscale | Mac, iPhone | not-run | not-run | not-run | not-run | not-run |
+
+What to check in the Local Constellation flows, beyond the core list:
+
+- **VoiceOver.** After Allow, record whether anything is announced; today the receipt lands in the inspector without an announcement (finding 3 below). Record how the controller's and the display's identical buttons are told apart (finding 1).
+- **Voice Control.** "Tap Ask to Join" shows numbers, because the controller and the display each have one. Record whether "Tap Allow", "Tap Next Cue", and "Tap Reconnect" work.
+- **Full Keyboard Access (Mac).** The code field takes the six digits and Return pairs. Record how Allow, Deny, and the conductor's cue controls are reached (finding 4).
+- **Siri Remote (Apple TV).** Typing the code opens the system keyboard; record whether Pair is reachable after it closes. Record where focus first lands (finding 7).
+- **Largest text size (iPhone).** The controller's buttons and the code entry stay reachable, and no board text truncates mid-word.
+
 ## Known gaps
 
 - **Mac announcements are posted but not yet heard.** Since the integration of CORE-010, `LabAnnouncement.post()` uses AppKit's `announcementRequested` notification on the Mac (the product policy allows AppKit for that). No person has yet confirmed that VoiceOver speaks them; that stays a manual row.
@@ -423,3 +455,28 @@ LAB-035-B qualified the experiment with automated checks and by reading the code
 | 2 | 5 | The deck's revision line reads the middle dot: its accessibility label is "Demo session · revision 2", and "Demo session · never started" before the first start. | `SessionStateCard.revisionText` in `Apps/Shared/SurfaceDeck/SurfaceDeckViews.swift` | simulator audit (the element's label), static review | Join the spoken parts with a comma, as Action Atlas finding 1 asks. |
 | 3 | 2 | On the Mac, Start and Pause answer ⌘Return while the deck shows, but have no menu command. The deck itself has View › Surface Deck (⌘7). | `SessionToggleButton` in `SurfaceDeckViews.swift` | static review | The same question as Action Atlas finding 4 and Access as a Superpower finding 2. The Full Keyboard Access pass decides. |
 | 4 | 8, 9 | At the default text size the audit reported 13 issues on the deck as the Control opened it, and 25 with the deck scrolled to its previews. Contrast "nearly passed" or failed on secondary text: section headers and footers, the revision line, the receipt's time and status, and the previews' captions and text. Dynamic Type was "partially unsupported" on the Receipts header, the empty-receipts sentence, the receipt's summary, Undo Start Session, and the sheet's Done button. Text was clipped on Undo Start Session and on one unnamed element, and 2 "potentially inaccessible text" issues had no element. At the largest size the audit reported 2 issues, both on Done: Dynamic Type and contrast. | iPhone deck | simulator audit | Secondary text and content under the translucent bar follow the core triage. The previews draw on a tertiary fill, which may explain the failed contrast there; confirm in the Increase Contrast pass. Done is the system's sheet button. |
+
+## Local Constellation review (LAB-019-B)
+
+[LAB-019](../experiments/LAB-019-local-constellation.md) runs a show across a conductor, a controller, and a display. The fallback simulation is the whole experiment on every host today; the live controls exist only in Companions builds. The review below was made with automated checks, the Mac app's rendered views, tvOS Simulator screenshots, and by reading the code. No manual pass was run: every row for C1 to C5 in the [experiment flows](#manual-passes) is `not-run`.
+
+**Automated results**
+
+| Check | Path | Result |
+|---|---|---|
+| `ConstellationAccessibilityTests` (Mac hosted tests, in `script/test.sh`) | hosted test, macOS 27.0 | passed: pairing, Next, and staleness through the accessibility press action (LAB-019-A) |
+| `ConstellationHostEvidenceTests` (Mac hosted tests, in `script/test.sh`) | hosted test, macOS 27.0 | passed: the whole fallback interaction through the press action, from an unpaired device's refusal to a restart. The code reads "Code" then six single digits. Boards read "Cue 2 of 6, Lanterns." and, when quiet, "Nothing heard from the conductor"; the roster reads Stale, then Disconnected |
+| `ConstellationRemoteUITests` (in `script/test.sh`'s Apple TV step) | simulator, Apple TV 4K (3rd generation), tvOS 27.0 | passed: the remote alone opened the screen, reached the display's Ask to Join, found the code and Allow, reached Cancel, and Menu left the screen |
+
+**Findings.** These stay open until fixed or closed by the manual pass. Each names the rule it concerns.
+
+| # | Rule | Finding | Where | Found by | Triage |
+|---|---|---|---|---|---|
+| 1 | 3 | The controller's and the display's sections use the same button labels: Ask to Join, Walk Out of Range, Lose Next Frame, Disconnect, and Reconnect. Allow appears in both the pairing card and the request card. A VoiceOver user hears two identical buttons, and Voice Control shows numbers. | `SimulatedLinkControls` in `Packages/LabFeatures/Sources/LocalConstellation/SimulationViews.swift`; `PairingRequestCard` and `PendingRequestCard` in `ConstellationViews.swift` | hosted test (the press action takes the first match), tvOS UI test (two Ask to Join buttons) | Name the device in each label, or add `accessibilityInputLabels` such as "Ask to Join as Display". |
+| 2 | 5 | The roster row and the device details read middle dots: "Controller · 4d92 664c · last heard 0.0 s ago" and "Gaps 0 reliable, 0 samples lost · Reconnections 0". | `PeerStatusRow` and `JoinerPanel.details` in `ConstellationViews.swift` | static review, Mac rendering | Join the spoken parts with commas, as Action Atlas finding 1 asks. |
+| 3 | 4 | When the person at the conductor allows a peer's start, the receipt is listed but no `LabAnnouncement` is posted; the outcome sentence only carries the updates-frequently trait. | `ConstellationSimulation.allow` and the host's page | static review | Post the receipt's announcement from the host, as the other experiments do. |
+| 4 | 2 | On the Mac the simulation's and the live conductor's actions (Allow, Deny, Next Cue, Start the Show) have no menu commands; only View › Local Constellation (⌃⌘5) does. | `Apps/Mac/Window/ConstellationColumns.swift` | static review | The same question as Surface Deck finding 3. The Full Keyboard Access pass decides. |
+| 5 | 8 | When a board is stale, the overlay's "Stale" and its sentence are drawn over the dimmed cue title, so the words overlap. In a 420-point column, Bring Back in Range truncates to "Bring Back in R…". | `ShowBoard` and `SimulatedLinkControls` | Mac rendering | Hide the cue text under the overlay, or move the warning below the board; let the link buttons wrap. |
+| 6 | 8 | On Apple TV the screen, presented full screen over the experiment's page, had no background of its own: the page showed through and its text overlapped every line. **Fixed in this ticket**: the screen now draws the system background. | `ConstellationScreen` in `Apps/TV/Constellation/ConstellationScreen.swift` | tvOS UI-test screenshots | Closed; the walkthrough's Apple TV screenshots are from after the fix. |
+| 7 | 2 | On Apple TV, focus first lands on Join a Live Show as the Display. One press of Select there starts browsing, which can raise the system's local network prompt. It is still an explicit action, but the simulation is one press further away. | `ConstellationScreen` | tvOS UI test | Consider default focus on the simulation's first control. |
+
