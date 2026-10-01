@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "subject": "LAB-048",
+  "date": "2026-10-01T07:52:33Z",
+  "provenance": {
+    "sourceRevision": "5d28e44-dirty",
+    "sdkName": "iphonesimulator27.0",
+    "xcodeVersion": "27.0",
+    "xcodeBuild": "27A266a",
+    "appVersion": "0.1.0",
+    "buildNumber": "1",
+    "buildProfile": "CoreLocal",
+    "minimumOS": "26.0"
+  },
+  "execution": {
+    "path": "simulator",
+    "simulator": {
+      "platform": "iOS",
+      "deviceClass": "iPhone 18 Pro",
+      "osVersion": "27.0 (24A434)"
+    }
+  },
+  "check": "Full automated gate failure and separately completed baseline isolation checks",
+  "inputs": [
+    "project.yml@sha256:ba1769bc1620c2af269a8e9f44b2383a721384326ba0e28a76f8cb096de9a6ba",
+    "Packages/LabFeatures/Package.swift@sha256:cc967bb58f1fc6df74c9e3d89199d59eba79660d239499d8decaa5d20cd3e9ab",
+    "Packages/LabFeatures/Sources/LabCatalog/Resources/experiments.json@sha256:dc9fa313752a951a0c9a396e254634d5707a168bfe8f312e18245704b8af5634"
+  ],
+  "steps": [
+    "LAB_SIMULATOR_PREFIX=\"NL LAB-048-A\" script/test.sh: two invocations; first missed catalog expectations, fixed before second.",
+    "Second: validators/self-tests, packages and Mac tests passed; phone action failed on existing SpeechTimelinePhoneTests.",
+    "Separate fresh Watch and TV tests: exact command in tickets/LAB-048-A.md; created simulators deleted.",
+    "python3 script/build_manifest.py: Release Source lane; xcresulttool get test-results summary/tests read the actual result bundles."
+  ],
+  "outcome": {
+    "result": "failed",
+    "detail": "Full gate failed, exit 65: SpeechTimelinePhoneTests/theOnDeviceRouteOrItsStatedFallbackRunsInsideTheApp(): Crash: NativeLab. This existing failure is also recorded in LAB-041-B and was not changed. Both frontier hosted fixture tests passed. Mac summary Passed (194 passed, 1 expected failure, 3 skipped); phone summary Failed (12 passed, 1 failed). Separately run Watch 115 and TV 181 tests passed. Release Source-lane CoreLocal, SystemSurfaces and Companions built and passed policy checks; CloudOptional/FrontierOptional skipped with no attached targets. No frontier managed framework/entitlement leaked into baseline builds."
+  },
+  "limitations": [
+    "A passing baseline build is not approval, provisioning, device proof or a live frontier capability run.",
+    "Optional signed PTT, CarPlay and Screen Time executable targets are absent. The CarPlay external-display scene and live Screen Time cleanup were not implemented/tested.",
+    "The full repository gate remains failed despite passing separately completed stages.",
+    "Manual accessibility and rendered frontier controls were not driven."
+  ]
+}

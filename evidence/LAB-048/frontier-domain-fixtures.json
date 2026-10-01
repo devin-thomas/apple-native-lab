@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "subject": "LAB-048",
+  "date": "2026-10-01T07:00:27Z",
+  "provenance": {
+    "sourceRevision": "e35785c-dirty",
+    "sdkName": "macosx27.0",
+    "xcodeVersion": "27.0",
+    "xcodeBuild": "27A266a",
+    "appVersion": "0.1.0",
+    "buildNumber": "1",
+    "buildProfile": "CoreLocal",
+    "minimumOS": "26.0"
+  },
+  "execution": {
+    "path": "fixture"
+  },
+  "check": "Three independent lifecycle simulations through authorized operations",
+  "inputs": [
+    "Packages/LabFeatures/Sources/CommercialFrontier/FrontierCase.swift@sha256:d4f62e5ca628442d9759507954feb0b376dabff3f25bd86e6a4e96c63a617da8",
+    "Packages/LabFeatures/Sources/CommercialFrontier/FrontierDesk.swift@sha256:9e3d2640b148774b6a1b7a45f1e7c3e10a7b0a82c87ac2b7f64129340b129477",
+    "Packages/LabFeatures/Tests/CommercialFrontierTests/FrontierTests.swift@sha256:58666ab559485ebf2d7e09e193c5f6fbb7d6ec280706da68a520f911c922ff86"
+  ],
+  "steps": [
+    "swift test --package-path Packages/LabFeatures --filter FrontierTests",
+    "Fresh in-memory OperationService with GrantAuthorizationPolicy; typed fixed fixture IDs; original audio list; no native system adapter"
+  ],
+  "outcome": {
+    "result": "passed",
+    "detail": "9 tests passed. PTT join/leave, CarPlay connect/disconnect, Screen Time individual consent/restriction/revoke and receipts; invalid transitions, denied first writes, duplicate reauthorization, cancellation, unavailable backend, stale conflict, malformed-record refusal, scoped reset and reopened desk state."
+  },
+  "limitations": [
+    "Fixture run on macOS 27.0 (26A425); no physical device or real system surface.",
+    "Request replay is cached for the lifetime of one desk instance only.",
+    "No restrictions, recording, APNs, account connections or cloud calls.",
+    "Hosted UI, accessibility and the full gate are recorded separately."
+  ]
+}
