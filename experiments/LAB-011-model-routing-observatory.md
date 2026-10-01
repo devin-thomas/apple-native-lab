@@ -1,11 +1,11 @@
 ---
 id: "LAB-011"
 title: "Model Routing Observatory"
-state: "specified"
+state: "implemented"
 milestone: "M4"
 category: "Intelligence"
 depends_on: ["LAB-010"]
-source_review: "2026-09-29"
+source_review: "2026-09-30"
 ---
 
 # LAB-011 — Model Routing Observatory
@@ -33,10 +33,10 @@ The first run uses original fixtures. Keep the underlying operation independent 
 
 ## Acceptance and proof
 
-- [ ] Cloud-off causes zero cloud requests.
-- [ ] Missing entitlement is an explained gate.
-- [ ] Exhausted quota never silently switches to a paid provider.
-- [ ] The declared fallback completes a meaningful version of the interaction.
+- [x] Cloud-off causes zero cloud requests. (`CloudOffTests.cloudOffCausesZeroCloudRequests`)
+- [x] Missing entitlement is an explained gate. (`EntitlementGateTests`)
+- [x] Exhausted quota never silently switches to a paid provider. (`QuotaExhaustionTests`)
+- [x] The declared fallback completes a meaningful version of the interaction. (`FallbackTests`)
 - [ ] Essential actions remain available through the platform's assistive and alternate-input paths.
 - [ ] Actual device/OS/permission and adapter-path evidence is recorded; untested combinations remain unverified.
 
@@ -56,6 +56,26 @@ A fixture replay is labeled as a replay. It can prove the domain/UI contract but
 
 Proposed module: `Packages/LabFeatures/model-routing-observatory/`, with native adapters only in supported hosts/extensions. Shared operations and imported document structures belong in the domain/store packages rather than a view. Record any narrower module split during implementation.
 
+Implemented split (LAB-011-A):
+
+- `Packages/LabFeatures/Sources/ModelRouting/` holds the domain types `InferenceRoute`, `ConsentGrant`, `UsageReceipt`, `OutgoingFieldPreview`, `PCCEligibility`, the `RouteResolver` / `ModelRoutingFlow`, injectable `CloudTransport`, and the `RoutingProbe` over Foundation Models on iOS and macOS. It depends on LabDomain and LabSupport, never holds the store, and never offers a paid third-party provider.
+- `Apps/Shared/ModelRouting/` holds the host backend over `LabLibrary` / `LabDataService`, the session, and the shared views.
+  - The Mac reaches it from the sidebar (⌃⌘8) and from this experiment's catalog page.
+  - iPhone reaches it from the catalog page only.
+- `Fixtures/routing/` holds the original sample prompt, which both hosts bundle as a resource.
+
+## Implementation notes (LAB-011-A)
+
+Observed with Xcode 27.0 (27A266a), the macOS 27.0 SDK's `FoundationModels.swiftinterface`, and this experiment's package tests on research. These are compile and fixture-test facts, not device proof.
+
+- **Private Cloud Compute.** `PrivateCloudComputeLanguageModel` is iOS, macOS, visionOS, and watchOS 27.0 (tvOS unavailable), with `availability` (`.available` / `.unavailable(.deviceNotEligible | .systemNotReady)`), `quotaUsage` (`.belowLimit` / `.limitReached`, `isLimitReached`), and errors `networkFailure`, `quotaLimitReached`, `serviceUnavailable`. The entitlement string used for the gate is `com.apple.developer.private-cloud-compute`. CoreLocal does not carry it; program enrollment and permitted distribution stay closed gates by default.
+- **PCC vs on-device.** On-device availability is read from `SystemLanguageModel.default` separately from PCC eligibility. A ready on-device model does not open PCC, and an open PCC availability reading does not imply the account gates are met.
+- **Cloud-off.** `RoutingPolicy.localOnly` is the default. The flow never increments cloud send attempts or calls the transport under that policy.
+- **Quota.** Exhausted quota closes the PCC route and completes local or manual fallback. `PaidProvider.supportedProviders` is empty; no alternate paid adapter exists.
+- **Outgoing fields.** The preview describes the lab’s proposed request envelope, not Apple’s wire format; no live PCC adapter is implemented. `OutgoingFieldPreview` lists exact proposed field names and values before any cloud attempt. Usage receipts and diagnostics keep names and lengths only, never the prompt text.
+- **Authorization.** After a separate review and explicit approval, annotating a demo sample with the local summary proposes as the model-tool adapter and commits as the app UI through `LabLibrary.submit` / `OperationService`.
+- **Transport.** CoreLocal uses `RefusingCloudTransport`. Even with every gate open and consent granted, nothing leaves the device in this profile.
+
 ## Delivery
 
 [Implementation ticket](../tickets/LAB-011-A.md) → [qualification ticket](../tickets/LAB-011-B.md).
@@ -65,3 +85,5 @@ Proposed module: `Packages/LabFeatures/model-routing-observatory/`, with native 
 **Primary-source references:** [S06](../docs/SOURCE_INDEX.md#s06), [S07](../docs/SOURCE_INDEX.md#s07). A source is not device proof.
 
 See [data contracts](../docs/DATA_CONTRACTS.md), [permission boundaries](../docs/EXTENSION_AND_PERMISSION_MATRIX.md), and [test strategy](../docs/TEST_STRATEGY.md) for shared requirements.
+
+[ADR-017](../docs/adr/ADR-017.md) records the refusing transport, session reset, and explicit annotation approval. Unknown PCC gates fail closed. Package probes gate PCC symbols with `compiler(>=6.4)` as well as runtime availability, because app `LAB_SDK_27` conditions do not reach Swift packages. This preserves the source path for the 26-family toolchain; that SDK compile remains unrun.

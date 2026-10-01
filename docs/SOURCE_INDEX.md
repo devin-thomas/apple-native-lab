@@ -107,13 +107,25 @@ Uncertain: which variant and availability other devices report, and the 26-famil
 
 **Private Cloud Compute eligibility** — reviewed
 
-Source: [Private Cloud Compute eligibility](https://developer.apple.com/private-cloud-compute/)
+Source: [Private Cloud Compute eligibility](https://developer.apple.com/private-cloud-compute/). Refreshed 2026-09-30 for LAB-011-A alongside [server-side intelligence](https://developer.apple.com/documentation/foundationmodels/adding-server-side-intelligence-with-private-cloud-compute) and the [Boolean entitlement key](https://developer.apple.com/documentation/bundleresources/entitlements/com.apple.developer.private-cloud-compute).
 
 Use in this plan: Small Business Program, download threshold, entitlement, and permitted distribution gates.
 
 Implementation evidence required: actual SDK symbol/availability, permissions or entitlement, and a named compile/device result.
 
-Installed SDK check (2026-09-29): the 27.0 SDKs declare `PrivateCloudComputeLanguageModel` for iOS, macOS, visionOS, and watchOS 27.0, with `availability`, `quotaUsage`, and network, quota, and service errors. No lab code references it; a LAB-010 test fails if Typed Local Intelligence ever does. The route remains `blocked` until each gate above is shown.
+Installed SDK check (2026-09-30, Xcode 27.0 (27A266a), macOS 27.0 SDK `FoundationModels.swiftinterface`, for LAB-011-A). Availability is the SDK's declaration.
+
+| Symbol LAB-011 uses or gates on | Installed signature | Declared availability |
+|---|---|---|
+| `PrivateCloudComputeLanguageModel` | `final class PrivateCloudComputeLanguageModel: Sendable`; `convenience init()`; `var availability`; `var quotaUsage`; `var isAvailable` | iOS, macOS, visionOS, watchOS 27.0; `@available(tvOS, unavailable)` |
+| `Availability` | `.available` or `.unavailable(UnavailableReason)` with `.deviceNotEligible`, `.systemNotReady` | 27.0, as above |
+| `QuotaUsage` | `status` (`.belowLimit(BelowLimit)` with `isApproachingLimit`, or `.limitReached`); `isLimitReached`; optional `limitIncreaseSuggestion`, `resetDate` | 27.0, as above |
+| Errors | `.networkFailure`, `.quotaLimitReached`, `.serviceUnavailable` | 27.0, as above |
+| Entitlement (not an SDK symbol) | `com.apple.developer.private-cloud-compute` | Managed; Small Business Program, download threshold, account assignment, and App Store / TestFlight / ad hoc distribution ([S07] page) |
+
+LAB-011's package reads availability and quota behind `#if compiler(>=6.4)` and `#available(iOS 27.0, macOS 27.0, *)` on iOS and macOS hosts. CoreLocal does not declare the entitlement; program and distribution gates stay closed. No live PCC send ran: CoreLocal uses `RefusingCloudTransport`. A source build is not PCC-eligible by default.
+
+Earlier note (2026-09-29): LAB-010 never references `PrivateCloudComputeLanguageModel`; its `PrivacyAndRouteTests` still fails if Typed Local Intelligence does.
 
 ## S08
 

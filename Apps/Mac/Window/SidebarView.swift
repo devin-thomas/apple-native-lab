@@ -8,6 +8,7 @@ import ShortcutWorkbench
 import RenderThatSurvives
 import ScreeningRoom
 import LocalConstellation
+import ModelRouting
 import SurfaceDeck
 import SwiftUI
 import TactileGrammar
@@ -109,6 +110,9 @@ struct SidebarView: View {
                 Label(HomeSceneExperiment.title, systemImage: HomeSceneExperiment.symbol)
                     .tag(SidebarDestination.homeSceneSandbox)
                     .accessibilityHint("Preview light changes in a fictional home and commit selected actions")
+                Label(ModelRoutingExperiment.title, systemImage: ModelRoutingExperiment.symbol)
+                    .tag(SidebarDestination.modelRouting)
+                    .accessibilityHint("Where a request would run, outgoing fields, and Private Cloud Compute gates")
             }
             Section("Experiments") {
                 row(.all, symbol: "square.grid.2x2")

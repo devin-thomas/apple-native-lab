@@ -176,6 +176,19 @@ Native Screening Room's playback is live session state with one authority, the d
 
 The resume point is one JSON file the experiment owns, `screening-room-resume-point.json`, in its own `ScreeningRoom` folder: `schemaVersion` 1, `clip` (a lab clip ID, never a path or URL), `position` in seconds, and `caption` (`off` or a lab track ID). A file over 4 KB, another version, a negative or non-finite position, or a clip this build cannot play is ignored and reported, and the next save replaces it. Reset removes the file and nothing else.
 
+## Model routing (LAB-011)
+
+Lab-owned types, not Apple symbols:
+
+- **`InferenceRoute`**: `on-device`, `private-cloud-compute`, or `local-fallback`.
+- **`RoutingPolicy`**: default `local-only` (zero cloud sends); `cloud-allowed` only after entitlement, program, distribution, availability, quota, and consent gates open.
+- **`ConsentGrant`**: single-attempt, short-lived consent bound to an `OutgoingFieldPreview` digest. Entering the observatory does not grant it. Distinct from domain `CommitGrant`.
+- **`OutgoingFieldPreview`**: exact proposed field names and values shown before any cloud attempt; not a captured Apple wire payload. A SHA-256 digest binds consent.
+- **`UsageReceipt`**: route, policy, outcome, outgoing field names and lengths, closed gate kinds, and a summary. Never the prompt, note, or model output.
+- **`PCCEligibility`**: entitlement, program eligibility (enrollment and download threshold), distribution, SDK availability, and quota as separate gates from on-device `SystemLanguageModel` availability.
+
+CoreLocal refuses PCC sends (`RefusingCloudTransport`) and does not declare `com.apple.developer.private-cloud-compute`. Exhausted quota falls back locally; no paid third-party provider is modeled.
+
 ## Evidence records
 
 An evidence record names experiment/ticket ID, commit/revision, build/toolchain, SDK/OS, device class, input fixture hash, adapter path, consent state, exact steps, expected/observed results, measurements with units, and limitations. Never fabricate an identifier when no run occurred. Store explicit `not-run` rather than an empty success value.

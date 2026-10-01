@@ -74,6 +74,8 @@ targets:
       - path: Fixtures/speech/speech-sample-script.txt
         buildPhase: resources
       - path: Fixtures/speech/speech-sample-captions.vtt
+      # LAB-011 Model Routing Observatory: original routing prompt fixture.
+      - path: Fixtures/routing/routing-sample-prompt.txt
         buildPhase: resources
     dependencies:
       - package: LabSupport
@@ -90,6 +92,9 @@ targets:
       # LAB-012 Point, Inspect, Propose: a chosen image, OCR, and a reviewable record.
       - package: LabFeatures
         product: PointInspect
+      # LAB-011 Model Routing Observatory: route policy, PCC eligibility, outgoing-field preview.
+      - package: LabFeatures
+        product: ModelRouting
       # LAB-035 Access as a Superpower: the task, its chart semantics, and the Audio Graph descriptor.
       - package: LabFeatures
         product: AccessSuperpower
@@ -251,6 +256,8 @@ targets:
       - path: Fixtures/speech/speech-sample-script.txt
         buildPhase: resources
       - path: Fixtures/speech/speech-sample-captions.vtt
+      # LAB-011 Model Routing Observatory: original routing prompt fixture.
+      - path: Fixtures/routing/routing-sample-prompt.txt
         buildPhase: resources
     dependencies:
       - package: LabSupport
@@ -267,6 +274,9 @@ targets:
       # LAB-012 Point, Inspect, Propose: a chosen image, OCR, and a reviewable record.
       - package: LabFeatures
         product: PointInspect
+      # LAB-011 Model Routing Observatory: route policy, PCC eligibility, outgoing-field preview.
+      - package: LabFeatures
+        product: ModelRouting
       # LAB-035 Access as a Superpower: the task, its chart semantics, and the Audio Graph descriptor.
       - package: LabFeatures
         product: AccessSuperpower
@@ -433,6 +443,7 @@ targets:
       - path: Fixtures/speech/speech-sample-script.txt
         buildPhase: resources
       - path: Fixtures/speech/speech-sample-captions.vtt
+      - path: Fixtures/routing/routing-sample-prompt.txt
         buildPhase: resources
     dependencies:
       - package: LabSupport
@@ -448,6 +459,7 @@ targets:
         product: TypedIntelligence
       - package: LabFeatures
         product: PointInspect
+        product: ModelRouting
       - package: LabFeatures
         product: AccessSuperpower
       - package: LabFeatures

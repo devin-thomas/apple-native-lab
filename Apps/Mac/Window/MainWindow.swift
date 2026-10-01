@@ -138,6 +138,8 @@ struct MainWindow: View {
             ConstellationListColumn()
         case .homeSceneSandbox:
             HomeSceneListColumn(window: window, session: window.homeScene)
+        case .modelRouting:
+            ModelRoutingListColumn(window: window)
         case .catalog(let scope):
             if let registry = model.registry {
                 CatalogListColumn(registry: registry, scope: scope, window: window)
@@ -207,6 +209,8 @@ struct MainWindow: View {
             ConstellationDetailColumn()
         case .homeSceneSandbox:
             HomeSceneDetailColumn(session: window.homeScene)
+        case .modelRouting:
+            ModelRoutingDetailColumn(window: window)
         case .catalog:
             if let registry = model.registry {
                 CatalogDetailColumn(registry: registry, experimentID: window.experimentID)

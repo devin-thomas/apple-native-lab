@@ -38,13 +38,14 @@ import Testing
         // Mac and simulator; share extension in the simulator), LAB-008 (drag, export, and import on the Mac;
         // Implemented: Focus filter, LAB-009 (previews without the File Provider, revisions, and adoption
         // through Portable Objects in package and Mac host tests; live Quick Look, Files, and File Provider
-        // were not run), LAB-019 (the pairing, session, and wire layer and the single-device simulation in
-        // package and host tests; two devices on a local network were not run), LAB-023 (place, move, and
-        // remove through the operation service on the virtual table in package and Mac host tests; the live
-        // AR adapter on a device was not run), LAB-029 (the graph, offline fallback, and hosted audio unit on
-        // the Mac with no audio device; iPhone and AUv3 extension compiled for the simulator), LAB-031
-        // (playback, captions, and the receipt path for playback commands in package tests and the Mac,
-        // iPhone, and Apple TV hosts; no physical device, AirPlay, or Picture in Picture on hardware),
+        // were not run), LAB-011 (route observatory package tests: cloud off, entitlement, quota, and the
+        // local and manual fallback), LAB-019 (the pairing, session, and wire layer and the single-device
+        // simulation in package and host tests; two devices on a local network were not run), LAB-023 (place,
+        // move, and remove through the operation service on the virtual table in package and Mac host tests;
+        // the live AR adapter on a device was not run), LAB-029 (the graph, offline fallback, and hosted
+        // audio unit on the Mac with no audio device; iPhone and AUv3 extension compiled for the simulator),
+        // LAB-031 (playback, captions, and the receipt path for playback commands in package tests and the
+        // Mac, iPhone, and Apple TV hosts; no physical device, AirPlay, or Picture in Picture on hardware),
         // LAB-032 (a checkpointed render job that survives interruption in package and Mac host tests; no
         // physical device, iOS continued processing in the simulator only), LAB-037 (fictional home scene;
         // package tests), LAB-038 (unsigned pass preview and the event card in package tests; no signed pass
@@ -62,8 +63,8 @@ import Testing
         // LAB-013 (the on-device transcriber on a synthesized clip on the development Mac and in the
         // simulator, quiet hours, rip in the simulator), LAB-010 (model on the development Mac and simulator,
         // settings, the file profile.
-        #expect(catalog.experiments.filter { $0.state != .specified }.map(\.id) == ["LAB-001", "LAB-002", "LAB-003", "LAB-004", "LAB-006", "LAB-007", "LAB-008", "LAB-009", "LAB-010", "LAB-012", "LAB-013", "LAB-015", "LAB-016", "LAB-017", "LAB-019", "LAB-023", "LAB-029", "LAB-030", "LAB-031", "LAB-032", "LAB-035", "LAB-037", "LAB-038", "LAB-041", "LAB-042", "LAB-043"])
-        #expect(catalog.experiments.filter { $0.state == .implemented }.count == 26)
+        #expect(catalog.experiments.filter { $0.state != .specified }.map(\.id) == ["LAB-001", "LAB-002", "LAB-003", "LAB-004", "LAB-006", "LAB-007", "LAB-008", "LAB-009", "LAB-010", "LAB-011", "LAB-012", "LAB-013", "LAB-015", "LAB-016", "LAB-017", "LAB-019", "LAB-023", "LAB-029", "LAB-030", "LAB-031", "LAB-032", "LAB-035", "LAB-037", "LAB-038", "LAB-041", "LAB-042", "LAB-043"])
+        #expect(catalog.experiments.filter { $0.state == .implemented }.count == 27)
         #expect(catalog.progress(for: .m1) == (live: 6, total: 6))
         #expect(catalog.progress(for: .m3).live >= 1)
     }

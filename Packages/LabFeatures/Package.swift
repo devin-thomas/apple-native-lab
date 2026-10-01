@@ -39,6 +39,9 @@ let package = Package(
         .library(name: "LocalConstellation", targets: ["LocalConstellation"]),
         .library(name: "HomeSceneSandbox", targets: ["HomeSceneSandbox"]),
         .library(name: "WalletMoment", targets: ["WalletMoment"]),
+        // LAB-011 Model Routing Observatory: route policy, PCC eligibility, outgoing-field
+        // preview, and usage receipts without raw prompt telemetry.
+        .library(name: "ModelRouting", targets: ["ModelRouting"]),
     ],
     dependencies: [
         .package(path: "../LabSupport"),
@@ -459,6 +462,25 @@ let package = Package(
         .testTarget(
             name: "WalletMomentTests",
             dependencies: ["WalletMoment", .product(name: "LabDomain", package: "LabDomain")]
+        ),
+        // LAB-011 Model Routing Observatory: local-only default policy, PCC eligibility separate
+        // from on-device availability, outgoing-field preview, usage receipts without prompts.
+        // FoundationModels is imported on iOS and macOS only for availability and quota probes.
+        .target(
+            name: "ModelRouting",
+            dependencies: [
+                .product(name: "LabDomain", package: "LabDomain"),
+                .product(name: "LabSupport", package: "LabSupport"),
+            ],
+            resources: [.copy("Resources/routing-sample-prompt.txt")]
+        ),
+        .testTarget(
+            name: "ModelRoutingTests",
+            dependencies: [
+                "ModelRouting",
+                .product(name: "LabDomain", package: "LabDomain"),
+                .product(name: "LabSupport", package: "LabSupport"),
+            ]
         ),
     ]
 )

@@ -7,6 +7,7 @@ import LocalConstellation
 import Observation
 import RenderThatSurvives
 import ScreeningRoom
+import ModelRouting
 import ShareIngress
 import RespectfulAttention
 import ShortcutWorkbench
@@ -72,6 +73,8 @@ enum SidebarDestination: Hashable {
     case localConstellation
     /// LAB-037: fictional home scene preview and selected light commits.
     case homeSceneSandbox
+    /// LAB-011: where a request would run, outgoing fields, and PCC gates.
+    case modelRouting
     case catalog(CatalogScope)
 
     var title: String {
@@ -103,6 +106,7 @@ enum SidebarDestination: Hashable {
         case .tabletopReality: TabletopExperiment.title
         case .localConstellation: LocalConstellation.title
         case .homeSceneSandbox: HomeSceneExperiment.title
+        case .modelRouting: ModelRoutingExperiment.title
         case .catalog(let scope): scope.title
         }
     }
@@ -137,6 +141,7 @@ enum SidebarDestination: Hashable {
         case .tabletopReality: "tabletop-reality"
         case .localConstellation: "local-constellation"
         case .homeSceneSandbox: "home-scene-sandbox"
+        case .modelRouting: "model-routing"
         case .catalog(.all): "all"
         case .catalog(.milestone(let milestone)): "milestone:\(milestone.rawValue)"
         case .catalog(.category(let category)): "category:\(category)"
@@ -174,6 +179,7 @@ enum SidebarDestination: Hashable {
         case ("tabletop-reality", nil): self = .tabletopReality
         case ("local-constellation", nil): self = .localConstellation
         case ("home-scene-sandbox", nil): self = .homeSceneSandbox
+        case ("model-routing", nil): self = .modelRouting
         case ("all", nil): self = .catalog(.all)
         case ("milestone", let raw?): guard let milestone = Milestone(rawValue: raw) else { return nil }
             self = .catalog(.milestone(milestone))
@@ -227,6 +233,8 @@ final class MainWindowState {
     let tabletop = TabletopSession()
     /// LAB-037: this window's fictional home, preview, and scene run.
     let homeScene = HomeSceneSession()
+    /// LAB-011: which observatory pane the detail column shows.
+    var modelRoutingPane: ModelRoutingPane? = .board
     var searchText = ""
     /// Incremented to ask the window to focus its search field.
     var searchRequests = 0

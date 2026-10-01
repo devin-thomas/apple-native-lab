@@ -1,0 +1,3 @@
+A short original prompt for the Model Routing Observatory.
+
+It asks which demo sample would match a field-notebook stain on tracing vellum, without naming a person, account, or private file.

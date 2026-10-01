@@ -4,6 +4,7 @@ import DesktopNativePower
 import FindTheThing
 import LabCatalog
 import LocalConstellation
+import ModelRouting
 import RenderThatSurvives
 import RespectfulAttention
 import ScreeningRoom
@@ -111,6 +112,9 @@ struct LabCommands: Commands {
                 .disabled(window == nil)
             Button(WalletMomentExperiment.title) { window?.destination = .walletMoment }
                 .keyboardShortcut("7", modifiers: [.command, .control])
+                .disabled(window == nil)
+            Button(ModelRoutingExperiment.title) { window?.destination = .modelRouting }
+                .keyboardShortcut("8", modifiers: [.command, .control])
                 .disabled(window == nil)
             Button(DesktopCommand.showPalette.title) { desktop.showsPalette = true }
                 .keyboardShortcut("k", modifiers: .command)
