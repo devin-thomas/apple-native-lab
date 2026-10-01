@@ -47,6 +47,7 @@ struct ExperimentDetailView: View {
                 RenderLaunch(experiment: experiment)
                 ScreeningRoomLaunch(experiment: experiment)
                 AudioWorkshopLaunch(experiment: experiment)
+                TabletopLaunch(experiment: experiment)
                 Text(experiment.moment)
                     .font(.title3)
                     .fixedSize(horizontal: false, vertical: true)

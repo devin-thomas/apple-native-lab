@@ -10,6 +10,7 @@ import ScreeningRoom
 import SurfaceDeck
 import SwiftUI
 import TactileGrammar
+import TabletopReality
 
 /// The sidebar: the lab's own collection first, then the catalog by milestone, lifecycle state, and
 /// category, each with a count. Every one of the six states is listed, even when it is empty, so
@@ -95,6 +96,9 @@ struct SidebarView: View {
                 Label(AudioWorkshop.title, systemImage: AudioWorkshop.symbol)
                     .tag(SidebarDestination.audioWorkshop)
                     .accessibilityHint("A small audio processor with panic mute, bypass, MIDI, and offline processing")
+                Label(TabletopExperiment.title, systemImage: TabletopExperiment.symbol)
+                    .tag(SidebarDestination.tabletopReality)
+                    .accessibilityHint("Place, move, and inspect objects on a virtual table")
             }
             Section("Experiments") {
                 row(.all, symbol: "square.grid.2x2")

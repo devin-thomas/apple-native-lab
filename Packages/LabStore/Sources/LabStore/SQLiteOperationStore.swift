@@ -117,6 +117,18 @@ public actor SQLiteOperationStore: OperationStore {
         try entities(read { try database.rows("SELECT \(Self.jobColumns) FROM jobs", map: Self.job) })
     }
 
+    public func anchor(_ id: AnchorID) throws(StoreError) -> LabAnchor? {
+        try entities(read {
+            try database.rows(
+                "SELECT \(Self.anchorColumns) FROM anchors WHERE id = ?1", [.text(id.rawValue.uuidString)], map: Self.anchor
+            )
+        }).first
+    }
+
+    public func anchors() throws(StoreError) -> [LabAnchor] {
+        try entities(read { try database.rows("SELECT \(Self.anchorColumns) FROM anchors", map: Self.anchor) })
+    }
+
     // MARK: Commit
 
     public func apply(_ commit: AuthorizedCommit) throws(StoreError) -> CommitOutcome {
@@ -168,6 +180,10 @@ public actor SQLiteOperationStore: OperationStore {
         for job in commit.jobs {
             try upsert(job)
             try checkpoint(.wrote(job.reference))
+        }
+        for anchor in commit.anchors {
+            try upsert(anchor)
+            try checkpoint(.wrote(anchor.reference))
         }
         for entity in commit.removals {
             try remove(entity)
@@ -274,6 +290,23 @@ public actor SQLiteOperationStore: OperationStore {
         }
     }
 
+    private func upsert(_ anchor: LabAnchor) throws(StoreError) {
+        try change(anchor.reference) {
+            try database.run(
+                """
+                INSERT INTO anchors (id, fixture, title, x_mm, y_mm, z_mm, yaw_degrees, revision) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)
+                ON CONFLICT (id) DO UPDATE SET fixture = excluded.fixture, title = excluded.title, x_mm = excluded.x_mm,
+                    y_mm = excluded.y_mm, z_mm = excluded.z_mm, yaw_degrees = excluded.yaw_degrees, revision = excluded.revision
+                """,
+                [
+                    .text(anchor.id.rawValue.uuidString), .text(anchor.fixture.value), .text(anchor.title.value),
+                    .integer(anchor.pose.x), .integer(anchor.pose.y), .integer(anchor.pose.z), .integer(anchor.pose.yaw),
+                    .integer(anchor.revision.rawValue),
+                ]
+            )
+        }
+    }
+
     /// Deletes one demo entity. The `namespace` condition means a user row is never matched, and
     /// the schema's triggers refuse a user deletion from any other path too.
     private func remove(_ entity: EntityReference) throws(StoreError) {
@@ -328,6 +361,7 @@ public actor SQLiteOperationStore: OperationStore {
         case .session: "sessions"
         case .attention: "attentions"
         case .job: "jobs"
+        case .anchor: "anchors"
         }
     }
 
@@ -354,6 +388,20 @@ public actor SQLiteOperationStore: OperationStore {
             id: JobID(rawValue: id), jobKind: kind, title: title, phase: phase, progress: progress,
             revision: revision, namespace: namespace
         )
+    }
+
+    private static let anchorColumns = "id, fixture, title, x_mm, y_mm, z_mm, yaw_degrees, revision, namespace"
+
+    private static func anchor(_ row: SQLiteStatement) -> LabAnchor? {
+        guard let id = row.text(0).flatMap(UUID.init(uuidString:)),
+              let fixture = row.text(1).flatMap({ try? FixtureKey($0) }),
+              let title = row.text(2).flatMap({ try? EntityTitle($0) }),
+              let pose = try? AnchorPose(x: row.integer(3), y: row.integer(4), z: row.integer(5), yaw: row.integer(6)),
+              pose.yaw == row.integer(6),
+              let revision = Revision(rawValue: row.integer(7)),
+              row.text(8) == DataNamespace.demo.rawValue
+        else { return nil }
+        return LabAnchor(id: AnchorID(rawValue: id), fixture: fixture, title: title, pose: pose, revision: revision)
     }
 
     private static func session(_ row: SQLiteStatement) -> LabSession? {

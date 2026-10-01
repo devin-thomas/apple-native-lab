@@ -117,7 +117,7 @@ import Testing
         #expect(try await store.session(SessionID(rawValue: uuid(65)))?.revision == .r(4))
         #expect(try DatabaseDump(directory.storeURL) == before)
         let raw = try SQLiteDatabase(url: directory.storeURL)
-        #expect(try raw.integer("PRAGMA user_version") == 5)
+        #expect(try raw.integer("PRAGMA user_version") == SQLiteOperationStore.schemaVersion)
         #expect(try raw.strings("SELECT name FROM pragma_table_info('jobs')") == [
             "id", "kind", "title", "phase", "detail", "completed_units", "total_units", "revision", "namespace", "extras",
         ])

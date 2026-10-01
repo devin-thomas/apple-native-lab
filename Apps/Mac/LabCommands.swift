@@ -9,6 +9,7 @@ import ScreeningRoom
 import ShortcutWorkbench
 import SurfaceDeck
 import SwiftUI
+import TabletopReality
 import TactileGrammar
 
 /// Menu bar commands for the essential actions, each with a keyboard shortcut. Window-specific
@@ -97,6 +98,9 @@ struct LabCommands: Commands {
                 .disabled(window == nil)
             Button(AudioWorkshop.title) { window?.destination = .audioWorkshop }
                 .keyboardShortcut("3", modifiers: [.command, .control])
+                .disabled(window == nil)
+            Button(TabletopExperiment.title) { window?.destination = .tabletopReality }
+                .keyboardShortcut("4", modifiers: [.command, .control])
                 .disabled(window == nil)
             Button(DesktopCommand.showPalette.title) { desktop.showsPalette = true }
                 .keyboardShortcut("k", modifiers: .command)

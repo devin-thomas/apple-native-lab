@@ -57,6 +57,8 @@ public enum ReadTarget: Hashable, Sendable {
     case attention(AttentionID)
     /// Every lab alert. There is no filter: the table holds only lab-owned demo rows.
     case attentions
+    /// Every lab-owned anchor (LAB-023).
+    case anchors
     case receipt(RequestID)
     /// One job (LAB-032).
     case job(JobID)

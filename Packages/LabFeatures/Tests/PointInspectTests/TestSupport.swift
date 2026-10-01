@@ -36,6 +36,8 @@ final class CountingStore: OperationStore, @unchecked Sendable {
     func attentions() async throws -> [LabAttention] { await base.attentions() }
     func job(_ id: JobID) async throws -> LabJob? { await base.job(id) }
     func jobs() async throws -> [LabJob] { await base.jobs() }
+    func anchor(_ id: AnchorID) async throws -> LabAnchor? { await base.anchor(id) }
+    func anchors() async throws -> [LabAnchor] { await base.anchors() }
 
     func apply(_ commit: AuthorizedCommit) async throws -> CommitOutcome {
         let outcome = try await base.apply(commit)

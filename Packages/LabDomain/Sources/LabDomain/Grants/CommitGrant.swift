@@ -59,6 +59,8 @@ public enum GrantTarget: Hashable, Sendable {
             true
         case (.entity(.job), .startJob), (.entity(.job), .updateJob):
             true
+        case (.entity(.anchor), .placeAnchor), (.entity(.anchor), .moveAnchor), (.entity(.anchor), .removeAnchor):
+            true
         default: false
         }
     }

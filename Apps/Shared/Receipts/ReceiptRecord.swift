@@ -118,6 +118,9 @@ extension OperationKind {
         case .restoreLabAlerts: "Restore Lab Alerts"
         case .startJob: "Start Job"
         case .updateJob: "Update Job"
+        case .placeAnchor: "Place Object"
+        case .moveAnchor: "Move Object"
+        case .removeAnchor: "Remove Object"
         }
     }
 }
@@ -160,6 +163,7 @@ extension EntityKind {
         case .session: "Session"
         case .attention: "Lab alert"
         case .job: "Job"
+        case .anchor: "Placed Object"
         }
     }
 }

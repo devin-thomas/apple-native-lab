@@ -12,6 +12,7 @@ import ShortcutWorkbench
 import SurfaceDeck
 import SwiftUI
 import TactileGrammar
+import TabletopReality
 import TypedIntelligence
 import FindTheThing
 
@@ -62,6 +63,8 @@ enum SidebarDestination: Hashable {
     case screeningRoom
     /// LAB-029: the audio graph, its safety controls, MIDI, offline processing, and presets.
     case audioWorkshop
+    /// LAB-023: the virtual table, its object list, and the tracking gate.
+    case tabletopReality
     case catalog(CatalogScope)
 
     var title: String {
@@ -89,6 +92,7 @@ enum SidebarDestination: Hashable {
         case .renderSurvives: RenderThatSurvives.title
         case .screeningRoom: ScreeningRoom.title
         case .audioWorkshop: AudioWorkshop.title
+        case .tabletopReality: TabletopExperiment.title
         case .catalog(let scope): scope.title
         }
     }
@@ -119,6 +123,7 @@ enum SidebarDestination: Hashable {
         case .renderSurvives: "render-survives"
         case .screeningRoom: "screening-room"
         case .audioWorkshop: "audio-workshop"
+        case .tabletopReality: "tabletop-reality"
         case .catalog(.all): "all"
         case .catalog(.milestone(let milestone)): "milestone:\(milestone.rawValue)"
         case .catalog(.category(let category)): "category:\(category)"
@@ -152,6 +157,7 @@ enum SidebarDestination: Hashable {
         case ("render-survives", nil): self = .renderSurvives
         case ("screening-room", nil): self = .screeningRoom
         case ("audio-workshop", nil): self = .audioWorkshop
+        case ("tabletop-reality", nil): self = .tabletopReality
         case ("all", nil): self = .catalog(.all)
         case ("milestone", let raw?): guard let milestone = Milestone(rawValue: raw) else { return nil }
             self = .catalog(.milestone(milestone))
@@ -199,6 +205,8 @@ final class MainWindowState {
     var workbenchRecipeID: RecipeID?
     /// LAB-009: sample documents, previews, and adopt-into-lab.
     let documentsEverywhere = DocumentsEverywhereSession()
+    /// LAB-023: this window's table, selection, and tracking.
+    let tabletop = TabletopSession()
     var searchText = ""
     /// Incremented to ask the window to focus its search field.
     var searchRequests = 0

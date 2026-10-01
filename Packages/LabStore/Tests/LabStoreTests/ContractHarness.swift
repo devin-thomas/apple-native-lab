@@ -38,6 +38,8 @@ actor ContractStore: OperationStore {
     func attentions() async throws -> [LabAttention] { try await inner.attentions() }
     func job(_ id: JobID) async throws -> LabJob? { try await inner.job(id) }
     func jobs() async throws -> [LabJob] { try await inner.jobs() }
+    func anchor(_ id: AnchorID) async throws -> LabAnchor? { try await inner.anchor(id) }
+    func anchors() async throws -> [LabAnchor] { try await inner.anchors() }
 
     func apply(_ commit: AuthorizedCommit) async throws -> CommitOutcome {
         if let hook = beforeNextCommit {

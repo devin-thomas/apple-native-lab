@@ -155,6 +155,11 @@ struct LabDataService: Sendable {
         try await service.findJobs(kind: kind, as: actor)
     }
 
+    /// Every lab-owned anchor, ordered by title (LAB-023 Tabletop Reality).
+    func anchors(as actor: ActorScope) async throws(OperationError) -> [LabAnchor] {
+        try await service.findAnchors(as: actor)
+    }
+
     /// Validates an operation as `actor` without committing or recording anything (LAB-010 Typed
     /// Local Intelligence proposes as the model-tool adapter, which can never commit).
     func propose(_ operation: DomainOperation, as actor: ActorScope) async throws(OperationError) -> OperationProposal {

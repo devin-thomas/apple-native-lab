@@ -130,6 +130,8 @@ struct MainWindow: View {
             ScreeningRoomListColumn()
         case .audioWorkshop:
             AudioWorkshopListColumn(window: window)
+        case .tabletopReality:
+            TabletopListColumn(window: window, session: window.tabletop)
         case .catalog(let scope):
             if let registry = model.registry {
                 CatalogListColumn(registry: registry, scope: scope, window: window)
@@ -191,6 +193,8 @@ struct MainWindow: View {
             ScreeningRoomDetailColumn()
         case .audioWorkshop:
             AudioWorkshopDetailColumn(window: window)
+        case .tabletopReality:
+            TabletopDetailColumn(session: window.tabletop)
         case .catalog:
             if let registry = model.registry {
                 CatalogDetailColumn(registry: registry, experimentID: window.experimentID)
@@ -225,6 +229,7 @@ struct MainWindow: View {
         case .pointInspect: "Search the record"
         case .findTheThing: "Search records"
         case .documentsEverywhere: "Search samples"
+        case .tabletopReality: "Search the table"
         default: "Search experiments"
         }
     }

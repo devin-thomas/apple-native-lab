@@ -18,6 +18,7 @@ enum StoreSchema {
         Migration(version: 3, sql: version3),
         Migration(version: 4, sql: version4),
         Migration(version: 5, sql: version5),
+        Migration(version: 6, sql: version6),
     ]
 
     static var currentVersion: Int { migrations[migrations.count - 1].version }
@@ -167,5 +168,26 @@ enum StoreSchema {
         CREATE TRIGGER user_jobs_are_never_deleted BEFORE DELETE ON jobs
         WHEN OLD.namespace = 'user'
         BEGIN SELECT RAISE(ABORT, 'lab-namespace: user data is never deleted'); END;
+        """
+
+    /// Version 6: lab-owned anchors (LAB-023 Tabletop Reality).
+    ///
+    /// An anchor is a fixture key, a title, and a pose in whole millimeters and degrees in its
+    /// scene's own frame. It is lab state, so its namespace is always `demo`: Reset Demo removes
+    /// every anchor and never touches user data. No column holds world coordinates, camera images,
+    /// or mapping data. Nothing earlier changes.
+    static let version6 = """
+        CREATE TABLE anchors (
+            id TEXT PRIMARY KEY NOT NULL CHECK (length(id) = 36),
+            fixture TEXT NOT NULL CHECK (length(fixture) BETWEEN 1 AND 40),
+            title TEXT NOT NULL,
+            x_mm INTEGER NOT NULL CHECK (x_mm BETWEEN -5000 AND 5000),
+            y_mm INTEGER NOT NULL CHECK (y_mm BETWEEN -5000 AND 5000),
+            z_mm INTEGER NOT NULL CHECK (z_mm BETWEEN -5000 AND 5000),
+            yaw_degrees INTEGER NOT NULL CHECK (yaw_degrees BETWEEN 0 AND 359),
+            revision INTEGER NOT NULL CHECK (revision >= 1),
+            namespace TEXT NOT NULL DEFAULT 'demo' CHECK (namespace = 'demo'),
+            extras TEXT NOT NULL DEFAULT '{}' CHECK (json_valid(extras))
+        ) STRICT;
         """
 }

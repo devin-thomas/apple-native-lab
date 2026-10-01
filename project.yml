@@ -151,6 +151,9 @@ targets:
       # LAB-029 Audio Workshop: the C kernel, live playback, MIDI, offline processing, and the audio unit.
       - package: LabFeatures
         product: AudioWorkshop
+      # LAB-023 Tabletop Reality: the kit, placement rules, tracking gate, and anchor operations.
+      - package: LabFeatures
+        product: TabletopReality
     info:
       path: Apps/Mac/Info.plist
       properties:
@@ -310,6 +313,9 @@ targets:
       # LAB-029 Audio Workshop: the C kernel, live playback, MIDI, offline processing, and the audio unit.
       - package: LabFeatures
         product: AudioWorkshop
+      # LAB-023 Tabletop Reality: the kit, placement rules, tracking gate, and anchor operations.
+      - package: LabFeatures
+        product: TabletopReality
     info:
       path: Apps/Phone/Info.plist
       properties:
@@ -471,6 +477,9 @@ targets:
       # LAB-029 Audio Workshop, as LabPhone.
       - package: LabFeatures
         product: AudioWorkshop
+      # LAB-023 Tabletop Reality, as LabPhone.
+      - package: LabFeatures
+        product: TabletopReality
       - target: ShareExtension
         embed: true
       # LAB-004: the widget and Control extension, embedded only in this SystemSurfaces variant.

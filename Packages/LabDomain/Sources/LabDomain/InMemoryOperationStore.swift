@@ -6,6 +6,7 @@ public actor InMemoryOperationStore: OperationStore {
     private var sessionsByID: [SessionID: LabSession] = [:]
     private var attentionsByID: [AttentionID: LabAttention] = [:]
     private var jobsByID: [JobID: LabJob] = [:]
+    private var anchorsByID: [AnchorID: LabAnchor] = [:]
     private var receiptsByRequest: [RequestID: ActionReceipt] = [:]
 
     public init() {}
@@ -33,6 +34,9 @@ public actor InMemoryOperationStore: OperationStore {
     public func job(_ id: JobID) -> LabJob? { jobsByID[id] }
 
     public func jobs() -> [LabJob] { Array(jobsByID.values) }
+    public func anchor(_ id: AnchorID) -> LabAnchor? { anchorsByID[id] }
+
+    public func anchors() -> [LabAnchor] { Array(anchorsByID.values) }
 
     /// Checks and writes without suspending, so the actor makes the whole commit atomic. Every
     /// check runs before the first write, so a throw leaves nothing written.
@@ -68,6 +72,9 @@ public actor InMemoryOperationStore: OperationStore {
         for job in commit.jobs {
             jobsByID[job.id] = job
         }
+        for anchor in commit.anchors {
+            anchorsByID[anchor.id] = anchor
+        }
         for removal in commit.removals {
             switch removal {
             case .collection(let id): collectionsByID[id] = nil
@@ -75,6 +82,7 @@ public actor InMemoryOperationStore: OperationStore {
             case .session(let id): sessionsByID[id] = nil
             case .attention(let id): attentionsByID[id] = nil
             case .job(let id): jobsByID[id] = nil
+            case .anchor(let id): anchorsByID[id] = nil
             }
         }
         receiptsByRequest[commit.requestID] = commit.receipt
@@ -114,6 +122,7 @@ public actor InMemoryOperationStore: OperationStore {
         case .session(let id): sessionsByID[id]?.namespace
         case .attention(let id): attentionsByID[id]?.namespace
         case .job(let id): jobsByID[id]?.namespace
+        case .anchor(let id): anchorsByID[id]?.namespace
         }
     }
 
@@ -124,6 +133,7 @@ public actor InMemoryOperationStore: OperationStore {
         case .session(let id): sessionsByID[id]?.revision
         case .attention(let id): attentionsByID[id]?.revision
         case .job(let id): jobsByID[id]?.revision
+        case .anchor(let id): anchorsByID[id]?.revision
         }
     }
 }
