@@ -102,6 +102,13 @@ public struct RecipeExportWithholding: Hashable, Sendable {
     /// Model-step fields whose names were typed. Neither name nor value is written.
     public let unnamedModelStepFields: Int
 
+    public init(title: Bool, stepDetails: [Int], modelStepValues: [String], unnamedModelStepFields: Int) {
+        self.title = title
+        self.stepDetails = stepDetails
+        self.modelStepValues = modelStepValues
+        self.unnamedModelStepFields = unnamedModelStepFields
+    }
+
     public var isEmpty: Bool {
         !title && stepDetails.isEmpty && modelStepValues.isEmpty && unnamedModelStepFields == 0
     }
