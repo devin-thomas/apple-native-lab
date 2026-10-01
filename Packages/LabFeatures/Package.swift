@@ -12,6 +12,7 @@ let package = Package(
         .library(name: "ShareIngress", targets: ["ShareIngress"]),
         .library(name: "PortableObjects", targets: ["PortableObjects"]),
         .library(name: "SurfaceDeck", targets: ["SurfaceDeck"]),
+        .library(name: "PointInspect", targets: ["PointInspect"]),
     ],
     dependencies: [
         .package(path: "../LabSupport"),
@@ -106,6 +107,20 @@ let package = Package(
         .testTarget(
             name: "SurfaceDeckTests",
             dependencies: ["SurfaceDeck", .product(name: "LabDomain", package: "LabDomain")]
+        ),
+        // LAB-012 Point, Inspect, Propose: a chosen image becomes a reviewable item. Vision OCR
+        // and barcodes, an on-device description where the system can attach an image, and manual
+        // fields. The model-tool adapter proposes; the app UI commits.
+        .target(
+            name: "PointInspect",
+            dependencies: [.product(name: "LabDomain", package: "LabDomain")]
+        ),
+        .testTarget(
+            name: "PointInspectTests",
+            dependencies: [
+                "PointInspect",
+                .product(name: "LabDomain", package: "LabDomain"),
+            ]
         ),
     ]
 )
