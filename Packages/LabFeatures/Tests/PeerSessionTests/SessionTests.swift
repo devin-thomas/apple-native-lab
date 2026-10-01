@@ -70,6 +70,23 @@ import Testing
         #expect(admitted == 1)
     }
 
+    @Test func cancellingTheCodePromptRefusesThePairingAndPinsNothing() async throws {
+        let rig = Rig()
+        await rig.conductor.openPairing()
+        let connection = rig.hub.dial(from: "phone")
+        let controller = rig.controller
+        let joining = Task { () async -> HandshakeFailure? in
+            do { try await controller.pair(over: connection); return nil } catch { return error as? HandshakeFailure }
+        }
+        _ = try await eventually { await rig.conductor.state.pairingRequest }
+        _ = try await eventually { await rig.controller.state.codePrompt }
+        await rig.controller.cancelCode()
+        #expect(await joining.value == HandshakeFailure.refusedLocally(.notApproved))
+        try await until { await rig.conductor.state.pairingRequest == nil }
+        #expect(await rig.conductorTrust.all().isEmpty)
+        #expect(await rig.controller.state.host == nil)
+    }
+
     @Test func aDisplayMayNotSendCommands() async throws {
         let rig = Rig()
         try await rig.pair(rig.display, label: "tv")
