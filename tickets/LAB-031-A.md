@@ -78,7 +78,7 @@ LAB-031's spec now claims `implemented`. The screening ran in package tests on t
   - `UIBackgroundModes: [audio]` on LabPhone, LabPhoneSurfaces, and LabTV, which Picture in Picture needs.
   - LabTV's Store-lane purpose strings gain camera and microphone, because it now links AVFoundation (the policy's `purpose` rule); a Source build declares none.
   - The LabTV scheme's test action runs `ScreeningRoomTests` and `ScreeningRoomPlaybackTests` in the tvOS simulator.
-- `Config/ProductPolicy.txt`: AVKit, CoreMedia, and MediaPlayer for CoreLocal on macOS; AVKit, AVFAudio, CoreMedia, and MediaPlayer for CoreLocal and SystemSurfaces on iOS; AVFoundation, AVKit, AVFAudio, and CoreMedia for Companions on tvOS. `Config/PurposeStrings.xcconfig`: its comment.
+- `Config/ProductPolicy.txt`: AVKit, CoreMedia, and MediaPlayer for CoreLocal on macOS; AVKit, AVFAudio, CoreMedia, and MediaPlayer for CoreLocal and SystemSurfaces on iOS; AVFoundation, AVKit, AVFAudio, CoreMedia, and CryptoKit (through LabDomain) for Companions on tvOS. The release manifest shows each one linked. `Config/PurposeStrings.xcconfig`: its comment.
 - Tests in the hosts (new): `Tests/LabMacTests/ScreeningRoomHostTests.swift` (5), `Tests/LabPhoneTests/ScreeningRoomPhoneTests.swift` (1), `Tests/LabTVTests/ScreeningRoomTVTests.swift` (2), and `Tests/LabTVUITests/ScreeningRoomRemoteUITests.swift` (1, remote-driven).
 - `experiments/LAB-031-native-screening-room.md` (`state: implemented`, the implemented split, and implementation notes) and the regenerated catalog JSON; `docs/DATA_CONTRACTS.md` (screening commands and the resume point); `docs/VERIFICATION_BOUNDARIES.md` (the installed SDK ledger's LAB-031 section); this record and rows in [BUILD_STATUS](../docs/BUILD_STATUS.md).
 
@@ -93,7 +93,7 @@ LAB-031's spec now claims `implemented`. The screening ran in package tests on t
 
 **Bug found and fixed.** The remote-driven tvOS test found that after Watch in Theater and Menu, Spanish captions had turned off: the system player re-applied the system's caption preference when it took the player. The player now has `appliesMediaSelectionCriteriaAutomatically` off, and `CaptionAuthorityTests` pins it. The cost is that the system's "Closed Captions + SDH" preference is not applied when a clip first opens.
 
-**Commands and results:** the LAB-031-A rows in [BUILD_STATUS](../docs/BUILD_STATUS.md).
+**Commands and results:** the LAB-031-A rows in [BUILD_STATUS](../docs/BUILD_STATUS.md). `python3 script/validate/all.py` passed 8 of 8. The full `script/test.sh` stopped at its Mac step on 5 share-ingress tests that cannot read their fixtures from a mirror on research's scratch SSD (an environment problem, not this branch); every other step passed with those 5 skipped.
 
 **Not run:**
 
