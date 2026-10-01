@@ -98,6 +98,6 @@ LAB-009's spec now claims `implemented`. The document browser and domain preview
 - Live File Provider domain registration.
 - VoiceOver / Voice Control / Full Keyboard Access passes.
 - A 26-SDK compile.
-- Full four-platform `script/test.sh` past the Mac host: stopped on ShareIngress fixture `Operation not permitted` under the research PortableSSD mirror (unrelated). Follow-up host-only DocumentsEverywhere filter was queue-killed (exit 129) while waiting for a research sim slot.
+- Full four-platform `script/test.sh` past the Mac host: stopped on ShareIngress fixture `Operation not permitted` under the research PortableSSD mirror (unrelated). DocumentsEverywhere host filter re-run afterwards: 3/3 passed.
 
 **Next dependency-ready ticket:** LAB-009-B (qualify Documents Everywhere), once the lead merges this branch. FrontierOptional File Provider host embedding needs a lead decision.
