@@ -54,6 +54,9 @@ Recorded at [LAB-001-B](../tickets/LAB-001-B.md) from the [LAB-001-A](../tickets
 
 ### Indexed app entities (LAB-006)
 
+LAB-006-B re-probe (2026-10-01), Xcode 27.0 (27A266a), macOS 27.0 (26A425): read the macOS SDK's `AppIntents.framework/Versions/A/Modules/AppIntents.swiftmodule/arm64e-apple-macos.swiftinterface`. `IndexedEntity` is declared at macOS 15.0 / iOS 18.0 / visionOS 2.0. The same interface extends `CSSearchableIndex` with async throwing `indexAppEntities(_:priority:)` (default priority 0) and generic `deleteAppEntities(identifiedBy:ofType:)` at that floor. These methods live in the App Intents overlay, not the Core Spotlight interface searched first. No changed API name or availability constraint was found. The [primary S02 source](SOURCE_INDEX.md#s02) and Apple's [indexing documentation](https://developer.apple.com/documentation/corespotlight/cssearchableindex/indexappentities(_:priority:)) were consulted. The qualification's host evidence runs the lexical/idle-donor path only; live donation, system deletion, and Spotlight results remain unverified.
+
+
 Recorded at [LAB-006-A](../tickets/LAB-006-A.md). No entitlement is needed to index this app's own entities. Donation is an explicit action; opening the experiment does not call Spotlight. Nothing here has run on a physical device or been verified as searchable from Spotlight UI.
 
 | Source | Installed symbol | Declared availability | Demonstrated | Remaining uncertainty |
