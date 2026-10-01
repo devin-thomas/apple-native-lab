@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "subject": "LAB-030",
+  "check": "All three muted cues in the iPhone host on its live adapter wiring",
+  "date": "2026-10-01T05:23:07Z",
+  "provenance": {
+    "sourceRevision": "e75c668-dirty (qualification documentation only; test source committed as e75c668)",
+    "sdkName": "iphonesimulator27.0",
+    "xcodeVersion": "27.0",
+    "xcodeBuild": "27A266a",
+    "appVersion": "0.1.0",
+    "buildNumber": "1",
+    "buildProfile": "CoreLocal",
+    "minimumOS": "26.0"
+  },
+  "execution": {
+    "path": "simulator",
+    "simulator": {
+      "platform": "iOS",
+      "deviceClass": "iPhone 18 Pro",
+      "osVersion": "27.0 (24A434)"
+    }
+  },
+  "inputs": [
+    "Packages/LabFeatures/Sources/TactileGrammar/CuePattern.swift@sha256:a8b4736c75813fb911ff630cbcf808f2549cc6880a6ca3aea116a701400ea5cb",
+    "Tests/LabPhoneTests/TactileGrammarPhoneTests.swift@sha256:bf635bc004882ff34276485a803ec5b2b08c14753679828e15631039c1344a97"
+  ],
+  "steps": [
+    "labr <worktree> LAB_SIMULATOR_PREFIX=\"NL LAB-030-B\" script/test.sh",
+    "LabPhone-Core test action on the ticket-created iPhone 18 Pro simulator",
+    "TactileGrammarPhoneTests.everyMutedCueCompletesInsideTheApp: fresh LiveTactileGrammar engine, capability read, three muted requests, each retried, Stop and reset",
+    "xcrun xcresulttool get test-results tests --path <LabPhone-Core result bundle> through labr: test and suite result Passed"
+  ],
+  "outcome": {
+    "result": "passed",
+    "detail": "The named test ran and passed in the iPhone app. Success, Warning and Timing each returned delivered on the visual route with its original visual/spoken values and audioPlayed false. Identical request retries returned the same receipt. The log held three receipts, reset cleared three and left zero. The capability read returned without starting output."
+  },
+  "limitations": [
+    "Simulator path only; no physical iPhone, controller, or Watch output. No actuator or audio playback was started because every request was muted.",
+    "The hosted test calls the engine in process, not taps on the rendered page; no screenshot, pulse animation, VoiceOver, reset dialog, or keyboard journey was exercised.",
+    "Simulator created and deleted by script/test.sh. No existing simulator or imported user data was used."
+  ]
+}

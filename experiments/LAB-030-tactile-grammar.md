@@ -73,6 +73,10 @@ Observed with Xcode 27.0 (27A266a) and the 27.0 SDKs. These are compile and fixt
 - Package tests drive a stand-in actuator. They prove the fallback, muted play, rate and fatigue limits, cancellation, invalid ids, and the authorization refusals. They do not prove what a device's actuator did.
 - On the research Mac (Apple M5 Max), `LiveHapticCapabilities.read()` returned Core Haptics false, controller haptics false, Watch false, and quiet audio true. The call returned. It did not play a cue.
 
+## Qualification notes (LAB-030-B)
+
+The [walkthrough](../docs/walkthroughs/LAB-030-tactile-grammar.md) and [qualification record](../tickets/LAB-030-B.md) separate fixture, muted Mac adapter, simulator, and unrun physical output. Clean three-cue replays and sequential exact rate/fatigue boundaries pass. This remains `implemented`; no physical iPhone, controller, or Watch output was measured, and no manual accessibility pass ran. The source review records reduced-motion, result-announcement, repeated-pulse, Watch stop/reset, and controller waveform limits. A receipt's spoken field is text, not proof of speech or tactile output.
+
 ## Delivery
 
 [Implementation ticket](../tickets/LAB-030-A.md) → [qualification ticket](../tickets/LAB-030-B.md).
