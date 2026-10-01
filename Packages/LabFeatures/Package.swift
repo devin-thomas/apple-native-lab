@@ -12,6 +12,8 @@ let package = Package(
         .library(name: "ShareIngress", targets: ["ShareIngress"]),
         .library(name: "PortableObjects", targets: ["PortableObjects"]),
         .library(name: "SurfaceDeck", targets: ["SurfaceDeck"]),
+        // LAB-039 Tiny Doorway: validated invocation links, sealed proposals, and the visit action.
+        .library(name: "TinyDoorway", targets: ["TinyDoorway"]),
         // CORE-012: the journey's fixed values only. A product so that Xcode gives the journey's
         // tests a scheme, as every module's scheme holds its own tests. No host links it.
         .library(name: "FirstJourney", targets: ["FirstJourney"]),
@@ -109,6 +111,17 @@ let package = Package(
         .testTarget(
             name: "SurfaceDeckTests",
             dependencies: ["SurfaceDeck", .product(name: "LabDomain", package: "LabDomain")]
+        ),
+        // LAB-039 Tiny Doorway: link validation, sealed proposals, visit commits, and fallbacks.
+        // No App Clip framework: CoreLocal validates the same URL shape and explains when the clip
+        // target is not configured.
+        .target(
+            name: "TinyDoorway",
+            dependencies: [.product(name: "LabDomain", package: "LabDomain")]
+        ),
+        .testTarget(
+            name: "TinyDoorwayTests",
+            dependencies: ["TinyDoorway", .product(name: "LabDomain", package: "LabDomain")]
         ),
         // CORE-012: the first six-lab journey across every M1 module over one OperationService.
         // `FirstJourney` holds only the journey's fixed values; no host links it.
