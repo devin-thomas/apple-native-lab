@@ -2,9 +2,9 @@
   "schemaVersion": 1,
   "subject": "LAB-040",
   "check": "Developer-only local StoreKit configuration loader",
-  "date": "2026-10-01T04:29:48Z",
+  "date": "2026-10-01T04:30:27Z",
   "provenance": {
-    "sourceRevision": "b8815de+uncommitted",
+    "sourceRevision": "04260df+uncommitted",
     "sdkName": "macosx27.0",
     "xcodeVersion": "27.0",
     "xcodeBuild": "27A266a"
@@ -13,7 +13,9 @@
     "path": "fixture"
   },
   "inputs": [
-    "Fixtures/LAB-040/Commerce.storekit@sha256:f370f35c84fbec3fc372122995f8db83fc79060311e764b4a6da6223f6543c59"
+    "Fixtures/LAB-040/Commerce.storekit@sha256:f370f35c84fbec3fc372122995f8db83fc79060311e764b4a6da6223f6543c59",
+    "Fixtures/LAB-040/ConfigurationProbe.swift@sha256:f46c6e3c5091c457936213f9c75c78bab6ed86699d679434f0189b9aa397ffac",
+    "Fixtures/LAB-040/check_configuration.sh@sha256:0302a01ff7a2fec83089cf324a41a132fa42193ec0c9507c3e095d75ee37c377"
   ],
   "steps": [
     "On research through labr: Fixtures/LAB-040/check_configuration.sh",
@@ -22,7 +24,7 @@
   ],
   "outcome": {
     "result": "blocked",
-    "detail": "The probe compiled. With developer framework/library paths, XCTest constructed SKTestSession, but the service refused saving its configuration: SKServiceErrorDomain code 2, underlying SKInternalErrorDomain code 4. The driver exited 1. Earlier iterations identified missing XCTest runtime and Swift support search paths; a bare executable aborted. No product purchase was requested."
+    "detail": "The final developer-only XCTest bundle compiled and ran one constructor assertion. StoreKitTest nevertheless refused saving the configuration: SKServiceErrorDomain code 2, underlying SKInternalErrorDomain code 4. The driver exited 1. Earlier iterations identified missing XCTest runtime and Swift support search paths; a bare executable aborted. No product purchase was requested."
   },
   "limitations": [
     "A passing constructor assertion is not proof that StoreKit Testing activated this configuration.",

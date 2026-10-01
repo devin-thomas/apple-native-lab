@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "subject": "LAB-040",
+  "check": "Commerce stale-action recovery through the native session and shared iPhone compilation",
+  "date": "2026-10-01T05:12:36Z",
+  "provenance": {
+    "sourceRevision": "9c50384-dirty",
+    "sdkName": "macosx27.0",
+    "xcodeVersion": "27.0",
+    "xcodeBuild": "27A266a",
+    "appVersion": "0.1.0",
+    "buildNumber": "1",
+    "buildProfile": "CoreLocal",
+    "minimumOS": "26.0"
+  },
+  "execution": {
+    "path": "fixture"
+  },
+  "inputs": [
+    "Apps/Shared/CommerceWithoutTricks/CommerceSession.swift@sha256:9481480beb74cfaa5a1a85bf9f063e256fbfd957766dee828d0cc6c7a28663e3",
+    "Tests/LabMacTests/CommerceHostTests.swift@sha256:f4f5dfccf85961caf59539d34c7aa725fff016a2ecfc937e316b3ca8556a742f"
+  ],
+  "steps": [
+    "On research through labr: xcodebuild -project AppleNativeLab.xcodeproj -scheme LabMac-Core -destination platform=macOS -derivedDataPath build/DerivedData -only-testing:LabMacTests/CommerceHostTests -collect-test-diagnostics never LAB_SOURCE_REVISION=9c50384-dirty test -quiet",
+    "Before the fix, the stale purchase retry regression failed (exit 65). After the fix, the selected CommerceHostTests suite passed (exit 0); its three cases include stale purchase, restore, and reset recovery through LabLibrary / OperationService.",
+    "On research through labr: xcodebuild -project AppleNativeLab.xcodeproj -scheme LabPhone-Core -sdk iphonesimulator -derivedDataPath build/DerivedData LAB_SOURCE_REVISION=9c50384-dirty build -quiet; passed (exit 0)."
+  ],
+  "outcome": {
+    "result": "passed",
+    "detail": "Recorded conflicts renew the UI request identifier for a reviewed retry. Unrecorded refusals retain the identifier. The hosted suite passed after the regression fix; the shared iPhone implementation compiled. This tested source was committed as fedd8c0."
+  },
+  "limitations": [
+    "Targeted follow-up after the earlier full four-platform gate; the full gate was not rerun after this change.",
+    "The later read-only xcresult inspection found no retained result bundle; this follow-up records the observed command exits, not a reconstructed xcresult summary.",
+    "Hosted fixture calls and simulator SDK compilation only; no physical device, iPhone UI walkthrough, real purchase, or StoreKit-backed adapter."
+  ]
+}
