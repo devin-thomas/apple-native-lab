@@ -82,6 +82,12 @@ Monotonic clocks are device-local and cannot be compared directly. A clock estim
 
 Reliable commands and replaceable samples are separate queues. A replayed message ID returns its previous admission result. Stale replaceable samples are dropped. When sequence continuity is lost or a peer reconnects, acquire a snapshot before admitting mutations. Bounded queues and expiration prevent a stale wrist input from unexpectedly changing a later session.
 
+### Screening commands and the resume point (LAB-031)
+
+Native Screening Room's playback is live session state with one authority, the device that owns the player (`ScreeningSession`). A controller reaches it only through `ScreeningLink`: a snapshot (`PlaybackState`, with its revision) or one `PlaybackCommand` with a request ID and the revision the controller last saw, answered by a `PlaybackReceipt`. In a protocol-v1 envelope a command is a reliable message whose `messageID` is the request ID and whose `baseRevision` is the seen revision; the receiver, never the payload, runs it as an `authorizedPeer`, which may play, pause, seek, choose captions, and move between the page and the theater, but not reset. Position samples are replaceable and never raise the revision. Signals (interruptions, route changes, the player's own controls) never cross the link. LAB-019 supplies the transport; `InProcessScreeningLink` stands in for it within one app.
+
+The resume point is one JSON file the experiment owns, `screening-room-resume-point.json`, in its own `ScreeningRoom` folder: `schemaVersion` 1, `clip` (a lab clip ID, never a path or URL), `position` in seconds, and `caption` (`off` or a lab track ID). A file over 4 KB, another version, a negative or non-finite position, or a clip this build cannot play is ignored and reported, and the next save replaces it. Reset removes the file and nothing else.
+
 ## Evidence records
 
 An evidence record names experiment/ticket ID, commit/revision, build/toolchain, SDK/OS, device class, input fixture hash, adapter path, consent state, exact steps, expected/observed results, measurements with units, and limitations. Never fabricate an identifier when no run occurred. Store explicit `not-run` rather than an empty success value.
