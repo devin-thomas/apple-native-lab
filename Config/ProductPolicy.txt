@@ -39,6 +39,9 @@ entitlement  CoreLocal  macos    com.apple.security.app-sandbox   # the Mac host
 # CoreLocal: Action Atlas (LAB-001). App Intents need no entitlement; the in-app browser is the fallback
 link         CoreLocal  macos    AppIntents          # App Intents, entities, and queries over the operation service
 link         CoreLocal  ios      AppIntents          # same, iPhone host
+# CoreLocal: Find the Thing (LAB-006). Donation updates this app's own indexed records. No entitlement.
+link         CoreLocal  macos    CoreSpotlight       # CSSearchableIndex.indexAppEntities for opted-in records only
+link         CoreLocal  ios      CoreSpotlight       # same, iPhone host
 link         CoreLocal  macos    CoreTransferable    # the action browser's Share button for an export (ShareLink)
 link         CoreLocal  ios      CoreTransferable    # same, iPhone host
 
@@ -52,6 +55,7 @@ link         SystemSurfaces ios  ARKit               # host variant: world track
 link         SystemSurfaces ios  AVFoundation        # host variant: camera and microphone status, as LabPhone
 link         SystemSurfaces ios  Accessibility       # host variant: the Audio Graph chart descriptor, as LabPhone
 link         SystemSurfaces ios  AppIntents          # host variant: Action Atlas intents, as LabPhone; the widget extension: Surface Deck's toggle and launch action
+link         SystemSurfaces ios  CoreSpotlight       # host variant: Find the Thing donation of opted-in records, as LabPhone
 link         SystemSurfaces ios  CoreBluetooth       # host variant: Bluetooth authorization status, as LabPhone
 link         SystemSurfaces ios  CoreTransferable    # host variant: the action browser's ShareLink, as LabPhone
 link         SystemSurfaces ios  CryptoKit           # host and extensions: SHA-256 of staged content and the demo seed (LabDomain)

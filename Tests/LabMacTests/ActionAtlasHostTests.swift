@@ -260,9 +260,9 @@ import Testing
         #expect(intents(from: "SurfaceDeck") == ["SetDemoSessionIntent", "GetDemoSessionIntent", "OpenSurfaceDeckIntent"])
         #expect(actions.count == 11)
         let entities = try #require(metadata["entities"] as? [String: Any])
-        #expect(Set(entities.keys) == ["LabItemEntity", "LabCollectionEntity"])
+        #expect(Set(entities.keys) == ["LabItemEntity", "LabCollectionEntity", "FindRecordEntity"])
         let queries = try #require(metadata["queries"] as? [String: Any])
-        #expect(Set(queries.keys) == ["LabItemQuery", "LabCollectionQuery"])
+        #expect(Set(queries.keys) == ["LabItemQuery", "LabCollectionQuery", "FindRecordQuery"])
     }
 }
 

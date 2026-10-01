@@ -1,3 +1,4 @@
+import FindTheThing
 import LabCatalog
 import LabSupport
 import SurfaceDeck
@@ -39,6 +40,9 @@ struct SidebarView: View {
                 Label(SurfaceDeck.title, systemImage: SurfaceDeck.symbol)
                     .tag(SidebarDestination.surfaceDeck)
                     .accessibilityHint("The demo session, its receipts, and previews of its widget and Control")
+                Label(FindTheThing.title, systemImage: FindTheThing.symbol)
+                    .tag(SidebarDestination.findTheThing)
+                    .accessibilityHint("Search opted-in records and see which ones the answer used")
             }
             Section("Experiments") {
                 row(.all, symbol: "square.grid.2x2")
