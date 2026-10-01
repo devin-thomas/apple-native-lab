@@ -12,6 +12,7 @@ let package = Package(
         .library(name: "ShareIngress", targets: ["ShareIngress"]),
         .library(name: "PortableObjects", targets: ["PortableObjects"]),
         .library(name: "SurfaceDeck", targets: ["SurfaceDeck"]),
+        .library(name: "FindTheThing", targets: ["FindTheThing"]),
     ],
     dependencies: [
         .package(path: "../LabSupport"),
@@ -106,6 +107,17 @@ let package = Package(
         .testTarget(
             name: "SurfaceDeckTests",
             dependencies: ["SurfaceDeck", .product(name: "LabDomain", package: "LabDomain")]
+        ),
+        // LAB-006 Find the Thing: an in-app index of opted-in records, lexical search, and an
+        // optional semantic retriever that may cite only records the index holds. App entity
+        // donation is compiled for iOS and macOS and is not called unless a host asks.
+        .target(
+            name: "FindTheThing",
+            dependencies: [.product(name: "LabDomain", package: "LabDomain")]
+        ),
+        .testTarget(
+            name: "FindTheThingTests",
+            dependencies: ["FindTheThing", .product(name: "LabDomain", package: "LabDomain")]
         ),
     ]
 )
