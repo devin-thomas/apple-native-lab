@@ -100,7 +100,7 @@ public struct ResolveLabItemIntent: AppIntent {
 public struct InspectModelStepIntent: AppIntent {
     public static let title: LocalizedStringResource = "Inspect Model Step"
     public static let description = IntentDescription(
-        "Shows what an optional model step would receive. Secret-shaped fields are redacted and are never stored in Shortcuts."
+        "Shows what an optional model step would receive. Only text Native Lab wrote is returned; anything you typed is withheld and never stored in Shortcuts."
     )
     public static let authenticationPolicy = IntentAuthenticationPolicy.requiresAuthentication
 
@@ -129,10 +129,12 @@ public struct InspectModelStepIntent: AppIntent {
         } else {
             recipe = try actions.recipe(RecipeID(rawValue: UUID(uuidString: "A3C00300-0001-4000-8000-000000000002")!))
         }
-        let inspection = try actions.inspectModelStep(of: recipe)
-        let lines = inspection.fields.keys.sorted().map { "\($0): \(inspection.fields[$0] ?? "")" }
-        let body = ([inspection.summary] + lines).joined(separator: "\n")
-        return WorkbenchIntentOutput(value: body, dialog: inspection.summary)
+        guard let payload = recipe.modelStep else {
+            throw .invalidInput("This recipe has no model step to inspect.")
+        }
+        // The result goes to Shortcuts, so it follows the export rule: no typed text leaves.
+        let view = ModelStepExportView(payload: payload)
+        return WorkbenchIntentOutput(value: view.text, dialog: view.summary)
     }
 }
 
@@ -141,7 +143,7 @@ public struct InspectModelStepIntent: AppIntent {
 public struct ExportRecipeIntent: AppIntent {
     public static let title: LocalizedStringResource = "Export Recipe"
     public static let description = IntentDescription(
-        "Exports a recipe definition as JSON. Raw secret values never appear in the file."
+        "Exports a recipe definition as JSON. Only text Native Lab wrote is included; anything you typed is marked withheld."
     )
     public static let authenticationPolicy = IntentAuthenticationPolicy.requiresAuthentication
 
@@ -159,13 +161,7 @@ public struct ExportRecipeIntent: AppIntent {
     public func perform() async throws -> some IntentResult & ReturnsValue<IntentFile> & ProvidesDialog {
         let output = try await run(with: workbench)
         let file = IntentFile(data: output.value.data, filename: output.value.filename, type: .json)
-        let dialog: String
-        if output.value.redactedKeys.isEmpty {
-            dialog = "Exported “\(output.value.recipe.title)”."
-        } else {
-            dialog = "Exported “\(output.value.recipe.title)”. Secret-shaped fields (\(output.value.redactedKeys.joined(separator: ", "))) were written as \(SecretRedaction.placeholder)."
-        }
-        return .result(value: file, dialog: "\(dialog)")
+        return .result(value: file, dialog: "\(output.dialog)")
     }
 
     public func run(with link: WorkbenchLink) async throws(WorkbenchError) -> WorkbenchIntentOutput<RecipeExport> {
@@ -177,7 +173,9 @@ public struct ExportRecipeIntent: AppIntent {
         } else {
             recipe = try actions.recipe(RecipeDefinition.importExportWalkthrough().id)
         }
-        return WorkbenchIntentOutput(value: actions.exportRecipe(recipe), dialog: "Exported.")
+        let export = actions.exportRecipe(recipe)
+        let dialog = ["Exported “\(export.displayTitle)”.", export.withheld.summary].compactMap(\.self).joined(separator: " ")
+        return WorkbenchIntentOutput(value: export, dialog: dialog)
     }
 }
 

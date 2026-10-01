@@ -6,7 +6,7 @@ import LabDomain
 ///
 /// The curated entry set is separate from the atomic action library (ADR S03). Recipes hold stable
 /// entity identifiers, so renaming a source item does not break them. Sensitive changes commit only
-/// through the host's `OperationService`. Shortcuts never stores secrets; recipe exports redact them.
+/// through the host's `OperationService`. Shortcuts never stores secrets; recipe exports carry only text the lab wrote.
 public enum ShortcutWorkbench {
     public static let experimentID = "LAB-003"
     public static let title = "Shortcut Workbench"

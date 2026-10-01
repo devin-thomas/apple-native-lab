@@ -1,7 +1,9 @@
 import Foundation
 
-/// Redacts secret-shaped values so they never enter recipe exports, model-step inspections, or
-/// Shortcuts-facing payloads. Shortcuts Storage is not a vault (S04).
+/// Masks values under secret-shaped field names in the in-app model-step inspection. This is a
+/// display courtesy, not the export guarantee: a field name cannot say whether a value is secret,
+/// so recipe exports and Shortcuts results withhold every typed value instead (`RecipeExport`).
+/// Shortcuts Storage is not a vault (S04).
 public enum SecretRedaction {
     public static let placeholder = "[redacted]"
 

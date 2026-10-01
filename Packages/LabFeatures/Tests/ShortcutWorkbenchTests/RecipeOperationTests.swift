@@ -103,13 +103,13 @@ import Testing
             ])
         )
         let export = RecipeExport(recipe: recipe)
-        #expect(export.redactedKeys.sorted() == ["apiKey", "password"])
-        #expect(!export.containsRawSecret([secret, "hunter2"]))
-        #expect(export.text.contains(SecretRedaction.placeholder))
-        #expect(export.text.contains("Summarize the lab."))
-        #expect(export.text.contains("neutral"))
-        #expect(!export.text.contains(secret))
-        #expect(!export.text.contains("hunter2"))
+        // Typed names and values never leave, whatever they are called; lab-written text does.
+        #expect(!export.containsRawSecret([secret, "hunter2", "Summarize the lab.", "apiKey", "password", "Secret-bearing recipe"]))
+        #expect(export.text.contains(RecipeExport.withheldPlaceholder))
+        #expect(export.text.contains("\"tone\" : \"neutral\""))
+        #expect(export.text.contains("\"prompt\" : \"[withheld]\""))
+        #expect(export.text.contains("\"withheldFieldCount\" : 2"))
+        #expect(export.withheld == RecipeExportWithholding(title: true, stepDetails: [], modelStepValues: ["prompt"], unnamedModelStepFields: 2))
     }
 
     @Test func modelStepInspectionRedactsSecrets() {
@@ -134,7 +134,7 @@ import Testing
         let backend = try await TestWorkbenchBackend.seeded()
         let catalog = WorkbenchRecipeCatalog(seed: [])
         let actions = backend.actions(.appUI, catalog: catalog)
-        var recipe = RecipeDefinition(
+        let recipe = RecipeDefinition(
             id: RecipeID(),
             title: "Transform only",
             steps: [RecipeStep(order: 1, kind: .transform, detail: " · via workbench")],

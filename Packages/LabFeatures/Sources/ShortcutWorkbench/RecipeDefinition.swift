@@ -27,8 +27,8 @@ public struct RecipeStep: Hashable, Sendable, Codable, Identifiable {
 
 /// Optional fields a model step would receive. Inspected in-app; never stored as Shortcuts secrets.
 public struct ModelStepPayload: Hashable, Sendable, Codable {
-    /// Free-form fields a recipe author attached. Secret-shaped keys are redacted on export and
-    /// on inspection.
+    /// Free-form fields a recipe author attached. In-app inspection masks secret-shaped names;
+    /// exports withhold every typed name and value (`RecipeExport`).
     public var fields: [String: String]
 
     public init(fields: [String: String] = [:]) {
@@ -42,7 +42,9 @@ public struct ModelStepPayload: Hashable, Sendable, Codable {
 /// a recoverable missing-item result rather than a silent empty run.
 public struct RecipeDefinition: Hashable, Sendable, Codable, Identifiable {
     public static let format = "native-lab-recipe"
-    public static let formatVersion = 1
+    /// Version 2 (LAB-003-B repair): exports carry only lab-authored text and mark the rest
+    /// `[withheld]`.
+    public static let formatVersion = 2
 
     public let id: RecipeID
     public var title: String
