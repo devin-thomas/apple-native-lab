@@ -33,10 +33,10 @@ The first run uses original fixtures. Keep the underlying operation independent 
 
 ## Acceptance and proof
 
-- [ ] Deleted private data is removed from the app index.
-- [ ] An unsupported query returns no invented results.
-- [ ] A generated answer cites actual record IDs.
-- [ ] The declared fallback completes a meaningful version of the interaction.
+- [x] Deleted private data is removed from the app index (fixture tests and Mac host replay; the bundled shelf detail remains readable).
+- [x] An unsupported query returns no invented results (package refusal tests and Mac host replay).
+- [x] A generated answer cites actual record IDs (deterministic answer text, package tests and Mac host replay; no model generation).
+- [x] The declared fallback completes a meaningful version of the interaction (lexical Mac host replay).
 - [ ] Essential actions remain available through the platform's assistive and alternate-input paths.
 - [ ] Actual device/OS/permission and adapter-path evidence is recorded; untested combinations remain unverified.
 
@@ -80,3 +80,7 @@ Observed with Xcode 27.0 (27A266a) and the 27.0 SDKs. These are package and host
 **Primary-source references:** [S02](../docs/SOURCE_INDEX.md#s02), [S06](../docs/SOURCE_INDEX.md#s06). A source is not device proof.
 
 See [data contracts](../docs/DATA_CONTRACTS.md), [permission boundaries](../docs/EXTENSION_AND_PERMISSION_MATRIX.md), and [test strategy](../docs/TEST_STRATEGY.md) for shared requirements.
+
+## Qualification boundaries (LAB-006-B)
+
+See the [walkthrough](../docs/walkthroughs/LAB-006-find-the-thing.md). Qualification keeps `implemented`: an isolated in-memory Mac host replay and package tests prove lexical search, citation IDs, deletion from the app index, and reset preservation of a non-shelf stand-in. No live Spotlight round trip, physical iPhone/iPad, or manual accessibility pass is claimed. Delete removes search visibility, not the original bundled shelf text; Reset Fixtures restores that fixture, and restarting the process creates a new in-memory index. A system deletion requires the separate donation action.

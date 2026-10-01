@@ -456,3 +456,15 @@ LAB-031-B simulator finding: at the default tvOS layout, the Spanish caption but
 Static review of `TrustDeskForm` only: labeled native controls, the Display name hint, combined Identity content, and a Receipt accessibility label exist. View › Trust Desk supplies ⌘0 on Mac. Hosted replays call sessions rather than accessibility actions. No manual accessibility pass or rendered audit ran.
 
 Open findings: individual desk actions have no Mac menu commands; the credential reference is limited to two lines; the 60-second grant display has no timed refresh (the operation still checks expiry). VoiceOver, Voice Control, Full Keyboard Access, large text, contrast, and focus order on Mac/iPhone/iPad are `not-run`. These findings prevent a release accessibility claim.
+
+## Find the Thing qualification (LAB-006-B)
+
+Static source review only: the search field and action buttons have names, shelf rows speak index status and privacy, citations speak title and UUID, Return submits search, and View › Find the Thing has ⌥⌘7. State is available in text. No essential action depends on motion.
+
+| Flow | Static review | VoiceOver | Voice Control | Full Keyboard Access | Large text / settings |
+|---|---|---|---|---|---|
+| Search and read citations | passed (labels and text present) | not-run | not-run | not-run | not-run |
+| Delete private note, reindex, reset | passed (named buttons and audit text) | not-run | not-run | not-run | not-run |
+| Explicit donation / unavailable message | passed (named button and textual outcome) | not-run | not-run | not-run | not-run |
+
+Findings: no Mac menu commands for index actions; no result announcements; UUID-heavy citation labels; iPhone index actions may be below the fold (source review, not a measured layout result). No manual or automated rendered accessibility pass is claimed. See the [walkthrough](walkthroughs/LAB-006-find-the-thing.md) for the search deletion versus retained shelf detail boundary.
