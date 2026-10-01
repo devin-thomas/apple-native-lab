@@ -30,7 +30,8 @@ extension DemoScript {
     ///     { "id": "find-glass", "find": { "text": "glass", "expect": ["<item UUID>"] } },
     ///     { "id": "rename", "request": "<UUID>", "updateItem": { "id": "<UUID>", "expected": 1, "title": "…" } },
     ///     { "id": "undo-rename", "request": "<UUID>", "undo": "rename" },
-    ///     { "id": "start", "request": "<UUID>", "setSession": { "id": "<UUID>", "running": true } }
+    ///     { "id": "start", "request": "<UUID>", "setSession": { "id": "<UUID>", "running": true } },
+    ///     { "id": "place", "request": "<UUID>", "placeAnchor": { "id": "<UUID>", "fixture": "pine", "title": "…", "x": 0, "z": 0, "yaw": 0 } }
     ///   ]
     /// }
     /// ```
@@ -192,7 +193,8 @@ private struct StepEntry: Decodable {
 
     private static let performKeys: [String] = [
         "resetDemo", "createCollection", "updateCollection", "archiveCollection", "restoreCollection",
-        "createItem", "updateItem", "archiveItem", "restoreItem", "setSession", "undo",
+        "createItem", "updateItem", "archiveItem", "restoreItem", "setSession",
+        "placeAnchor", "moveAnchor", "removeAnchor", "undo",
     ]
     private static let actionKeys = ["approve", "find"] + performKeys
 
@@ -250,6 +252,11 @@ private struct OperationEntry: Decodable {
     let title: String?
     let note: String?
     let running: Bool?
+    let fixture: String?
+    let x: Int?
+    let y: Int?
+    let z: Int?
+    let yaw: Int?
 
     init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: AnyKey.self)
@@ -261,6 +268,11 @@ private struct OperationEntry: Decodable {
         title = try container.decodeIfPresent(String.self, forKey: AnyKey(stringValue: "title"))
         note = try container.decodeIfPresent(String.self, forKey: AnyKey(stringValue: "note"))
         running = try container.decodeIfPresent(Bool.self, forKey: AnyKey(stringValue: "running"))
+        fixture = try container.decodeIfPresent(String.self, forKey: AnyKey(stringValue: "fixture"))
+        x = try container.decodeIfPresent(Int.self, forKey: AnyKey(stringValue: "x"))
+        y = try container.decodeIfPresent(Int.self, forKey: AnyKey(stringValue: "y"))
+        z = try container.decodeIfPresent(Int.self, forKey: AnyKey(stringValue: "z"))
+        yaw = try container.decodeIfPresent(Int.self, forKey: AnyKey(stringValue: "yaw"))
     }
 
     private func failure(_ make: (String) -> DemoScriptError, _ key: String) -> ScriptFileFailure {
@@ -293,6 +305,26 @@ private struct OperationEntry: Decodable {
 
     private func validNote(_ raw: String) throws -> ItemNote {
         do { return try ItemNote(raw) } catch { throw failure({ .invalidValue(path: $0) }, "note") }
+    }
+
+    /// A pose in whole millimeters and degrees. `y` defaults to the surface, 0; `yaw` must already
+    /// be in `0..<360`, as a stored pose is, so a script never relies on wrapping.
+    private func pose() throws -> AnchorPose {
+        let x = try required(x, "x")
+        let z = try required(z, "z")
+        let yaw = try required(yaw, "yaw")
+        guard (0..<360).contains(yaw) else { throw failure({ .invalidValue(path: $0) }, "yaw") }
+        do {
+            return try AnchorPose(x: x, y: y ?? 0, z: z, yaw: yaw)
+        } catch {
+            // The one way a pose fails: a coordinate beyond `AnchorPose.reach`.
+            throw failure({ .invalidValue(path: $0) }, abs(x) > AnchorPose.reach ? "x" : abs(z) > AnchorPose.reach ? "z" : "y")
+        }
+    }
+
+    private func validFixture() throws -> FixtureKey {
+        let raw = try required(fixture, "fixture")
+        do { return try FixtureKey(raw) } catch { throw failure({ .invalidValue(path: $0) }, "fixture") }
     }
 
     func operation(_ kind: String) throws -> DomainOperation {
@@ -345,6 +377,19 @@ private struct OperationEntry: Decodable {
                 expected: expected == nil ? nil : try revision(),
                 running: try required(running, "running")
             )
+        case "placeAnchor":
+            // LAB-023. The caller chooses the anchor's ID, as the tabletop does.
+            try allow(["id", "fixture", "title", "x", "y", "z", "yaw"])
+            return .placeAnchor(draft: AnchorDraft(
+                id: AnchorID(rawValue: try entityID()), fixture: try validFixture(),
+                title: try validTitle(try required(title, "title")), pose: try pose()
+            ))
+        case "moveAnchor":
+            try allow(["id", "expected", "x", "y", "z", "yaw"])
+            return .moveAnchor(id: AnchorID(rawValue: try entityID()), expected: try revision(), pose: try pose())
+        case "removeAnchor":
+            try allow(["id", "expected"])
+            return .removeAnchor(id: AnchorID(rawValue: try entityID()), expected: try revision())
         default:
             throw ScriptFileFailure(error: .unknownField(path: path))
         }

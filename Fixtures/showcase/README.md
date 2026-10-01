@@ -136,6 +136,33 @@ A stale toggle is not in the script. The runner counts a conflict receipt as a s
 
 The request IDs were generated once at random for this fixture. Never change or reuse one.
 
+## `tabletop-reality/`
+
+The complete [LAB-023](../../experiments/LAB-023-tabletop-reality.md) fixture interaction on the virtual table, from a clean store, for the LAB-023-B qualification. Its `seed.json` is a byte-for-byte copy of the app's demo seed, and its fixture keys, titles, and the first four poses are the bundled kit's (`Packages/LabFeatures/Sources/TabletopReality/Resources/tabletop-kit.json`). `TabletopShowcaseTests` in `Packages/LabDemo` fails if either differs. Poses are whole millimeters and degrees in the table's own frame.
+
+| Step | What it does |
+|---|---|
+| `approve-reset`, `reset` | The person confirms Reset Demo, which creates the 12 samples. The table is empty. |
+| `place-windmill`, `place-cottage`, `place-pine`, `place-lantern` | Set Out Starter Scene: the kit's four starter objects at their poses, one receipt each. |
+| `place-lighthouse` | A click on the table at (300, −200) with the Lighthouse chosen. |
+| `move-lighthouse`, `turn-lighthouse` | Move Left by the default 20 mm, then Turn Left by 15°, each from the revision the person saw. |
+| `approve-remove-lighthouse`, `remove-lighthouse` | Removing is destructive: a grant for exactly this removal, then the removal. |
+| `undo-remove-lighthouse` | The removal's undo places the same Lighthouse where it was, facing where it faced. |
+| `create-collection`, `create-item` | The person's own collection, Field notes, and an item in it, Table sketch. |
+| `find-swatches` | List the Pigment swatches collection: nothing on the table touched a sample. |
+| `approve-reset-again`, `reset-again`, `find-yours-after-reset` | A second Reset Demo removes the five lab-owned anchors and nothing else; the person's item is still in Field notes. |
+| `place-after-reset` | Place on Table on the empty table: the Lantern at the center. |
+
+Tracking loss and the live AR adapter are not in the script: a replay has no tracking status and no camera. The TabletopReality package qualification tests and the Mac hosted tests prove that precision interactions are refused while tracking is lost. A stale move is not in the script either, since the runner counts its conflict receipt as a step that did not pass; `TabletopShowcaseTests` replays a copy with one to show it is refused and changes nothing.
+
+The script is run three ways:
+
+- by `Packages/LabDemo` as evidence, on SQLite, composed as the app-UI adapter;
+- by `TabletopShowcaseReplayTests` in `Packages/LabFeatures`, which checks that the tabletop's planner builds exactly these operations from Set Out Starter Scene, a click, Move Left, Turn Left, Remove, and Place on Table;
+- in the Mac app by `TabletopHostEvidenceTests`, through the window's own `TabletopSession`.
+
+The request, anchor, collection, and item IDs were generated once at random for this fixture. Never change or reuse one.
+
 ## `first-journey/`
 
 The [CORE-012](../../tickets/CORE-012.md) first six-lab journey on one shared object, from a clean store, for the M1 qualification and [showcase 01](../../showcases/01-the-app-that-meets-you-halfway.md). Its `seed.json` is a byte-for-byte copy of the app's demo seed; `FirstJourneyShowcaseTests` in `Packages/LabDemo` fails if the two differ. The shared object is [`Fixtures/intelligence/intelligence-injected-note.txt`](../intelligence/README.md), the note whose instructions must stay data; its practice samples are the six that [`Fixtures/access/archive-chart.json`](../access/README.md) lists.
@@ -166,7 +193,7 @@ The journey is run two ways:
 - **Steps.** Each step has an `id` and exactly one action:
   - `approve`: the name of a later step.
   - `find`: optional `collection`, `text`, `includeArchived`, and `limit`, and the ordered item IDs it must `expect`.
-  - A change, with a `request` UUID: `resetDemo`, one of the domain operations such as `updateItem`, `archiveItem`, or `setSession` (`id`, `running`, and `expected` unless the session was never started), or `undo`, which names an earlier step.
+  - A change, with a `request` UUID: `resetDemo`, one of the domain operations such as `updateItem`, `archiveItem`, `setSession` (`id`, `running`, and `expected` unless the session was never started), `placeAnchor` (`id`, `fixture`, `title`, `x`, `z`, `yaw` in `0..<360`, and optional `y`), `moveAnchor` (`id`, `expected`, and the pose), or `removeAnchor` (`id`, `expected`), or `undo`, which names an earlier step.
 - **Order.** The first change must be `resetDemo`, with the script's own seed.
 
 A script cannot choose its adapter, permissions, or grants. The runner acts as the app UI with that adapter's fixed ceiling ([ADR-011](../../docs/adr/ADR-011.md)). Its only grants are the ones its `approve` steps ask the in-memory ledger for, each covering exactly one later step ([ADR-013](../../docs/adr/ADR-013.md)). Each run starts from a new, empty store and refuses one that already holds data.

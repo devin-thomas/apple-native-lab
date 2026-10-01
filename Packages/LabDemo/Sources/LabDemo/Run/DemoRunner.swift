@@ -200,7 +200,8 @@ public struct DemoRunner: Sendable {
         let state: DemoState?
         do {
             state = DemoState(
-                collections: try await store.collections(), items: try await store.items(in: nil), sessions: try await store.sessions()
+                collections: try await store.collections(), items: try await store.items(in: nil),
+                sessions: try await store.sessions(), anchors: try await store.anchors()
             )
         } catch {
             state = nil

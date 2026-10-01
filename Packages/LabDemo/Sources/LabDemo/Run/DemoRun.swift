@@ -124,27 +124,32 @@ public struct DemoEnvironment: Hashable, Sendable {
     public let timebase: Timebase
 }
 
-/// Every collection, item, and session in the store after the last step, ordered by ID.
+/// Every collection, item, session, and lab-owned anchor in the store after the last step,
+/// ordered by ID.
 public struct DemoState: Hashable, Sendable, Encodable {
     public let collections: [LabCollection]
     public let items: [LabItem]
     /// The demo sessions (LAB-004). Left out of the JSON when there are none, so a run that never
     /// starts a session encodes, and fingerprints, exactly as it did before sessions existed.
     public let sessions: [LabSession]
+    /// The lab-owned anchors (LAB-023). Left out of the JSON when there are none, like sessions.
+    public let anchors: [LabAnchor]
 
-    init(collections: [LabCollection], items: [LabItem], sessions: [LabSession] = []) {
+    init(collections: [LabCollection], items: [LabItem], sessions: [LabSession] = [], anchors: [LabAnchor] = []) {
         self.collections = collections.sorted { $0.id.rawValue.uuidString < $1.id.rawValue.uuidString }
         self.items = items.sorted { $0.id.rawValue.uuidString < $1.id.rawValue.uuidString }
         self.sessions = sessions.sorted { $0.id.rawValue.uuidString < $1.id.rawValue.uuidString }
+        self.anchors = anchors.sorted { $0.id.rawValue.uuidString < $1.id.rawValue.uuidString }
     }
 
-    private enum CodingKeys: String, CodingKey { case collections, items, sessions }
+    private enum CodingKeys: String, CodingKey { case collections, items, sessions, anchors }
 
     public func encode(to encoder: any Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(collections, forKey: .collections)
         try container.encode(items, forKey: .items)
         if !sessions.isEmpty { try container.encode(sessions, forKey: .sessions) }
+        if !anchors.isEmpty { try container.encode(anchors, forKey: .anchors) }
     }
 }
 

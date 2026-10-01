@@ -1,0 +1,139 @@
+{
+  "format": "native-lab-demo-script",
+  "formatVersion": 1,
+  "id": "tabletop-reality",
+  "subject": "LAB-023",
+  "title": "Set out the starter scene, place, move, turn, remove, and restore an object, then reset the demo and keep the person's notes",
+  "dataTier": "public-fixture",
+  "provenance": "Original synthetic script written for this project's LAB-023 qualification replay and distributed under its MIT License. Its seed is a byte-for-byte copy of the app's demo seed, Fixtures/demo/seed.json; its fixture keys, titles, and starter poses are the bundled tabletop kit's.",
+  "seed": "seed.json",
+  "untested": [
+    "The live AR adapter: no camera, ARKit session, plane, world map, or occlusion. Poses are table-relative millimeters, the same on the virtual table and in AR.",
+    "Tracking loss: the replay has no tracking status; the TabletopReality package and Mac hosted qualification tests prove that precision interactions are refused while tracking is limited.",
+    "The RealityKit scene, the object list, and the host views: the replay renders nothing.",
+    "A stale move or removal: the runner counts a conflict receipt as a step that did not pass, so the qualification tests carry it.",
+    "Physical devices and the iOS simulator: the replay runs in the package test process on the Mac."
+  ],
+  "steps": [
+    {
+      "id": "approve-reset",
+      "approve": "reset",
+      "description": "The person confirms Reset Demo."
+    },
+    {
+      "id": "reset",
+      "request": "FEB35015-4D7F-40B8-A550-20A4A2184A24",
+      "resetDemo": {},
+      "description": "Reset Demo creates the 12 original samples. The table is empty."
+    },
+    {
+      "id": "place-windmill",
+      "request": "5B4BFF3C-4A2B-4EE5-8989-8D6CE61D9F8C",
+      "placeAnchor": { "id": "F696EB2C-1CC9-4EC4-855E-7E97E4B14A6A", "fixture": "windmill", "title": "Windmill", "x": -240, "z": -60, "yaw": 20 },
+      "description": "Set Out Starter Scene, first of four commits: the Windmill at the kit's starter pose."
+    },
+    {
+      "id": "place-cottage",
+      "request": "7A91BC8E-A334-495A-B6A5-9DE91DCCF2D9",
+      "placeAnchor": { "id": "21F89892-82C8-4C06-BF85-304AEBAA21C0", "fixture": "cottage", "title": "Cottage", "x": 60, "z": -120, "yaw": 0 },
+      "description": "The Cottage, behind the center."
+    },
+    {
+      "id": "place-pine",
+      "request": "152BA8D8-B638-4006-A483-2A36AF06A4A1",
+      "placeAnchor": { "id": "30DB25CF-F70B-4037-8BB2-0A7D84C9418D", "fixture": "pine", "title": "Pine Tree", "x": 250, "z": 90, "yaw": 0 },
+      "description": "The Pine Tree, front right."
+    },
+    {
+      "id": "place-lantern",
+      "request": "FD0AA2B0-300B-43EB-B5B2-B1AF239E4AA6",
+      "placeAnchor": { "id": "92EF6094-D878-49C7-BBA0-D15A0E4FE3AD", "fixture": "lantern", "title": "Lantern", "x": -60, "z": 150, "yaw": 0 },
+      "description": "The Lantern, front left. The starter scene is set out."
+    },
+    {
+      "id": "place-lighthouse",
+      "request": "24E3AB0C-9D05-421B-AABB-0B1B2762633E",
+      "placeAnchor": { "id": "7230CBE0-E5B2-4D8A-A9BA-60DB5057C28C", "fixture": "lighthouse", "title": "Lighthouse", "x": 300, "z": -200, "yaw": 0 },
+      "description": "A click on the table's back right places the Lighthouse there."
+    },
+    {
+      "id": "move-lighthouse",
+      "request": "0EA9B7A3-A6BE-49C2-BF0F-CAAA4D0CFB05",
+      "moveAnchor": { "id": "7230CBE0-E5B2-4D8A-A9BA-60DB5057C28C", "expected": 1, "x": 280, "z": -200, "yaw": 0 },
+      "description": "Move Left by the default 20 mm step. Revision 2."
+    },
+    {
+      "id": "turn-lighthouse",
+      "request": "DA226012-54F0-4C67-8CE2-902B6D2044C5",
+      "moveAnchor": { "id": "7230CBE0-E5B2-4D8A-A9BA-60DB5057C28C", "expected": 2, "x": 280, "z": -200, "yaw": 15 },
+      "description": "Turn Left by 15 degrees, counterclockwise seen from above. Revision 3."
+    },
+    {
+      "id": "approve-remove-lighthouse",
+      "approve": "remove-lighthouse",
+      "description": "Removing is destructive: the person's press is a grant for exactly this removal."
+    },
+    {
+      "id": "remove-lighthouse",
+      "request": "B1A57251-2A7E-459E-A293-9B98DEC7ADF0",
+      "removeAnchor": { "id": "7230CBE0-E5B2-4D8A-A9BA-60DB5057C28C", "expected": 3 },
+      "description": "Remove the Lighthouse from revision 3."
+    },
+    {
+      "id": "undo-remove-lighthouse",
+      "request": "A8FC994D-3315-4F84-A31A-64A1C78C9E35",
+      "undo": "remove-lighthouse",
+      "description": "Undo the removal with the operation its receipt recorded: the same Lighthouse, where it was, facing where it faced."
+    },
+    {
+      "id": "create-collection",
+      "request": "BC768E03-DD1E-4F72-9A45-0BA6000F932F",
+      "createCollection": { "id": "FCE4BCC5-5370-4698-A674-1E01E2D48781", "title": "Field notes" },
+      "description": "The person's own collection, outside the demo."
+    },
+    {
+      "id": "create-item",
+      "request": "985BB0C7-B2F9-44D4-BFE7-B904E7E66D7E",
+      "createItem": { "id": "81A31255-35F6-4969-AAB8-CD8864215172", "collection": "FCE4BCC5-5370-4698-A674-1E01E2D48781", "title": "Table sketch", "note": "Windmill left, cottage behind, lighthouse back right." },
+      "description": "An item of the person's own in it."
+    },
+    {
+      "id": "find-swatches",
+      "find": {
+        "collection": "A40194B3-5E91-4C5C-AE02-CF703BE23224",
+        "expect": [
+          "DB666EF1-F642-43F1-B415-895B6ECFF693",
+          "9B97BF2F-4D0B-4197-9CA8-36489DF40455",
+          "C8E1904C-E8DC-40A0-93D3-53F6C0FFF95D",
+          "3A1711A8-E1DB-489E-8321-414266A8DF49"
+        ]
+      },
+      "description": "List the Pigment swatches collection by title: nothing on the table touched a sample."
+    },
+    {
+      "id": "approve-reset-again",
+      "approve": "reset-again",
+      "description": "The person confirms Reset Demo a second time."
+    },
+    {
+      "id": "reset-again",
+      "request": "58A8E415-00A1-49CF-9587-31916EC0E29F",
+      "resetDemo": {},
+      "description": "Reset Demo removes the five lab-owned anchors and nothing else: the samples already match the seed, and the person's collection and item are not the demo's."
+    },
+    {
+      "id": "find-yours-after-reset",
+      "find": {
+        "collection": "FCE4BCC5-5370-4698-A674-1E01E2D48781",
+        "expect": ["81A31255-35F6-4969-AAB8-CD8864215172"]
+      },
+      "description": "The person's item is still in Field notes."
+    },
+    {
+      "id": "place-after-reset",
+      "request": "72F7ED3C-91CC-4200-949E-AD45F572DA52",
+      "placeAnchor": { "id": "306AB1A4-686C-441E-A6BA-DC09DD1E645D", "fixture": "lantern", "title": "Lantern", "x": 0, "z": 0, "yaw": 0 },
+      "description": "Place on Table after the reset: the free spot nearest the center of an empty table is its center."
+    }
+  ]
+}
