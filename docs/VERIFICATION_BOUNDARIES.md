@@ -63,6 +63,16 @@ Recorded at [LAB-010-B](../tickets/LAB-010-B.md) from the [LAB-010-A](../tickets
 | [S06](SOURCE_INDEX.md#s06) | `LanguageModelSession(model:tools:instructions:)`, `respond(to:schema:includeSchemaInPrompt:options:)` with a runtime `GenerationSchema` narrowed by `.anyOf`, greedy `GenerationOptions`, and one `Tool` | 26.0 (the session and `Tool` also watchOS 27.0) | Drafts of both fixture notes on the Mac and in the simulator. Every sample was an offered title. On the note with injected instructions, every draft ignored them. The Mac drafts took 1.5 to 5.6 s. In the simulator the ambiguous note took 19 to 29 s, and one draft was stopped at the app's 30-second limit. | The cause of two early failures on the Mac that the extractor classed as "other": the underlying error's type was not recorded. Behavior on other devices, OS builds, and model versions. |
 | [S07](SOURCE_INDEX.md#s07) | `PrivateCloudComputeLanguageModel` | iOS, macOS, visionOS, watchOS 27.0 | Never referenced: `PrivacyAndRouteTests` fails if a LAB-010 source does | Not applicable: no cloud route is built |
 
+### Core ML (LAB-015)
+
+Recorded at [LAB-015-A](../tickets/LAB-015-A.md). The declarations were read on 2026-09-30 from the macOS 27.0 SDK's `CoreML.swiftinterface` and `FoundationModels.swiftinterface` (Xcode 27.0, 27A266a). No Core ML type is linked, and no model was loaded. The signatures are in [S63](SOURCE_INDEX.md#s63).
+
+| Source | Installed symbol | Declared availability | Demonstrated | Remaining uncertainty |
+|---|---|---|---|---|
+| [S63](SOURCE_INDEX.md#s63) | `MLModel.load(contentsOf:configuration:)` | macOS 12.0, iOS 15.0, watchOS 8.0, tvOS 15.0 | Not called. The fixture loader runs only after the lab's own license and byte check, and reports zero bytes allocated (`ModelGateTests`) | A real Core ML model on a device. This build does not ship one |
+| [S63](SOURCE_INDEX.md#s63) | `MLComputePlan.load` and `estimatedCost(of:) -> Cost`, `Cost.weight: Double` | macOS 14.4, iOS 17.4, watchOS 10.4, tvOS 17.4 | Not called. `weight` is not a byte count, and the plan loads an asset | Whether a future model file's plan would be a useful budget |
+| [S06](SOURCE_INDEX.md#s06) | No Foundation Models evaluation type. `DynamicProfileBuilder` says a profile body "must evaluate to a single active profile" | The session is 26.0, as in the Foundation Models section | Not called from LAB-015. `BoundaryTests` fails if the module imports the framework | An evaluation API added later |
+
 ### Chart semantics and accessibility actions (LAB-035)
 
 Recorded at [LAB-035-B](../tickets/LAB-035-B.md) from the [LAB-035-A](../tickets/LAB-035-A.md) implementation. The declarations were read again on 2026-09-30 from the `Accessibility` headers and the `SwiftUI` and `SwiftUICore` `.swiftinterface` files of the macOS 27.0 and iOS 27.0 SDKs. No entitlement is needed for any of these. Every declared availability is below the lab's 26.0 floor, so none is gated. No person has used VoiceOver, Voice Control, or an Audio Graph on them, on any device.

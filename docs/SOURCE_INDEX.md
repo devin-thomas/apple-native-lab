@@ -677,6 +677,16 @@ Use in this plan: Runtime model execution reference.
 
 Implementation evidence required: actual SDK symbol/availability, permissions or entitlement, and a named compile/device result.
 
+Installed SDK check (2026-09-30, Xcode 27.0 (27A266a), from the macOS 27.0 SDK's `CoreML.swiftinterface`, for LAB-015-A). Availability is the SDK's declaration. LAB-015 does not call these symbols and does not link Core ML. The fixture executor is the path that runs.
+
+| Symbol read, not called | Installed signature | Declared availability |
+|---|---|---|
+| `MLModel.load` | `class func load(contentsOf url: URL, configuration: MLModelConfiguration = MLModelConfiguration()) async throws -> MLModel` | macOS 12.0, iOS 15.0, watchOS 8.0, tvOS 15.0 |
+| `MLComputePlan.load` | `static func load(contentsOf url: URL, configuration: MLModelConfiguration) async throws -> MLComputePlan` and the `MLModelAsset` overload | macOS 14.4, iOS 17.4, watchOS 10.4, tvOS 17.4 |
+| `MLComputePlan.estimatedCost` | `func estimatedCost(of operation: MLModelStructure.Program.Operation) -> MLComputePlan.Cost?`, where `Cost` is `let weight: Double` | same as `MLComputePlan` |
+
+No symbol in that interface reports a byte size before `load`. Foundation Models, read for the same ticket, has no evaluation harness; `DynamicProfileBuilder` uses "evaluate" only as a compiler diagnostic. The bench does not import that framework.
+
 ## S64
 
 **Siri AI availability** — reviewed
