@@ -12,6 +12,7 @@ let package = Package(
         .library(name: "ShareIngress", targets: ["ShareIngress"]),
         .library(name: "PortableObjects", targets: ["PortableObjects"]),
         .library(name: "SurfaceDeck", targets: ["SurfaceDeck"]),
+        .library(name: "RespectfulAttention", targets: ["RespectfulAttention"]),
     ],
     dependencies: [
         .package(path: "../LabSupport"),
@@ -106,6 +107,17 @@ let package = Package(
         .testTarget(
             name: "SurfaceDeckTests",
             dependencies: ["SurfaceDeck", .product(name: "LabDomain", package: "LabDomain")]
+        ),
+        // LAB-043 Respectful Attention: the agenda, Focus filter, and consented lab alerts over
+        // LabDomain. AlarmKit and UserNotifications stay out of this package so CoreLocal never
+        // links them.
+        .target(
+            name: "RespectfulAttention",
+            dependencies: [.product(name: "LabDomain", package: "LabDomain")]
+        ),
+        .testTarget(
+            name: "RespectfulAttentionTests",
+            dependencies: ["RespectfulAttention", .product(name: "LabDomain", package: "LabDomain")]
         ),
     ]
 )
