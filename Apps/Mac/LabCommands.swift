@@ -1,5 +1,6 @@
 import ContextCards
 import DesktopNativePower
+import FindTheThing
 import LabCatalog
 import RespectfulAttention
 import SurfaceDeck
@@ -73,6 +74,9 @@ struct LabCommands: Commands {
                 .disabled(window == nil)
             Button(RespectfulAttention.title) { window?.destination = .respectfulAttention }
                 .keyboardShortcut("6", modifiers: [.command, .option])
+                .disabled(window == nil)
+            Button(FindTheThing.title) { window?.destination = .findTheThing }
+                .keyboardShortcut("7", modifiers: [.command, .option])
                 .disabled(window == nil)
             Button(DesktopCommand.showPalette.title) { desktop.showsPalette = true }
                 .keyboardShortcut("k", modifiers: .command)

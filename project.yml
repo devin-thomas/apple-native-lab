@@ -128,6 +128,9 @@ targets:
       # LAB-013 Speech Timeline: the timeline, caption import and export, the save operation, and the on-device adapters.
       - package: LabFeatures
         product: SpeechTimeline
+      # LAB-006 Find the Thing: opted-in search, citations, and this app's indexed records.
+      - package: LabFeatures
+        product: FindTheThing
     info:
       path: Apps/Mac/Info.plist
       properties:
@@ -265,6 +268,9 @@ targets:
       # LAB-013 Speech Timeline: the timeline, caption import and export, the save operation, and the on-device adapters.
       - package: LabFeatures
         product: SpeechTimeline
+      # LAB-006 Find the Thing: opted-in search, citations, and this app's indexed records.
+      - package: LabFeatures
+        product: FindTheThing
     info:
       path: Apps/Phone/Info.plist
       properties:
@@ -397,6 +403,9 @@ targets:
       # LAB-013 Speech Timeline: the timeline, caption import and export, the save operation, and the on-device adapters.
       - package: LabFeatures
         product: SpeechTimeline
+      # LAB-006 Find the Thing: opted-in search, citations, and this app's indexed records.
+      - package: LabFeatures
+        product: FindTheThing
       - target: ShareExtension
         embed: true
       # LAB-004: the widget and Control extension, embedded only in this SystemSurfaces variant.

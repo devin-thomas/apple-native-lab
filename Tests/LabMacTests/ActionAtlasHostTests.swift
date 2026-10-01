@@ -272,9 +272,9 @@ import Testing
         #expect(intents(from: "PointInspect") == ["PointInspectVisualSearchIntent"])
         #expect(actions.count == 19)
         let entities = try #require(metadata["entities"] as? [String: Any])
-        #expect(Set(entities.keys) == ["LabItemEntity", "LabCollectionEntity"])
+        #expect(Set(entities.keys) == ["LabItemEntity", "LabCollectionEntity", "FindRecordEntity"])
         let queries = try #require(metadata["queries"] as? [String: Any])
-        #expect(Set(queries.keys) == ["LabItemQuery", "LabCollectionQuery"])
+        #expect(Set(queries.keys) == ["LabItemQuery", "LabCollectionQuery", "FindRecordQuery"])
     }
 }
 

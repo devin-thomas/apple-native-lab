@@ -9,6 +9,7 @@ import SurfaceDeck
 import SwiftUI
 import TactileGrammar
 import TypedIntelligence
+import FindTheThing
 
 /// What the sidebar selects: the lab's own data, or a slice of the experiment catalog.
 enum SidebarDestination: Hashable {
@@ -45,6 +46,8 @@ enum SidebarDestination: Hashable {
     case pointInspect
     /// LAB-013: a transcript scrubbed against its audio, with provisional and finalized text.
     case speechTimeline
+    /// LAB-006: search opted-in records and see which ones the answer used.
+    case findTheThing
     case catalog(CatalogScope)
 
     var title: String {
@@ -66,6 +69,7 @@ enum SidebarDestination: Hashable {
         case .respectfulAttention: RespectfulAttention.title
         case .pointInspect: "Point, Inspect, Propose"
         case .speechTimeline: "Speech Timeline"
+        case .findTheThing: FindTheThing.title
         case .catalog(let scope): scope.title
         }
     }
@@ -90,6 +94,7 @@ enum SidebarDestination: Hashable {
         case .respectfulAttention: "respectful-attention"
         case .pointInspect: "point-inspect"
         case .speechTimeline: "speech-timeline"
+        case .findTheThing: "find-the-thing"
         case .catalog(.all): "all"
         case .catalog(.milestone(let milestone)): "milestone:\(milestone.rawValue)"
         case .catalog(.category(let category)): "category:\(category)"
@@ -117,6 +122,7 @@ enum SidebarDestination: Hashable {
         case ("respectful-attention", nil): self = .respectfulAttention
         case ("point-inspect", nil): self = .pointInspect
         case ("speech-timeline", nil): self = .speechTimeline
+        case ("find-the-thing", nil): self = .findTheThing
         case ("all", nil): self = .catalog(.all)
         case ("milestone", let raw?): guard let milestone = Milestone(rawValue: raw) else { return nil }
             self = .catalog(.milestone(milestone))
@@ -158,6 +164,8 @@ final class MainWindowState {
     let durableSync = DurableSyncSession()
     /// LAB-030: this window's cues, intensity, and last result.
     let tactile = TactileGrammarModel()
+    /// LAB-006: the shelf search and its answer, over the app index.
+    let finder = FindTheThingSession()
     var searchText = ""
     /// Incremented to ask the window to focus its search field.
     var searchRequests = 0

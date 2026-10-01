@@ -116,6 +116,8 @@ struct MainWindow: View {
             PointInspectListColumn()
         case .speechTimeline:
             SpeechTimelineListColumn()
+        case .findTheThing:
+            FindTheThingListColumn(session: window.finder)
         case .catalog(let scope):
             if let registry = model.registry {
                 CatalogListColumn(registry: registry, scope: scope, window: window)
@@ -165,6 +167,8 @@ struct MainWindow: View {
             PointInspectScreen()
         case .speechTimeline:
             SpeechTimelineDetailColumn(window: window)
+        case .findTheThing:
+            FindTheThingDetailColumn(session: window.finder)
         case .catalog:
             if let registry = model.registry {
                 CatalogDetailColumn(registry: registry, experimentID: window.experimentID)
@@ -197,6 +201,7 @@ struct MainWindow: View {
         case .durableSync: "Search devices"
         case .tactileGrammar: "Search cues"
         case .pointInspect: "Search the record"
+        case .findTheThing: "Search records"
         default: "Search experiments"
         }
     }

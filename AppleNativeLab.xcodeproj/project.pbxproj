@@ -42,6 +42,7 @@
 		47F8EF47F63CC3723EA8DEA5 /* ShareExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 8D8791DE695E10C7EC57F692 /* ShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		4B2A43D0E3738A399F39F68E /* speech-sample-script.txt in Resources */ = {isa = PBXBuildFile; fileRef = 7DE0EE54C4DB67B0300205B9 /* speech-sample-script.txt */; };
 		4C323A1952AE6012980ED83A /* AccessSuperpower in Frameworks */ = {isa = PBXBuildFile; productRef = 540B210369D029C191E89BAB /* AccessSuperpower */; };
+		4C77075AA982DE68699E3EDC /* FindTheThing in Frameworks */ = {isa = PBXBuildFile; productRef = 642B301753124012D1855B8B /* FindTheThing */; };
 		4D1936E1C7A89558B10E01F3 /* intelligence-ambiguous-note.txt in Resources */ = {isa = PBXBuildFile; fileRef = AE4F4AB8C2CC86E0A0AF350A /* intelligence-ambiguous-note.txt */; };
 		4DD8734A8F0814E2CFC44062 /* LabCatalog in Frameworks */ = {isa = PBXBuildFile; productRef = A89F084FC0938D0139A2042E /* LabCatalog */; };
 		4E60DC2D92BC7C909C4D6C56 /* LabCatalog in Frameworks */ = {isa = PBXBuildFile; productRef = 21367E5C42D7E02E6E77C8AB /* LabCatalog */; };
@@ -73,7 +74,9 @@
 		84B3B61948F3C7DE691D8B56 /* speech-sample-captions.vtt in Resources */ = {isa = PBXBuildFile; fileRef = C4B33BA8A8374E544563EE90 /* speech-sample-captions.vtt */; };
 		85AB9FBA224F864273906840 /* PickUpHere in Frameworks */ = {isa = PBXBuildFile; productRef = D2925C43D1B2531E485720E6 /* PickUpHere */; };
 		89E214F72A8F8E59C59B440C /* PointInspect in Frameworks */ = {isa = PBXBuildFile; productRef = 1AB36AC1BEC9879ABFC930C0 /* PointInspect */; };
+		8A6729B0DB6FC2773ADD61D0 /* FindTheThing in Frameworks */ = {isa = PBXBuildFile; productRef = 592FAE1A0F9F452B0C657DFD /* FindTheThing */; };
 		8D5B9929C2461FEBE0755266 /* TactileGrammar in Frameworks */ = {isa = PBXBuildFile; productRef = 142DDF1CDB91674FC377411B /* TactileGrammar */; };
+		8FDDF8EBEF317883CD104666 /* FindTheThing in Frameworks */ = {isa = PBXBuildFile; productRef = D6C031B31CED84F339102FE1 /* FindTheThing */; };
 		8FDE617CDA6BA219C4DA965D /* LabCatalog in Frameworks */ = {isa = PBXBuildFile; productRef = 59FA911654D48713C53F9816 /* LabCatalog */; };
 		96EA540221683FF1A975546B /* LabSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 9429B9706DB8D93A799FDA9F /* LabSupport */; };
 		A0AF3C92D36C68C1D64BE7D6 /* SurfaceDeck in Frameworks */ = {isa = PBXBuildFile; productRef = CE841A8FB5E31C78D4112220 /* SurfaceDeck */; };
@@ -443,6 +446,7 @@
 				14D3B3DFC30B0C1AA90BB2F2 /* TactileGrammar in Frameworks */,
 				2B7CE60245911BE30BCE0A59 /* RespectfulAttention in Frameworks */,
 				07B83BC2A5F536D912FB5499 /* SpeechTimeline in Frameworks */,
+				8FDDF8EBEF317883CD104666 /* FindTheThing in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -478,6 +482,7 @@
 				3812E98375DD0AD6ACB802BD /* TactileGrammar in Frameworks */,
 				DBE25FF6B377671BE1C03843 /* RespectfulAttention in Frameworks */,
 				AFC454E3BA10F271D73AC35A /* SpeechTimeline in Frameworks */,
+				4C77075AA982DE68699E3EDC /* FindTheThing in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -541,6 +546,7 @@
 				8D5B9929C2461FEBE0755266 /* TactileGrammar in Frameworks */,
 				3C5668CFD762C5B374A3842A /* RespectfulAttention in Frameworks */,
 				BD13FCF347A13D74C8BD2E77 /* SpeechTimeline in Frameworks */,
+				8A6729B0DB6FC2773ADD61D0 /* FindTheThing in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -783,6 +789,7 @@
 				0CC56DC092F1A632E1457223 /* TactileGrammar */,
 				162A84CBFDB2A97151B9FE17 /* RespectfulAttention */,
 				DD6B5A5D377A99A4E139C082 /* SpeechTimeline */,
+				D6C031B31CED84F339102FE1 /* FindTheThing */,
 			);
 			productName = LabPhoneSurfaces;
 			productReference = 9A57B8DBFF3F863D70D41513 /* LabPhoneSurfaces.app */;
@@ -827,6 +834,7 @@
 				142DDF1CDB91674FC377411B /* TactileGrammar */,
 				5C86286540B38D0B7E0CCAA6 /* RespectfulAttention */,
 				313A41B2A33E906243201726 /* SpeechTimeline */,
+				592FAE1A0F9F452B0C657DFD /* FindTheThing */,
 			);
 			productName = LabMac;
 			productReference = 2F62DB7E020E6BFDAC86BD42 /* LabMac.app */;
@@ -940,6 +948,7 @@
 				324EFBAF6F4776B60F1A8261 /* TactileGrammar */,
 				94A9495834CC96447469549B /* RespectfulAttention */,
 				F6364CBD60BE2BEE0A31456F /* SpeechTimeline */,
+				642B301753124012D1855B8B /* FindTheThing */,
 			);
 			productName = LabPhone;
 			productReference = 28C2C1B8B040DD0D06AF070E /* LabPhone.app */;
@@ -2252,6 +2261,10 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = ShareIngress;
 		};
+		592FAE1A0F9F452B0C657DFD /* FindTheThing */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FindTheThing;
+		};
 		59350CEF01CB3A0AC950B880 /* LocalModelBench */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = LocalModelBench;
@@ -2263,6 +2276,10 @@
 		5C86286540B38D0B7E0CCAA6 /* RespectfulAttention */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = RespectfulAttention;
+		};
+		642B301753124012D1855B8B /* FindTheThing */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FindTheThing;
 		};
 		6CF6B1898735341A74FB3DA4 /* LabStore */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -2387,6 +2404,10 @@
 		D681B15E8F4FC00BCB2862EE /* ActionAtlas */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ActionAtlas;
+		};
+		D6C031B31CED84F339102FE1 /* FindTheThing */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FindTheThing;
 		};
 		D848D3397291632E552B77A2 /* LabCatalog */ = {
 			isa = XCSwiftPackageProductDependency;

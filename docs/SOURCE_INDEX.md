@@ -31,6 +31,8 @@ Implementation evidence required: actual SDK symbol/availability, permissions or
 
 Installed SDK check (2026-09-30): the iOS 27.0 SDK's `AppSchema` domains were read and none was adopted for a lab sample. `View.appEntityIdentifier(_:)` associates one sample with its view ([installed SDK ledger](VERIFICATION_BOUNDARIES.md#installed-sdk-ledger)).
 
+Installed SDK check (2026-09-30, Xcode 27.0 (27A266a), macOS and iOS 27.0 SDKs, for LAB-006-A): `IndexedEntity` and `CSSearchableIndex.indexAppEntities` / `deleteAppEntities(identifiedBy:ofType:)` are in App Intents (macOS 15.0, iOS 18.0, visionOS 2.0) and absent from the watchOS and tvOS interfaces. No entitlement. See the [installed SDK ledger](VERIFICATION_BOUNDARIES.md#installed-sdk-ledger).
+
 ## S03
 
 **App Shortcuts HIG** — reviewed

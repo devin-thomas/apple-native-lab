@@ -52,6 +52,16 @@ Recorded at [LAB-001-B](../tickets/LAB-001-B.md) from the [LAB-001-A](../tickets
 | [S05](SOURCE_INDEX.md#s05) | The `AppIntentsTesting` framework ships with Xcode 27.0 in each platform's `Developer/Library/Frameworks`, as test-only tooling. Its definitions are addressed by bundle identifier, such as `IntentDefinitions(bundleIdentifier:)`. | Every public type: macOS, iOS, watchOS, tvOS, and visionOS 27.0 | Not run | System-path tests need a signing team ([S05](SOURCE_INDEX.md#s05)) and a test target. The project's 26.0 floor also means such tests must be gated to 27.0. |
 | [S02](SOURCE_INDEX.md#s02), [S64](SOURCE_INDEX.md#s64) | No App Schema is adopted | Not applicable | Siri was not used | Siri phrasing, schema matching, and availability |
 
+### Indexed app entities (LAB-006)
+
+Recorded at [LAB-006-A](../tickets/LAB-006-A.md). No entitlement is needed to index this app's own entities. Donation is an explicit action; opening the experiment does not call Spotlight. Nothing here has run on a physical device or been verified as searchable from Spotlight UI.
+
+| Source | Installed symbol | Declared availability | Demonstrated | Remaining uncertainty |
+|---|---|---|---|---|
+| [S02](SOURCE_INDEX.md#s02) | `IndexedEntity` (`attributeSet`, optional `hideInSpotlight` from 15.4/18.4) | macOS 15.0, iOS 18.0, visionOS 2.0; absent from watchOS and tvOS App Intents interfaces | Compiled into `FindRecordEntity` for macOS and iOS. Package tests build an entity only for opted-in records. | Spotlight UI listing, Siri, and device behavior |
+| [S02](SOURCE_INDEX.md#s02) | `CSSearchableIndex.indexAppEntities(_:priority:)` and `deleteAppEntities(identifiedBy:ofType:)` | macOS 15.0, iOS 18.0, visionOS 2.0 | Compiled into `IndexedEntityDonor`. Package tests exercise the idle donor and a recording donor; the live donor was not driven against a system index in this ticket. | A live donation and delete round trip in the running app and from Spotlight |
+| [S02](SOURCE_INDEX.md#s02) | `FindRecordQuery` as `EntityStringQuery` over the app's own `AppSearchIndex` | Same floor as App Intents entity queries | Hosted metadata expects `FindRecordEntity` / `FindRecordQuery` in the Mac app's App Intents metadata. | Shortcuts or Siri resolving the entity on a device |
+
 ### Foundation Models (LAB-010)
 
 Recorded at [LAB-010-B](../tickets/LAB-010-B.md) from the [LAB-010-A](../tickets/LAB-010-A.md) implementation. The installed signatures are in [S06](SOURCE_INDEX.md#s06). No entitlement is needed: the model ran inside the sandboxed Mac app, whose entitlements are App Sandbox and user-selected file access. The model has not run on a physical iPhone or iPad.

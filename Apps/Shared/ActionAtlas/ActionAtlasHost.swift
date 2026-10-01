@@ -1,6 +1,7 @@
 import ActionAtlas
 import AppIntents
 import ContextCards
+import FindTheThing
 import LabDomain
 import PointInspect
 import RespectfulAttention
@@ -11,16 +12,17 @@ import DesktopNativePower
 #endif
 
 /// Includes Action Atlas's App Intents, entities, and queries in this app's App Intents metadata,
-/// Surface Deck's toggle and launch action (LAB-004), Context Cards' ask and set-aside (LAB-002),
-/// Play Tactile Cue (LAB-030), Respectful Attention's alerts and Focus filter (LAB-043), and Point,
-/// Inspect, Propose's visual-search handoff (LAB-012). On the Mac it also includes Desktop Native Power's one allowlisted command (LAB-042). The intents live
-/// in package targets; Xcode extracts them into the host.
+/// with Surface Deck's toggle and launch action (LAB-004), Context Cards' ask and set-aside
+/// (LAB-002), Play Tactile Cue (LAB-030), Respectful Attention's alerts and Focus filter (LAB-043),
+/// Point, Inspect, Propose's visual-search handoff (LAB-012), and Find the Thing's record entity
+/// (LAB-006). On the Mac it also includes Desktop Native Power's one allowlisted command (LAB-042).
+/// The intents live in package targets; Xcode extracts them into the host.
 struct NativeLabIntentsPackage: AppIntentsPackage {
     static var includedPackages: [any AppIntentsPackage.Type] {
         #if os(macOS)
-        [ActionAtlasIntentsPackage.self, SurfaceDeckIntentsPackage.self, ContextCardsIntentsPackage.self, TactileGrammarIntentsPackage.self, RespectfulAttentionIntentsPackage.self, PointInspectIntentsPackage.self, DesktopNativePowerIntentsPackage.self]
+        [ActionAtlasIntentsPackage.self, SurfaceDeckIntentsPackage.self, ContextCardsIntentsPackage.self, TactileGrammarIntentsPackage.self, RespectfulAttentionIntentsPackage.self, PointInspectIntentsPackage.self, FindTheThingIntentsPackage.self, DesktopNativePowerIntentsPackage.self]
         #else
-        [ActionAtlasIntentsPackage.self, SurfaceDeckIntentsPackage.self, ContextCardsIntentsPackage.self, TactileGrammarIntentsPackage.self, RespectfulAttentionIntentsPackage.self, PointInspectIntentsPackage.self]
+        [ActionAtlasIntentsPackage.self, SurfaceDeckIntentsPackage.self, ContextCardsIntentsPackage.self, TactileGrammarIntentsPackage.self, RespectfulAttentionIntentsPackage.self, PointInspectIntentsPackage.self, FindTheThingIntentsPackage.self]
         #endif
     }
 }

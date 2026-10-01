@@ -15,6 +15,7 @@ struct LabPhoneApp: App {
         ContextCardsHost.connect(library)
         TactileGrammarCenter.shared.install(LiveTactileGrammar.makeEngine())
         AttentionHost.connect(library)
+        FindTheThingHost.connect()
     }
 
     var body: some Scene {

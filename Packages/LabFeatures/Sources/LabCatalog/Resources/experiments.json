@@ -113,7 +113,7 @@
       "title": "Find the Thing",
       "category": "Intelligence",
       "milestone": "M2",
-      "state": "specified",
+      "state": "implemented",
       "dependsOn": [
         "LAB-001",
         "LAB-010"
