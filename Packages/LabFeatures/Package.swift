@@ -43,6 +43,7 @@ let package = Package(
         // preview, and usage receipts without raw prompt telemetry.
         .library(name: "ModelRouting", targets: ["ModelRouting"]),
         .library(name: "CommerceWithoutTricks", targets: ["CommerceWithoutTricks"]),
+        .library(name: "CommercialFrontier", targets: ["CommercialFrontier"]),
     ],
     dependencies: [
         .package(path: "../LabSupport"),
@@ -50,6 +51,12 @@ let package = Package(
         .package(path: "../LabStaging"),
     ],
     targets: [
+        // LAB-048: independent compile-only SDK seams, never linked by the baseline hosts.
+        .target(name: "FrontierPTTProbe"),
+        .target(name: "FrontierCarPlayProbe"),
+        .target(name: "FrontierScreenTimeProbe"),
+        .target(name: "CommercialFrontier", dependencies: [.product(name: "LabDomain", package: "LabDomain")]),
+        .testTarget(name: "CommercialFrontierTests", dependencies: ["CommercialFrontier", .product(name: "LabDomain", package: "LabDomain")]),
         .target(
             name: "LabCatalog",
             dependencies: [.product(name: "LabSupport", package: "LabSupport")],

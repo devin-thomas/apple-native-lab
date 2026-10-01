@@ -53,6 +53,7 @@ struct ExperimentDetailView: View {
                 HomeSceneLaunch(experiment: experiment)
                 ModelRoutingLaunch(experiment: experiment)
                 CommerceLaunch(experiment: experiment)
+                FrontierLaunch(experiment: experiment)
                 Text(experiment.moment)
                     .font(.title3)
                     .fixedSize(horizontal: false, vertical: true)
