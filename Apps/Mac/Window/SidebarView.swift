@@ -1,3 +1,4 @@
+import AudioWorkshop
 import LabCatalog
 import LabSupport
 import SurfaceDeck
@@ -39,6 +40,9 @@ struct SidebarView: View {
                 Label(SurfaceDeck.title, systemImage: SurfaceDeck.symbol)
                     .tag(SidebarDestination.surfaceDeck)
                     .accessibilityHint("The demo session, its receipts, and previews of its widget and Control")
+                Label(AudioWorkshop.title, systemImage: AudioWorkshop.symbol)
+                    .tag(SidebarDestination.audioWorkshop)
+                    .accessibilityHint("A small audio processor with panic mute, bypass, MIDI, and offline processing")
             }
             Section("Experiments") {
                 row(.all, symbol: "square.grid.2x2")
