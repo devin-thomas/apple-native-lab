@@ -39,6 +39,31 @@ host_tests() {
     -collect-test-diagnostics never LAB_SOURCE_REVISION="$REVISION" test -quiet
 }
 
+# Runs a host scheme's tests on a new simulator for a platform. On a loaded machine a fresh
+# simulator sometimes fails to launch the app or the test runner before any test runs; only that
+# failure, recognized by its message, earns one more try on another new simulator. A failing test
+# is never retried.
+simulator_host_tests() {
+  local scheme="$1" platform="$2" log status
+  log="$(mktemp -t lab-host-tests)"
+  new_simulator "$platform"
+  set +e
+  host_tests "$scheme" "$SIMULATOR" 2>&1 | tee "$log"
+  status=${PIPESTATUS[0]}
+  set -e
+  delete_created_simulators
+  if [[ "$status" != 0 ]] && grep -qE "failed to launch|Failed to install or launch the test runner|test runner hung before establishing connection" "$log" \
+     && ! grep -qE "^Failing tests:" "$log"; then
+    echo "note: the $platform simulator failed to start the test run; retrying once on a new simulator" >&2
+    new_simulator "$platform"
+    status=0
+    host_tests "$scheme" "$SIMULATOR" || status=$?
+    delete_created_simulators
+  fi
+  rm -f "$log"
+  return "$status"
+}
+
 step "Repository validators (links, tickets, experiments, catalog, evidence, workflow policy)"
 python3 script/validate/all.py
 
@@ -75,19 +100,13 @@ with_mac_ui_lock xcodebuild -project "$PROJECT" -scheme LabMac-Core -destination
   -derivedDataPath "$DERIVED" LAB_SOURCE_REVISION="$REVISION" test -quiet
 
 step "iPhone host smoke tests in an iOS simulator (LabPhone-Core)"
-new_simulator iOS
-host_tests LabPhone-Core "$SIMULATOR"
-delete_created_simulators
+simulator_host_tests LabPhone-Core iOS
 
 step "Watch host smoke tests, then LabSupport and LabCatalog tests, in a watchOS simulator (LabWatch)"
-new_simulator watchOS
-host_tests LabWatch "$SIMULATOR"
-delete_created_simulators
+simulator_host_tests LabWatch watchOS
 
 step "Apple TV host smoke and remote focus tests, then LabSupport and LabCatalog tests, in a tvOS simulator (LabTV)"
-new_simulator tvOS
-host_tests LabTV "$SIMULATOR"
-delete_created_simulators
+simulator_host_tests LabTV tvOS
 
 step "Release builds of every profile match Config/ProductPolicy.txt (build_manifest.py)"
 python3 script/build_manifest.py
