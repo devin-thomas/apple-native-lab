@@ -1,3 +1,4 @@
+import ContextCards
 import LabCatalog
 import LabSupport
 import SurfaceDeck
@@ -36,6 +37,9 @@ struct SidebarView: View {
                 Label("Portable Objects", systemImage: "shippingbox")
                     .tag(SidebarDestination.portableObjects)
                     .accessibilityHint("Drag, export, and import lab objects")
+                Label(ContextCards.title, systemImage: ContextCards.symbol)
+                    .tag(SidebarDestination.contextCards)
+                    .accessibilityHint("Ask about the sample on screen, then set it aside")
                 Label(SurfaceDeck.title, systemImage: SurfaceDeck.symbol)
                     .tag(SidebarDestination.surfaceDeck)
                     .accessibilityHint("The demo session, its receipts, and previews of its widget and Control")

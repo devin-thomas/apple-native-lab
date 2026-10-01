@@ -1,3 +1,4 @@
+import ContextCards
 import LabCatalog
 import SurfaceDeck
 import SwiftUI
@@ -43,6 +44,9 @@ struct LabCommands: Commands {
                 .disabled(window == nil)
             Button("Portable Objects") { window?.destination = .portableObjects }
                 .keyboardShortcut("8", modifiers: .command)
+                .disabled(window == nil)
+            Button(ContextCards.title) { window?.destination = .contextCards }
+                .keyboardShortcut("9", modifiers: .command)
                 .disabled(window == nil)
         }
 

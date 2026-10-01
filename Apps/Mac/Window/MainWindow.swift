@@ -92,6 +92,8 @@ struct MainWindow: View {
             ShareInboxListColumn(window: window)
         case .portableObjects:
             PortableObjectsListColumn(window: window)
+        case .contextCards:
+            ContextCardsListColumn(window: window)
         case .surfaceDeck:
             SurfaceDeckListColumn(window: window)
         case .catalog(let scope):
@@ -120,6 +122,8 @@ struct MainWindow: View {
             ShareInboxDetailColumn(window: window)
         case .portableObjects:
             PortableObjectsDetailColumn(window: window)
+        case .contextCards:
+            ContextCardsDetailColumn()
         case .surfaceDeck:
             SurfaceDeckDetailColumn()
         case .catalog:
@@ -146,6 +150,7 @@ struct MainWindow: View {
         case .accessSuperpower: "Search archived samples"
         case .shareInbox: "Search the inbox"
         case .portableObjects: "Search objects"
+        case .contextCards: "Search samples"
         default: "Search experiments"
         }
     }

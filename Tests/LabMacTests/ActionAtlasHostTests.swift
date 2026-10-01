@@ -258,7 +258,9 @@ import Testing
         ])
         // LAB-004 Surface Deck's toggle, read, and launch action join them, and nothing else does.
         #expect(intents(from: "SurfaceDeck") == ["SetDemoSessionIntent", "GetDemoSessionIntent", "OpenSurfaceDeckIntent"])
-        #expect(actions.count == 11)
+        // LAB-002 Context Cards' ask and set-aside. Neither is a curated App Shortcut.
+        #expect(intents(from: "ContextCards") == ["AskAboutVisibleSampleIntent", "SetAsideSampleIntent"])
+        #expect(actions.count == 13)
         let entities = try #require(metadata["entities"] as? [String: Any])
         #expect(Set(entities.keys) == ["LabItemEntity", "LabCollectionEntity"])
         let queries = try #require(metadata["queries"] as? [String: Any])

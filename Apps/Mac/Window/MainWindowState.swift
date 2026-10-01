@@ -1,3 +1,4 @@
+import ContextCards
 import LabCatalog
 import LabDomain
 import LabSupport
@@ -20,6 +21,8 @@ enum SidebarDestination: Hashable {
     case shareInbox
     /// LAB-008: drag, export, and import lab objects.
     case portableObjects
+    /// LAB-002: one sample on screen, and the decision to set it aside.
+    case contextCards
     /// LAB-004: the demo session, its receipts, and the widget and Control previews.
     case surfaceDeck
     case catalog(CatalogScope)
@@ -32,6 +35,7 @@ enum SidebarDestination: Hashable {
         case .accessSuperpower: AccessSuperpowerExperiment.title
         case .shareInbox: "Share Inbox"
         case .portableObjects: "Portable Objects"
+        case .contextCards: ContextCards.title
         case .surfaceDeck: SurfaceDeck.title
         case .catalog(let scope): scope.title
         }
@@ -46,6 +50,7 @@ enum SidebarDestination: Hashable {
         case .accessSuperpower: "access-superpower"
         case .shareInbox: "share-inbox"
         case .portableObjects: "portable-objects"
+        case .contextCards: "context-cards"
         case .surfaceDeck: "surface-deck"
         case .catalog(.all): "all"
         case .catalog(.milestone(let milestone)): "milestone:\(milestone.rawValue)"
@@ -63,6 +68,7 @@ enum SidebarDestination: Hashable {
         case ("access-superpower", nil): self = .accessSuperpower
         case ("share-inbox", nil): self = .shareInbox
         case ("portable-objects", nil): self = .portableObjects
+        case ("context-cards", nil): self = .contextCards
         case ("surface-deck", nil): self = .surfaceDeck
         case ("all", nil): self = .catalog(.all)
         case ("milestone", let raw?): guard let milestone = Milestone(rawValue: raw) else { return nil }
@@ -93,6 +99,8 @@ final class MainWindowState {
     var inboxEntry: InboxEntry.ID?
     /// LAB-008: this window's objects, selection, and import under review.
     let portableObjects = PortableObjectsSession()
+    /// LAB-002: the sample on screen and the decision waiting on it.
+    let contextCards = ContextCardsSession()
     var searchText = ""
     /// Incremented to ask the window to focus its search field.
     var searchRequests = 0
