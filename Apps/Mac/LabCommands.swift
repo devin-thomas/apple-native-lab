@@ -1,4 +1,5 @@
 import LabCatalog
+import RespectfulAttention
 import SurfaceDeck
 import SwiftUI
 
@@ -40,6 +41,9 @@ struct LabCommands: Commands {
                 .disabled(window == nil)
             Button(SurfaceDeck.title) { window?.destination = .surfaceDeck }
                 .keyboardShortcut("7", modifiers: .command)
+                .disabled(window == nil)
+            Button(RespectfulAttention.title) { window?.destination = .respectfulAttention }
+                .keyboardShortcut("9", modifiers: .command)
                 .disabled(window == nil)
             Button("Portable Objects") { window?.destination = .portableObjects }
                 .keyboardShortcut("8", modifiers: .command)

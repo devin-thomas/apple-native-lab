@@ -11,6 +11,7 @@ struct LabMacApp: App {
         // App Intents use this same library, so their receipts join this session's list.
         ActionAtlasHost.connect(library)
         SurfaceDeckHost.connect(library)
+        AttentionHost.connect(library)
     }
 
     var body: some Scene {

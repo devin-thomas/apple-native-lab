@@ -70,6 +70,14 @@ entitlement  CoreLocal  macos    com.apple.security.files.user-selected.read-wri
 link         SystemSurfaces ios  WidgetKit           # the widget and Controls; the host variant's reloadTimelines and reloadControls
 link         SystemSurfaces ios  _AppIntents_SwiftUI # the widget's Toggle(isOn:intent:) comes from SwiftUI's App Intents overlay
 
+# SystemSurfaces: Respectful Attention (LAB-043). Only the iPhone surfaces host links AlarmKit and
+# UserNotifications. CoreLocal keeps the in-app agenda and never links either framework. Cancel
+# removes lab identifiers only. AlarmKit's AlarmAttributes conforms to ActivityKit.ActivityAttributes,
+# so ActivityKit is linked for that conformance alone; no Live Activity is started.
+link         SystemSurfaces ios  UserNotifications   # local reminders, cancelled only by the lab notification identifier
+link         SystemSurfaces ios  AlarmKit           # alarms, cancelled only by the lab alarm identifier
+link         SystemSurfaces ios  ActivityKit        # AlarmKit AlarmAttributes conformance only; no Live Activity
+
 # Companions: the Watch host's capability status probes (CORE-004)
 link         Companions watchos  AVFAudio            # record permission and audio input
 link         Companions watchos  CoreBluetooth       # Bluetooth authorization status
@@ -94,3 +102,4 @@ purpose      ARKit              NSCameraUsageDescription
 purpose      Speech             NSSpeechRecognitionUsageDescription
 purpose      CoreBluetooth      NSBluetoothAlwaysUsageDescription
 purpose      NearbyInteraction  NSNearbyInteractionUsageDescription
+purpose      AlarmKit           NSAlarmKitUsageDescription

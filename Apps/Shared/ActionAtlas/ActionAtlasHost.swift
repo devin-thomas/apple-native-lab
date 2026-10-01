@@ -1,13 +1,16 @@
 import ActionAtlas
 import AppIntents
 import LabDomain
+import RespectfulAttention
 import SurfaceDeck
 
 /// Includes Action Atlas's App Intents, entities, and queries in this app's App Intents metadata,
 /// and Surface Deck's toggle and launch action (LAB-004). The intents live in package targets;
 /// Xcode extracts them into the host.
 struct NativeLabIntentsPackage: AppIntentsPackage {
-    static var includedPackages: [any AppIntentsPackage.Type] { [ActionAtlasIntentsPackage.self, SurfaceDeckIntentsPackage.self] }
+    static var includedPackages: [any AppIntentsPackage.Type] {
+        [ActionAtlasIntentsPackage.self, SurfaceDeckIntentsPackage.self, RespectfulAttentionIntentsPackage.self]
+    }
 }
 
 /// Connects App Intents to this host's store.

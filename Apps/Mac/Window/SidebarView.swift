@@ -1,5 +1,6 @@
 import LabCatalog
 import LabSupport
+import RespectfulAttention
 import SurfaceDeck
 import SwiftUI
 
@@ -39,6 +40,9 @@ struct SidebarView: View {
                 Label(SurfaceDeck.title, systemImage: SurfaceDeck.symbol)
                     .tag(SidebarDestination.surfaceDeck)
                     .accessibilityHint("The demo session, its receipts, and previews of its widget and Control")
+                Label(RespectfulAttention.title, systemImage: RespectfulAttention.symbol)
+                    .tag(SidebarDestination.respectfulAttention)
+                    .accessibilityHint("A reminder, a Focus filter, and an alarm, scheduled only when you ask")
             }
             Section("Experiments") {
                 row(.all, symbol: "square.grid.2x2")

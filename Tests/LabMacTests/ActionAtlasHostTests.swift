@@ -256,9 +256,13 @@ import Testing
             "CreateCollectionIntent", "CreateItemIntent", "FindItemsIntent", "GetItemIntent",
             "UpdateItemIntent", "ArchiveItemIntent", "RestoreItemIntent", "ExportItemIntent",
         ])
-        // LAB-004 Surface Deck's toggle, read, and launch action join them, and nothing else does.
+        // LAB-004 Surface Deck's toggle, read, and launch action join them.
         #expect(intents(from: "SurfaceDeck") == ["SetDemoSessionIntent", "GetDemoSessionIntent", "OpenSurfaceDeckIntent"])
-        #expect(actions.count == 11)
+        // LAB-043 Respectful Attention's schedule, cancel, and Focus filter join them, and nothing else does.
+        #expect(intents(from: "RespectfulAttention") == [
+            "ScheduleLabAlertIntent", "CancelLabAlertsIntent", "LabFocusFilterIntent",
+        ])
+        #expect(actions.count == 14)
         let entities = try #require(metadata["entities"] as? [String: Any])
         #expect(Set(entities.keys) == ["LabItemEntity", "LabCollectionEntity"])
         let queries = try #require(metadata["queries"] as? [String: Any])
