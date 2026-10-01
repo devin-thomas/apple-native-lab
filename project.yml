@@ -81,6 +81,9 @@ targets:
       # LAB-035 Access as a Superpower: the task, its chart semantics, and the Audio Graph descriptor.
       - package: LabFeatures
         product: AccessSuperpower
+      # LAB-038 Wallet Moment: unsigned pass preview, sample event card, signing boundary (no PassKit link).
+      - package: LabFeatures
+        product: WalletMoment
       # LAB-007 Share Ingress Station: the share inbox and its paste and file-picker fallbacks.
       - package: LabFeatures
         product: ShareIngress
@@ -167,6 +170,9 @@ targets:
       # LAB-035 Access as a Superpower: the task, its chart semantics, and the Audio Graph descriptor.
       - package: LabFeatures
         product: AccessSuperpower
+      # LAB-038 Wallet Moment: unsigned pass preview, sample event card, signing boundary (no PassKit link).
+      - package: LabFeatures
+        product: WalletMoment
       # LAB-007 Share Ingress Station: the share inbox and its paste and file-picker fallbacks.
       - package: LabFeatures
         product: ShareIngress
@@ -262,6 +268,8 @@ targets:
         product: TypedIntelligence
       - package: LabFeatures
         product: AccessSuperpower
+      - package: LabFeatures
+        product: WalletMoment
       - package: LabFeatures
         product: PortableObjects
       # LAB-004 Surface Deck: the deck, its intents, and the snapshot writer, as LabPhone.

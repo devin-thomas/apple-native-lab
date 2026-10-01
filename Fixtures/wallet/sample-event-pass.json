@@ -1,0 +1,26 @@
+{
+  "format": "native-lab-event-pass",
+  "formatVersion": 1,
+  "description": "Original fictional Harbor Lantern Festival ticket for LAB-038. No real venue, account, or signing key.",
+  "pass": {
+    "id": "A38E0001-0000-4000-8000-000000000038",
+    "serialNumber": "HLF-2026-0042",
+    "organizationName": "Harbor Lantern Collective",
+    "eventName": "Harbor Lantern Festival",
+    "venue": "North Pier Pavilion",
+    "seat": "GA-42",
+    "startsAt": "2026-10-17T18:00:00Z",
+    "expiresAt": "2026-10-18T02:00:00Z",
+    "barcode": {
+      "format": "qr",
+      "message": "HLF2026:GA42:A38E0001",
+      "altText": "Ticket HLF-2026-0042"
+    },
+    "updateTag": "v1"
+  },
+  "readings": {
+    "beforeEvent": "Upcoming",
+    "duringEvent": "Active",
+    "afterExpiry": "Expired"
+  }
+}
