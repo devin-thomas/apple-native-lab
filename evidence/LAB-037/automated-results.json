@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "subject": "LAB-037",
+  "check": "Review completed automated gate, host result bundles, and Release manifest",
+  "date": "2026-10-01T04:30:20Z",
+  "execution": {
+    "path": "static-review"
+  },
+  "provenance": {
+    "appVersion": "0.1.0",
+    "buildNumber": "1",
+    "buildProfile": "CoreLocal",
+    "sourceRevision": "3d91ead-dirty",
+    "xcodeVersion": "27.0",
+    "xcodeBuild": "27A266a",
+    "sdkName": "macosx27.0",
+    "minimumOS": "26.0"
+  },
+  "inputs": [
+    "source:3d91ead with uncommitted catalog, documentation, and evidence updates"
+  ],
+  "steps": [
+    "Through labr on research: LAB_SIMULATOR_PREFIX=\"NL LAB-037-A\" script/test.sh",
+    "Read the four latest xcresult summaries with xcrun xcresulttool get test-results summary; read the Mac HomeSceneHostTests node with get test-results tests",
+    "Read build/manifest/manifest.json summary from the completed gate"
+  ],
+  "outcome": {
+    "result": "passed",
+    "detail": "Full gate exited 0. Mac/Phone/Watch/TV result bundles Passed: Mac 133 total, 130 passed, 0 failed, 2 skipped; Phone 4 passed; Watch 115 passed; TV 116 passed. HomeSceneHostTests case Passed. All package suites passed, including 17 Home Scene tests. CoreLocal, SystemSurfaces and Companions Release profiles built and passed policy checks."
+  },
+  "limitations": [
+    "This is review of fixture/simulator/build results, with no physical-device or live HomeKit claim. The domain fixture record supplies the implemented-state evidence.",
+    "CloudOptional and FrontierOptional skipped because no schemes build their targets. Skipped Mac checks are not claimed as passing.",
+    "Two existing Share Ingress known issues remain. HomeSceneSession emitted typed-catch warnings; Mac compilation also printed an exit-0/no-output diagnostic, while the result bundle and full gate passed.",
+    "First full-gate attempt exited 129 before host tests; a research quiet window delayed the successful retry."
+  ]
+}

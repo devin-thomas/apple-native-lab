@@ -485,6 +485,8 @@ Use in this plan: Home database access reference; not universal vendor control.
 
 Implementation evidence required: actual SDK symbol/availability, permissions or entitlement, and a named compile/device result.
 
+Installed SDK check (2026-09-30, Xcode 27.0 with the iOS 27.0 and macOS 27.0 SDKs, LAB-037-A): HomeKit is present on iOS and `API_UNAVAILABLE(macos)` (no `HomeKit.framework` in the macOS SDK). `HMHomeManager.authorizationStatus`, `HMAccessory.isReachable`, `HMServiceTypeLightbulb` / `LockMechanism` / `Door` / `SecuritySystem` / `Thermostat`, and `HMCharacteristicTypePowerState` / `Brightness` are recorded in the [installed SDK ledger](VERIFICATION_BOUNDARIES.md#homekit-lab-037). CoreLocal does not link HomeKit or declare `com.apple.developer.homekit`; the fictional home is the shipped path. No live HomeKit run.
+
 ## S45
 
 **Wallet passes** — reference
