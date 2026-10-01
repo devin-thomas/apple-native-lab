@@ -73,6 +73,9 @@ struct QualificationTests {
             try await lab.adopter.adopt(id, into: lab.inbox)
         }
         #expect(await lab.snapshot() == before)
+        // Current behavior: the refused duplicate retains its staged review. The browser has no
+        // Close Review action; record this finding rather than claiming all refusals clean up.
+        #expect(await lab.importer.waitingImports().count == 1)
     }
 
     @Test func previewEscapesDocumentMarkupWithoutActivatingAProvider() throws {
