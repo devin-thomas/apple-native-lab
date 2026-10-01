@@ -161,10 +161,10 @@ struct CommerceForm: View {
                     .fixedSize(horizontal: false, vertical: true)
             }
             if let receipt = session.receipt {
-                Text(receipt.receipt.summary)
+                Text("Last committed receipt: \(receipt.receipt.summary)")
                     .font(.callout)
                     .foregroundStyle(.secondary)
-                    .accessibilityLabel("Receipt: \(receipt.receipt.summary)")
+                    .accessibilityLabel("Last committed receipt: \(receipt.receipt.summary)")
             }
         } header: {
             Text("Status")

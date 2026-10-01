@@ -207,9 +207,9 @@ final class CommerceSession {
         case .verified:
             "Nothing changed."
         case .unverified:
-            "Unverified transaction. Nothing was entitled. No real charge."
+            "Unverified transaction. It granted no entitlement. No real charge."
         case .pendingApproval:
-            "Purchase is pending approval. Nothing was entitled yet. No real charge."
+            "Purchase is pending approval. It has granted no new entitlement. No real charge."
         case .cancelled:
             "Purchase cancelled. Nothing was changed. No real charge."
         case .failed:
