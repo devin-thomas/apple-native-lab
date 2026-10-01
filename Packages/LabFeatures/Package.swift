@@ -7,6 +7,7 @@ let package = Package(
     products: [
         .library(name: "LabCatalog", targets: ["LabCatalog"]),
         .library(name: "ActionAtlas", targets: ["ActionAtlas"]),
+        .library(name: "ContextCards", targets: ["ContextCards"]),
         .library(name: "TypedIntelligence", targets: ["TypedIntelligence"]),
         .library(name: "AccessSuperpower", targets: ["AccessSuperpower"]),
         .library(name: "ShareIngress", targets: ["ShareIngress"]),
@@ -34,6 +35,23 @@ let package = Package(
         .testTarget(
             name: "ActionAtlasTests",
             dependencies: ["ActionAtlas", .product(name: "LabDomain", package: "LabDomain")]
+        ),
+        // LAB-002 Context Cards: the visible sample, the schema gate, and the set-aside decision
+        // over Action Atlas's operation path. SwiftUI draws the snippet; the host draws the card.
+        .target(
+            name: "ContextCards",
+            dependencies: [
+                "ActionAtlas",
+                .product(name: "LabDomain", package: "LabDomain"),
+            ]
+        ),
+        .testTarget(
+            name: "ContextCardsTests",
+            dependencies: [
+                "ContextCards",
+                "ActionAtlas",
+                .product(name: "LabDomain", package: "LabDomain"),
+            ]
         ),
         // LAB-010 Typed Local Intelligence: typed proposals from the on-device model or the
         // non-model sample parser, validated and proposed as the model-tool adapter, committed only
