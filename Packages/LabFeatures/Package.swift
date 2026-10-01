@@ -12,6 +12,7 @@ let package = Package(
         .library(name: "ShareIngress", targets: ["ShareIngress"]),
         .library(name: "PortableObjects", targets: ["PortableObjects"]),
         .library(name: "SurfaceDeck", targets: ["SurfaceDeck"]),
+        .library(name: "TactileGrammar", targets: ["TactileGrammar"]),
     ],
     dependencies: [
         .package(path: "../LabSupport"),
@@ -106,6 +107,18 @@ let package = Package(
         .testTarget(
             name: "SurfaceDeckTests",
             dependencies: ["SurfaceDeck", .product(name: "LabDomain", package: "LabDomain")]
+        ),
+        // LAB-030 Tactile Grammar: three cues, their visual and spoken equivalents, and the
+        // authorization-checked play operation. Core Haptics, GameController, and WatchKit are
+        // imported only on the platforms that ship them, so a host that does not link this product
+        // never links those frameworks.
+        .target(
+            name: "TactileGrammar",
+            dependencies: [.product(name: "LabDomain", package: "LabDomain")]
+        ),
+        .testTarget(
+            name: "TactileGrammarTests",
+            dependencies: ["TactileGrammar", .product(name: "LabDomain", package: "LabDomain")]
         ),
     ]
 )

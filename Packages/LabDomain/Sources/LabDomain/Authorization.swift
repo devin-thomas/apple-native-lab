@@ -107,4 +107,10 @@ public struct AuthorizationDenial: Hashable, Sendable {
     public let adapter: AdapterKind
     public let required: Permission
     public let reason: Reason
+
+    public init(adapter: AdapterKind, required: Permission, reason: Reason) {
+        self.adapter = adapter
+        self.required = required
+        self.reason = reason
+    }
 }
