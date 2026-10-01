@@ -60,7 +60,7 @@ final class HomeSceneSession {
         defer { isRunning = false }
         do {
             let permission = try await sandbox.requestLiveAccess()
-            message = permission.explanation + " " + platformGate
+            message = permission.allowsLiveMode ? permission.explanation : platformGate
             home = try await sandbox.refreshHome()
             rebuildProposal()
             LabAnnouncement(text: message ?? "").post()
