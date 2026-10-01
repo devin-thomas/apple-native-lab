@@ -14,8 +14,9 @@ import Speech
 /// microphone, finalizes what it heard, and reports why, so the session pauses instead of ending
 /// silently.
 ///
-/// Never run on hardware by LAB-013-A: the lab's source builds declare no microphone purpose
-/// string, so `RecordingGate` falls back before this is reached. See the ticket's record.
+/// Which changes stop it is `CaptureStop`. Never run on hardware (LAB-013-A, LAB-013-B): the lab's
+/// source builds declare no microphone purpose string, so `RecordingGate` falls back before this
+/// is reached. See the tickets' records.
 public actor OnDeviceSpeechCapture: SpeechCapturing {
     #if canImport(Speech) && (os(iOS) || os(macOS))
     private var engine: AVAudioEngine?
@@ -131,28 +132,21 @@ public actor OnDeviceSpeechCapture: SpeechCapturing {
     #if canImport(Speech) && (os(iOS) || os(macOS))
     private func observeRoute(of engine: AVAudioEngine) {
         let center = NotificationCenter.default
+        // Either platform: the engine stopped because its input or output changed.
+        observers.append(center.addObserver(forName: .AVAudioEngineConfigurationChange, object: engine, queue: nil) { [weak self] _ in
+            guard let self else { return }
+            Task { await self.finish(with: CaptureStop.engineConfigurationChanged) }
+        })
         #if os(iOS)
         observers.append(center.addObserver(forName: AVAudioSession.routeChangeNotification, object: nil, queue: nil) { [weak self] note in
             guard let raw = note.userInfo?[AVAudioSessionRouteChangeReasonKey] as? UInt,
-                  let reason = AVAudioSession.RouteChangeReason(rawValue: raw) else { return }
-            let sentence: String? = switch reason {
-            case .oldDeviceUnavailable: "the audio device in use was disconnected"
-            case .newDeviceAvailable: "a new audio device was connected"
-            case .routeConfigurationChange: "the audio route's configuration changed"
-            default: nil
-            }
-            guard let sentence, let self else { return }
-            Task { await self.finish(with: .routeChanged(reason: sentence)) }
+                  let event = CaptureStop.routeChange(reason: raw), let self else { return }
+            Task { await self.finish(with: event) }
         })
         observers.append(center.addObserver(forName: AVAudioSession.interruptionNotification, object: nil, queue: nil) { [weak self] note in
             guard let raw = note.userInfo?[AVAudioSessionInterruptionTypeKey] as? UInt,
-                  AVAudioSession.InterruptionType(rawValue: raw) == .began, let self else { return }
-            Task { await self.finish(with: .interrupted) }
-        })
-        #else
-        observers.append(center.addObserver(forName: .AVAudioEngineConfigurationChange, object: engine, queue: nil) { [weak self] _ in
-            guard let self else { return }
-            Task { await self.finish(with: .routeChanged(reason: "the audio device configuration changed")) }
+                  let event = CaptureStop.interruption(type: raw), let self else { return }
+            Task { await self.finish(with: event) }
         })
         #endif
     }

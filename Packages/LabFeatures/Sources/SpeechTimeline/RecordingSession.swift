@@ -13,6 +13,39 @@ public enum CaptureEvent: Hashable, Sendable {
     case failed(RecognitionFailure)
 }
 
+/// Which system audio changes stop a live capture, and the words the session shows for each.
+///
+/// Kept apart from the notifications so the mapping can be tested without a microphone: the iOS
+/// observer passes the raw values of `AVAudioSession.RouteChangeReason` and
+/// `AVAudioSession.InterruptionType`, and both platforms report the engine's configuration change.
+/// A change that leaves the microphone working (a category change or an override the app made, a
+/// wake from sleep) does not stop capture; every change that can stop the engine's input does, so
+/// the session pauses and says why rather than going quiet.
+public enum CaptureStop {
+    /// `AVAudioSession.RouteChangeReason` raw values (iOS SDK): new device 1, old device
+    /// unavailable 2, no suitable route for the category 7, route configuration change 8.
+    public static func routeChange(reason rawValue: UInt) -> CaptureEvent? {
+        let sentence: String? = switch rawValue {
+        case 1: "a new audio device was connected"
+        case 2: "the audio device in use was disconnected"
+        case 7: "no audio input is available"
+        case 8: "the audio route's configuration changed"
+        default: nil
+        }
+        return sentence.map { .routeChanged(reason: $0) }
+    }
+
+    /// `AVAudioSession.InterruptionType` raw values (iOS SDK): began 1. An ended interruption
+    /// does not restart capture; the person presses Resume Recording.
+    public static func interruption(type rawValue: UInt) -> CaptureEvent? {
+        rawValue == 1 ? .interrupted : nil
+    }
+
+    /// `AVAudioEngineConfigurationChange`: the engine stopped because its input or output
+    /// changed, on either platform.
+    public static let engineConfigurationChanged = CaptureEvent.routeChanged(reason: "the audio device configuration changed")
+}
+
 /// Captures from the microphone and recognizes on device. Only `RecordingSession` starts one, and
 /// only after `RecordingGate` allowed it for the person's Record action.
 public protocol SpeechCapturing: Sendable {

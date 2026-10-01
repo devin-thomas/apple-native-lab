@@ -13,7 +13,8 @@ public enum UpdateOutcome: Hashable, Sendable {
     case provisionalShown
     /// The provisional text was empty; the previous guess was cleared.
     case provisionalCleared
-    /// A guess for audio already finalized. It was dropped, so no finalized words are shown twice.
+    /// A guess for audio already finalized, or one reaching back over a finalized segment. It was
+    /// dropped, so no finalized words are shown twice.
     case staleProvisionalDropped
     case finalized(SegmentID)
     /// The same final result delivered again. Nothing changed.
@@ -59,7 +60,9 @@ public enum TimelineError: Error, Hashable, Sendable {
 /// - Finalized segments never overlap and are sorted by start.
 /// - A final result removes the provisional text it covers, so a finalized word is never also
 ///   shown as provisional. The recognizer then sends a new guess for whatever audio remains.
-/// - A guess for audio already finalized is dropped.
+/// - A guess for audio already finalized is dropped, and so is a guess that reaches back over a
+///   finalized segment (a late guess from before that segment was final), because its text holds
+///   words the segment already shows.
 /// - A correction changes a segment's text only. Its range, recognized text, and word times stay.
 ///
 /// `revision` rises with every change a person could save, so a save can tell whether the
@@ -121,6 +124,7 @@ public struct TranscriptTimeline: Hashable, Sendable {
         case .provisional(let range, let text):
             let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
             if range.endMilliseconds <= finalizedThroughMilliseconds { return .staleProvisionalDropped }
+            if segments.contains(where: { $0.range.overlaps(range) }) { return .staleProvisionalDropped }
             if trimmed.isEmpty {
                 provisional = nil
                 return .provisionalCleared

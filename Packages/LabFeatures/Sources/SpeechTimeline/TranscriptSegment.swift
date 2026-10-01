@@ -127,12 +127,14 @@ public struct ProvisionalText: Hashable, Sendable {
 /// Text checks shared by recognition, captions, annotations, and corrections.
 enum SegmentText {
     /// Trims surrounding whitespace, then requires 1 to `segmentText` characters and no control
-    /// characters, line breaks included: a segment is one line.
+    /// characters, line breaks included (the Unicode line and paragraph separators too): a segment
+    /// is one line.
     static func validated(_ raw: String) throws(TimelineError) -> String {
         let text = raw.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !text.isEmpty else { throw .emptyText }
         guard text.count <= SpeechTimelineLimits.segmentText else { throw .textTooLong(limit: SpeechTimelineLimits.segmentText) }
-        guard !text.unicodeScalars.contains(where: { $0.properties.generalCategory == .control }) else {
+        let breaking: Set<Unicode.GeneralCategory> = [.control, .lineSeparator, .paragraphSeparator]
+        guard !text.unicodeScalars.contains(where: { breaking.contains($0.properties.generalCategory) }) else {
             throw .controlCharacters
         }
         return text
