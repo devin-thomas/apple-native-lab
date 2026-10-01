@@ -450,3 +450,9 @@ Static review and tvOS simulator screenshots only; no manual assistive-technolog
 Essential manual flows (all `not-run`): open/play/pause/seek; select captions and return from theater; recover from a failing clip; cancel/confirm Reset; read companion denial. Automated model tests do not close these manual gates.
 
 LAB-031-B simulator finding: at the default tvOS layout, the Spanish caption button wraps its title as "Span-ish" in the [return screenshot](walkthroughs/images/LAB-031/tvos-spanish-return.png). The remote still selected it and the summary read Spanish. The TV surface owner should widen the caption row or prevent this word break; confirm with large text and VoiceOver.
+
+## Trust Desk review (LAB-041-B)
+
+Static review of `TrustDeskForm` only: labeled native controls, the Display name hint, combined Identity content, and a Receipt accessibility label exist. View › Trust Desk supplies ⌘0 on Mac. Hosted replays call sessions rather than accessibility actions. No manual accessibility pass or rendered audit ran.
+
+Open findings: individual desk actions have no Mac menu commands; the credential reference is limited to two lines; the 60-second grant display has no timed refresh (the operation still checks expiry). VoiceOver, Voice Control, Full Keyboard Access, large text, contrast, and focus order on Mac/iPhone/iPad are `not-run`. These findings prevent a release accessibility claim.

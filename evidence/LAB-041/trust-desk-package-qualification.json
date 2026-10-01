@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "subject": "LAB-041",
+  "check": "Trust Desk package qualification: identity, recovery, passkey boundaries, refusals and reset",
+  "date": "2026-10-01T05:44:05Z",
+  "provenance": {
+    "sourceRevision": "4a73858-dirty",
+    "sdkName": "macosx27.0",
+    "xcodeVersion": "27.0",
+    "xcodeBuild": "27A266a",
+    "appVersion": "0.1.0",
+    "buildNumber": "1",
+    "buildProfile": "CoreLocal",
+    "minimumOS": "26.0"
+  },
+  "execution": {
+    "path": "fixture"
+  },
+  "inputs": [
+    "Packages/LabFeatures/Sources/TrustDesk/TrustDeskFixture.swift@sha256:f2920c8613b5d16a78da48ecc50ae312c151d6131ad7aef1deb6e4bf37cb4891",
+    "Packages/LabFeatures/Tests/TrustDeskTests/TrustDeskQualificationTests.swift@sha256:7f4c41f69ea39c4a7c6b136c7a3c69579d7c39e41dd3a4a7345c11145b60f290",
+    "Packages/LabFeatures/Tests/TrustDeskTests/TrustDeskOperationTests.swift@sha256:fa645c4dafc4dca64e8593f9303366d6793e1554f6825fb93b3e62af39c6ed1e"
+  ],
+  "steps": [
+    "swift test --package-path Packages/LabFeatures --filter TrustDesk",
+    "Fresh in-memory stores and memory secrets; scripted failure/cancellation/unavailability; manual monotonic clock; injected stale update and read-only actor"
+  ],
+  "outcome": {
+    "result": "passed",
+    "detail": "20 tests in 4 suites passed. Stable identity and passkey user handle survived rename. Export/copy of passkey material was refused; passkey assertion did not authorize opening. Biometric failure retained local confirmation. Complete clean replay reset and reopened the fixture. Cancellation/unavailability retained the earlier open record and secret; revoked/expired grants refused opening. A stale update produced conflict without secret write. Read-only actor denied commit with no record or secret. Repeated opening added no second secret; scoped reset kept other user data and demo data. Promptless real LocalAuthentication probe did not succeed."
+  },
+  "limitations": [
+    "Fixture path on macOS 27.0 (26A425), not a biometric or system-passkey ceremony. No simulator or physical mobile device in this command.",
+    "The package Keychain test accepts OSStatus -34018 or -25308 as unavailable; its pass alone is not proof of a successful Keychain write. Mac hosted evidence records the successful scoped store separately.",
+    "Original fixtures only; no screenshots, recordings, account connections or exports."
+  ]
+}
