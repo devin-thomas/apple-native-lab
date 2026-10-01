@@ -1,3 +1,4 @@
+import CryptoKit
 import Foundation
 import LabSupport
 import LocalConstellation
@@ -98,7 +99,7 @@ import Testing
             date: started,
             provenance: .current,
             execution: try Execution(observing: .current),
-            inputs: ["cue-sheet:LocalConstellation", "session:\(LocalConstellation.showSessionID)"],
+            inputs: [try Self.cueSheetInput(), "session:\(LocalConstellation.showSessionID)"],
             steps: [
                 "xcodebuild -scheme LabTV -destination <tvOS simulator> -only-testing:LabTVTests/ConstellationTVEvidenceTests test",
                 "TVConstellationModel starts the simulation with the show stored in memory, as the Apple TV app does",
@@ -125,6 +126,17 @@ import Testing
         Attachment.record(String(decoding: try encoder.encode(record), as: UTF8.self) + "\n", named: "LAB-019-local-constellation-tvos-simulator.json")
         #expect(record.path == .simulator)
         #expect(record.supportedState == .implemented)
+    }
+
+    /// The cue sheet as this app bundles it, by its SHA-256, from the LocalConstellation module's
+    /// resource bundle.
+    nonisolated static func cueSheetInput() throws -> String {
+        let root = try #require(Bundle.main.resourceURL)
+        let bundles = ((try? FileManager.default.contentsOfDirectory(at: root, includingPropertiesForKeys: nil)) ?? [])
+            .filter { $0.lastPathComponent.hasSuffix("LocalConstellation.bundle") }
+        let bundle = try #require(bundles.first.flatMap(Bundle.init(url:)), "the LocalConstellation resource bundle")
+        let data = try Data(contentsOf: try #require(bundle.url(forResource: "cue-sheet", withExtension: "json")))
+        return "cue-sheet:app-bundle@sha256:" + SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined()
     }
 
     private func wait<Value>(_ timeout: Duration = .seconds(10), _ read: @MainActor () -> Value?) async throws -> Value {

@@ -110,7 +110,7 @@ import Testing
             date: started,
             provenance: .current,
             execution: try Execution(observing: .current),
-            inputs: ["cue-sheet:LocalConstellation", "transport:tcp-loopback"],
+            inputs: [try ConstellationTVEvidenceTests.cueSheetInput(), "transport:tcp-loopback"],
             steps: [
                 "On one Mac: LAB_019_DEMO_DIR=<folder> swift test --package-path Packages/LabFeatures --filter ConstellationTwoEndpointConductor, the conductor, on a LANListener with LANScope.loopbackOnly and no Bonjour name",
                 "xcodebuild -scheme LabTV -destination <tvOS simulator> -only-testing:LabTVTests/ConstellationTwoEndpointTests TEST_RUNNER_LAB_019_DEMO_DIR=<folder> test, the display, connecting to LANEndpoint.loopback(port:)",
