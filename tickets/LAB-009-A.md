@@ -64,6 +64,7 @@ LAB-009's spec now claims `implemented`. The document browser and domain preview
   - `LabCatalogTests` expect 7 implemented experiments.
 - `Apps/Shared/DocumentsEverywhere/` (new): session and browser views.
 - `Apps/Mac/Window/DocumentsEverywhereColumns.swift` (new).
+- `Tests/LabMacTests/DocumentsEverywhereHostTests.swift` (new): sidebar destination; session opens two samples with provider disabled; selecting Tide card updates the preview. Uses a fresh SQLite store and staging folder.
 - Hooks in shared host files, one case each:
   - `MainWindowState` has `.documentsEverywhere` and the per-window session.
   - `MainWindow` has the columns, search prompt, and environment open action.
@@ -97,5 +98,6 @@ LAB-009's spec now claims `implemented`. The document browser and domain preview
 - Live File Provider domain registration.
 - VoiceOver / Voice Control / Full Keyboard Access passes.
 - A 26-SDK compile.
+- Full four-platform `script/test.sh` past the Mac host: stopped on ShareIngress fixture `Operation not permitted` under the research PortableSSD mirror (unrelated). Follow-up host-only DocumentsEverywhere filter was queue-killed (exit 129) while waiting for a research sim slot.
 
 **Next dependency-ready ticket:** LAB-009-B (qualify Documents Everywhere), once the lead merges this branch. FrontierOptional File Provider host embedding needs a lead decision.
