@@ -535,6 +535,8 @@ Use in this plan: Controller capability and input reference.
 
 Implementation evidence required: actual SDK symbol/availability, permissions or entitlement, and a named compile/device result.
 
+Installed SDK check (2026-09-30, Xcode 27.0 (27A266a), from `GCController.h` and `GCDeviceHaptics.h` in the iOS 27.0 SDK, for LAB-030-A): `GCController.haptics` is a nullable `GCDeviceHaptics`, available on macOS 11.0, iOS 14.0, and tvOS 14.0. `createEngineWithLocality:` is the same availability; Swift name `createEngine(withLocality:)`. `GCHapticsLocalityDefault` is guaranteed. The watchOS SDK has no GameController framework. No entitlement. On the research Mac the probe found no controller reporting haptics. No controller was played.
+
 ## S50
 
 **Core Haptics** — reference
@@ -544,6 +546,8 @@ Source: [Core Haptics](https://developer.apple.com/documentation/corehaptics)
 Use in this plan: Hardware-sensitive haptic/audio pattern reference.
 
 Implementation evidence required: actual SDK symbol/availability, permissions or entitlement, and a named compile/device result.
+
+Installed SDK check (2026-09-30, Xcode 27.0 (27A266a), from the Core Haptics headers in the iOS, macOS, and tvOS 27.0 SDKs, for LAB-030-A): `CHHapticEngine` is iOS 13.0, macOS 10.15, tvOS 14.0, and unavailable on watchOS. The watchOS SDK has no Core Haptics framework. `capabilitiesForHardware()` returns `supportsHaptics` and `supportsAudio`. `makePlayer(with:)` is the Swift name of `createPlayerWithPattern:error:`. `CHHapticTimeImmediate` is 0. No entitlement. On the research Mac, `supportsHaptics` was false. No pattern was played.
 
 ## S51
 

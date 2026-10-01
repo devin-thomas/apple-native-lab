@@ -103,3 +103,14 @@ Recorded at [LAB-004-B](../tickets/LAB-004-B.md) from the [LAB-004-A](../tickets
 | [S59](SOURCE_INDEX.md#s59) | `Toggle(isOn:intent:label:)` in `_AppIntents_SwiftUI`, which the widget extension links | iOS 17.0, macOS 14.0, tvOS 17.0, watchOS 10.0 | The widget's toggle in the simulator. The release manifest records the link (LAB-004-A) | None beyond the widget's own |
 | [S59](SOURCE_INDEX.md#s59) | `View.privacySensitive(_:)` and `RedactionReasons.privacy` | iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0 | Drawn with the privacy redaction in a package test and read back by text recognition: the detail line is gone and the state stays readable. The deck's "Lock Screen, locked" preview uses the same redaction | That the system applies it to this widget on a locked device |
 
+### Core Haptics, controllers, and Watch haptics (LAB-030)
+
+Recorded at LAB-030-A from the Core Haptics, GameController, and WatchKit headers of the 27.0 SDKs on 2026-09-30. No entitlement is required. Nothing here was played on a physical device. A package test called `CHHapticEngine.capabilitiesForHardware()` and `GCController.controllers()` on the research Mac and got a value back.
+
+| Source | Installed symbol | Declared availability | Demonstrated | Remaining uncertainty |
+|---|---|---|---|---|
+| [S50](SOURCE_INDEX.md#s50) | `CHHapticEngine`, `capabilitiesForHardware()`, `supportsHaptics`, `makePlayer(with:)`, `CHHapticEvent` transient and continuous, `CHHapticTimeImmediate` (0) | iOS 13.0, macOS 10.15, tvOS 14.0; unavailable on watchOS. The watchOS SDK has no Core Haptics framework | Compiled into the Mac and iPhone hosts. On the research Mac (Apple M5 Max), `supportsHaptics` was false. The call did not play a pattern | What an iPhone or a Mac with a haptic actuator reports, and what the pattern feels like |
+| [S49](SOURCE_INDEX.md#s49) | `GCController.haptics`, `GCDeviceHaptics.createEngine(withLocality:)`, `GCHapticsLocality.default` | macOS 11.0, iOS 14.0, tvOS 14.0. No GameController framework on watchOS | Compiled into the Mac and iPhone hosts. On the research Mac, no controller reported haptics | Which controllers return a non-nil `haptics`, and playback on one |
+| WatchKit | `WKInterfaceDevice.play(_:)` with `WKHapticType.success`, `.retry`, and `.start` | watchOS 2.0 for `play`; the three types are in the original enum | Compiled into the Watch host. The route sends one system haptic and an empty event list. Not played | What a Watch does, including a Watch that ignores the call |
+
+
