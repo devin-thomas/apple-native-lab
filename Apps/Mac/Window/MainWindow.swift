@@ -58,6 +58,7 @@ struct MainWindow: View {
             window.inspect(record)
         }
         .focusedSceneValue(\.mainWindow, window)
+        .modifier(DesktopPowerChrome())
         // Views in the window, such as an experiment page's Open button, change its destination (LAB-010, LAB-035).
         .environment(window)
         .environment(\.openPortableObjects, OpenPortableObjectsAction(window: ObjectIdentifier(window)) { window.destination = .portableObjects })
@@ -94,6 +95,8 @@ struct MainWindow: View {
             PortableObjectsListColumn(window: window)
         case .surfaceDeck:
             SurfaceDeckListColumn(window: window)
+        case .desktopPower:
+            DesktopPowerListColumn()
         case .catalog(let scope):
             if let registry = model.registry {
                 CatalogListColumn(registry: registry, scope: scope, window: window)
@@ -122,6 +125,8 @@ struct MainWindow: View {
             PortableObjectsDetailColumn(window: window)
         case .surfaceDeck:
             SurfaceDeckDetailColumn()
+        case .desktopPower:
+            DesktopPowerDetailColumn()
         case .catalog:
             if let registry = model.registry {
                 CatalogDetailColumn(registry: registry, experimentID: window.experimentID)
@@ -146,6 +151,7 @@ struct MainWindow: View {
         case .accessSuperpower: "Search archived samples"
         case .shareInbox: "Search the inbox"
         case .portableObjects: "Search objects"
+        case .desktopPower: "Search notes"
         default: "Search experiments"
         }
     }

@@ -34,6 +34,9 @@ struct ExperimentDetailView: View {
                 header
                 AccessSuperpowerLaunch(experiment: experiment)
                 SurfaceDeckLaunch(experiment: experiment)
+                #if os(macOS)
+                DesktopPowerLaunch(experiment: experiment)
+                #endif
                 Text(experiment.moment)
                     .font(.title3)
                     .fixedSize(horizontal: false, vertical: true)

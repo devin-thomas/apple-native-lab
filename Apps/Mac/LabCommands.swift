@@ -1,3 +1,4 @@
+import DesktopNativePower
 import LabCatalog
 import SurfaceDeck
 import SwiftUI
@@ -6,6 +7,7 @@ import SwiftUI
 /// commands act on the frontmost main window and are disabled when none is in front.
 struct LabCommands: Commands {
     let library: LabLibrary
+    let desktop: DesktopPowerSession
     @FocusedValue(\.mainWindow) private var window
 
     var body: some Commands {
@@ -44,6 +46,25 @@ struct LabCommands: Commands {
             Button("Portable Objects") { window?.destination = .portableObjects }
                 .keyboardShortcut("8", modifiers: .command)
                 .disabled(window == nil)
+            Button("Desktop Native Power") { window?.destination = .desktopPower }
+                .keyboardShortcut("9", modifiers: .command)
+                .disabled(window == nil)
+            Button(DesktopCommand.showPalette.title) { desktop.showsPalette = true }
+                .keyboardShortcut("k", modifiers: .command)
+            Button(DesktopCommand.showStatus.title) {
+                Task { await desktop.run(.showStatus) }
+            }
+            .keyboardShortcut("9", modifiers: [.command, .option])
+        }
+
+        CommandGroup(after: .importExport) {
+            Button(DesktopCommand.importFile.title) { desktop.showsFileImporter = true }
+                .keyboardShortcut("o", modifiers: [.command, .control])
+            Button(DesktopCommand.openDocumentWindow.title) {
+                desktop.openSelected()
+            }
+            .keyboardShortcut(.defaultAction)
+            .disabled(desktop.selectedID == nil)
         }
 
         CommandGroup(replacing: .textEditing) {
@@ -61,6 +82,21 @@ struct LabCommands: Commands {
             }
             .keyboardShortcut("l", modifiers: [.command, .option])
             .disabled(window == nil || library.latestReceipt == nil)
+
+            Divider()
+
+            Button(DesktopCommand.importSelectedText.title) {
+                Task { await desktop.importPasteboard() }
+            }
+            .keyboardShortcut("t", modifiers: [.command, .control])
+            Button(DesktopCommand.importFixtureNote.title) {
+                Task { await desktop.run(.importFixtureNote) }
+            }
+            .keyboardShortcut("n", modifiers: [.command, .option])
+            Button(DesktopCommand.resetFixtureState.title) {
+                Task { await desktop.run(.resetFixtureState) }
+            }
+            .keyboardShortcut("r", modifiers: [.command, .option])
 
             Divider()
 

@@ -256,9 +256,11 @@ import Testing
             "CreateCollectionIntent", "CreateItemIntent", "FindItemsIntent", "GetItemIntent",
             "UpdateItemIntent", "ArchiveItemIntent", "RestoreItemIntent", "ExportItemIntent",
         ])
-        // LAB-004 Surface Deck's toggle, read, and launch action join them, and nothing else does.
+        // LAB-004 Surface Deck's toggle, read, and launch action join them.
         #expect(intents(from: "SurfaceDeck") == ["SetDemoSessionIntent", "GetDemoSessionIntent", "OpenSurfaceDeckIntent"])
-        #expect(actions.count == 11)
+        // LAB-042: the one allowlisted desktop command. It is Mac-only.
+        #expect(intents(from: "DesktopNativePower") == ["RunDesktopCommandIntent"])
+        #expect(actions.count == 12)
         let entities = try #require(metadata["entities"] as? [String: Any])
         #expect(Set(entities.keys) == ["LabItemEntity", "LabCollectionEntity"])
         let queries = try #require(metadata["queries"] as? [String: Any])
