@@ -12,6 +12,7 @@ let package = Package(
         .library(name: "ShareIngress", targets: ["ShareIngress"]),
         .library(name: "PortableObjects", targets: ["PortableObjects"]),
         .library(name: "SurfaceDeck", targets: ["SurfaceDeck"]),
+        .library(name: "InkHasStructure", targets: ["InkHasStructure"]),
         // CORE-012: the journey's fixed values only. A product so that Xcode gives the journey's
         // tests a scheme, as every module's scheme holds its own tests. No host links it.
         .library(name: "FirstJourney", targets: ["FirstJourney"]),
@@ -109,6 +110,16 @@ let package = Package(
         .testTarget(
             name: "SurfaceDeckTests",
             dependencies: ["SurfaceDeck", .product(name: "LabDomain", package: "LabDomain")]
+        ),
+        // LAB-045 Ink Has Structure: editable anchored ink and typed notes over LabDomain values.
+        // Hosts draw and commit saves through OperationService; PencilKit stays in the iOS host.
+        .target(
+            name: "InkHasStructure",
+            dependencies: [.product(name: "LabDomain", package: "LabDomain")]
+        ),
+        .testTarget(
+            name: "InkHasStructureTests",
+            dependencies: ["InkHasStructure", .product(name: "LabDomain", package: "LabDomain")]
         ),
         // CORE-012: the first six-lab journey across every M1 module over one OperationService.
         // `FirstJourney` holds only the journey's fixed values; no host links it.
