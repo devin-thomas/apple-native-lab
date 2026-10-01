@@ -23,6 +23,11 @@ struct VirtualTabletopScene: View {
             RealityView { content in
                 controller.build(kit: kit, drawsTable: true)
                 content.add(controller.root)
+                // Start above the front edge, looking down at the tabletop, so a first tap lands
+                // on its surface; the orbit controls turn around the table from there.
+                let camera = PerspectiveCamera()
+                camera.look(at: .zero, from: [0, 0.75, 1.0], relativeTo: nil)
+                content.add(camera)
                 content.cameraTarget = controller.root
             } update: { _ in
                 controller.sync(kit: kit, anchors: anchors, selection: selection)
