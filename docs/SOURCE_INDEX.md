@@ -141,6 +141,8 @@ Use in this plan: On-device transcription with separately managed assets and tim
 
 Implementation evidence required: actual SDK symbol/availability, permissions or entitlement, and a named compile/device result.
 
+Installed SDK check (2026-09-30, Xcode 27.0 with the macOS and iOS 27.0 SDKs): the `SpeechAnalyzer`, `SpeechTranscriber`, and `AssetInventory` symbols Speech Timeline uses, with their declared availability, are in the [installed SDK ledger](VERIFICATION_BOUNDARIES.md#speech-lab-013). They were compiled for macOS and iOS. The transcriber ran on the development Mac, in a test process and in the sandboxed app, on speech this Mac's synthesizer produced; the iOS 27.0 simulator reports it unavailable. No microphone, physical iPhone, or model download was used.
+
 ## S11
 
 **Core Transferable representations** — reviewed
