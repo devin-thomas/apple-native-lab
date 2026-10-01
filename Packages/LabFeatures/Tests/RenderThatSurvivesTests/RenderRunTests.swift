@@ -178,6 +178,24 @@ import Testing
         #expect(bench.summaries.isEmpty)
     }
 
+    @Test func withoutAStoreARenderIsRefusedAndLeavesNothing() async throws {
+        let folder = FileManager.default.temporaryDirectory.appending(path: "RenderUnavailable-\(UUID().uuidString)")
+        defer { try? FileManager.default.removeItem(at: folder) }
+        let studio = RenderStudio(
+            backend: UnavailableBackend(), workspace: RenderWorkspace(root: folder),
+            destination: DestinationCheck(capacity: FixedCapacity(bytes: 1 << 34)), gpu: .unavailable,
+            runway: TestRunway(mode: .whileAppRuns)
+        )
+        await #expect(throws: RenderRefusal.job(.unavailable(reason: "The lab store is closed."))) {
+            try await studio.start(Recipes.short, options: .init())
+        }
+        await #expect(throws: JobError.unavailable(reason: "The lab store is closed.")) {
+            try await studio.recover()
+        }
+        // The folder was checked and created, and nothing else was written.
+        #expect(try FileManager.default.contentsOfDirectory(atPath: folder.path(percentEncoded: false)).isEmpty)
+    }
+
     @Test func aSecondRenderOfTheSameOutputIsRefusedWhileOneRuns() async throws {
         let bench = Bench()
         bench.hooks.on(.segmentStarted(0)) { [studio = bench.studio] _ in
@@ -238,4 +256,13 @@ final class AllowedSwitch: Sendable {
     private let state = Mutex(true)
     var value: Bool { state.withLock { $0 } }
     func set(_ value: Bool) { state.withLock { $0 = value } }
+}
+
+/// A backend whose store cannot be opened: the unavailable path.
+struct UnavailableBackend: JobBackend {
+    func job(_ id: JobID) async throws(JobError) -> LabJob { throw .unavailable(reason: "The lab store is closed.") }
+    func jobs(of kind: JobKind) async throws(JobError) -> [LabJob] { throw .unavailable(reason: "The lab store is closed.") }
+    func commit(_ operation: DomainOperation, requestID: RequestID) async throws(JobError) -> ActionReceipt {
+        throw .unavailable(reason: "The lab store is closed.")
+    }
 }
