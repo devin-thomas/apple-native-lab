@@ -136,7 +136,8 @@ public final class ScreeningRoomModel {
             await load(session.clip ?? ScreeningClips.testCard)
         case .play:
             activateAudio()
-            if player.currentSeconds > state.position + 0.5 || state.position == 0 { player.seek(to: state.position) }
+            // Playing from the end starts over: the session moved the position, so the player follows.
+            if abs(player.currentSeconds - state.position) > 0.5 { player.seek(to: state.position) }
             player.play()
         case .pause:
             player.pause()

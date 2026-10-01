@@ -183,3 +183,12 @@ func settles(_ condition: () -> Bool) async -> Bool {
     }
     return true
 }
+
+/// The system's own caption criteria must not override the session's choice when a surface takes
+/// the player (found in the tvOS simulator: the theater turned Spanish captions off).
+@MainActor
+@Suite struct CaptionAuthorityTests {
+    @Test func thePlayerDoesNotApplySelectionCriteriaByItself() {
+        #expect(ScreeningPlayer().player.appliesMediaSelectionCriteriaAutomatically == false)
+    }
+}

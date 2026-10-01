@@ -15,7 +15,7 @@ import Testing
         // The lab's own theater, then the platform's full screen, Picture in Picture, and AirPlay,
         // then back to the page.
         let moved = try session.run(.present(.theater))
-        #expect(moved.summary == "Moved Test Card to Theater, still at 0:03.")
+        #expect(moved.summary == "Moved Test Card to the theater, still at 0:03.")
         #expect(moved.undo == .present(.inline))
         for surface: PlaybackSurface in [.fullScreen, .pictureInPicture, .external, .inline] {
             let before = session.state.revision

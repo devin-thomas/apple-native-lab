@@ -29,6 +29,17 @@ public enum PlaybackSurface: String, Hashable, Sendable, Codable, CaseIterable {
         }
     }
 
+    /// The surface as a place in a sentence, such as "Moved the clip to the theater."
+    public var place: String {
+        switch self {
+        case .inline: "the page"
+        case .theater: "the theater"
+        case .fullScreen: "full screen"
+        case .pictureInPicture: "Picture in Picture"
+        case .external: "AirPlay"
+        }
+    }
+
     /// Whether the lab's own controls may ask for it. The rest belong to system controls.
     public var isRequestable: Bool {
         switch self {

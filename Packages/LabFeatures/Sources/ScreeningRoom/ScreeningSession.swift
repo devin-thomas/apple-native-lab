@@ -296,7 +296,7 @@ public struct ScreeningSession: Sendable {
         case .pause: "Paused \(clipTitle) at \(at)."
         case .seek, .skip: "Moved \(clipTitle) from \(PlaybackState.clock(old.position)) to \(at)."
         case .selectCaption(let choice): "\(choice.title(in: new.clip.flatMap(ScreeningClips.clip))) for \(clipTitle)."
-        case .present(let surface): "Moved \(clipTitle) to \(surface.title), still at \(at)."
+        case .present(let surface): "Moved \(clipTitle) to \(surface.place), still at \(at)."
         case .forgetResumePoint: "Forgot the resume point: \(clipTitle) is back at the start, captions off, in the page."
         }
     }
@@ -308,7 +308,7 @@ public struct ScreeningSession: Sendable {
         case .pause: "Already paused."
         case .seek, .skip: "Already at \(PlaybackState.clock(state.position))."
         case .selectCaption: "Those captions are already chosen."
-        case .present(let surface): "Already showing \(surface.title.lowercased())."
+        case .present(let surface): "Already in \(surface.place)."
         case .forgetResumePoint: "Nothing to reset."
         }
     }

@@ -73,6 +73,7 @@ struct ScreeningRoomScreen: View {
         .padding(.horizontal, 80)
         .padding(.top, 24)
         .navigationTitle(ScreeningRoom.title)
+        .accessibilityElement(children: .contain)
         .accessibilityIdentifier("screening.screen")
         .task { await model.start() }
         .onChange(of: model.state.surface, initial: true) { _, surface in
@@ -120,14 +121,19 @@ struct ScreeningRoomScreen: View {
         .clipShape(.rect(cornerRadius: 24))
     }
 
+    /// Play or pause and the two skips as symbols in one row, with Watch in Theater below them:
+    /// the column is too narrow for four titled buttons side by side.
     private var controls: some View {
-        HStack(spacing: 24) {
-            Button(model.state.isPlaying ? "Pause" : "Play", systemImage: model.state.isPlaying ? "pause.fill" : "play.fill") {
-                run(model.state.isPlaying ? .pause : .play)
+        VStack(alignment: .leading, spacing: 24) {
+            HStack(spacing: 24) {
+                Button(model.state.isPlaying ? "Pause" : "Play", systemImage: model.state.isPlaying ? "pause.fill" : "play.fill") {
+                    run(model.state.isPlaying ? .pause : .play)
+                }
+                .accessibilityIdentifier("screening.play")
+                Button("Back 10 Seconds", systemImage: "gobackward.10") { run(.skip(by: -ScreeningRoom.skipInterval)) }
+                Button("Forward 10 Seconds", systemImage: "goforward.10") { run(.skip(by: ScreeningRoom.skipInterval)) }
             }
-            .accessibilityIdentifier("screening.play")
-            Button("Back 10", systemImage: "gobackward.10") { run(.skip(by: -ScreeningRoom.skipInterval)) }
-            Button("Forward 10", systemImage: "goforward.10") { run(.skip(by: ScreeningRoom.skipInterval)) }
+            .labelStyle(.iconOnly)
             Button("Watch in Theater", systemImage: "play.rectangle") { run(.present(.theater)) }
                 .accessibilityIdentifier("screening.theater")
         }
@@ -159,7 +165,7 @@ struct ScreeningRoomScreen: View {
     private var clips: some View {
         VStack(alignment: .leading, spacing: 16) {
             CardHeading(title: "Clips")
-            HStack(spacing: 24) {
+            VStack(alignment: .leading, spacing: 20) {
                 ForEach(ScreeningClips.all) { clip in
                     Button(clip.title, systemImage: model.state.clip == clip.id ? "checkmark.circle.fill" : "film") {
                         Task { await model.open(clip) }

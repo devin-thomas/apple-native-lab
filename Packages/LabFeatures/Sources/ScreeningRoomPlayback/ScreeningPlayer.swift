@@ -29,6 +29,10 @@ public final class ScreeningPlayer {
 
     public init() {
         player.allowsExternalPlayback = true
+        // The session's caption choice is the only one. With automatic criteria on, the system
+        // player re-applied the system's caption preference when it took the player for the
+        // theater on Apple TV, which turned Spanish captions off (LAB-031-A, tvOS simulator).
+        player.appliesMediaSelectionCriteriaAutomatically = false
         observePlayer()
     }
 
