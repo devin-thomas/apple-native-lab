@@ -224,6 +224,73 @@ import Testing
         #expect(again.outcome == .delivered)
     }
 
+    /// LAB-030-B: replay every cue from a clean log, without an actuator or audio device.
+    @Test func aCleanReplayKeepsAllThreeMutedAndUnavailableCuesUsable() async throws {
+        for intensity in [IntensityPreference.standard, .muted] {
+            let engine = TactileGrammarEngine(capabilities: { .none }, clock: { 0 })
+            for pattern in CuePattern.all {
+                let request = play(pattern.id, intensity: intensity)
+                let receipt = try await engine.play(request)
+                #expect(receipt.route == .fallback)
+                #expect(receipt.outcome == .delivered)
+                #expect(receipt.visual == pattern.visual)
+                #expect(receipt.spoken == pattern.spoken)
+                #expect(!receipt.audioPlayed)
+                #expect(try await engine.play(request) == receipt)
+            }
+            #expect(await engine.receiptCount() == 3)
+            #expect(await engine.resetDemo().clearedReceipts == 3)
+            #expect(await engine.receiptCount() == 0)
+        }
+    }
+
+    @Test(arguments: CuePattern.all)
+    func eachCueAdmitsAtItsExactRateBoundary(_ pattern: CuePattern) async throws {
+        let clock = ManualCueClock()
+        let actuator = RecordingActuator()
+        let engine = makeEngine(core: actuator, capabilities: .core, clock: clock)
+        _ = try await engine.play(play(pattern.id))
+        clock.milliseconds = pattern.minimumGapMilliseconds - 1
+        #expect(try await engine.play(play(pattern.id)).outcome == .limited(.rate))
+        clock.milliseconds += 1
+        #expect(try await engine.play(play(pattern.id)).outcome == .delivered)
+        #expect(await actuator.deliveries.count == 2)
+    }
+
+    @Test func fatigueExpiresAtTheWindowBoundaryAndMutedCuesDoNotConsumeIt() async throws {
+        let clock = ManualCueClock()
+        let actuator = RecordingActuator()
+        let engine = makeEngine(core: actuator, capabilities: .core, clock: clock)
+        for index in 0..<CueLimits.fatigueCount {
+            clock.milliseconds = index * CuePattern.success.minimumGapMilliseconds
+            _ = try await engine.play(play("success"))
+        }
+        for pattern in CuePattern.all {
+            #expect(try await engine.play(play(pattern.id, intensity: .muted)).outcome == .delivered)
+        }
+        clock.milliseconds = CueLimits.fatigueWindowMilliseconds - 1
+        #expect(try await engine.play(play("warning")).outcome == .limited(.fatigue))
+        clock.milliseconds += 1
+        #expect(try await engine.play(play("warning")).outcome == .delivered)
+        #expect(await actuator.deliveries.count == 6)
+    }
+
+    /// The live capability read and muted route run on the Mac. No output device is started.
+    @Test func theInstalledMacAdapterCompletesEveryMutedCue() async throws {
+        let capabilities = LiveHapticCapabilities.read()
+        print("LAB-030-B capabilities: \(capabilities.sentence)")
+        let engine = LiveTactileGrammar.makeEngine()
+        for pattern in CuePattern.all {
+            let receipt = try await engine.play(play(pattern.id, intensity: .muted))
+            #expect(receipt.route == .fallback)
+            #expect(receipt.spoken == pattern.spoken)
+            #expect(receipt.visual == pattern.visual)
+            #expect(!receipt.audioPlayed)
+        }
+        _ = await engine.stop()
+        #expect(await engine.resetDemo().clearedReceipts == 3)
+    }
+
     @Test func readingInstalledCapabilitiesDoesNotCrash() {
         let capabilities = LiveHapticCapabilities.read()
         #expect(!capabilities.sentence.isEmpty)
