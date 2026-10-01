@@ -33,10 +33,10 @@ The first run uses original fixtures. Keep the underlying operation independent 
 
 ## Acceptance and proof
 
-- [ ] A display-name change cannot change identity.
-- [ ] Biometric failure retains a non-destructive recovery path.
-- [ ] Passkeys are never misrepresented as exportable app secrets.
-- [ ] The declared fallback completes a meaningful version of the interaction.
+- [x] A display-name change cannot change identity.
+- [x] Biometric failure retains a non-destructive recovery path.
+- [x] Passkeys are never misrepresented as exportable app secrets.
+- [x] The declared fallback completes a meaningful version of the interaction.
 - [ ] Essential actions remain available through the platform's assistive and alternate-input paths.
 - [ ] Actual device/OS/permission and adapter-path evidence is recorded; untested combinations remain unverified.
 
@@ -69,6 +69,10 @@ Observed with Xcode 27.0 (27A266a) and the 27.0 SDKs. These are Mac and package-
 - `ASAuthorizationPlatformPublicKeyCredentialProvider` (`init(relyingPartyIdentifier:)`, `createCredentialRegistrationRequest`, `createCredentialAssertionRequest`) is macOS 12.0, iOS 15.0, tvOS 16.0, and unavailable on watchOS. `ASPublicKeyCredential` exposes `credentialID` and `rawClientDataJSON`, not a private key. This build does not present `ASAuthorizationController`. The passkey path is a labeled simulation against `fixture.trust-desk.invalid`.
 - `SecItemAdd` with `kSecUseDataProtectionKeychain` returns `errSecMissingEntitlement` (-34018) from `swift test`, which is not a sandboxed app. The store then writes a file-keychain item, still scoped by service and account and not synchronizable; that path returned `errSecInteractionNotAllowed` (-25308) because the login keychain wanted UI. The same store, inside the sandboxed Mac host, wrote and read two services for one account without a prompt.
 - An `AuthorizationGrant` is not a `CommitGrant`. Opening the sealed record is an `updateItem` through the app UI, so it produces an ordinary receipt and does not need a destructive-commit grant. The desk grant is what allows that open. It lasts 60 seconds, 300 at most, and is memory-only.
+
+## Qualification notes (LAB-041-B)
+
+The [qualification](../tickets/LAB-041-B.md) and [walkthrough](../docs/walkthroughs/LAB-041-trust-desk.md) record 20 package tests, Mac hosted fixture replay, and an iPhone simulator hosted replay. Hosted replays use a scoped Keychain but scripted local authorization; passkeys remain a labeled protocol simulation. No physical-device run or manual accessibility pass. State stays `implemented`. The full repository gate stopped on an unrelated Speech Timeline simulator crash; Trust Desk's individually inspected phone test passed.
 
 ## Delivery
 

@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "subject": "LAB-041",
+  "check": "Trust Desk publication, privacy, rights and accessibility source review",
+  "date": "2026-10-01T05:23:01Z",
+  "provenance": {
+    "sourceRevision": "4a73858-dirty",
+    "sdkName": "macosx27.0",
+    "xcodeVersion": "27.0",
+    "xcodeBuild": "27A266a",
+    "appVersion": "0.1.0",
+    "buildNumber": "1",
+    "buildProfile": "CoreLocal",
+    "minimumOS": "26.0"
+  },
+  "execution": {
+    "path": "static-review"
+  },
+  "inputs": [
+    "Apps/Shared/TrustDesk/TrustDeskViews.swift@sha256:764a8782ae5523cc97bcc205cb618220a777991e4359ed67f49f56beb39736f8",
+    "Packages/LabFeatures/Sources/TrustDesk/TrustDeskFixture.swift@sha256:f2920c8613b5d16a78da48ecc50ae312c151d6131ad7aef1deb6e4bf37cb4891",
+    "docs/walkthroughs/LAB-041-trust-desk.md@sha256:6a839b8c71aa0f275e2bd861f4176ae46341dba8051f42548b6b8f93e941dc97"
+  ],
+  "steps": [
+    "Read fixture, form, session and operation source; compare walkthrough with executed package and Mac hosted tests",
+    "Review retained JSON records: original fixture identifiers and source hashes only; no screenshot, recording or secret export"
+  ],
+  "outcome": {
+    "result": "passed",
+    "detail": "Walkthrough labels scripted authorization, memory/package replay, Mac hosted Keychain replay, and passkey protocol simulation separately. No claim of sensor success or system passkey. Retained inputs are original fixture sources and tests. UI has native labeled controls, identity combination, name hint and receipt label. Open accessibility findings and all manual passes are stated explicitly."
+  },
+  "limitations": [
+    "Static review supports no live-adapter or release-accessibility claim. No VoiceOver, Voice Control, Full Keyboard Access, large-text or contrast pass.",
+    "No screenshots or exports produced; this review approves only the original fixture metadata retained in these records.",
+    "Grant display may remain stale until another refresh, and credential text has a two-line limit."
+  ]
+}
