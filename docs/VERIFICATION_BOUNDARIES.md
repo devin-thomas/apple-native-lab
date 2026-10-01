@@ -103,3 +103,12 @@ Recorded at [LAB-004-B](../tickets/LAB-004-B.md) from the [LAB-004-A](../tickets
 | [S59](SOURCE_INDEX.md#s59) | `Toggle(isOn:intent:label:)` in `_AppIntents_SwiftUI`, which the widget extension links | iOS 17.0, macOS 14.0, tvOS 17.0, watchOS 10.0 | The widget's toggle in the simulator. The release manifest records the link (LAB-004-A) | None beyond the widget's own |
 | [S59](SOURCE_INDEX.md#s59) | `View.privacySensitive(_:)` and `RedactionReasons.privacy` | iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0 | Drawn with the privacy redaction in a package test and read back by text recognition: the detail line is gone and the state stays readable. The deck's "Lock Screen, locked" preview uses the same redaction | That the system applies it to this widget on a locked device |
 
+### Documents Everywhere (LAB-009)
+
+Recorded at [LAB-009-A](../tickets/LAB-009-A.md). Document Quick Look is distinct from AR Quick Look ([S22](SOURCE_INDEX.md#s22)). No File Provider domain is registered in this build. Nothing here has run on a physical device.
+
+| Source | Installed symbol | Declared availability | Demonstrated | Remaining uncertainty |
+|---|---|---|---|---|
+| — (document Quick Look; not AR [S22](SOURCE_INDEX.md#s22)) | `QLPreviewProvider`, `QLPreviewingController.providePreview(for:completionHandler:)`, `QLPreviewReply(dataOfContentType:contentSize:dataCreationBlock:)`, `QLFilePreviewRequest.fileURL` | iOS 15.0, macOS 12.0; unavailable on watchOS and tvOS | Compiled into `QuickLookPreview` (SystemSurfaces). Package tests build the same HTML via `DocumentPreviewBuilder` with the provider disabled | Finder/Files Quick Look on a device; Mac Quick Look extension (no LabMacSurfaces host yet) |
+| [S14](SOURCE_INDEX.md#s14) | `NSFileProviderReplicatedExtension`, `NSFileProviderItemVersion(contentVersion:metadataVersion:)`, `NSFileProviderManager` domain APIs | File Provider v3+ (iOS 16 / macOS 13 family and later in the installed headers) | Lab-owned `DocumentRevision` and `ProviderSession` mirror content/metadata versions and disconnect/eviction without deleting authority (`DocumentsEverywhereTests`). Extension sources exist under `Extensions/DocumentsProvider/`; no FrontierOptional host embeds them yet | Live domain add/remove, materialization, and a qualified FrontierOptional build |
+
