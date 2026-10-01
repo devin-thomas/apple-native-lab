@@ -26,9 +26,9 @@ final class DocumentPreviewProvider: QLPreviewProvider, QLPreviewingController {
             let reply = QLPreviewReply(
                 dataOfContentType: .html,
                 contentSize: CGSize(width: 600, height: 400)
-            ) { reply, _ -> Data in
+            ) { reply -> Data in
                 reply.title = preview.title
-                reply.stringEncoding = String.Encoding.utf8.rawValue
+                reply.stringEncoding = .utf8
                 return Data(preview.html.utf8)
             }
             handler(reply, nil)
