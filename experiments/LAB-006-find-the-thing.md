@@ -1,7 +1,7 @@
 ---
 id: "LAB-006"
 title: "Find the Thing"
-state: "specified"
+state: "implemented"
 milestone: "M2"
 category: "Intelligence"
 depends_on: ["LAB-001", "LAB-010"]
@@ -55,6 +55,21 @@ A fixture replay is labeled as a replay. It can prove the domain/UI contract but
 ## Build ownership
 
 Proposed module: `Packages/LabFeatures/find-the-thing/`, with native adapters only in supported hosts/extensions. Shared operations and imported document structures belong in the domain/store packages rather than a view. Record any narrower module split during implementation.
+
+Implemented split (LAB-006-A):
+
+- `Packages/LabFeatures/Sources/FindTheThing/`: `SearchDocument`, `SearchHit`, `EvidencePointer`, `SearchAnswer`, `AppSearchIndex` (opted-in records only), `FindTheThingOperation` (lexical search before optional semantic retrieval, delete/reindex with audit counts, donation), `ServiceFindBackend` (archives lab items through `OperationService`), `MessyCollection` fixtures, and `FindRecordEntity` / `IndexedEntityDonor` on iOS and macOS only. It depends on LabDomain and never holds the store.
+- `Apps/Shared/FindTheThing/`: the shared session over one app index, the page, and `FindTheThingHost.connect()` for entity-query dependency injection. The Mac reaches it from the sidebar and View › Find the Thing (⌘9), with columns in `Apps/Mac/Window/FindTheThingColumns.swift`. The iPhone reaches it from this experiment's catalog page.
+- No Watch or Apple TV surface: `IndexedEntity` and `CSSearchableIndex.indexAppEntities` are unavailable there; those hosts keep the idle donor and in-app lexical search is not linked.
+
+## Implementation notes (LAB-006-A)
+
+Observed with Xcode 27.0 (27A266a) and the 27.0 SDKs. These are package and host compile facts, not device proof.
+
+- `IndexedEntity` and `CSSearchableIndex.indexAppEntities` / `deleteAppEntities(identifiedBy:ofType:)` are macOS 15.0, iOS 18.0, visionOS 2.0. They do not appear in the watchOS or tvOS App Intents interfaces. No entitlement is required for donating this app's own indexed entities.
+- Donation is an explicit Index action. Opening the experiment only loads the shelf into the empty in-app index; it does not call Spotlight.
+- Semantic retrieval is optional and off by default (`UnavailableSemanticRetriever`). Lexical search always runs first; a retriever's IDs are kept only when the app index holds them.
+- The deep link `nativelab://find/<uuid>` is an in-app name. This build does not register a system URL type and does not search other apps' indexes.
 
 ## Delivery
 
