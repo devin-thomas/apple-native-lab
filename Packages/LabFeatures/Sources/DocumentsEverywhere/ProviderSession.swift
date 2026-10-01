@@ -3,7 +3,8 @@ import Foundation
 /// Whether the opt-in sample File Provider is offering its mirror.
 ///
 /// The default in every CoreLocal and SystemSurfaces build is `disabled`. Qualification
-/// (LAB-009-B) is what turns it on. Disconnecting never deletes the authoritative fixtures.
+/// of a separately embedded live adapter is required before activation. LAB-009-B tests this
+/// model without registering a domain. Disconnecting never deletes the authoritative fixtures.
 public enum ProviderConnectionState: String, Hashable, Sendable, Codable {
     /// Not activated in this build. The document browser is the path.
     case disabled
