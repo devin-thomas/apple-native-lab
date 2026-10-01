@@ -22,6 +22,8 @@ enum SidebarDestination: Hashable {
     case portableObjects
     /// LAB-004: the demo session, its receipts, and the widget and Control previews.
     case surfaceDeck
+    /// LAB-045: annotate sample media; keep ink editable with document IDs.
+    case inkHasStructure
     case catalog(CatalogScope)
 
     var title: String {
@@ -33,6 +35,7 @@ enum SidebarDestination: Hashable {
         case .shareInbox: "Share Inbox"
         case .portableObjects: "Portable Objects"
         case .surfaceDeck: SurfaceDeck.title
+        case .inkHasStructure: InkHasStructureExperiment.title
         case .catalog(let scope): scope.title
         }
     }
@@ -47,6 +50,7 @@ enum SidebarDestination: Hashable {
         case .shareInbox: "share-inbox"
         case .portableObjects: "portable-objects"
         case .surfaceDeck: "surface-deck"
+        case .inkHasStructure: "ink-has-structure"
         case .catalog(.all): "all"
         case .catalog(.milestone(let milestone)): "milestone:\(milestone.rawValue)"
         case .catalog(.category(let category)): "category:\(category)"
@@ -64,6 +68,7 @@ enum SidebarDestination: Hashable {
         case ("share-inbox", nil): self = .shareInbox
         case ("portable-objects", nil): self = .portableObjects
         case ("surface-deck", nil): self = .surfaceDeck
+        case ("ink-has-structure", nil): self = .inkHasStructure
         case ("all", nil): self = .catalog(.all)
         case ("milestone", let raw?): guard let milestone = Milestone(rawValue: raw) else { return nil }
             self = .catalog(.milestone(milestone))
@@ -93,6 +98,8 @@ final class MainWindowState {
     var inboxEntry: InboxEntry.ID?
     /// LAB-008: this window's objects, selection, and import under review.
     let portableObjects = PortableObjectsSession()
+    /// LAB-045: this window's annotation session.
+    let ink = InkSession()
     var searchText = ""
     /// Incremented to ask the window to focus its search field.
     var searchRequests = 0

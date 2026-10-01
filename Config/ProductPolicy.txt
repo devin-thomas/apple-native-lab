@@ -45,6 +45,9 @@ link         CoreLocal  ios      CoreTransferable    # same, iPhone host
 # CoreLocal: Access as a Superpower (LAB-035). The chart's Audio Graph; the summary and table are the fallback
 link         CoreLocal  macos    Accessibility       # AXChartDescriptor for the archive chart's Audio Graph (SwiftUI accessibilityChartDescriptor)
 link         CoreLocal  ios      Accessibility       # same, iPhone host
+# CoreLocal: Ink Has Structure (LAB-045). PencilKit canvas is iOS-only (`PKCanvasView`); Mac uses pointer drawing.
+link         CoreLocal  ios      PencilKit            # PKCanvasView with drawingPolicy anyInput; unsupported Pencil gestures stay absent
+link         SystemSurfaces ios  PencilKit           # host variant: same PencilKit canvas as LabPhone
 # SystemSurfaces: Share Ingress Station (LAB-007). LabPhoneSurfaces is the iPhone host built from
 # LabPhone's sources, so it links what LabPhone links, for the same reasons. The share extension it
 # embeds links only Foundation, SwiftUI, UIKit, and CryptoKit. Only this profile may carry the App Group.
