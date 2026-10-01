@@ -38,6 +38,7 @@ struct ExperimentDetailView: View {
                 DesktopPowerLaunch(experiment: experiment)
                 #endif
                 TrustDeskLaunch(experiment: experiment)
+                ContextCardsLaunch(experiment: experiment)
                 Text(experiment.moment)
                     .font(.title3)
                     .fixedSize(horizontal: false, vertical: true)

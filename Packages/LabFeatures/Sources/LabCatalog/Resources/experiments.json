@@ -39,7 +39,7 @@
       "title": "Context Cards",
       "category": "System surfaces",
       "milestone": "M2",
-      "state": "specified",
+      "state": "implemented",
       "dependsOn": [
         "LAB-001"
       ],

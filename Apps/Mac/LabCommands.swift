@@ -1,4 +1,5 @@
 import DesktopNativePower
+import ContextCards
 import LabCatalog
 import SurfaceDeck
 import SwiftUI
@@ -52,9 +53,12 @@ struct LabCommands: Commands {
             Button(TrustDeskExperiment.title) { window?.destination = .trustDesk }
                 .keyboardShortcut("0", modifiers: .command)
                 .disabled(window == nil)
-            // The eleventh destination continues the numbered row on ⌥⌘1, after ⌘1–⌘9 and ⌘0.
+            // After ⌘1–⌘9 and ⌘0, later destinations continue the numbered row on ⌥⌘1, ⌥⌘2, and so on.
             Button("Pick Up Here") { window?.destination = .pickUpHere }
                 .keyboardShortcut("1", modifiers: [.command, .option])
+                .disabled(window == nil)
+            Button(ContextCards.title) { window?.destination = .contextCards }
+                .keyboardShortcut("2", modifiers: [.command, .option])
                 .disabled(window == nil)
             Button(DesktopCommand.showPalette.title) { desktop.showsPalette = true }
                 .keyboardShortcut("k", modifiers: .command)

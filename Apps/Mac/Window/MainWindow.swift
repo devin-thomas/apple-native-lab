@@ -98,6 +98,8 @@ struct MainWindow: View {
             TrustDeskListColumn(window: window, session: window.trustDesk)
         case .pickUpHere:
             PickUpListColumn(window: window)
+        case .contextCards:
+            ContextCardsListColumn(window: window)
         case .surfaceDeck:
             SurfaceDeckListColumn(window: window)
         case .desktopPower:
@@ -132,6 +134,8 @@ struct MainWindow: View {
             TrustDeskDetailColumn(session: window.trustDesk)
         case .pickUpHere:
             PickUpDetailColumn(window: window)
+        case .contextCards:
+            ContextCardsDetailColumn()
         case .surfaceDeck:
             SurfaceDeckDetailColumn()
         case .desktopPower:
@@ -163,6 +167,7 @@ struct MainWindow: View {
         case .desktopPower: "Search notes"
         case .trustDesk: "Search the desk"
         case .pickUpHere: "Search drafts"
+        case .contextCards: "Search samples"
         default: "Search experiments"
         }
     }

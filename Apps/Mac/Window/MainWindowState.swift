@@ -1,3 +1,4 @@
+import ContextCards
 import LabCatalog
 import LabDomain
 import LabSupport
@@ -24,6 +25,8 @@ enum SidebarDestination: Hashable {
     case trustDesk
     /// LAB-016: continue a draft at a section. The hint is an identifier and a position.
     case pickUpHere
+    /// LAB-002: one sample on screen, and the decision to set it aside.
+    case contextCards
     /// LAB-004: the demo session, its receipts, and the widget and Control previews.
     case surfaceDeck
     /// LAB-042: command palette, notes, and menu-bar status. Mac only.
@@ -40,6 +43,7 @@ enum SidebarDestination: Hashable {
         case .portableObjects: "Portable Objects"
         case .trustDesk: TrustDeskExperiment.title
         case .pickUpHere: "Pick Up Here"
+        case .contextCards: ContextCards.title
         case .surfaceDeck: SurfaceDeck.title
         case .desktopPower: "Desktop Native Power"
         case .catalog(let scope): scope.title
@@ -57,6 +61,7 @@ enum SidebarDestination: Hashable {
         case .portableObjects: "portable-objects"
         case .trustDesk: "trust-desk"
         case .pickUpHere: "pick-up-here"
+        case .contextCards: "context-cards"
         case .surfaceDeck: "surface-deck"
         case .desktopPower: "desktop-power"
         case .catalog(.all): "all"
@@ -77,6 +82,7 @@ enum SidebarDestination: Hashable {
         case ("portable-objects", nil): self = .portableObjects
         case ("trust-desk", nil): self = .trustDesk
         case ("pick-up-here", nil): self = .pickUpHere
+        case ("context-cards", nil): self = .contextCards
         case ("surface-deck", nil): self = .surfaceDeck
         case ("desktop-power", nil): self = .desktopPower
         case ("all", nil): self = .catalog(.all)
@@ -112,6 +118,8 @@ final class MainWindowState {
     let trustDesk = TrustDeskSession()
     /// LAB-016: this window's continuation. Clearing it drops the hint, not the drafts.
     let pickUp = PickUpSession()
+    /// LAB-002: the sample on screen and the decision waiting on it.
+    let contextCards = ContextCardsSession()
     var searchText = ""
     /// Incremented to ask the window to focus its search field.
     var searchRequests = 0

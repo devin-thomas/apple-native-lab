@@ -260,7 +260,9 @@ import Testing
         #expect(intents(from: "SurfaceDeck") == ["SetDemoSessionIntent", "GetDemoSessionIntent", "OpenSurfaceDeckIntent"])
         // LAB-042: the one allowlisted desktop command. It is Mac-only.
         #expect(intents(from: "DesktopNativePower") == ["RunDesktopCommandIntent"])
-        #expect(actions.count == 12)
+        // LAB-002 Context Cards' ask and set-aside. Neither is a curated App Shortcut.
+        #expect(intents(from: "ContextCards") == ["AskAboutVisibleSampleIntent", "SetAsideSampleIntent"])
+        #expect(actions.count == 14)
         let entities = try #require(metadata["entities"] as? [String: Any])
         #expect(Set(entities.keys) == ["LabItemEntity", "LabCollectionEntity"])
         let queries = try #require(metadata["queries"] as? [String: Any])

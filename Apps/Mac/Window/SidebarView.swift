@@ -1,3 +1,4 @@
+import ContextCards
 import LabCatalog
 import LabSupport
 import SurfaceDeck
@@ -42,6 +43,9 @@ struct SidebarView: View {
                 Label("Pick Up Here", systemImage: "arrow.left.arrow.right")
                     .tag(SidebarDestination.pickUpHere)
                     .accessibilityHint("Continue a draft at a section, or copy a link or the document")
+                Label(ContextCards.title, systemImage: ContextCards.symbol)
+                    .tag(SidebarDestination.contextCards)
+                    .accessibilityHint("Ask about the sample on screen, then set it aside")
                 Label(SurfaceDeck.title, systemImage: SurfaceDeck.symbol)
                     .tag(SidebarDestination.surfaceDeck)
                     .accessibilityHint("The demo session, its receipts, and previews of its widget and Control")

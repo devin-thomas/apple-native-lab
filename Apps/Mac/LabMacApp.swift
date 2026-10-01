@@ -14,6 +14,7 @@ struct LabMacApp: App {
         SurfaceDeckHost.connect(library)
         let desktop = DesktopPowerHost.connect(library)
         _desktop = State(initialValue: desktop)
+        ContextCardsHost.connect(library)
     }
 
     var body: some Scene {

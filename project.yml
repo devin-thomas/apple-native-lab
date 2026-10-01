@@ -99,6 +99,9 @@ targets:
       # LAB-041 Trust Desk: local authorization, a scoped keychain record, and a passkey simulation.
       - package: LabFeatures
         product: TrustDesk
+      # LAB-002 Context Cards: the visible sample, the schema gate, and the set-aside intents.
+      - package: LabFeatures
+        product: ContextCards
     info:
       path: Apps/Mac/Info.plist
       properties:
@@ -120,9 +123,13 @@ targets:
             NSPortName: Native Lab
             NSSendTypes:
               - public.utf8-plain-text
-        # LAB-016: the system delivers this activity type only if it is listed. No entitlement.
+        # LAB-002: the activity type for the sample on screen. Code reads the key, never the prefix.
+        LabContextCardsActivityType: $(LAB_BUNDLE_PREFIX).nativelab.context-cards.visible-sample
+        # The system delivers an activity type only if it is listed. No entitlement.
+        # LAB-016: pick-up-here. LAB-002: the visible sample.
         NSUserActivityTypes:
           - nativelab.pick-up-here
+          - $(LAB_BUNDLE_PREFIX).nativelab.context-cards.visible-sample
         UTExportedTypeDeclarations:
           - UTTypeIdentifier: $(LAB_BUNDLE_PREFIX).nativelab.object
             UTTypeDescription: Native Lab Object
@@ -203,6 +210,9 @@ targets:
       # LAB-041 Trust Desk: local authorization, a scoped keychain record, and a passkey simulation.
       - package: LabFeatures
         product: TrustDesk
+      # LAB-002 Context Cards: the visible sample, the schema gate, and the set-aside intents.
+      - package: LabFeatures
+        product: ContextCards
     info:
       path: Apps/Phone/Info.plist
       properties:
@@ -214,9 +224,13 @@ targets:
         LabDistributionLane: $(LAB_DISTRIBUTION_LANE)
         # LAB-008: the lab object type, named from the bundle prefix. Code reads the key, never the prefix.
         LabObjectTypeIdentifier: $(LAB_BUNDLE_PREFIX).nativelab.object
-        # LAB-016: the system delivers this activity type only if it is listed. No entitlement.
+        # LAB-002: the activity type for the sample on screen. Code reads the key, never the prefix.
+        LabContextCardsActivityType: $(LAB_BUNDLE_PREFIX).nativelab.context-cards.visible-sample
+        # The system delivers an activity type only if it is listed. No entitlement.
+        # LAB-016: pick-up-here. LAB-002: the visible sample.
         NSUserActivityTypes:
           - nativelab.pick-up-here
+          - $(LAB_BUNDLE_PREFIX).nativelab.context-cards.visible-sample
         UTExportedTypeDeclarations:
           - UTTypeIdentifier: $(LAB_BUNDLE_PREFIX).nativelab.object
             UTTypeDescription: Native Lab Object
@@ -304,6 +318,9 @@ targets:
       # LAB-041 Trust Desk: local authorization, a scoped keychain record, and a passkey simulation.
       - package: LabFeatures
         product: TrustDesk
+      # LAB-002 Context Cards: the same module LabPhone links. This host compiles Apps/Shared.
+      - package: LabFeatures
+        product: ContextCards
       - target: ShareExtension
         embed: true
       # LAB-004: the widget and Control extension, embedded only in this SystemSurfaces variant.
@@ -319,9 +336,13 @@ targets:
         LabBuildProfile: $(LAB_BUILD_PROFILE)
         LabDistributionLane: $(LAB_DISTRIBUTION_LANE)
         LabAppGroupIdentifier: $(LAB_APP_GROUP_IDENTIFIER)
-        # LAB-016: the system delivers this activity type only if it is listed. No entitlement.
+        # LAB-002: the activity type for the sample on screen. Code reads the key, never the prefix.
+        LabContextCardsActivityType: $(LAB_BUNDLE_PREFIX).nativelab.context-cards.visible-sample
+        # The system delivers an activity type only if it is listed. No entitlement.
+        # LAB-016: pick-up-here. LAB-002: the visible sample.
         NSUserActivityTypes:
           - nativelab.pick-up-here
+          - $(LAB_BUNDLE_PREFIX).nativelab.context-cards.visible-sample
         UILaunchScreen: {}
         UIApplicationSceneManifest:
           UIApplicationSupportsMultipleScenes: true

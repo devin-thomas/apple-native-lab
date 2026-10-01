@@ -24,6 +24,8 @@
 	<string>public.app-category.developer-tools</string>
 	<key>LabBuildProfile</key>
 	<string>$(LAB_BUILD_PROFILE)</string>
+	<key>LabContextCardsActivityType</key>
+	<string>$(LAB_BUNDLE_PREFIX).nativelab.context-cards.visible-sample</string>
 	<key>LabDistributionLane</key>
 	<string>$(LAB_DISTRIBUTION_LANE)</string>
 	<key>LabObjectTypeIdentifier</key>
@@ -51,6 +53,7 @@
 	<key>NSUserActivityTypes</key>
 	<array>
 		<string>nativelab.pick-up-here</string>
+		<string>$(LAB_BUNDLE_PREFIX).nativelab.context-cards.visible-sample</string>
 	</array>
 	<key>UTExportedTypeDeclarations</key>
 	<array>
