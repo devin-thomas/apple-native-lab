@@ -133,6 +133,7 @@ import Testing
         // Typed text never leaves in an export, whatever its field is called.
         let sentinel = "original-synthetic-secret-sentinel"
         let typed = RecipeDefinition(
+            id: RecipeID(rawValue: UUID(uuidString: "A3C00300-0003-4000-8000-000000000013")!),
             title: "Original typed title \(sentinel)",
             steps: [RecipeStep(order: 1, kind: .query, detail: sentinel), RecipeStep(order: 2, kind: .export)],
             sourceItemIDs: [request.newItemID],

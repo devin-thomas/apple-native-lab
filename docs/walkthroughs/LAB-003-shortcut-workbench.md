@@ -16,17 +16,25 @@ These are instructions derived from the implemented views. The qualification doe
 
 The qualification stages and commits original text into a fresh user collection, binds that item’s ID to a recipe, removes the completed import step, renames the item, and runs query → transform → export. It checks the receipt, the retained ID, cancellation of another staged import, and Reset Demo leaving the user item unchanged. The Mac and iPhone hosted test source uses the same checks against each host’s real SQLite backend. Evidence records identify which runs actually completed.
 
+## Fresh recipe
+
+The bundled Import → Query → Transform → Export recipe also runs unbound, as the Run Import–Export Recipe intent does when given a collection and no source item. The run is planned before it changes anything: the collection, import title and note, query text, the transform's source and resulting note, and the step order. A recipe that cannot complete (a transform with nothing to transform, a transform before the import, two imports, a missing collection or bound item, an oversized note or query) is refused with nothing staged or committed. A recipe that imports transforms the item it imports, so the transform rides on the import's one `createItem`; the new item is then bound as the recipe's source. A run commits at most one operation, so it never stops half-way.
+
+## What an export contains
+
+An export writes the format, the recipe's ID, each step's order and kind, and the IDs of the items it uses. It writes a title, a step's detail, or a model-step field name or value only when that string is exactly text the lab ships in its bundled recipes. Anything a person or caller typed is withheld, whatever its field is called: a typed value is written as `[withheld]`, and a model-step field whose name was typed is only counted. The export message and the Export Recipe intent's dialog say what was withheld. The Inspect Model Step intent's result follows the same rule. The in-app inspection still shows typed values, masking secret-shaped field names.
+
 ## Known limits
 
-- A new unbound four-step recipe saves its imported item but then refuses the transform with “This recipe has no source item to transform.” Its catalog copy has the new binding, but the running recipe does not. This is a failed complete interaction, even when a characterization test successfully reproduces it. Do not use a passing bound replay to claim the fresh flow passed.
-- Redaction replaces values under secret-shaped model field names. It does not detect secrets in `prompt`, recipe titles, step details, or other ordinary text. Use only original neutral text. The unrestricted “raw secret values never enter exports” criterion is not proven.
-- Import retries with the same request and payload replay the original receipt. A completed multi-step recipe is not an idempotent transaction: transform uses a new request ID on each run and can append its suffix again.
-- Cancellation before import commit leaves no item. Cancellation after a commit cannot undo that committed step. The runner’s “nothing was changed” cancellation message is too broad for that case.
+- Person-authored recipes export as structure and IDs only. There is no reviewed opt-in to include typed text.
+- A completed bound recipe is not idempotent: its transform uses a new request ID on each run and can append its suffix again. A fresh run's import and transform share the run's request, so a retry replays the first receipt.
+- Cancellation before the run's one commit leaves nothing. After that commit the run finishes its read and export steps rather than stopping.
+- A bound run from the app or the intent saves the bound copy over the walkthrough in the session catalog, so a later unbound run of that recipe in the same session runs the bound copy.
 - Recipes are process-local; export preserves IDs but no recipe-file importer or cross-device store exists here. A saved system shortcut surviving rename, Shortcuts Storage, Siri, and model transcript inspection remain unverified.
 
 ## Privacy, rights and accessibility review
 
-Only original fixture text, fixed sample identifiers, synthetic redaction sentinels, source hashes, and test evidence belong in this qualification. There are no screenshots, recordings, credentials, private stores, real accounts, or personal shortcuts to publish. No network/model/Storage adapter is exercised by the recipe tests.
+Only original fixture text, fixed sample identifiers, synthetic sentinels, source hashes, and test evidence belong in this qualification. There are no screenshots, recordings, credentials, private stores, real accounts, or personal shortcuts to publish. No network/model/Storage adapter is exercised by the recipe tests.
 
 Static accessibility review: native List, NavigationLink and Button controls use visible labels and system fonts; the Mac has a navigation menu shortcut. Recipe action buttons launch work in a Task without a Cancel control or retained cancellation owner. Mac selection replaces the overview with a detail page, so the list’s manual fallback shows titles rather than complete instructions until the overview is restored. Latest results appear on the overview, while actions run on the detail page. These require a UI and assistive-technology pass. VoiceOver, Voice Control, Full Keyboard Access, large text, reduced motion and an automated UI audit are not-run.
 
