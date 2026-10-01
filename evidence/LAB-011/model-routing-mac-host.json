@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "subject": "LAB-011",
+  "check": "Local and manual routing fallback in the sandboxed Mac host",
+  "date": "2026-10-01T04:18:02Z",
+  "provenance": {
+    "sourceRevision": "b8815de+dirty",
+    "sdkName": "macosx27.0",
+    "xcodeVersion": "27.0",
+    "xcodeBuild": "27A266a",
+    "minimumOS": "26.0",
+    "buildProfile": "CoreLocal"
+  },
+  "execution": {
+    "path": "fixture"
+  },
+  "inputs": [
+    "Fixtures/routing/routing-sample-prompt.txt@sha256:e2aa6121f7190ba72f2d38268b03589c6df2c0a4167d18b38580941ade83216c"
+  ],
+  "steps": [
+    "Through labr on research: xcodebuild -project AppleNativeLab.xcodeproj -scheme LabMac-Core -destination platform=macOS -derivedDataPath build/DerivedData -only-testing:LabMacTests/ModelRoutingHostTests test -quiet",
+    "Start LabLibrary over a fresh temporary SQLite store; load the bundled routing fixture; refuse cloud-off; generate a local excerpt; prepare a proposal; explicitly approve its annotation; repeat approval; finish manual answer; reset session",
+    "Read the xcresulttool test-results summary: one test passed, zero failed or skipped"
+  ],
+  "outcome": {
+    "result": "passed",
+    "detail": "The selected ModelRoutingHostTests workflow ran: local-only default and closed entitlement; fixture loaded; cloud attempt refused; generating and reviewing added no store receipt; approval added one app-UI receipt; duplicate approval added none; manual answer completed; reset restored local-only and cleared usage while preserving the saved store receipt."
+  },
+  "limitations": [
+    "Fixture workflow inside the hosted app, not physical-device or live PCC qualification.",
+    "The test calls the session; no person or UI automation drove the visible controls, VoiceOver, Voice Control, or Full Keyboard Access.",
+    "Full four-platform checks are recorded separately in the ticket completion record."
+  ]
+}

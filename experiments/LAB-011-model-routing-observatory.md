@@ -5,7 +5,7 @@ state: "implemented"
 milestone: "M4"
 category: "Intelligence"
 depends_on: ["LAB-010"]
-source_review: "2026-09-29"
+source_review: "2026-09-30"
 ---
 
 # LAB-011 — Model Routing Observatory

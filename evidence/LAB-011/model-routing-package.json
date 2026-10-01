@@ -2,9 +2,9 @@
   "schemaVersion": 1,
   "subject": "LAB-011",
   "check": "Model routing package acceptance and consent boundaries",
-  "date": "2026-10-01T04:13:58Z",
+  "date": "2026-10-01T04:52:41Z",
   "provenance": {
-    "sourceRevision": "04e3327+dirty",
+    "sourceRevision": "2372e74+dirty",
     "sdkName": "macosx27.0",
     "xcodeVersion": "27.0",
     "xcodeBuild": "27A266a",

@@ -87,9 +87,9 @@ public struct PCCEligibility: Hashable, Sendable {
         gates.allSatisfy(\.isOpen)
     }
 
-    /// Explained sentence for the first closed gate, or `nil` when fully open.
+    /// Explained sentence for the first unmet gate, or `nil` when fully open.
     public var explanation: String? {
-        closedGates.first.map { "\($0.kind.title): \($0.detail)" }
+        gates.first(where: { !$0.isOpen }).map { "\($0.kind.title): \($0.detail)" }
     }
 
     /// CoreLocal default: no PCC entitlement, program, or distribution claim. Availability and

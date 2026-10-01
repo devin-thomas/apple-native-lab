@@ -169,7 +169,7 @@ public enum RoutingProbe {
         #else
         return RouteGate(
             .availability, .unknown,
-            "FoundationModels is not compiled for this platform; PCC was not measured."
+            "The PCC probe is not compiled for this platform or SDK; availability was not measured."
         )
         #endif
     }

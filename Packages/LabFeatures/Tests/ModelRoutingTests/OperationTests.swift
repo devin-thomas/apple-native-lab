@@ -204,6 +204,7 @@ private actor CancellingTransport: CloudTransport {
             entitlement: open.entitlement, program: open.program, distribution: open.distribution,
             availability: RouteGate(.availability, .unknown, "Not measured"), quota: open.quota
         )
+        #expect(unknown.explanation?.contains("Not measured") == true)
         let flow = ModelRoutingFlow(resolver: RouteResolver(policy: .cloudAllowed, pcc: unknown))
         let prompt = try Repository.fixturePrompt()
         let observation = try await flow.observe(prompt: prompt)

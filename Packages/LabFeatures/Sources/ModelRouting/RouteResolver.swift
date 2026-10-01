@@ -293,7 +293,7 @@ public actor ModelRoutingFlow {
             outgoing: preview,
             summary: result.accepted
                 ? "Cloud transport accepted the previewed fields."
-                : "Cloud transport refused the previewed fields. Nothing left this device."
+                : "Cloud transport did not accept the previewed fields."
         )
         record(receipt)
         let promptChars = preview.fields.first(where: { $0.name == "prompt" })?.characterCount ?? 0
