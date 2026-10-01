@@ -75,6 +75,8 @@ enum SidebarDestination: Hashable {
     case homeSceneSandbox
     /// LAB-011: where a request would run, outgoing fields, and PCC gates.
     case modelRouting
+    /// LAB-040: local product fixtures and transaction-state simulator (no real charge).
+    case commerceWithoutTricks
     case catalog(CatalogScope)
 
     var title: String {
@@ -107,6 +109,7 @@ enum SidebarDestination: Hashable {
         case .localConstellation: LocalConstellation.title
         case .homeSceneSandbox: HomeSceneExperiment.title
         case .modelRouting: ModelRoutingExperiment.title
+        case .commerceWithoutTricks: CommerceExperiment.title
         case .catalog(let scope): scope.title
         }
     }
@@ -142,6 +145,7 @@ enum SidebarDestination: Hashable {
         case .localConstellation: "local-constellation"
         case .homeSceneSandbox: "home-scene-sandbox"
         case .modelRouting: "model-routing"
+        case .commerceWithoutTricks: "commerce-without-tricks"
         case .catalog(.all): "all"
         case .catalog(.milestone(let milestone)): "milestone:\(milestone.rawValue)"
         case .catalog(.category(let category)): "category:\(category)"
@@ -180,6 +184,7 @@ enum SidebarDestination: Hashable {
         case ("local-constellation", nil): self = .localConstellation
         case ("home-scene-sandbox", nil): self = .homeSceneSandbox
         case ("model-routing", nil): self = .modelRouting
+        case ("commerce-without-tricks", nil): self = .commerceWithoutTricks
         case ("all", nil): self = .catalog(.all)
         case ("milestone", let raw?): guard let milestone = Milestone(rawValue: raw) else { return nil }
             self = .catalog(.milestone(milestone))
@@ -235,6 +240,8 @@ final class MainWindowState {
     let homeScene = HomeSceneSession()
     /// LAB-011: which observatory pane the detail column shows.
     var modelRoutingPane: ModelRoutingPane? = .board
+    /// LAB-040: local product fixtures and transaction-state simulator.
+    let commerce = CommerceSession()
     var searchText = ""
     /// Incremented to ask the window to focus its search field.
     var searchRequests = 0

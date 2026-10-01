@@ -140,6 +140,8 @@ struct MainWindow: View {
             HomeSceneListColumn(window: window, session: window.homeScene)
         case .modelRouting:
             ModelRoutingListColumn(window: window)
+        case .commerceWithoutTricks:
+            CommerceListColumn(window: window, session: window.commerce)
         case .catalog(let scope):
             if let registry = model.registry {
                 CatalogListColumn(registry: registry, scope: scope, window: window)
@@ -211,6 +213,8 @@ struct MainWindow: View {
             HomeSceneDetailColumn(session: window.homeScene)
         case .modelRouting:
             ModelRoutingDetailColumn(window: window)
+        case .commerceWithoutTricks:
+            CommerceDetailColumn(session: window.commerce)
         case .catalog:
             if let registry = model.registry {
                 CatalogDetailColumn(registry: registry, experimentID: window.experimentID)
@@ -248,6 +252,7 @@ struct MainWindow: View {
         case .documentsEverywhere: "Search samples"
         case .tabletopReality: "Search the table"
         case .homeSceneSandbox: "Search accessories"
+        case .commerceWithoutTricks: "Search products"
         default: "Search experiments"
         }
     }

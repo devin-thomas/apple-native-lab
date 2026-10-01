@@ -42,6 +42,7 @@ let package = Package(
         // LAB-011 Model Routing Observatory: route policy, PCC eligibility, outgoing-field
         // preview, and usage receipts without raw prompt telemetry.
         .library(name: "ModelRouting", targets: ["ModelRouting"]),
+        .library(name: "CommerceWithoutTricks", targets: ["CommerceWithoutTricks"]),
     ],
     dependencies: [
         .package(path: "../LabSupport"),
@@ -481,6 +482,17 @@ let package = Package(
                 .product(name: "LabDomain", package: "LabDomain"),
                 .product(name: "LabSupport", package: "LabSupport"),
             ]
+        ),
+        // LAB-040 Commerce Without Tricks: local product fixtures products and a local
+        // transaction-state simulator. Entitlement grants commit through OperationService. StoreKit
+        // is not linked, so no button can create a real charge.
+        .target(
+            name: "CommerceWithoutTricks",
+            dependencies: [.product(name: "LabDomain", package: "LabDomain")]
+        ),
+        .testTarget(
+            name: "CommerceWithoutTricksTests",
+            dependencies: ["CommerceWithoutTricks", .product(name: "LabDomain", package: "LabDomain")]
         ),
     ]
 )

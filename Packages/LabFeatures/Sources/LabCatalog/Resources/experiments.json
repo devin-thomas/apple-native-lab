@@ -736,7 +736,7 @@
       "title": "Commerce Without Tricks",
       "category": "Commercial",
       "milestone": "M4",
-      "state": "specified",
+      "state": "implemented",
       "dependsOn": [
         "LAB-001"
       ],

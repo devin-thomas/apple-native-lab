@@ -537,7 +537,11 @@ Source: [StoreKit](https://developer.apple.com/documentation/storekit)
 
 Use in this plan: Local testing and transaction verification reference.
 
+Reviewed for LAB-040-A: [Setting up StoreKit Testing in Xcode](https://developer.apple.com/documentation/xcode/setting-up-storekit-testing-in-xcode) distinguishes local configuration files from account-synced files and requires enabling a configuration before StoreKit uses its data. [VerificationResult](https://developer.apple.com/documentation/storekit/verificationresult) distinguishes verified and unverified wrapped values. The fallback mirrors those outcomes; it does not perform StoreKit signature verification.
+
 Implementation evidence required: actual SDK symbol/availability, permissions or entitlement, and a named compile/device result.
+
+Installed SDK check (2026-09-30, Xcode 27.0 with the macOS 27.0 SDK): `Product.purchase`, `Product.PurchaseResult`, `VerificationResult`, `Transaction.updates` / `currentEntitlements` / `finish()`, and `Transaction.revocationDate` / `revocationReason` are in the [installed SDK ledger](VERIFICATION_BOUNDARIES.md#installed-sdk-ledger). LAB-040-A does not link StoreKit; the default build uses the local transaction-state simulator only.
 
 ## S47
 

@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "subject": "LAB-040",
+  "check": "Commerce host receipt path and the four-platform automated gate",
+  "date": "2026-10-01T04:36:40Z",
+  "provenance": {
+    "sourceRevision": "9c50384-dirty",
+    "sdkName": "macosx27.0",
+    "xcodeVersion": "27.0",
+    "xcodeBuild": "27A266a",
+    "appVersion": "0.1.0",
+    "buildNumber": "1",
+    "buildProfile": "CoreLocal",
+    "minimumOS": "26.0"
+  },
+  "execution": {
+    "path": "fixture"
+  },
+  "inputs": [
+    "Packages/LabFeatures/Sources/CommerceWithoutTricks/CommerceFixture.swift@sha256:e5016ea319ca01aeaced3c22dede5e0e37a4192370d90e0ae0d7ffd741558cc4",
+    "Apps/Shared/CommerceWithoutTricks/CommerceSession.swift@sha256:ac7398ff2d5ed9e4269731748c2d6977839d3fb55af40e23bf4cabf1ee0f60f1",
+    "Tests/LabMacTests/CommerceHostTests.swift@sha256:115b82a6cda76298170f9c64e5690ec235596e3bef35ceb2eaf1d019211fbaf9"
+  ],
+  "steps": [
+    "On research through labr: LAB_SIMULATOR_PREFIX=\"NL LAB-040-A\" script/test.sh",
+    "Mac CommerceHostTests: fresh SQLite stores in the sandboxed app, verified notebook purchase, unverified compass purchase, and restoration through CommerceSession / LabLibrary / OperationService",
+    "Read xcresulttool test-results summary and tests from each result bundle; both CommerceHostTests cases are Passed",
+    "Release manifest: CoreLocal, SystemSurfaces, and Companions built; CloudOptional and FrontierOptional skipped because they have no schemes"
+  ],
+  "outcome": {
+    "result": "passed",
+    "detail": "Full gate passed: validators 8/8, 93 validator self-tests; LabSupport 97, LabDomain 156, LabStore 44, LabStaging 40, LabDemo 119, LabFeatures 363 tests in 9 runs (commerce 18). Mac 134 total: 131 passed, 1 expected failure, 2 skipped; both commerce host tests passed. iOS simulator 4, watchOS simulator 115, tvOS simulator 116 passed. Release profiles passed product policy. Verified simulated grants and restores produced app-UI receipts; unverified compass produced no entitlement or new receipt."
+  },
+  "limitations": [
+    "Fixture host calls, not an outside UI walkthrough, physical-device commerce qualification, or a StoreKit transaction. The iPhone commerce screen compiled, but its flow was not separately driven.",
+    "The local StoreKit configuration service probe is blocked separately; no StoreKit-backed purchase adapter exists.",
+    "Existing known issues remain: Share Ingress duplicate recognition and same-second arrival ordering; Mac expected failure and skipped tests remain unqualified.",
+    "Physical devices, iPad, manual VoiceOver / Voice Control / Full Keyboard Access, and a 26-SDK / Swift 6.2 build were not run.",
+    "The script created and cleaned up its own iOS 27.0, watchOS 27.0, and tvOS 27.0 simulators; this is simulator evidence, never physical-device proof."
+  ]
+}

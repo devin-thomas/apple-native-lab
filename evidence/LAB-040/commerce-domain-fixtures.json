@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "subject": "LAB-040",
+  "check": "Local commerce domain operations, refusals, request replay, lifecycle, and fixture parity",
+  "date": "2026-10-01T04:22:41Z",
+  "provenance": {
+    "sourceRevision": "b8815de+uncommitted",
+    "sdkName": "macosx27.0",
+    "xcodeVersion": "27.0",
+    "xcodeBuild": "27A266a",
+    "minimumOS": "26.0"
+  },
+  "execution": {
+    "path": "fixture"
+  },
+  "inputs": [
+    "Packages/LabFeatures/Sources/CommerceWithoutTricks/CommerceFixture.swift@sha256:e5016ea319ca01aeaced3c22dede5e0e37a4192370d90e0ae0d7ffd741558cc4",
+    "Fixtures/LAB-040/Commerce.storekit@sha256:f370f35c84fbec3fc372122995f8db83fc79060311e764b4a6da6223f6543c59",
+    "Packages/LabFeatures/Sources/CommerceWithoutTricks/CommerceDesk.swift@sha256:6570d08c9f823fc911b6c581d95196b06c4c08c389ecf23d8c74b774887f5a96",
+    "Packages/LabFeatures/Sources/CommerceWithoutTricks/TransactionStateSimulator.swift@sha256:4eca8cbbca281253571c305eb050b00977d2c58b6a64f0cc7ea52d4d601860ca"
+  ],
+  "steps": [
+    "On research through labr: swift test --package-path Packages/LabFeatures --filter CommerceWithoutTricksTests",
+    "Original product fixtures, deterministic injected simulator session ID, and fresh in-memory stores behind OperationService with GrantAuthorizationPolicy",
+    "Verified/unverified purchases, pending approval, offline restore refusal, refund, revoke, reset, unavailable/cancelled writes, denied/replayed requests, stale revisions, and reentrant mutations"
+  ],
+  "outcome": {
+    "result": "passed",
+    "detail": "18 tests in 4 suites passed. Unverified grants nothing; refused writes preserve simulator state; replays return the same receipt and recheck authorization; a stale receipt grants or clears nothing; refunded history cannot restore after later unsuccessful attempts. Reset preserves an unrelated imported record. The two local configuration products match the simulator fixtures."
+  },
+  "limitations": [
+    "Fixture execution on the research Mac (Apple M5 Max, macOS 27.0 build 26A425); no App Store account or storefront used.",
+    "This record covers package tests, not a native UI walkthrough or a StoreKit transaction. The standalone StoreKitTest loader compiled but aborted without an XCTest runtime; its hosted replacement is recorded separately.",
+    "Physical devices, manual assistive-technology passes, and compilation with Xcode 26 / Swift 6.2 were not run."
+  ]
+}

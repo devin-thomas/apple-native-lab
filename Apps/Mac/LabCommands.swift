@@ -116,6 +116,9 @@ struct LabCommands: Commands {
             Button(ModelRoutingExperiment.title) { window?.destination = .modelRouting }
                 .keyboardShortcut("8", modifiers: [.command, .control])
                 .disabled(window == nil)
+            Button(CommerceExperiment.title) { window?.destination = .commerceWithoutTricks }
+                .keyboardShortcut("9", modifiers: [.command, .control])
+                .disabled(window == nil)
             Button(DesktopCommand.showPalette.title) { desktop.showsPalette = true }
                 .keyboardShortcut("k", modifiers: .command)
             Button(DesktopCommand.showStatus.title) {

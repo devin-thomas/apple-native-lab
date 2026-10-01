@@ -113,6 +113,9 @@ struct SidebarView: View {
                 Label(ModelRoutingExperiment.title, systemImage: ModelRoutingExperiment.symbol)
                     .tag(SidebarDestination.modelRouting)
                     .accessibilityHint("Where a request would run, outgoing fields, and Private Cloud Compute gates")
+                Label(CommerceExperiment.title, systemImage: CommerceExperiment.symbol)
+                    .tag(SidebarDestination.commerceWithoutTricks)
+                    .accessibilityHint("Buy, restore, refund, and offline states with no real charge")
             }
             Section("Experiments") {
                 row(.all, symbol: "square.grid.2x2")

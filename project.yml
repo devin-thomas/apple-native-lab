@@ -171,6 +171,9 @@ targets:
       # LAB-037 Home Scene Sandbox: fictional home preview and selected light commits.
       - package: LabFeatures
         product: HomeSceneSandbox
+      # LAB-040 Commerce Without Tricks: local product fixtures and transaction-state simulator.
+      - package: LabFeatures
+        product: CommerceWithoutTricks
     info:
       path: Apps/Mac/Info.plist
       properties:
@@ -350,6 +353,9 @@ targets:
       # LAB-037 Home Scene Sandbox: fictional home preview and selected light commits.
       - package: LabFeatures
         product: HomeSceneSandbox
+      # LAB-040 Commerce Without Tricks: local product fixtures and transaction-state simulator.
+      - package: LabFeatures
+        product: CommerceWithoutTricks
     info:
       path: Apps/Phone/Info.plist
       properties:
@@ -526,6 +532,9 @@ targets:
       # LAB-037 Home Scene Sandbox: fictional home preview and selected light commits.
       - package: LabFeatures
         product: HomeSceneSandbox
+      # LAB-040 Commerce Without Tricks: local product fixtures and transaction-state simulator.
+      - package: LabFeatures
+        product: CommerceWithoutTricks
       - target: ShareExtension
         embed: true
       # LAB-004: the widget and Control extension, embedded only in this SystemSurfaces variant.
@@ -811,6 +820,8 @@ targets:
       - path: Fixtures/speech/speech-sample-script.txt
         buildPhase: resources
       - path: Fixtures/speech/speech-sample-captions.vtt
+      # LAB-011 Model Routing Observatory: original routing prompt fixture.
+      - path: Fixtures/routing/routing-sample-prompt.txt
         buildPhase: resources
     dependencies:
       - package: LabSupport
@@ -827,9 +838,15 @@ targets:
       # LAB-012 Point, Inspect, Propose: a chosen image, OCR, and a reviewable record.
       - package: LabFeatures
         product: PointInspect
+      # LAB-011 Model Routing Observatory: route policy, PCC eligibility, outgoing-field preview.
+      - package: LabFeatures
+        product: ModelRouting
       # LAB-035 Access as a Superpower: the task, its chart semantics, and the Audio Graph descriptor.
       - package: LabFeatures
         product: AccessSuperpower
+      # LAB-038 Wallet Moment: unsigned pass preview, sample event card, signing boundary (no PassKit link).
+      - package: LabFeatures
+        product: WalletMoment
       # LAB-007 Share Ingress Station: the share inbox and its paste and file-picker fallbacks.
       - package: LabFeatures
         product: ShareIngress
@@ -899,6 +916,12 @@ targets:
         product: LocalConstellation
       - package: LabFeatures
         product: PeerSessionNetwork
+      # LAB-037 Home Scene Sandbox: fictional home preview and selected light commits.
+      - package: LabFeatures
+        product: HomeSceneSandbox
+      # LAB-040 Commerce Without Tricks: local product fixtures and transaction-state simulator.
+      - package: LabFeatures
+        product: CommerceWithoutTricks
     info:
       path: Apps/Companions/Mac/Info.plist
       properties:
@@ -962,7 +985,6 @@ targets:
         INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription: $(LAB_PURPOSE_BLUETOOTH)
         INFOPLIST_KEY_NSFaceIDUsageDescription: $(LAB_PURPOSE_FACE_ID)
 
-
   # Companions: the iPhone and iPad host variant with Local Constellation's local-network adapter
   # (LAB-019). Same sources and bundle identifier as LabPhone, so it replaces the CoreLocal app;
   # its own scheme, LabPhone-Companions, keeps the Network framework and the local network purpose
@@ -995,6 +1017,8 @@ targets:
       - path: Fixtures/speech/speech-sample-script.txt
         buildPhase: resources
       - path: Fixtures/speech/speech-sample-captions.vtt
+      # LAB-011 Model Routing Observatory: original routing prompt fixture.
+      - path: Fixtures/routing/routing-sample-prompt.txt
         buildPhase: resources
     dependencies:
       - package: LabSupport
@@ -1011,9 +1035,15 @@ targets:
       # LAB-012 Point, Inspect, Propose: a chosen image, OCR, and a reviewable record.
       - package: LabFeatures
         product: PointInspect
+      # LAB-011 Model Routing Observatory: route policy, PCC eligibility, outgoing-field preview.
+      - package: LabFeatures
+        product: ModelRouting
       # LAB-035 Access as a Superpower: the task, its chart semantics, and the Audio Graph descriptor.
       - package: LabFeatures
         product: AccessSuperpower
+      # LAB-038 Wallet Moment: unsigned pass preview, sample event card, signing boundary (no PassKit link).
+      - package: LabFeatures
+        product: WalletMoment
       # LAB-007 Share Ingress Station: the share inbox and its paste and file-picker fallbacks.
       - package: LabFeatures
         product: ShareIngress
@@ -1080,6 +1110,12 @@ targets:
         product: LocalConstellation
       - package: LabFeatures
         product: PeerSessionNetwork
+      # LAB-037 Home Scene Sandbox: fictional home preview and selected light commits.
+      - package: LabFeatures
+        product: HomeSceneSandbox
+      # LAB-040 Commerce Without Tricks: local product fixtures and transaction-state simulator.
+      - package: LabFeatures
+        product: CommerceWithoutTricks
     info:
       path: Apps/Companions/Phone/Info.plist
       properties:
@@ -1145,8 +1181,6 @@ targets:
         INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription: $(LAB_PURPOSE_BLUETOOTH)
         INFOPLIST_KEY_NSNearbyInteractionUsageDescription: $(LAB_PURPOSE_NEARBY_INTERACTION)
         INFOPLIST_KEY_NSFaceIDUsageDescription: $(LAB_PURPOSE_FACE_ID)
-
-
 
   # Companions: the Watch host installs directly to a paired Watch; it is not embedded in
   # the iPhone app yet, so CoreLocal never depends on Watch provisioning.
