@@ -5,6 +5,7 @@ import LabSupport
 import Observation
 import ShareIngress
 import RespectfulAttention
+import ShortcutWorkbench
 import SurfaceDeck
 import SwiftUI
 import TactileGrammar
@@ -48,6 +49,8 @@ enum SidebarDestination: Hashable {
     case speechTimeline
     /// LAB-006: search opted-in records and see which ones the answer used.
     case findTheThing
+    /// LAB-003: curated App Shortcuts, recipes, and the manual fallback.
+    case shortcutWorkbench
     case catalog(CatalogScope)
 
     var title: String {
@@ -70,6 +73,7 @@ enum SidebarDestination: Hashable {
         case .pointInspect: "Point, Inspect, Propose"
         case .speechTimeline: "Speech Timeline"
         case .findTheThing: FindTheThing.title
+        case .shortcutWorkbench: ShortcutWorkbench.title
         case .catalog(let scope): scope.title
         }
     }
@@ -95,6 +99,7 @@ enum SidebarDestination: Hashable {
         case .pointInspect: "point-inspect"
         case .speechTimeline: "speech-timeline"
         case .findTheThing: "find-the-thing"
+        case .shortcutWorkbench: "shortcut-workbench"
         case .catalog(.all): "all"
         case .catalog(.milestone(let milestone)): "milestone:\(milestone.rawValue)"
         case .catalog(.category(let category)): "category:\(category)"
@@ -123,6 +128,7 @@ enum SidebarDestination: Hashable {
         case ("point-inspect", nil): self = .pointInspect
         case ("speech-timeline", nil): self = .speechTimeline
         case ("find-the-thing", nil): self = .findTheThing
+        case ("shortcut-workbench", nil): self = .shortcutWorkbench
         case ("all", nil): self = .catalog(.all)
         case ("milestone", let raw?): guard let milestone = Milestone(rawValue: raw) else { return nil }
             self = .catalog(.milestone(milestone))
@@ -166,6 +172,8 @@ final class MainWindowState {
     let tactile = TactileGrammarModel()
     /// LAB-006: the shelf search and its answer, over the app index.
     let finder = FindTheThingSession()
+    /// LAB-003: selected recipe in the workbench list.
+    var workbenchRecipeID: RecipeID?
     var searchText = ""
     /// Incremented to ask the window to focus its search field.
     var searchRequests = 0

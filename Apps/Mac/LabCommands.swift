@@ -3,6 +3,7 @@ import DesktopNativePower
 import FindTheThing
 import LabCatalog
 import RespectfulAttention
+import ShortcutWorkbench
 import SurfaceDeck
 import SwiftUI
 import TactileGrammar
@@ -77,6 +78,9 @@ struct LabCommands: Commands {
                 .disabled(window == nil)
             Button(FindTheThing.title) { window?.destination = .findTheThing }
                 .keyboardShortcut("7", modifiers: [.command, .option])
+                .disabled(window == nil)
+            Button(ShortcutWorkbench.title) { window?.destination = .shortcutWorkbench }
+                .keyboardShortcut("8", modifiers: [.command, .option])
                 .disabled(window == nil)
             Button(DesktopCommand.showPalette.title) { desktop.showsPalette = true }
                 .keyboardShortcut("k", modifiers: .command)

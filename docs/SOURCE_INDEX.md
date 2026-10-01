@@ -43,7 +43,7 @@ Use in this plan: Up to ten curated App Shortcuts; distinguish the larger action
 
 Implementation evidence required: actual SDK symbol/availability, permissions or entitlement, and a named compile/device result.
 
-Installed SDK check (2026-09-29): `AppShortcutsProvider` is in the installed SDK, but no curated App Shortcut is declared yet ([installed SDK ledger](VERIFICATION_BOUNDARIES.md#installed-sdk-ledger)).
+Installed SDK check (2026-09-30): `AppShortcutsProvider` is adopted by LAB-003-A as `NativeLabAppShortcuts` with six curated entries ([installed SDK ledger](VERIFICATION_BOUNDARIES.md#installed-sdk-ledger)).
 
 ## S04
 
@@ -54,6 +54,8 @@ Source: [Shortcuts, WWDC26](https://developer.apple.com/videos/play/wwdc2026/310
 Use in this plan: Storage and model actions; stable cross-device entity identifiers.
 
 Implementation evidence required: actual SDK symbol/availability, permissions or entitlement, and a named compile/device result.
+
+Installed SDK check (2026-09-30): LAB-003-A does not call Shortcuts Storage; recipes bind lab-owned entity UUIDs and redact secrets on export. The iOS 27.0 AppIntents.swiftinterface has no type named Shortcuts Storage; durable identity is `PersistentlyIdentifiable` ([installed SDK ledger](VERIFICATION_BOUNDARIES.md#installed-sdk-ledger)).
 
 ## S05
 

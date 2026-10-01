@@ -43,6 +43,7 @@ struct ExperimentDetailView: View {
                 TactileGrammarLaunch(experiment: experiment)
                 RespectfulAttentionLaunch(experiment: experiment)
                 FindTheThingLaunch(experiment: experiment)
+                ShortcutWorkbenchLaunch(experiment: experiment)
                 Text(experiment.moment)
                     .font(.title3)
                     .fixedSize(horizontal: false, vertical: true)

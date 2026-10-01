@@ -77,6 +77,7 @@ struct MainWindow: View {
         .onAppear(perform: restore)
         // The Open Surface Deck action (Shortcuts) shows the deck in this window (LAB-004).
         .onChange(of: SurfaceDeckModel.shared.openRequests) { window.destination = .surfaceDeck }
+        .onChange(of: ShortcutWorkbenchModel.shared.openRequests) { window.destination = .shortcutWorkbench }
         .task { await library.start() }
     }
 
@@ -118,6 +119,8 @@ struct MainWindow: View {
             SpeechTimelineListColumn()
         case .findTheThing:
             FindTheThingListColumn(session: window.finder)
+        case .shortcutWorkbench:
+            ShortcutWorkbenchListColumn(window: window)
         case .catalog(let scope):
             if let registry = model.registry {
                 CatalogListColumn(registry: registry, scope: scope, window: window)
@@ -169,6 +172,8 @@ struct MainWindow: View {
             SpeechTimelineDetailColumn(window: window)
         case .findTheThing:
             FindTheThingDetailColumn(session: window.finder)
+        case .shortcutWorkbench:
+            ShortcutWorkbenchDetailColumn(window: window)
         case .catalog:
             if let registry = model.registry {
                 CatalogDetailColumn(registry: registry, experimentID: window.experimentID)

@@ -14,6 +14,7 @@ let package = Package(
         .library(name: "PortableObjects", targets: ["PortableObjects"]),
         .library(name: "PickUpHere", targets: ["PickUpHere"]),
         .library(name: "SurfaceDeck", targets: ["SurfaceDeck"]),
+        .library(name: "ShortcutWorkbench", targets: ["ShortcutWorkbench"]),
         // CORE-012: the journey's fixed values only. A product so that Xcode gives the journey's
         // tests a scheme, as every module's scheme holds its own tests. No host links it.
         .library(name: "FirstJourney", targets: ["FirstJourney"]),
@@ -148,6 +149,23 @@ let package = Package(
         .testTarget(
             name: "SurfaceDeckTests",
             dependencies: ["SurfaceDeck", .product(name: "LabDomain", package: "LabDomain")]
+        ),
+        // LAB-003 Shortcut Workbench: curated App Shortcuts, typed recipes, and rename-safe entity
+        // references over Action Atlas entities and the host's OperationService.
+        .target(
+            name: "ShortcutWorkbench",
+            dependencies: [
+                "ActionAtlas",
+                .product(name: "LabDomain", package: "LabDomain"),
+            ]
+        ),
+        .testTarget(
+            name: "ShortcutWorkbenchTests",
+            dependencies: [
+                "ShortcutWorkbench",
+                "ActionAtlas",
+                .product(name: "LabDomain", package: "LabDomain"),
+            ]
         ),
         // CORE-012: the first six-lab journey across every M1 module over one OperationService.
         // `FirstJourney` holds only the journey's fixed values; no host links it.

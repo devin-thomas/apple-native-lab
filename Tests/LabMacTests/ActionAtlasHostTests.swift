@@ -268,9 +268,14 @@ import Testing
         #expect(intents(from: "RespectfulAttention") == [
             "ScheduleLabAlertIntent", "CancelLabAlertsIntent", "LabFocusFilterIntent",
         ])
-        // LAB-012's visual-search handoff. Nothing else joins them.
+        // LAB-012's visual-search handoff.
         #expect(intents(from: "PointInspect") == ["PointInspectVisualSearchIntent"])
-        #expect(actions.count == 19)
+        // LAB-003 Shortcut Workbench curated entries. Nothing else joins them.
+        #expect(intents(from: "ShortcutWorkbench") == [
+            "OpenShortcutWorkbenchIntent", "RunImportExportRecipeIntent", "ResolveLabItemIntent",
+            "InspectModelStepIntent", "ExportRecipeIntent",
+        ])
+        #expect(actions.count == 24)
         let entities = try #require(metadata["entities"] as? [String: Any])
         #expect(Set(entities.keys) == ["LabItemEntity", "LabCollectionEntity", "FindRecordEntity"])
         let queries = try #require(metadata["queries"] as? [String: Any])

@@ -3,6 +3,7 @@ import FindTheThing
 import LabCatalog
 import LabSupport
 import RespectfulAttention
+import ShortcutWorkbench
 import SurfaceDeck
 import SwiftUI
 import TactileGrammar
@@ -76,6 +77,9 @@ struct SidebarView: View {
                 Label(FindTheThing.title, systemImage: FindTheThing.symbol)
                     .tag(SidebarDestination.findTheThing)
                     .accessibilityHint("Search opted-in records and see which ones the answer used")
+                Label(ShortcutWorkbench.title, systemImage: ShortcutWorkbench.symbol)
+                    .tag(SidebarDestination.shortcutWorkbench)
+                    .accessibilityHint("Curated recipes and manual instructions; no secret storage in Shortcuts")
             }
             Section("Experiments") {
                 row(.all, symbol: "square.grid.2x2")
