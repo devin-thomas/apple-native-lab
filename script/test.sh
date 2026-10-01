@@ -63,8 +63,15 @@ swift test --package-path Packages/LabDemo --quiet
 step "LabFeatures package tests"
 swift test --package-path Packages/LabFeatures --quiet
 
+# The Mac host tests drive the app in the logged-in GUI session, which concurrent runs on one Mac
+# share. When LAB_MAC_UI_LOCK names a lock file, this step waits for it (lockf), so runs from several
+# checkouts on one shared machine take turns here and run their other steps in parallel.
+with_mac_ui_lock() {
+  if [[ -n "${LAB_MAC_UI_LOCK:-}" ]]; then lockf -k "$LAB_MAC_UI_LOCK" "$@"; else "$@"; fi
+}
+
 step "Mac host hosted smoke tests (LabMac-Core)"
-xcodebuild -project "$PROJECT" -scheme LabMac-Core -destination 'platform=macOS' \
+with_mac_ui_lock xcodebuild -project "$PROJECT" -scheme LabMac-Core -destination 'platform=macOS' \
   -derivedDataPath "$DERIVED" LAB_SOURCE_REVISION="$REVISION" test -quiet
 
 step "iPhone host smoke tests in an iOS simulator (LabPhone-Core)"
