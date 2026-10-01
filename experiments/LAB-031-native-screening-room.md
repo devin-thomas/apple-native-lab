@@ -79,6 +79,10 @@ Observed with Xcode 27.0 (27A266a) and the 27.0 SDKs, on the Mac and in the iOS 
 - Picture in Picture on iPhone and iPad needs the `audio` background mode, which LabPhone, LabPhoneSurfaces, and LabTV now declare.
 - A companion controller on another device is not built here: LAB-019 supplies the paired transport. The page's Companion remote runs in the same app through `InProcessScreeningLink`, as an authorized peer, and says it is a simulation.
 
+## Qualification notes (LAB-031-B)
+
+Qualification retains `implemented`: real local assets and the one-player model are exercised on the Mac and simulator paths, with fixture signals for interruptions/routes. No physical-event or manual accessibility promotion is claimed. See the [walkthrough](../docs/walkthroughs/LAB-031-native-screening-room.md), [qualification record](../tickets/LAB-031-B.md#completion-record-2026-10-01), and `evidence/LAB-031/` for the executed checks and remaining gates. Protected content and cancellation of an in-flight asset load remain unobserved.
+
 ## Delivery
 
 [Implementation ticket](../tickets/LAB-031-A.md) → [qualification ticket](../tickets/LAB-031-B.md).
