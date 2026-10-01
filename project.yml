@@ -6,9 +6,9 @@
 # profile's compilation condition. Schemes by profile:
 #   CoreLocal         LabMac-Core, LabPhone-Core
 #   Companions        LabWatch, LabTV
-#   SystemSurfaces    LabPhone-Surfaces (the host variant, the share extension, the widget and Control extension)
+#   SystemSurfaces    LabPhone-Surfaces (the host variant, the share extension, the widget and Control extension, the Quick Look preview)
 #   CloudOptional     none yet
-#   FrontierOptional  none yet
+#   FrontierOptional  none yet (LAB-009 File Provider sources live under Extensions/DocumentsProvider/; host wiring waits on qualification)
 # Entitlements and purpose strings are declared per executable, on the target that uses them.
 # Every host scheme's test action runs a smoke test inside that host (script/test.sh). The LabWatch
 # and LabTV test actions also run the LabSupport and LabCatalog package tests on their platform.
@@ -87,6 +87,9 @@ targets:
       # LAB-008 Portable Objects: the .anlab document, its Transferable representations, and staged imports.
       - package: LabFeatures
         product: PortableObjects
+      # LAB-009 Documents Everywhere: sample catalog, previews, and provider lifecycle (provider disabled).
+      - package: LabFeatures
+        product: DocumentsEverywhere
       # LAB-004 Surface Deck: the demo session's deck, its intents, and the in-app widget previews.
       - package: LabFeatures
         product: SurfaceDeck
@@ -173,6 +176,9 @@ targets:
       # LAB-008 Portable Objects: the .anlab document, its Transferable representations, and staged imports.
       - package: LabFeatures
         product: PortableObjects
+      # LAB-009 Documents Everywhere: sample catalog, previews, and provider lifecycle (provider disabled).
+      - package: LabFeatures
+        product: DocumentsEverywhere
       # LAB-004 Surface Deck: the demo session's deck, its intents, and the in-app widget previews.
       - package: LabFeatures
         product: SurfaceDeck
@@ -264,6 +270,9 @@ targets:
         product: AccessSuperpower
       - package: LabFeatures
         product: PortableObjects
+      # LAB-009 Documents Everywhere: sample catalog and previews; Quick Look extension embedded below.
+      - package: LabFeatures
+        product: DocumentsEverywhere
       # LAB-004 Surface Deck: the deck, its intents, and the snapshot writer, as LabPhone.
       - package: LabFeatures
         product: SurfaceDeck
@@ -271,6 +280,9 @@ targets:
         embed: true
       # LAB-004: the widget and Control extension, embedded only in this SystemSurfaces variant.
       - target: SurfaceWidgets
+        embed: true
+      # LAB-009: Quick Look preview for .anlab; works without the File Provider.
+      - target: QuickLookPreview
         embed: true
     info:
       path: Extensions/PhoneSurfacesHost/Info.plist
@@ -282,6 +294,14 @@ targets:
         LabBuildProfile: $(LAB_BUILD_PROFILE)
         LabDistributionLane: $(LAB_DISTRIBUTION_LANE)
         LabAppGroupIdentifier: $(LAB_APP_GROUP_IDENTIFIER)
+        # LAB-008 / LAB-009: lab object type for Portable Objects and Quick Look.
+        LabObjectTypeIdentifier: $(LAB_BUNDLE_PREFIX).nativelab.object
+        UTExportedTypeDeclarations:
+          - UTTypeIdentifier: $(LAB_BUNDLE_PREFIX).nativelab.object
+            UTTypeDescription: Native Lab Object
+            UTTypeConformsTo: [public.json]
+            UTTypeTagSpecification:
+              public.filename-extension: [anlab]
         UILaunchScreen: {}
         UIApplicationSceneManifest:
           UIApplicationSupportsMultipleScenes: true
@@ -398,6 +418,48 @@ targets:
       base:
         PRODUCT_NAME: SurfaceWidgets
         PRODUCT_BUNDLE_IDENTIFIER: $(LAB_BUNDLE_PREFIX).nativelab.widgets
+        TARGETED_DEVICE_FAMILY: "1,2"
+        APPLICATION_EXTENSION_API_ONLY: YES
+        SKIP_INSTALL: YES
+
+  # SystemSurfaces: Quick Look preview for Native Lab objects (LAB-009). Reads the file URL the
+  # system provides and builds the same HTML preview the document browser uses. Needs no File
+  # Provider and no App Group. Embedded only by LabPhoneSurfaces.
+  QuickLookPreview:
+    type: app-extension
+    platform: iOS
+    configFiles:
+      Debug: Config/Profiles/SystemSurfaces.xcconfig
+      Release: Config/Profiles/SystemSurfaces.xcconfig
+    sources:
+      - Extensions/QuickLookPreview
+    dependencies:
+      - package: LabFeatures
+        product: DocumentsEverywhere
+    info:
+      path: Extensions/QuickLookPreview/Info.plist
+      properties:
+        CFBundleDisplayName: Native Lab Preview
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        LabSourceRevision: $(LAB_SOURCE_REVISION)
+        LabBuildProfile: $(LAB_BUILD_PROFILE)
+        LabDistributionLane: $(LAB_DISTRIBUTION_LANE)
+        LabObjectTypeIdentifier: $(LAB_BUNDLE_PREFIX).nativelab.object
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.quicklook.preview
+          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).DocumentPreviewProvider
+          NSExtensionAttributes:
+            QLSupportedContentTypes:
+              - $(LAB_BUNDLE_PREFIX).nativelab.object
+              - public.json
+    entitlements:
+      path: Extensions/QuickLookPreview/QuickLookPreview.entitlements
+      properties: {}
+    settings:
+      base:
+        PRODUCT_NAME: QuickLookPreview
+        PRODUCT_BUNDLE_IDENTIFIER: $(LAB_BUNDLE_PREFIX).nativelab.quicklook
         TARGETED_DEVICE_FAMILY: "1,2"
         APPLICATION_EXTENSION_API_ONLY: YES
         SKIP_INSTALL: YES
@@ -621,6 +683,7 @@ schemes:
         LabPhoneSurfaces: all
         ShareExtension: all
         SurfaceWidgets: all
+        QuickLookPreview: all
     run:
       config: Debug
     archive:

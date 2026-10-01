@@ -61,6 +61,7 @@ struct MainWindow: View {
         // Views in the window, such as an experiment page's Open button, change its destination (LAB-010, LAB-035).
         .environment(window)
         .environment(\.openPortableObjects, OpenPortableObjectsAction(window: ObjectIdentifier(window)) { window.destination = .portableObjects })
+        .environment(\.openDocumentsEverywhere, OpenDocumentsEverywhereAction(window: ObjectIdentifier(window)) { window.destination = .documentsEverywhere })
         .onChange(of: window.searchRequests) { focusedPane = .search }
         .onChange(of: window.destination) { old, new in
             if (old == .collection) != (new == .collection) { window.searchText = "" }
@@ -92,6 +93,8 @@ struct MainWindow: View {
             ShareInboxListColumn(window: window)
         case .portableObjects:
             PortableObjectsListColumn(window: window)
+        case .documentsEverywhere:
+            DocumentsEverywhereListColumn(window: window)
         case .surfaceDeck:
             SurfaceDeckListColumn(window: window)
         case .catalog(let scope):
@@ -120,6 +123,8 @@ struct MainWindow: View {
             ShareInboxDetailColumn(window: window)
         case .portableObjects:
             PortableObjectsDetailColumn(window: window)
+        case .documentsEverywhere:
+            DocumentsEverywhereDetailColumn(window: window)
         case .surfaceDeck:
             SurfaceDeckDetailColumn()
         case .catalog:
@@ -146,6 +151,7 @@ struct MainWindow: View {
         case .accessSuperpower: "Search archived samples"
         case .shareInbox: "Search the inbox"
         case .portableObjects: "Search objects"
+        case .documentsEverywhere: "Search samples"
         default: "Search experiments"
         }
     }

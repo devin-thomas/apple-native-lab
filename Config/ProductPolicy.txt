@@ -69,6 +69,8 @@ entitlement  CoreLocal  macos    com.apple.security.files.user-selected.read-wri
 # links WidgetKit.
 link         SystemSurfaces ios  WidgetKit           # the widget and Controls; the host variant's reloadTimelines and reloadControls
 link         SystemSurfaces ios  _AppIntents_SwiftUI # the widget's Toggle(isOn:intent:) comes from SwiftUI's App Intents overlay
+link         SystemSurfaces ios  QuickLook           # LAB-009 Quick Look preview extension for .anlab (no File Provider)
+link         SystemSurfaces ios  QuickLookSupport    # QLPreviewProvider / QLPreviewReply on iOS
 
 # Companions: the Watch host's capability status probes (CORE-004)
 link         Companions watchos  AVFAudio            # record permission and audio input

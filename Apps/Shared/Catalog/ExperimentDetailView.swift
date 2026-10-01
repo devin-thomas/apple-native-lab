@@ -47,7 +47,7 @@ struct ExperimentDetailView: View {
                     Text(experiment.fallback)
                 }
                 DetailSection(title: "How this works", symbol: "gearshape.2") {
-                    Text(Self.buildSummary(for: experiment.state))
+                    Text(howThisWorks)
                 }
                 DetailSection(title: "Runs on", symbol: "laptopcomputer.and.iphone") {
                     Text(experiment.hosts)
@@ -82,6 +82,16 @@ struct ExperimentDetailView: View {
             }
         }
         #endif
+    }
+
+    private var howThisWorks: String {
+        if experiment.id == DocumentsEverywhereModule.experimentID {
+            DocumentsEverywhereModule.summary
+        } else if experiment.id == PortableObjectsModule.experimentID {
+            PortableObjectsModule.summary
+        } else {
+            Self.buildSummary(for: experiment.state)
+        }
     }
 
     private var header: some View {
