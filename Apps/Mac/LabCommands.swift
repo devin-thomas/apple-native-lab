@@ -2,6 +2,7 @@ import ContextCards
 import DesktopNativePower
 import FindTheThing
 import LabCatalog
+import RenderThatSurvives
 import RespectfulAttention
 import ShortcutWorkbench
 import SurfaceDeck
@@ -58,6 +59,7 @@ struct LabCommands: Commands {
                 .keyboardShortcut("0", modifiers: .command)
                 .disabled(window == nil)
             // After ⌘1–⌘9 and ⌘0, later destinations continue the numbered row on ⌥⌘1, ⌥⌘2, and so on.
+            // ⌥⌘9 is Desktop Status, so the row skips it and goes on to ⌥⌘0.
             Button("Pick Up Here") { window?.destination = .pickUpHere }
                 .keyboardShortcut("1", modifiers: [.command, .option])
                 .disabled(window == nil)
@@ -81,6 +83,9 @@ struct LabCommands: Commands {
                 .disabled(window == nil)
             Button(ShortcutWorkbench.title) { window?.destination = .shortcutWorkbench }
                 .keyboardShortcut("8", modifiers: [.command, .option])
+                .disabled(window == nil)
+            Button(RenderThatSurvives.title) { window?.destination = .renderSurvives }
+                .keyboardShortcut("0", modifiers: [.command, .option])
                 .disabled(window == nil)
             Button(DesktopCommand.showPalette.title) { desktop.showsPalette = true }
                 .keyboardShortcut("k", modifiers: .command)

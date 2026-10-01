@@ -79,6 +79,9 @@ public enum ActionAtlasError: Error, Hashable, Sendable {
         case .reasonTooLong(let limit): "A reason can have at most \(limit) characters. Nothing was changed."
         case .invalidMoment: "That date and time does not exist. Nothing was changed."
         case .unknownTimeZone: "That time zone is not recognized. Nothing was changed."
+        // Job values (LAB-032) never come from an Action Atlas action; listed for completeness.
+        case .progressOutOfRange, .invalidSlug, .textLength, .unsafeFileName, .invalidDigest, .negativeByteCount:
+            "A job value is not valid. Nothing was changed."
         }
     }
 
@@ -117,6 +120,7 @@ public enum ActionAtlasError: Error, Hashable, Sendable {
         case .demoCollection: "Demo collections hold only the samples. Choose one of your own collections. Nothing was changed."
         case .noChanges: "Nothing would change: the new values match the current ones."
         case .nothingToCancel: "There are no lab alerts to cancel. Nothing was changed."
+        case .jobFinished, .jobPhase, .jobProgress: "That job cannot take this step now. Nothing was changed."
         }
     }
 }

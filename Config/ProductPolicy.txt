@@ -132,6 +132,28 @@ link         SystemSurfaces ios  UserNotifications   # local reminders, cancelle
 link         SystemSurfaces ios  AlarmKit           # alarms, cancelled only by the lab alarm identifier
 link         SystemSurfaces ios  ActivityKit        # AlarmKit AlarmAttributes conformance only; no Live Activity
 
+# CoreLocal: Render That Survives (LAB-032). Frames are generated, drawn by Core Image on Metal or by
+# the CPU, encoded by AVFoundation (already allowed above), and played back in the app. No entitlement:
+# continued processing needs only the Info.plist identifier wildcard, and the render never asks for
+# background GPU. The SystemSurfaces host variant links the same, as LabPhone.
+link         CoreLocal  macos    CoreImage           # the GPU drawing path: Core Image renders frames on the Metal device
+link         CoreLocal  macos    Metal               # the GPU drawing path's device (MTLCreateSystemDefaultDevice)
+link         CoreLocal  macos    CoreVideo           # the encoder's pixel buffers
+link         CoreLocal  macos    CoreMedia           # sample times and the segment composition
+link         CoreLocal  macos    _AVKit_SwiftUI      # VideoPlayer for the published movie
+link         CoreLocal  ios      CoreImage           # as macos
+link         CoreLocal  ios      Metal               # as macos
+link         CoreLocal  ios      CoreVideo           # as macos
+link         CoreLocal  ios      CoreMedia           # as macos
+link         CoreLocal  ios      _AVKit_SwiftUI      # as macos
+link         CoreLocal  ios      BackgroundTasks     # continued processing for a render a person starts (BGContinuedProcessingTask)
+link         SystemSurfaces ios  CoreImage           # host variant: as LabPhone
+link         SystemSurfaces ios  Metal               # host variant: as LabPhone
+link         SystemSurfaces ios  CoreVideo           # host variant: as LabPhone
+link         SystemSurfaces ios  CoreMedia           # host variant: as LabPhone
+link         SystemSurfaces ios  _AVKit_SwiftUI      # host variant: as LabPhone
+link         SystemSurfaces ios  BackgroundTasks     # host variant: as LabPhone
+
 # Companions: the Watch host's capability status probes (CORE-004)
 link         Companions watchos  AVFAudio            # record permission and audio input
 link         Companions watchos  CoreBluetooth       # Bluetooth authorization status

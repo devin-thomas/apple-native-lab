@@ -74,6 +74,8 @@ final class CountingStore: OperationStore {
     func sessions() async throws -> [LabSession] { await base.sessions() }
     func attention(_ id: AttentionID) async throws -> LabAttention? { await base.attention(id) }
     func attentions() async throws -> [LabAttention] { await base.attentions() }
+    func job(_ id: JobID) async throws -> LabJob? { await base.job(id) }
+    func jobs() async throws -> [LabJob] { await base.jobs() }
 
     func apply(_ commit: AuthorizedCommit) async throws -> CommitOutcome {
         let outcome = try await base.apply(commit)

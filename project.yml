@@ -134,6 +134,11 @@ targets:
       # LAB-003 Shortcut Workbench: curated App Shortcuts, recipes, and the manual fallback.
       - package: LabFeatures
         product: ShortcutWorkbench
+      # LAB-032 Render That Survives: the reusable job runtime and the render module.
+      - package: LabFeatures
+        product: LabJobs
+      - package: LabFeatures
+        product: RenderThatSurvives
     info:
       path: Apps/Mac/Info.plist
       properties:
@@ -277,6 +282,11 @@ targets:
       # LAB-003 Shortcut Workbench: curated App Shortcuts, recipes, and the manual fallback.
       - package: LabFeatures
         product: ShortcutWorkbench
+      # LAB-032 Render That Survives: the reusable job runtime and the render module.
+      - package: LabFeatures
+        product: LabJobs
+      - package: LabFeatures
+        product: RenderThatSurvives
     info:
       path: Apps/Phone/Info.plist
       properties:
@@ -301,6 +311,10 @@ targets:
             UTTypeConformsTo: [public.json]
             UTTypeTagSpecification:
               public.filename-extension: [anlab]
+        # LAB-032: continued processing for a render a person starts. Each request registers a new
+        # identifier under this wildcard. No background mode and no background-GPU entitlement.
+        BGTaskSchedulerPermittedIdentifiers:
+          - $(PRODUCT_BUNDLE_IDENTIFIER).render.*
         UILaunchScreen: {}
         UIApplicationSceneManifest:
           UIApplicationSupportsMultipleScenes: true
@@ -415,6 +429,11 @@ targets:
       # LAB-003 Shortcut Workbench: curated App Shortcuts and recipes, as LabPhone.
       - package: LabFeatures
         product: ShortcutWorkbench
+      # LAB-032 Render That Survives, as LabPhone.
+      - package: LabFeatures
+        product: LabJobs
+      - package: LabFeatures
+        product: RenderThatSurvives
       - target: ShareExtension
         embed: true
       # LAB-004: the widget and Control extension, embedded only in this SystemSurfaces variant.
@@ -437,6 +456,9 @@ targets:
         NSUserActivityTypes:
           - nativelab.pick-up-here
           - $(LAB_BUNDLE_PREFIX).nativelab.context-cards.visible-sample
+        # LAB-032: as LabPhone.
+        BGTaskSchedulerPermittedIdentifiers:
+          - $(PRODUCT_BUNDLE_IDENTIFIER).render.*
         UILaunchScreen: {}
         UIApplicationSceneManifest:
           UIApplicationSupportsMultipleScenes: true

@@ -589,7 +589,7 @@
       "title": "Render That Survives",
       "category": "Media",
       "milestone": "M2",
-      "state": "specified",
+      "state": "implemented",
       "dependsOn": [
         "LAB-008"
       ],

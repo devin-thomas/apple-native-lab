@@ -8,6 +8,7 @@ This matrix assigns review boundaries, not preapproved entitlements. Verify exac
 | Widgets / Controls | Extension; SystemSurfaces profile | User adds/configures surfaces; signing capabilities | Host state deck |
 | Share intake | Share extension; App Group staging where needed | User explicitly shares chosen items | File picker / paste |
 | Quick Look / File Provider | Separate extension targets | Activation, file access, provider lifecycle | Host document browser |
+| Continued background processing (LAB-032) | Host Info.plist identifier wildcard (`BGTaskSchedulerPermittedIdentifiers`); CoreLocal; no entitlement. Background GPU would need its own entitlement and is not requested | A person starts the job in the foreground; the system may refuse it or end it early | Foreground job that stops at a checkpoint and resumes; Mac worker while the app runs |
 | Local Foundation Models | Isolated adapter | Eligible device, language/region, enabled/ready assets | Manual editor / labeled parser |
 | PCC / external model | CloudOptional | Program, entitlement, distribution, user eligibility, consent, quota | Local-only path |
 | Camera / microphone / AR | Host capabilities | Explicit permission and selected session | Selected image/media fixture |

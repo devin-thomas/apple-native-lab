@@ -57,6 +57,8 @@ public enum GrantTarget: Hashable, Sendable {
             true
         case (.demo, .cancelLabAlerts), (.demo, .restoreLabAlerts):
             true
+        case (.entity(.job), .startJob), (.entity(.job), .updateJob):
+            true
         default: false
         }
     }

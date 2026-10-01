@@ -17,6 +17,8 @@ struct LabPhoneApp: App {
         AttentionHost.connect(library)
         FindTheThingHost.connect()
         ShortcutWorkbenchHost.connect(library)
+        // LAB-032: continued processing when a render qualifies, a foreground job otherwise.
+        RenderStudioModel.shared.connect(library, runway: ContinuedProcessingRunway())
     }
 
     var body: some Scene {

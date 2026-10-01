@@ -8,6 +8,8 @@ public enum EntityKind: String, Codable, Sendable, CaseIterable {
     case session
     /// A lab-owned reminder, Focus filter, or alarm (LAB-043 Respectful Attention).
     case attention
+    /// A finite piece of expensive work a person started, such as a render (LAB-032).
+    case job
 }
 
 /// A stored domain value with a stable identity and a revision.
@@ -45,6 +47,7 @@ public typealias CollectionID = EntityID<LabCollection>
 public typealias ItemID = EntityID<LabItem>
 public typealias SessionID = EntityID<LabSession>
 public typealias AttentionID = EntityID<LabAttention>
+public typealias JobID = EntityID<LabJob>
 
 /// Names one requested decision. An adapter creates it once per user intent and reuses it on
 /// every retry, so a retry returns the original receipt instead of mutating again.
@@ -131,6 +134,7 @@ public enum EntityReference: Hashable, Sendable, Codable, CustomStringConvertibl
     case item(ItemID)
     case session(SessionID)
     case attention(AttentionID)
+    case job(JobID)
 
     public var kind: EntityKind {
         switch self {
@@ -138,6 +142,7 @@ public enum EntityReference: Hashable, Sendable, Codable, CustomStringConvertibl
         case .item: .item
         case .session: .session
         case .attention: .attention
+        case .job: .job
         }
     }
 
@@ -147,6 +152,7 @@ public enum EntityReference: Hashable, Sendable, Codable, CustomStringConvertibl
         case .item(let id): id.rawValue
         case .session(let id): id.rawValue
         case .attention(let id): id.rawValue
+        case .job(let id): id.rawValue
         }
     }
 
@@ -165,6 +171,7 @@ public enum EntityReference: Hashable, Sendable, Codable, CustomStringConvertibl
         case .item: self = .item(ItemID(rawValue: id))
         case .session: self = .session(SessionID(rawValue: id))
         case .attention: self = .attention(AttentionID(rawValue: id))
+        case .job: self = .job(JobID(rawValue: id))
         }
     }
 

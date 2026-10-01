@@ -27,6 +27,12 @@ public enum RuleViolation: Hashable, Sendable {
     case noChanges(EntityReference)
     /// Cancel or restore was asked to change no lab alerts.
     case nothingToCancel
+    /// The job has finished; a finished job never changes again (LAB-032).
+    case jobFinished(JobID)
+    /// The transition needs the job in another phase, such as resuming a job that is running.
+    case jobPhase(JobID, current: JobPhase.Name)
+    /// A checkpoint would move progress backwards or past the job's total.
+    case jobProgress(JobID)
 }
 
 /// A store problem, without the underlying detail, which may contain paths or content.

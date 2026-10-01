@@ -127,6 +127,13 @@ public enum DomainOperation: Hashable, Sendable, Codable {
     case cancelLabAlerts(pins: [AttentionPin])
     /// Puts lab alerts back after a cancel. Each draft was already consented. Not destructive.
     case restoreLabAlerts(drafts: [AttentionDraft])
+    /// Records a new job, running, with none of its work done yet (LAB-032 Render That Survives).
+    /// Not destructive and not undoable: stopping a job is a transition, not an inverse.
+    case startJob(draft: JobDraft)
+    /// Moves a job one step through its lifecycle (`JobTransition`) at the revision the caller
+    /// last saw. Not destructive: cancelling or failing a job removes nothing from view. Never
+    /// undoable, because a job's effects are work and files that a receipt cannot take back.
+    case updateJob(id: JobID, expected: Revision, transition: JobTransition)
 
     public var kind: OperationKind {
         switch self {
@@ -143,6 +150,8 @@ public enum DomainOperation: Hashable, Sendable, Codable {
         case .scheduleAttention: .scheduleAttention
         case .cancelLabAlerts: .cancelLabAlerts
         case .restoreLabAlerts: .restoreLabAlerts
+        case .startJob: .startJob
+        case .updateJob: .updateJob
         }
     }
 
@@ -160,6 +169,10 @@ public enum DomainOperation: Hashable, Sendable, Codable {
             .session(id)
         case .scheduleAttention(_, let draft):
             .attention(draft.id)
+        case .startJob(let draft):
+            .job(draft.id)
+        case .updateJob(let id, _, _):
+            .job(id)
         case .cancelLabAlerts, .restoreLabAlerts, .resetDemo:
             nil
         }
@@ -169,7 +182,7 @@ public enum DomainOperation: Hashable, Sendable, Codable {
     /// For a session, `nil` means the caller saw a session that was never started.
     public var expectedRevision: Revision? {
         switch self {
-        case .createCollection, .createItem, .resetDemo:
+        case .createCollection, .createItem, .resetDemo, .startJob:
             nil
         case .updateCollection(_, let expected, _), .archiveCollection(_, let expected),
              .restoreCollection(_, let expected), .updateItem(_, let expected, _),
@@ -179,6 +192,8 @@ public enum DomainOperation: Hashable, Sendable, Codable {
             expected
         case .cancelLabAlerts, .restoreLabAlerts:
             nil
+        case .updateJob(_, let expected, _):
+            expected
         }
     }
 
@@ -189,7 +204,7 @@ public enum DomainOperation: Hashable, Sendable, Codable {
     /// unchanged.
     public func rebased(onto revision: Revision) -> DomainOperation {
         switch self {
-        case .createCollection, .createItem, .resetDemo: self
+        case .createCollection, .createItem, .resetDemo, .startJob: self
         case .updateCollection(let id, _, let title): .updateCollection(id: id, expected: revision, title: title)
         case .archiveCollection(let id, _): .archiveCollection(id: id, expected: revision)
         case .restoreCollection(let id, _): .restoreCollection(id: id, expected: revision)
@@ -199,6 +214,7 @@ public enum DomainOperation: Hashable, Sendable, Codable {
         case .setSession(let id, _, let running): .setSession(id: id, expected: revision, running: running)
         case .scheduleAttention(_, let draft): .scheduleAttention(expected: revision, draft: draft)
         case .cancelLabAlerts, .restoreLabAlerts: self
+        case .updateJob(let id, _, let transition): .updateJob(id: id, expected: revision, transition: transition)
         }
     }
 }
@@ -218,6 +234,8 @@ public enum OperationKind: String, Hashable, Sendable, Codable, CaseIterable {
     case scheduleAttention = "schedule-attention"
     case cancelLabAlerts = "cancel-lab-alerts"
     case restoreLabAlerts = "restore-lab-alerts"
+    case startJob = "start-job"
+    case updateJob = "update-job"
 
     /// Whether the operation removes something from normal view. Destructive commits need their
     /// own permission, which no model tool can hold (ADR-007).
@@ -225,7 +243,7 @@ public enum OperationKind: String, Hashable, Sendable, Codable, CaseIterable {
         switch self {
         case .archiveCollection, .archiveItem, .resetDemo, .cancelLabAlerts: true
         case .createCollection, .updateCollection, .restoreCollection, .createItem, .updateItem, .restoreItem,
-             .setSession, .scheduleAttention, .restoreLabAlerts:
+             .setSession, .scheduleAttention, .restoreLabAlerts, .startJob, .updateJob:
             false
         }
     }

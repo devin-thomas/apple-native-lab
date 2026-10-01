@@ -145,6 +145,16 @@ struct LabDataService: Sendable {
         try await service.findAttentions(as: actor)
     }
 
+    /// One job (LAB-032 Render That Survives).
+    func job(_ id: JobID, as actor: ActorScope) async throws(OperationError) -> LabJob {
+        try await service.findJob(id, as: actor)
+    }
+
+    /// Every job of one kind.
+    func jobs(kind: JobKind, as actor: ActorScope) async throws(OperationError) -> [LabJob] {
+        try await service.findJobs(kind: kind, as: actor)
+    }
+
     /// Validates an operation as `actor` without committing or recording anything (LAB-010 Typed
     /// Local Intelligence proposes as the model-tool adapter, which can never commit).
     func propose(_ operation: DomainOperation, as actor: ActorScope) async throws(OperationError) -> OperationProposal {

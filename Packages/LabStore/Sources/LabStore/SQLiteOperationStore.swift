@@ -107,6 +107,16 @@ public actor SQLiteOperationStore: OperationStore {
         try entities(read { try database.rows("SELECT \(Self.attentionColumns) FROM attentions", map: Self.attention) })
     }
 
+    public func job(_ id: JobID) throws(StoreError) -> LabJob? {
+        try entities(read {
+            try database.rows("SELECT \(Self.jobColumns) FROM jobs WHERE id = ?1", [.text(id.rawValue.uuidString)], map: Self.job)
+        }).first
+    }
+
+    public func jobs() throws(StoreError) -> [LabJob] {
+        try entities(read { try database.rows("SELECT \(Self.jobColumns) FROM jobs", map: Self.job) })
+    }
+
     // MARK: Commit
 
     public func apply(_ commit: AuthorizedCommit) throws(StoreError) -> CommitOutcome {
@@ -154,6 +164,10 @@ public actor SQLiteOperationStore: OperationStore {
         for attention in commit.attentions {
             try upsert(attention)
             try checkpoint(.wrote(attention.reference))
+        }
+        for job in commit.jobs {
+            try upsert(job)
+            try checkpoint(.wrote(job.reference))
         }
         for entity in commit.removals {
             try remove(entity)
@@ -237,6 +251,29 @@ public actor SQLiteOperationStore: OperationStore {
         }
     }
 
+    private func upsert(_ job: LabJob) throws(StoreError) {
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = [.sortedKeys, .withoutEscapingSlashes]
+        guard let detail = try? encoder.encode(job.phase) else { throw .corruptRecord }
+        try change(job.reference) {
+            try database.run(
+                """
+                INSERT INTO jobs (id, kind, title, phase, detail, completed_units, total_units, revision, namespace)
+                VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9)
+                ON CONFLICT (id) DO UPDATE SET title = excluded.title, phase = excluded.phase, detail = excluded.detail,
+                    completed_units = excluded.completed_units, total_units = excluded.total_units,
+                    revision = excluded.revision, namespace = excluded.namespace
+                """,
+                [
+                    .text(job.id.rawValue.uuidString), .text(job.jobKind.rawValue), .text(job.title.value),
+                    .text(job.phase.name.rawValue), .text(String(decoding: detail, as: UTF8.self)),
+                    .integer(job.progress.completed), job.progress.total.map { .integer($0) } ?? .null,
+                    .integer(job.revision.rawValue), .text(job.namespace.rawValue),
+                ]
+            )
+        }
+    }
+
     /// Deletes one demo entity. The `namespace` condition means a user row is never matched, and
     /// the schema's triggers refuse a user deletion from any other path too.
     private func remove(_ entity: EntityReference) throws(StoreError) {
@@ -290,6 +327,7 @@ public actor SQLiteOperationStore: OperationStore {
         case .item: "items"
         case .session: "sessions"
         case .attention: "attentions"
+        case .job: "jobs"
         }
     }
 
@@ -299,6 +337,24 @@ public actor SQLiteOperationStore: OperationStore {
     private static let itemColumns = "id, collection_id, title, note, is_archived, revision, namespace, extras"
     private static let sessionColumns = "id, is_running, revision, namespace"
     private static let attentionColumns = "id, channel, reason, year, month, day, hour, minute, time_zone, revision, namespace"
+    private static let jobColumns = "id, kind, title, phase, detail, completed_units, total_units, revision, namespace"
+
+    private static func job(_ row: SQLiteStatement) -> LabJob? {
+        guard let id = row.text(0).flatMap(UUID.init(uuidString:)),
+              let kind = row.text(1).flatMap(JobKind.init(rawValue:)),
+              let title = row.text(2).flatMap({ try? EntityTitle($0) }),
+              let phaseName = row.text(3).flatMap(JobPhase.Name.init(rawValue:)),
+              let phase = row.text(4).flatMap({ try? JSONDecoder().decode(JobPhase.self, from: Data($0.utf8)) }),
+              phase.name == phaseName,
+              let progress = try? JobProgress(completed: row.integer(5), total: row.isNull(6) ? nil : row.integer(6)),
+              let revision = Revision(rawValue: row.integer(7)),
+              let namespace = row.text(8).flatMap(DataNamespace.init(rawValue:))
+        else { return nil }
+        return LabJob(
+            id: JobID(rawValue: id), jobKind: kind, title: title, phase: phase, progress: progress,
+            revision: revision, namespace: namespace
+        )
+    }
 
     private static func session(_ row: SQLiteStatement) -> LabSession? {
         guard let id = row.text(0).flatMap(UUID.init(uuidString:)),

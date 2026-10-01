@@ -97,7 +97,7 @@ import Testing
         #expect(try await store.attentions().isEmpty)
         #expect(try DatabaseDump(directory.storeURL) == before)
         let raw = try SQLiteDatabase(url: directory.storeURL)
-        #expect(try raw.integer("PRAGMA user_version") == 4)
+        #expect(try raw.integer("PRAGMA user_version") == SQLiteOperationStore.schemaVersion)
         #expect(try raw.strings("SELECT name FROM pragma_table_info('attentions')") == [
             "id", "channel", "reason", "year", "month", "day", "hour", "minute", "time_zone", "revision", "namespace", "extras",
         ])

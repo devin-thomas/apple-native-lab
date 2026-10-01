@@ -372,6 +372,9 @@ private struct StepContext {
         case .demoCollection(let id): "collection \(id) is a demo collection, which holds only seed samples"
         case .noChanges(let reference): "the update would leave \(reference) unchanged"
         case .nothingToCancel: "there are no lab alerts to cancel"
+        case .jobFinished(let id): "job \(id) has finished"
+        case .jobPhase(let id, let current): "job \(id) is \(current.rawValue), which does not allow that step"
+        case .jobProgress(let id): "the checkpoint would move job \(id) backwards or past its total"
         }
     }
 }

@@ -121,6 +121,8 @@ struct MainWindow: View {
             FindTheThingListColumn(session: window.finder)
         case .shortcutWorkbench:
             ShortcutWorkbenchListColumn(window: window)
+        case .renderSurvives:
+            RenderListColumn(window: window)
         case .catalog(let scope):
             if let registry = model.registry {
                 CatalogListColumn(registry: registry, scope: scope, window: window)
@@ -174,6 +176,8 @@ struct MainWindow: View {
             FindTheThingDetailColumn(session: window.finder)
         case .shortcutWorkbench:
             ShortcutWorkbenchDetailColumn(window: window)
+        case .renderSurvives:
+            RenderDetailColumn()
         case .catalog:
             if let registry = model.registry {
                 CatalogDetailColumn(registry: registry, experimentID: window.experimentID)

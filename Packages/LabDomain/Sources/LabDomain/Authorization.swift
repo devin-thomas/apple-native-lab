@@ -58,6 +58,10 @@ public enum ReadTarget: Hashable, Sendable {
     /// Every lab alert. There is no filter: the table holds only lab-owned demo rows.
     case attentions
     case receipt(RequestID)
+    /// One job (LAB-032).
+    case job(JobID)
+    /// Every job of one kind, or of every kind when `nil`.
+    case jobs(JobKind?)
 }
 
 /// One attempt to use the domain, as presented to the authorization policy.

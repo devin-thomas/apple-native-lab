@@ -1,3 +1,4 @@
+import LabJobs
 import SwiftUI
 import TactileGrammar
 
@@ -20,6 +21,8 @@ struct LabMacApp: App {
         AttentionHost.connect(library)
         FindTheThingHost.connect()
         ShortcutWorkbenchHost.connect(library)
+        // LAB-032: the Mac worker runs renders while the app runs.
+        RenderStudioModel.shared.connect(library, runway: MacWorkerRunway())
     }
 
     var body: some Scene {

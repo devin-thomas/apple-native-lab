@@ -91,7 +91,8 @@ import Testing
         #expect(try await store.attentions().isEmpty)
         #expect(try DatabaseDump(directory.storeURL) == before)
         let raw = try SQLiteDatabase(url: directory.storeURL)
-        #expect(try raw.integer("PRAGMA user_version") == 4)
+        // Later versions (LAB-032's jobs) migrate the same file on the same open.
+        #expect(try raw.integer("PRAGMA user_version") == SQLiteOperationStore.schemaVersion)
         #expect(try raw.strings("SELECT name FROM pragma_table_info('sessions')") == ["id", "is_running", "revision", "namespace", "extras"])
     }
 

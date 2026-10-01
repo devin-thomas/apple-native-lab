@@ -91,6 +91,8 @@ struct ReceiptPresentation: Hashable {
                 "Nothing changed, so there is nothing to undo."
             } else if kind == .resetDemo {
                 "Reset Demo has no undo. It changed only demo samples; your own data was not touched."
+            } else if kind == .startJob || kind == .updateJob {
+                "A job's steps have no undo: the work and files they record cannot be taken back by a receipt."
             } else {
                 "This operation offers no undo."
             }
@@ -114,6 +116,8 @@ extension OperationKind {
         case .scheduleAttention: "Schedule Lab Alert"
         case .cancelLabAlerts: "Cancel Lab Alerts"
         case .restoreLabAlerts: "Restore Lab Alerts"
+        case .startJob: "Start Job"
+        case .updateJob: "Update Job"
         }
     }
 }
@@ -124,6 +128,13 @@ extension DomainOperation {
         switch self {
         case .setSession(_, _, let running): running ? "Start Session" : "Pause Session"
         case .scheduleAttention(_, let draft): "Schedule \(draft.channel.title)"
+        // A job step names itself (LAB-032): the kind alone says only "Update Job".
+        case .updateJob(_, _, .checkpoint): "Save Job Checkpoint"
+        case .updateJob(_, _, .interrupt): "Stop Job"
+        case .updateJob(_, _, .resume): "Resume Job"
+        case .updateJob(_, _, .cancel): "Cancel Job"
+        case .updateJob(_, _, .fail): "Fail Job"
+        case .updateJob(_, _, .succeed): "Finish Job"
         default: kind.title
         }
     }
@@ -148,6 +159,7 @@ extension EntityKind {
         case .item: "Item"
         case .session: "Session"
         case .attention: "Lab alert"
+        case .job: "Job"
         }
     }
 }

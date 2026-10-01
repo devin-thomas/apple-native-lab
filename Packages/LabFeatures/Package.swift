@@ -27,6 +27,8 @@ let package = Package(
         .library(name: "PointInspect", targets: ["PointInspect"]),
         .library(name: "SpeechTimeline", targets: ["SpeechTimeline"]),
         .library(name: "FindTheThing", targets: ["FindTheThing"]),
+        .library(name: "LabJobs", targets: ["LabJobs"]),
+        .library(name: "RenderThatSurvives", targets: ["RenderThatSurvives"]),
     ],
     dependencies: [
         .package(path: "../LabSupport"),
@@ -295,6 +297,30 @@ let package = Package(
         .testTarget(
             name: "FindTheThingTests",
             dependencies: ["FindTheThing", .product(name: "LabDomain", package: "LabDomain")]
+        ),
+        // Finite, expensive work that records itself as a LabDomain job (LAB-032, reused by later
+        // labs): the recorder over the host's OperationService, launch-time recovery, stop
+        // signals, destination checks, atomic publication, and the background runway protocol.
+        // Foundation only; the iOS continued-processing runway lives in the iPhone host.
+        .target(
+            name: "LabJobs",
+            dependencies: [.product(name: "LabDomain", package: "LabDomain")]
+        ),
+        .testTarget(
+            name: "LabJobsTests",
+            dependencies: ["LabJobs", .product(name: "LabDomain", package: "LabDomain")]
+        ),
+        // LAB-032 Render That Survives: generated frames drawn on the GPU (Core Image on Metal) or
+        // the CPU, encoded by AVFoundation into checkpointed segments, joined, checked, and
+        // published with one rename. It never opens the store.
+        .target(
+            name: "RenderThatSurvives",
+            dependencies: ["LabJobs", .product(name: "LabDomain", package: "LabDomain")],
+            resources: [.copy("Resources/recipes.json")]
+        ),
+        .testTarget(
+            name: "RenderThatSurvivesTests",
+            dependencies: ["RenderThatSurvives", "LabJobs", .product(name: "LabDomain", package: "LabDomain")]
         ),
     ]
 )

@@ -3,6 +3,7 @@ import LabCatalog
 import LabDomain
 import LabSupport
 import Observation
+import RenderThatSurvives
 import ShareIngress
 import RespectfulAttention
 import ShortcutWorkbench
@@ -51,6 +52,8 @@ enum SidebarDestination: Hashable {
     case findTheThing
     /// LAB-003: curated App Shortcuts, recipes, and the manual fallback.
     case shortcutWorkbench
+    /// LAB-032: render a fixture as a job that survives leaving the app.
+    case renderSurvives
     case catalog(CatalogScope)
 
     var title: String {
@@ -74,6 +77,7 @@ enum SidebarDestination: Hashable {
         case .speechTimeline: "Speech Timeline"
         case .findTheThing: FindTheThing.title
         case .shortcutWorkbench: ShortcutWorkbench.title
+        case .renderSurvives: RenderThatSurvives.title
         case .catalog(let scope): scope.title
         }
     }
@@ -100,6 +104,7 @@ enum SidebarDestination: Hashable {
         case .speechTimeline: "speech-timeline"
         case .findTheThing: "find-the-thing"
         case .shortcutWorkbench: "shortcut-workbench"
+        case .renderSurvives: "render-survives"
         case .catalog(.all): "all"
         case .catalog(.milestone(let milestone)): "milestone:\(milestone.rawValue)"
         case .catalog(.category(let category)): "category:\(category)"
@@ -129,6 +134,7 @@ enum SidebarDestination: Hashable {
         case ("speech-timeline", nil): self = .speechTimeline
         case ("find-the-thing", nil): self = .findTheThing
         case ("shortcut-workbench", nil): self = .shortcutWorkbench
+        case ("render-survives", nil): self = .renderSurvives
         case ("all", nil): self = .catalog(.all)
         case ("milestone", let raw?): guard let milestone = Milestone(rawValue: raw) else { return nil }
             self = .catalog(.milestone(milestone))

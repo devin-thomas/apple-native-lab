@@ -4,6 +4,7 @@ import LabCatalog
 import LabSupport
 import RespectfulAttention
 import ShortcutWorkbench
+import RenderThatSurvives
 import SurfaceDeck
 import SwiftUI
 import TactileGrammar
@@ -80,6 +81,9 @@ struct SidebarView: View {
                 Label(ShortcutWorkbench.title, systemImage: ShortcutWorkbench.symbol)
                     .tag(SidebarDestination.shortcutWorkbench)
                     .accessibilityHint("Curated recipes and manual instructions; no secret storage in Shortcuts")
+                Label(RenderThatSurvives.title, systemImage: RenderThatSurvives.symbol)
+                    .tag(SidebarDestination.renderSurvives)
+                    .accessibilityHint("Render a fixture as a job that survives leaving the app")
             }
             Section("Experiments") {
                 row(.all, symbol: "square.grid.2x2")

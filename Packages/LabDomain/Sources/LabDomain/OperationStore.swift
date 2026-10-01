@@ -12,14 +12,15 @@
 ///    `commit.requestID`, write nothing and return `.duplicateRequest` with the recorded receipt.
 ///    Otherwise, if any precondition does not hold, write nothing and return
 ///    `.preconditionFailed`. Otherwise upsert every collection, then every item, then every
-///    session, then every attention in the commit, remove every entity in `commit.removals` in the
-///    order given, record
-///    `commit.receipt` under `commit.requestID`, and return `.applied`.
+///    session, then every attention, then every job in the commit, remove every entity in
+///    `commit.removals` in the order given, record `commit.receipt` under `commit.requestID`, and
+///    return `.applied`.
 /// 3. A recorded receipt is never changed or replaced. Request IDs are unique.
 /// 4. Reads return the last applied state. `collections()` and `items(in:)` return archived
 ///    entities too, in any order.
 /// 5. Namespaces are fixed. An upsert never changes a stored entity's namespace, an item always
-///    has its collection's namespace, a session and a lab alert are always `demo`, and a removal only ever deletes
+///    has its collection's namespace, a session and a lab alert are always `demo`, a job keeps the
+///    namespace it was created in, and a removal only ever deletes
 ///    a `demo` entity. A store
 ///    throws rather than break one of these rules, so a planning mistake cannot reach user data.
 ///    Rule 1 covers that throw too: nothing from the commit is written.
@@ -43,6 +44,10 @@ public protocol OperationStore: Sendable {
     func attention(_ id: AttentionID) async throws -> LabAttention?
     /// Every stored lab alert, in any order. The table holds only lab-owned demo rows.
     func attentions() async throws -> [LabAttention]
+    /// A stored job, or `nil` (LAB-032).
+    func job(_ id: JobID) async throws -> LabJob?
+    /// Every stored job, in any order.
+    func jobs() async throws -> [LabJob]
     func apply(_ commit: AuthorizedCommit) async throws -> CommitOutcome
 }
 
@@ -66,9 +71,11 @@ public struct AuthorizedCommit: Sendable {
     public let sessions: [LabSession]
     /// Lab alerts to upsert (LAB-043). Always in the demo namespace.
     public let attentions: [LabAttention]
-    /// Entities to delete, items before collections. Only Reset Demo and Cancel Lab Alerts remove
-    /// anything, only demo
-    /// entities, and every removal is also pinned by a precondition.
+    /// Jobs to upsert (LAB-032).
+    public let jobs: [LabJob]
+    /// Entities to delete, items before collections, then jobs. Only Reset Demo and Cancel Lab
+    /// Alerts remove anything, only demo entities, and every removal is also pinned by a
+    /// precondition.
     public let removals: [EntityReference]
 
     init(
@@ -78,6 +85,7 @@ public struct AuthorizedCommit: Sendable {
         items: [LabItem],
         sessions: [LabSession] = [],
         attentions: [LabAttention] = [],
+        jobs: [LabJob] = [],
         removals: [EntityReference]
     ) {
         self.receipt = receipt
@@ -86,6 +94,7 @@ public struct AuthorizedCommit: Sendable {
         self.items = items
         self.sessions = sessions
         self.attentions = attentions
+        self.jobs = jobs
         self.removals = removals
     }
 
