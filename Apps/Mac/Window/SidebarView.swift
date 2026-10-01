@@ -39,6 +39,9 @@ struct SidebarView: View {
                 Label(SurfaceDeck.title, systemImage: SurfaceDeck.symbol)
                     .tag(SidebarDestination.surfaceDeck)
                     .accessibilityHint("The demo session, its receipts, and previews of its widget and Control")
+                Label(HomeSceneExperiment.title, systemImage: HomeSceneExperiment.symbol)
+                    .tag(SidebarDestination.homeSceneSandbox)
+                    .accessibilityHint("Preview light changes in a fictional home and commit selected actions")
             }
             Section("Experiments") {
                 row(.all, symbol: "square.grid.2x2")
