@@ -12,6 +12,7 @@ let package = Package(
         .library(name: "ShareIngress", targets: ["ShareIngress"]),
         .library(name: "PortableObjects", targets: ["PortableObjects"]),
         .library(name: "SurfaceDeck", targets: ["SurfaceDeck"]),
+        .library(name: "TrustDesk", targets: ["TrustDesk"]),
     ],
     dependencies: [
         .package(path: "../LabSupport"),
@@ -106,6 +107,16 @@ let package = Package(
         .testTarget(
             name: "SurfaceDeckTests",
             dependencies: ["SurfaceDeck", .product(name: "LabDomain", package: "LabDomain")]
+        ),
+        // LAB-041 Trust Desk: local authorization, a scoped keychain record, and a labeled
+        // passkey simulation. The sealed-record open commits through OperationService.
+        .target(
+            name: "TrustDesk",
+            dependencies: [.product(name: "LabDomain", package: "LabDomain")]
+        ),
+        .testTarget(
+            name: "TrustDeskTests",
+            dependencies: ["TrustDesk", .product(name: "LabDomain", package: "LabDomain")]
         ),
     ]
 )
