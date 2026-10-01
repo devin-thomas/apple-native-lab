@@ -109,6 +109,9 @@ struct LabCommands: Commands {
             Button(HomeSceneExperiment.title) { window?.destination = .homeSceneSandbox }
                 .keyboardShortcut("6", modifiers: [.command, .control])
                 .disabled(window == nil)
+            Button(WalletMomentExperiment.title) { window?.destination = .walletMoment }
+                .keyboardShortcut("7", modifiers: [.command, .control])
+                .disabled(window == nil)
             Button(DesktopCommand.showPalette.title) { desktop.showsPalette = true }
                 .keyboardShortcut("k", modifiers: .command)
             Button(DesktopCommand.showStatus.title) {

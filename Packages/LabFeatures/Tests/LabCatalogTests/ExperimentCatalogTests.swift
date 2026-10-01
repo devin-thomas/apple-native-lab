@@ -47,7 +47,8 @@ import Testing
         // iPhone, and Apple TV hosts; no physical device, AirPlay, or Picture in Picture on hardware),
         // LAB-032 (a checkpointed render job that survives interruption in package and Mac host tests; no
         // physical device, iOS continued processing in the simulator only), LAB-037 (fictional home scene;
-        // package tests), Services menu, Vision on a device, and a device were not exercised), LAB-043
+        // package tests), LAB-038 (unsigned pass preview and the event card in package tests; no signed pass
+        // and no Wallet), Services menu, Vision on a device, and a device were not exercised), LAB-043
         // (scheduling, and the caption fallback; no microphone, and the manual exchange in package and Mac
         // host tests; not live CloudKit, and the audio and visual fallback in package and Mac host tests; no
         // haptic hardware, and the in-app fallback in package and Mac host tests; no delivered notification
@@ -61,8 +62,8 @@ import Testing
         // LAB-013 (the on-device transcriber on a synthesized clip on the development Mac and in the
         // simulator, quiet hours, rip in the simulator), LAB-010 (model on the development Mac and simulator,
         // settings, the file profile.
-        #expect(catalog.experiments.filter { $0.state != .specified }.map(\.id) == ["LAB-001", "LAB-002", "LAB-003", "LAB-004", "LAB-006", "LAB-007", "LAB-008", "LAB-009", "LAB-010", "LAB-012", "LAB-013", "LAB-015", "LAB-016", "LAB-017", "LAB-019", "LAB-023", "LAB-029", "LAB-030", "LAB-031", "LAB-032", "LAB-035", "LAB-037", "LAB-041", "LAB-042", "LAB-043"])
-        #expect(catalog.experiments.filter { $0.state == .implemented }.count == 25)
+        #expect(catalog.experiments.filter { $0.state != .specified }.map(\.id) == ["LAB-001", "LAB-002", "LAB-003", "LAB-004", "LAB-006", "LAB-007", "LAB-008", "LAB-009", "LAB-010", "LAB-012", "LAB-013", "LAB-015", "LAB-016", "LAB-017", "LAB-019", "LAB-023", "LAB-029", "LAB-030", "LAB-031", "LAB-032", "LAB-035", "LAB-037", "LAB-038", "LAB-041", "LAB-042", "LAB-043"])
+        #expect(catalog.experiments.filter { $0.state == .implemented }.count == 26)
         #expect(catalog.progress(for: .m1) == (live: 6, total: 6))
         #expect(catalog.progress(for: .m3).live >= 1)
     }

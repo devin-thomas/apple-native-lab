@@ -1,0 +1,22 @@
+{
+  "format": "native-lab-event-pass",
+  "formatVersion": 1,
+  "description": "Hostile fixture: claims a private key. Must be refused.",
+  "privateKey": "-----BEGIN PRIVATE KEY-----\nMIIE\n-----END PRIVATE KEY-----",
+  "pass": {
+    "id": "A38E0002-0000-4000-8000-000000000038",
+    "serialNumber": "BAD-KEY",
+    "organizationName": "Should Refuse",
+    "eventName": "Should Refuse",
+    "venue": "Nowhere",
+    "seat": "X",
+    "startsAt": "2026-10-17T18:00:00Z",
+    "expiresAt": "2026-10-18T02:00:00Z",
+    "barcode": {
+      "format": "qr",
+      "message": "nope",
+      "altText": "nope"
+    },
+    "updateTag": "v1"
+  }
+}

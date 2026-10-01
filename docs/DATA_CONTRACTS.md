@@ -113,6 +113,15 @@ LAB-029 saves a graph preset as an ordinary item, with a `createItem` receipt wh
 
 The AUv3 unit keeps the same canonical JSON in its `fullState` under `nativeLab.audioWorkshop.preset`, so a host saves it in its own project. The canonical form has sorted keys and no whitespace, so the same preset always gives the same bytes.
 
+## Event passes (LAB-038)
+
+A lab-owned event pass is not a Wallet `.pkpass` and not a payment credential. `PassDefinition` / `PassUpdate` in `Packages/LabFeatures/Sources/WalletMoment/` hold the unsigned preview payload: event name, venue, seat, start/expiry, barcode (format, message, alt text), and an update tag. The on-disk fixture format is `"format": "native-lab-event-pass"`, `formatVersion` 1 (`Fixtures/wallet/sample-event-pass.json`).
+
+- **Signing boundary.** No pass-signing private key, WWDR certificate, or PKCS12 enters the repository, fixtures, or CoreLocal client. An operator adapter may be explicitly injected; no executable path, process runner, or network transport is supplied. Output is limited to 2,000,000 bytes and must have a ZIP local-header prefix. This envelope check does not verify archive contents or an Apple signature ([ADR-016](adr/ADR-016.md)). Default: signing unavailable; the unsigned preview remains the usable path.
+- **Barcode.** Validated as display data only. It is never a grant, scope, adapter, or authorization token. JSON fields that claim `privateKey`, `grant`, `authorization`, and related authority names are refused.
+- **Lifecycle.** Before `startsAt` is upcoming; from `startsAt` until `expiresAt` is active; at or after `expiresAt` is expired. Expiration is honest even when the barcode message is unchanged.
+- **Local event card.** Saving commits a user `Event passes` collection and item through `OperationService` as the app UI, with a receipt. Item extras record experiment ownership (`experiment`/`LAB-038`, `kind`/`event-pass`) and the barcode message once (extras are write-once). Updates change the item title and note. Reset of experiment-owned cards archives those items only.
+
 ## Import resource policy
 
 Initial defaults: at most 32 attachments per import; at most 2 MiB of metadata/text; at most 1 GiB total staged media; at most 2,000 archive entries; nesting depth at most 16. These are proposed protective defaults, not measured device limits. Media should stream to disk rather than allocate the declared total in memory. A smaller device/profile can impose stricter limits, and the UI must show the effective limit before import.

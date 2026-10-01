@@ -117,6 +117,9 @@ link         SystemSurfaces ios  RealityKit          # host variant: the virtual
 link         SystemSurfaces ios  RealityFoundation   # host variant, as LabPhone
 link         SystemSurfaces ios  _RealityKit_SwiftUI # host variant, as LabPhone
 
+# CoreLocal: Wallet Moment (LAB-038). Domain preview and event card only; PassKit is not linked.
+# Operator signing stays outside the client (injected adapter). Add-to-Wallet is FrontierOptional / qualification.
+
 # SystemSurfaces: Surface Deck (LAB-004). The host variant writes the session snapshot into the same
 # App Group and asks WidgetKit to reload only when it changes. The widget and Control extension it
 # embeds links only Foundation, SwiftUI, UIKit, AppIntents, _AppIntents_SwiftUI, CryptoKit (through

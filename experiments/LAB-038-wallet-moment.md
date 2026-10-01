@@ -1,7 +1,7 @@
 ---
 id: "LAB-038"
 title: "Wallet Moment"
-state: "specified"
+state: "implemented"
 milestone: "M4"
 category: "Commercial"
 depends_on: ["LAB-008"]
@@ -16,7 +16,7 @@ Build an original event pass with a useful update story and an explicit signing 
 
 ## Scope and native leverage
 
-**Hosts:** iPhone; Watch Wallet display is system-managed.
+**Hosts:** iPhone; Watch Wallet display is system-managed. The Mac host shows the same unsigned preview and sample event card (the declared fallback).
 
 **Primary APIs:** Wallet passes, PassKit. API names are implementation leads; exact installed signatures and availability require a compile/probe.
 
@@ -55,6 +55,21 @@ A fixture replay is labeled as a replay. It can prove the domain/UI contract but
 ## Build ownership
 
 Proposed module: `Packages/LabFeatures/wallet-moment/`, with native adapters only in supported hosts/extensions. Shared operations and imported document structures belong in the domain/store packages rather than a view. Record any narrower module split during implementation.
+
+Implemented split (LAB-038-A):
+
+- `Packages/LabFeatures/Sources/WalletMoment/`: `PassDefinition`, `PassUpdate`, `PassBarcode`, lifecycle and unsigned `PassPreview`, `PassValidator` (including refusal of signing-key fields), `PassSigningEnvironment` (`UnavailablePassSigner`, `OperatorPassSigner`, `TestPassSigner`), `EventCardOperations` over `WalletMomentBackend`, and `SampleEvent`. Depends on LabDomain only. Does not link PassKit and never holds a pass-signing key.
+- `Apps/Shared/WalletMoment/`: the session, preview card, controls, iPhone page, and catalog launch. The Mac shows the same parts in its window (`Apps/Mac/Window/WalletMomentColumns.swift`), reached from the sidebar, View › Wallet Moment (⌃⌘7), and the catalog page.
+- `Fixtures/wallet/`: the sample event pass and a hostile signing-key fixture that must be refused.
+
+## Implementation notes (LAB-038-A)
+
+Observed with Xcode 27.0 (27A266a) and the iOS/macOS 27.0 SDKs on research. These are compile and package-test facts, not device proof and not a live Wallet install.
+
+- `PKPass` Objective-C `initWithData:error:`, `PKPassLibrary.isPassLibraryAvailable()`, `PKAddPassesViewController.canAddPasses`, and `PKPassTypeBarcode` are present in the iOS 27.0 PassKit headers. `PKAddPassesViewController` is behind `TARGET_OS_IPHONE`. iOS 27 also adds archive and data-based add-passes APIs. This ticket does not link PassKit into CoreLocal; add-to-Wallet is left for qualification / FrontierOptional operator signing.
+- Signing stays outside the client: `OperatorPassSigner` accepts only an explicitly injected adapter and bounds its archive output; no process or network transport ships in the module (see [ADR-016](../docs/adr/ADR-016.md)). The default path is `UnavailablePassSigner`; the unsigned preview and sample event card remain usable.
+- A barcode is validated as display data only. There is no API that turns a barcode into a grant, scope, or adapter. Forbidden JSON field names include `privateKey`, `grant`, and `authorization`.
+- Saving the event card commits `createCollection` / `createItem` through `OperationService` as the app UI, with a receipt. Item extras record the experiment ownership and barcode message once (write-once); updates change the title and note.
 
 ## Delivery
 

@@ -38,6 +38,7 @@ let package = Package(
         .library(name: "PeerSessionNetwork", targets: ["PeerSessionNetwork"]),
         .library(name: "LocalConstellation", targets: ["LocalConstellation"]),
         .library(name: "HomeSceneSandbox", targets: ["HomeSceneSandbox"]),
+        .library(name: "WalletMoment", targets: ["WalletMoment"]),
     ],
     dependencies: [
         .package(path: "../LabSupport"),
@@ -448,6 +449,16 @@ let package = Package(
         .testTarget(
             name: "HomeSceneSandboxTests",
             dependencies: ["HomeSceneSandbox", .product(name: "LabDomain", package: "LabDomain")]
+        ),
+        // LAB-038 Wallet Moment: unsigned pass preview, barcode validation, expiration, and an
+        // operator-supplied signing seam. No PassKit link and no pass-signing key in the client.
+        .target(
+            name: "WalletMoment",
+            dependencies: [.product(name: "LabDomain", package: "LabDomain")]
+        ),
+        .testTarget(
+            name: "WalletMomentTests",
+            dependencies: ["WalletMoment", .product(name: "LabDomain", package: "LabDomain")]
         ),
     ]
 )

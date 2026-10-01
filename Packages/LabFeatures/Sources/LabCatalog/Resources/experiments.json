@@ -699,12 +699,12 @@
       "title": "Wallet Moment",
       "category": "Commercial",
       "milestone": "M4",
-      "state": "specified",
+      "state": "implemented",
       "dependsOn": [
         "LAB-008"
       ],
       "moment": "Build an original event pass with a useful update story and an explicit signing boundary.",
-      "hosts": "iPhone; Watch Wallet display is system-managed",
+      "hosts": "iPhone; Watch Wallet display is system-managed. The Mac host shows the same unsigned preview and sample event card (the declared fallback)",
       "primaryAPIs": "Wallet passes, PassKit",
       "tickets": [
         "LAB-038-A",

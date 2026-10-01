@@ -316,3 +316,16 @@ Recorded at [LAB-037-A](../tickets/LAB-037-A.md) from the iOS 27.0 SDK HomeKit h
 | [S44](SOURCE_INDEX.md#s44) | `HMAccessory.matterNodeID`, `HMService.matterEndpointID` | matterNodeID: iOS 16.1+; matterEndpointID: iOS 18.0+; unavailable on macOS | Present in the SDK; not used. Matter controller work is out of scope | Matter controller path |
 
 LAB-037-A resumed SDK probe (2026-09-30): `xcrun swiftc -typecheck -sdk "$(xcrun --sdk iphoneos --show-sdk-path)" -target arm64-apple-ios26.0 build/probes/HomeKitSymbols.swift` passed on research with Xcode 27.0 (27A266a). The temporary probe imports HomeKit and references `HMHomeManager.authorizationStatus`, `HMAccessory.isReachable`, all five listed service types, power/brightness characteristics, and `HMCharacteristic.writeValue(_:completionHandler:)`. The macOS SDK framework-directory check confirmed HomeKit.framework is absent. This is an iOS 26 deployment-target probe using the installed 27 SDK, not a compile with a 26-family SDK. Matter properties were inspected in headers only and are not called; their Swift refinement was not probed.
+
+### Wallet passes (LAB-038)
+
+Recorded at [LAB-038-A](../tickets/LAB-038-A.md). Symbols were read on 2026-09-30 from the iOS 27.0 and macOS 27.0 PassKit headers in Xcode 27.0 (27A266a). No PassKit framework is linked into CoreLocal by this ticket. No entitlement was added. Nothing here has run as add-to-Wallet on a device or in the simulator.
+
+| Source | Installed symbol | Declared availability | Demonstrated | Remaining uncertainty |
+|---|---|---|---|---|
+| [S45](SOURCE_INDEX.md#s45) | `PKPass` Objective-C `initWithData:error:` | Present in the iOS and macOS 27.0 PassKit headers (class availability follows PassKit platform support) | Header read only. LAB-038-A validates lab-owned `PassDefinition` fixtures without constructing a `PKPass` | Loading a real signed `.pkpass` on a device |
+| [S45](SOURCE_INDEX.md#s45) | `PKPassLibrary.isPassLibraryAvailable()`, `passes`, `containsPass:`, `addPasses:withCompletionHandler:` | `isPassLibraryAvailable`: iOS 6.0, watchOS 3.0. Add-passes completion: iOS 7.0, watchOS 3.0 | Header read only | Library contents and add-passes on a physical iPhone |
+| [S45](SOURCE_INDEX.md#s45) | `PKPassTypeBarcode` (and deprecated `PKPassTypePayment` alias of secure-element) | `PKPassType` property: macOS 11.0, iOS 8.0, watchOS 3.0. Secure-element: iOS 13.4, watchOS 6.2 | Header read only. LAB-038-A stays on barcode-style event passes in its domain model | Secure-element / payment passes (out of scope) |
+| [S45](SOURCE_INDEX.md#s45) | `PKAddPassesViewController` (`initWithPass:`, `canAddPasses`); iOS 27 archive/data initializers | Controller: iOS 6.0, behind `TARGET_OS_IPHONE`. `canAddPasses`: iOS 8.0. Archive/data inits: iOS 27.0, visionOS 27.0 | Header read only. Not linked | Presenting add-to-Wallet after an operator-signed pass |
+| [S45](SOURCE_INDEX.md#s45) | Operator signing seam (injected adapter) — lab-owned, not an Apple symbol | Not applicable | Package tests: unavailable by default; operator double accepts a ZIP envelope and refuses non-archive or oversized output (`PassSigningTests`) | A real operator tool producing a signed `.pkpass` |
+
