@@ -54,9 +54,13 @@ import Testing
         model.selectedRecipeID = "short-bars"
         model.preferGPU = true
         await model.start()
+        // The store records the job as finished before the model hears the worker's outcome, so
+        // wait for the outcome itself: its report arrives with it (LAB-032-B; reading the report
+        // as soon as the store said succeeded failed intermittently in full runs).
         try #require(await eventually {
             await model.refresh()
-            return model.jobs.first.map { if case .succeeded = $0.phase { true } else { false } } ?? false
+            guard let job = model.jobs.first, case .succeeded = job.phase else { return false }
+            return model.reports[job.id] != nil
         })
         let job = try #require(model.jobs.first)
         guard case .succeeded(let output) = job.phase else { Issue.record("\(job.phase)"); return }
