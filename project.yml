@@ -101,6 +101,9 @@ targets:
       # LAB-038 Wallet Moment: unsigned pass preview, sample event card, signing boundary (no PassKit link).
       - package: LabFeatures
         product: WalletMoment
+      # LAB-039 Tiny Doorway: validated links, sealed proposals, and the visit action.
+      - package: LabFeatures
+        product: TinyDoorway
       # LAB-007 Share Ingress Station: the share inbox and its paste and file-picker fallbacks.
       - package: LabFeatures
         product: ShareIngress
@@ -289,6 +292,9 @@ targets:
       # LAB-038 Wallet Moment: unsigned pass preview, sample event card, signing boundary (no PassKit link).
       - package: LabFeatures
         product: WalletMoment
+      # LAB-039 Tiny Doorway: validated links, sealed proposals, and the visit action.
+      - package: LabFeatures
+        product: TinyDoorway
       # LAB-007 Share Ingress Station: the share inbox and its paste and file-picker fallbacks.
       - package: LabFeatures
         product: ShareIngress
@@ -477,6 +483,7 @@ targets:
         product: AccessSuperpower
       - package: LabFeatures
         product: WalletMoment
+        product: TinyDoorway
       - package: LabFeatures
         product: PortableObjects
       # LAB-016 Pick Up Here: the same continuation module as LabPhone.
@@ -834,6 +841,8 @@ targets:
       - path: Fixtures/routing/routing-sample-prompt.txt
         buildPhase: resources
     dependencies:
+      - package: LabFeatures
+        product: TinyDoorway
       - package: LabSupport
       - package: LabDomain
       - package: LabStore
@@ -1034,6 +1043,8 @@ targets:
       - path: Fixtures/routing/routing-sample-prompt.txt
         buildPhase: resources
     dependencies:
+      - package: LabFeatures
+        product: TinyDoorway
       - package: LabSupport
       - package: LabDomain
       - package: LabStore

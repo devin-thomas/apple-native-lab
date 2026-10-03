@@ -1,0 +1,69 @@
+{
+  "format": "native-lab-doorway-links",
+  "formatVersion": 1,
+  "provenance": "Original synthetic doorway URLs for LAB-039. The https host is fictional; nothing is fetched.",
+  "accepted": [
+    {
+      "name": "visit-quartz-https",
+      "url": "https://doorway.nativelab.example/open/visit?item=af451890-ca80-4de9-b18b-4007066c9177",
+      "expect": "proposal"
+    },
+    {
+      "name": "visit-quartz-deeplink",
+      "url": "nativelab://doorway/open/visit?item=af451890-ca80-4de9-b18b-4007066c9177",
+      "expect": "proposal"
+    },
+    {
+      "name": "info-https",
+      "url": "https://doorway.nativelab.example/info",
+      "expect": "information"
+    },
+    {
+      "name": "info-deeplink",
+      "url": "nativelab://doorway/info",
+      "expect": "information"
+    }
+  ],
+  "refused": [
+    {
+      "name": "wrong-host",
+      "url": "https://evil.example/open/visit?item=af451890-ca80-4de9-b18b-4007066c9177",
+      "expect": "refused"
+    },
+    {
+      "name": "reset-demo-path",
+      "url": "https://doorway.nativelab.example/open/reset-demo",
+      "expect": "refused"
+    },
+    {
+      "name": "privileged-query",
+      "url": "https://doorway.nativelab.example/open/visit?item=af451890-ca80-4de9-b18b-4007066c9177&operation=archiveItem",
+      "expect": "refused"
+    },
+    {
+      "name": "unknown-item",
+      "url": "https://doorway.nativelab.example/open/visit?item=00000000-0000-0000-0000-000000000001",
+      "expect": "refused"
+    },
+    {
+      "name": "missing-item",
+      "url": "https://doorway.nativelab.example/open/visit",
+      "expect": "refused"
+    },
+    {
+      "name": "javascript-scheme",
+      "url": "javascript:alert(1)",
+      "expect": "refused"
+    },
+    {
+      "name": "file-scheme",
+      "url": "file:///tmp/visit",
+      "expect": "refused"
+    },
+    {
+      "name": "admin-path",
+      "url": "https://doorway.nativelab.example/admin/delete?item=af451890-ca80-4de9-b18b-4007066c9177",
+      "expect": "refused"
+    }
+  ]
+}

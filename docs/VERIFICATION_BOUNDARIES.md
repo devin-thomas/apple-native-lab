@@ -411,3 +411,11 @@ Re-read the macOS 27.0 SDK `Foundation.framework/Headers/NSUserActivity.h` throu
 ### Respectful Attention qualification (LAB-043-B, 2026-10-01)
 
 Through `labr`, re-read the installed iOS 27.0 `AlarmKit.swiftinterface`: `schedule(id:configuration:) async throws`, `cancel(id:) throws`, `authorizationState`, and `requestAuthorization() async throws` remain present. Toolchain report: Xcode 27.0 (27A266a), Swift 6.4, Mac Apple M5 Max, macOS 27.0 (26A425). No API name, entitlement, deployment floor, or platform boundary changed. The earlier LAB-043-A availability rows remain authoritative; this qualification adds calendar-component and host fixture checks, not live AlarmKit proof. [Source review](../evidence/LAB-043/attention-source-review.json) records reset, error-reporting, intent, and accessibility limitations. Live notification/alarm delivery and system Focus behavior remain not-run.
+### App Clips (LAB-039)
+
+Recorded at [LAB-039-A](../tickets/LAB-039-A.md) from the iOS 27.0 SDK's `AppClip.framework` headers on 2026-09-30 (Xcode 27.0). CoreLocal does not link the framework and declares no associated domains. No App Clip target is embedded; invocation remains an external FrontierOptional gate.
+
+| Source | Installed symbol | Declared availability | Demonstrated | Remaining uncertainty |
+|---|---|---|---|---|
+| [S52](SOURCE_INDEX.md#s52) | `APActivationPayload` with `URL` and `confirmAcquiredInRegion:completionHandler:`; `APActivationPayloadErrorCodeDisallowed` / `DoesNotMatch`; `NSUserActivity.appClipActivationPayload` | iOS 14.0 | Symbols read from the installed SDK. Package tests validate the same https URL shape locally and refuse `InvocationContext.source == .appClip` while `DoorwayClipStatus` is not configured. | An embedded App Clip, associated domains, AASA hosting, NFC/visual-code invocation, and location confirmation on a device |
+

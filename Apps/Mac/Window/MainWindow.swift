@@ -94,6 +94,8 @@ struct MainWindow: View {
             AccessSuperpowerListColumn(window: window, session: window.access)
         case .walletMoment:
             WalletMomentListColumn(window: window, session: window.wallet)
+        case .tinyDoorway:
+            TinyDoorwayListColumn(window: window, session: window.doorway)
         case .shareInbox:
             ShareInboxListColumn(window: window)
         case .portableObjects:
@@ -166,6 +168,8 @@ struct MainWindow: View {
             AccessSuperpowerDetailColumn(window: window, session: window.access)
         case .walletMoment:
             WalletMomentDetailColumn(window: window, session: window.wallet)
+        case .tinyDoorway:
+            TinyDoorwayDetailColumn(window: window, session: window.doorway)
         case .shareInbox:
             ShareInboxDetailColumn(window: window)
         case .portableObjects:
@@ -238,6 +242,7 @@ struct MainWindow: View {
         case .typedIntelligence: "Search notes"
         case .accessSuperpower: "Search archived samples"
         case .walletMoment: "Search passes"
+        case .tinyDoorway: "Search fixtures"
         case .shareInbox: "Search the inbox"
         case .portableObjects: "Search objects"
         case .desktopPower: "Search notes"

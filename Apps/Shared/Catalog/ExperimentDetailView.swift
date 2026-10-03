@@ -54,6 +54,7 @@ struct ExperimentDetailView: View {
                 ModelRoutingLaunch(experiment: experiment)
                 CommerceLaunch(experiment: experiment)
                 FrontierLaunch(experiment: experiment)
+                TinyDoorwayLaunch(experiment: experiment)
                 Text(experiment.moment)
                     .font(.title3)
                     .fixedSize(horizontal: false, vertical: true)

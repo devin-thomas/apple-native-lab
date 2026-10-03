@@ -29,6 +29,8 @@ enum SidebarDestination: Hashable {
     case accessSuperpower
     /// LAB-038: unsigned pass preview, sample event card, and signing boundary.
     case walletMoment
+    /// LAB-039: validate a doorway link and confirm one tightly scoped visit.
+    case tinyDoorway
     /// LAB-007: the share inbox, with the paste and file-picker fallbacks.
     case shareInbox
     /// LAB-008: drag, export, and import lab objects.
@@ -86,6 +88,7 @@ enum SidebarDestination: Hashable {
         case .typedIntelligence: "Typed Local Intelligence"
         case .accessSuperpower: AccessSuperpowerExperiment.title
         case .walletMoment: WalletMomentExperiment.title
+        case .tinyDoorway: TinyDoorwayExperiment.title
         case .shareInbox: "Share Inbox"
         case .portableObjects: "Portable Objects"
         case .trustDesk: TrustDeskExperiment.title
@@ -122,6 +125,7 @@ enum SidebarDestination: Hashable {
         case .typedIntelligence: "typed-intelligence"
         case .accessSuperpower: "access-superpower"
         case .walletMoment: "wallet-moment"
+        case .tinyDoorway: "tiny-doorway"
         case .shareInbox: "share-inbox"
         case .portableObjects: "portable-objects"
         case .trustDesk: "trust-desk"
@@ -161,6 +165,7 @@ enum SidebarDestination: Hashable {
         case ("typed-intelligence", nil): self = .typedIntelligence
         case ("access-superpower", nil): self = .accessSuperpower
         case ("wallet-moment", nil): self = .walletMoment
+        case ("tiny-doorway", nil): self = .tinyDoorway
         case ("share-inbox", nil): self = .shareInbox
         case ("portable-objects", nil): self = .portableObjects
         case ("trust-desk", nil): self = .trustDesk
@@ -212,6 +217,8 @@ final class MainWindowState {
     let access = AccessTaskSession()
     /// Wallet Moment's preview, signing attempt, and saved event card in this window.
     let wallet = WalletMomentSession()
+    /// Tiny Doorway's link draft, validation, and visit result in this window.
+    let doorway = DoorwaySession()
     /// The share-inbox import the detail column shows.
     var inboxEntry: InboxEntry.ID?
     /// LAB-008: this window's objects, selection, and import under review.
