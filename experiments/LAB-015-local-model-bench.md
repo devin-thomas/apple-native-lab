@@ -33,10 +33,10 @@ The first run uses original fixtures. Keep the underlying operation independent 
 
 ## Acceptance and proof
 
-- [ ] Cold and warm results cannot be merged.
-- [ ] A failed task cannot improve a performance score.
-- [ ] A model too large for memory is refused before allocation.
-- [ ] The declared fallback completes a meaningful version of the interaction.
+- [x] Cold and warm results cannot be merged (fixture tests; LAB-015-B).
+- [x] A failed task cannot improve a performance score (fixture tests; LAB-015-B).
+- [x] A model too large for memory is refused before allocation (injected descriptor and loader; LAB-015-B).
+- [x] The declared fallback completes a meaningful version of the interaction (four fixture phases, hosted record/retry/reset; LAB-015-B).
 - [ ] Essential actions remain available through the platform's assistive and alternate-input paths.
 - [ ] Actual device/OS/permission and adapter-path evidence is recorded; untested combinations remain unverified.
 
@@ -70,6 +70,12 @@ Observed with Xcode 27.0 (27A266a) and the macOS 27.0 SDK. These are package tes
 - **Phases.** Download, warm-up, and measured are separate runs. A score exists only for a measured run whose every task passed, and only inside one thermal class. Cold and warm throw `mixedThermal`. A failed task throws `failedTask`; its latency is not a median.
 - **Fixture.** The executor compares each case to the corpus's expected text. Every report has `inference: false`, `executor: "fixture"`, `timebase: "fixture-script"`, and `thermalSensor: "not-observed"`. The same inputs export the same JSON.
 - **Receipts.** Record creates a user collection and one item through `OperationService`. A retry of the same report returns the original receipt. Reset archives only items in that collection whose extras are a bench report, and only with a grant. A model tool is refused and writes nothing. The lab's own Reset Demo does not remove user items.
+
+## Qualification notes (LAB-015-B)
+
+The [walkthrough](../docs/walkthroughs/LAB-015-local-model-bench.md) and [evidence](../evidence/LAB-015/) describe the qualified fixture pipeline. LAB-015 stays `implemented`: there is no live inference adapter to qualify. Package checks cover failure scoring, pre-loader refusal, cancellation, authorization, duplicate recording, and stale reset. The Mac hosted replay runs all four phases on a clean SQLite store, records twice, resets twice, and preserves an original user item standing in for imported data.
+
+Current limitations are observable contracts: reset archives persisted reports but leaves the in-memory reports; recording identical bytes after reset returns the original receipt and does not restore the archived item. A stale reset returns a conflict receipt, while the session's message counts returned receipts without distinguishing conflict from archive. The session supplies total physical memory as the declared budget, not free-memory telemetry. There is no report-selection control, save-file dialog, or iPhone export view. Accessibility passes and a live model's correctness, peak memory, thermal behavior, and hardware latency remain unverified. No behavior or platform support changed in this qualification.
 
 ## Delivery
 

@@ -137,7 +137,6 @@ Each qualification ticket adds its experiment's flows here. They use the same pa
 | A3 | LAB-001 | Find items | The count is read, and each item reads title, collection, status, and note, separated by commas |
 | A4 | LAB-001 | Archive an item, open its receipt, and undo | The result and the receipt are heard or focused, and Undo is reachable and says what it did |
 | A5 | LAB-001 | Update an item that changed after it was picked | The "Not applied" sentence is read, and the receipt says nothing changed |
-
 | Pass | Device | A1 | A2 | A3 | A4 | A5 |
 |---|---|---|---|---|---|---|
 | VoiceOver | Mac | not-run | not-run | not-run | not-run | not-run |
@@ -168,7 +167,6 @@ What to check in the Action Atlas flows, beyond the core list:
 | S5 | LAB-035 | Finish by keyboard (Mac: ⌘5, Tab to the list, arrow keys, Return; iPhone: Full Keyboard Access to a Restore button) | The list is reached without keyboard navigation, Return restores, and ⌥⌘L and ⌥⌘Z reach the receipt and its undo |
 | S6 | LAB-035 | Finish by ear: describe the chart and play its Audio Graph, then use that bar's Restore action | The description reads the title, summary, and both axes; the highest tone is Mineral specimens |
 | S7 | LAB-035 | Finish without the chart: the summary and the list only | The summary gives every count, each heading reads like its bar, and each sample has its own Restore |
-
 | Pass | Device | S1 | S2 | S3 | S4 | S5 | S6 | S7 |
 |---|---|---|---|---|---|---|---|---|
 | VoiceOver | Mac | not-run | not-run | not-run | not-run | not-run | not-run | not-run |
@@ -200,7 +198,6 @@ What to check in the Access as a Superpower flows, beyond the core list:
 | I3 | LAB-007 | Choose Files… and pick two files | The picker is reachable, and each file reads as File picker with its position and "Can't be added in this version" |
 | I4 | LAB-007 | Share an image from another app to Native Lab (iPhone, SystemSurfaces build) | The extension's summary and each item's line are read, and Done is reachable |
 | I5 | LAB-007 | Paste content that is refused, then remove a waiting import | Each refusal is read by position, never by content; Remove asks first, and its result is heard |
-
 | Pass | Device | I1 | I2 | I3 | I4 | I5 |
 |---|---|---|---|---|---|---|
 | VoiceOver | Mac | not-run | not-run | not-run | not applicable | not-run |
@@ -261,7 +258,6 @@ What to check in the Surface Deck flows, beyond the core list:
 | C3 | LAB-019 | Move the show from the controller and point at the display (the pointer pad's arrow buttons) | Each board reads its cue and title after the move; the pointer has a path without a drag |
 | C4 | LAB-019 | Ask to Start on the controller, then Allow at the conductor | The request is read at the conductor with its device; Allow's result and the receipt are heard or focused |
 | C5 | LAB-019 | Walk Out of Range, wait, then Bring Back in Range and Reconnect | "Stale" and "Nothing heard from the conductor" are read on the board and in the roster without relying on color, then Disconnected, then Live |
-
 | Pass | Device | C1 | C2 | C3 | C4 | C5 |
 |---|---|---|---|---|---|---|
 | VoiceOver | Mac | not-run | not-run | not-run | not-run | not-run |
@@ -585,7 +581,6 @@ Mac only. The automated checks read the running app's menus and an off-screen ho
 | DP3 | Open and close document windows while retaining the note | Package station and hosted session close handlers only; native scene lifecycle not-run |
 | DP4 | Restore without opening private content | Package and hosted stale private-route checks |
 | DP5 | Reset previews beside imported user notes | Package reset test; hosted fixture reset and global Reset Demo |
-
 | Manual pass | Device | DP1 | DP2 | DP3 | DP4 | DP5 |
 |---|---|---|---|---|---|---|
 | VoiceOver | Mac | not-run | not-run | not-run | not-run | not-run |
@@ -629,3 +624,16 @@ Source review only: `ContextCardsPage` combines sample text, exposes visible ref
 | Confirm; inspect receipt; reset | Hosted session fixture (receipt contents, no inspector navigation) | not-run | not-run | not-run | not-run |
 
 The system snippet's combined children and its intent button require a system presentation audit. No Context Cards accessibility audit or manual assistive-technology pass ran. These remain release gates.
+## Local Model Bench (LAB-015-B)
+
+Static review on 2026-10-01 of `LocalModelBenchPage`, `LocalModelBenchExport`, `LocalModelBenchSession`, and the Mac navigation hook. This is not a rendered accessibility audit or a manual pass.
+
+| Flow | Static observation | Remaining check |
+|---|---|---|
+| Open bench | Mac sidebar and View menu (⌥⌘3); iPhone named navigation link | Keyboard invocation, VoiceOver navigation, Voice Control |
+| Run phases and read scores | Four named standard buttons; textual cold/warm scores; corpus rows combine children; no custom motion | Focus movement, spoken units, largest text and rendered contrast |
+| Record and inspect result | Named button disabled until a report exists; visible message | Session does not explicitly announce results; manual speech and focus not-run |
+| Reset: cancel, confirm, inspect receipts | Standard destructive confirmation and Cancel | Manual cancellation and Full Keyboard Access not-run; conflict receipts must be inspected separately |
+| Copy export | Mac selectable monospaced text | Copying by keyboard or assistive technology not-run; no iPhone export surface |
+
+Open findings: run/record/reset have no dedicated Mac menu commands; record/reset messages do not post `LabAnnouncement`; on iPhone record/reset appear after the corpus rather than in a pinned action bar. These source observations do not establish clipping or a failed assistive-technology interaction. All manual VoiceOver, Voice Control, Full Keyboard Access, largest-text, Increase Contrast, Reduce Motion, Reduce Transparency, and grayscale passes stay `not-run` on Mac and iPhone. No screenshots were published.
