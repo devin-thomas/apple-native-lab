@@ -2,6 +2,7 @@ import Foundation
 import LabDomain
 import LabJobs
 import RenderThatSurvives
+import RespectfulAttention
 import Testing
 import UIKit
 @testable import NativeLab
@@ -47,18 +48,26 @@ import UIKit
         #expect(permitted == ["\(try #require(ContinuedProcessingRunway.prefix)).*"])
     }
 
+    /// The host can ask for Focus metadata during any render. The reported lifecycle crash
+    /// trapped in this context's unsupported request.identifier expression, not in the worker.
+    @Test func theHostsFocusContextCanBeReadWhileQualifyingRenders() throws {
+        let allowed = LabAlertIdentity.notificationID(RespectfulAttention.offers[0].id)
+        let context = LabFocusFilterIntent(includedIdentifiers: [allowed, "foreign.alert"]).appContext
+        let predicate = try #require(context.notificationFilterPredicate)
+        #expect(predicate.evaluate(with: allowed))
+        #expect(!predicate.evaluate(with: "foreign.alert"))
+        let empty = try #require(LabFocusFilterIntent(includedIdentifiers: []).appContext.notificationFilterPredicate)
+        #expect(!empty.evaluate(with: allowed))
+    }
+
     @Test func aRenderRecordsTheRunwayIOSGrantedAndPublishesTheMovie() async throws {
         let (_, model) = try await connected()
         model.selectedRecipeID = "short-bars"
         model.wantsBackground = true
         await model.start()
-        // Wait for the worker's outcome, which carries the report, not only for the store's phase:
-        // the store says finished a moment before the model hears the outcome.
-        try #require(await eventually {
-            await model.refresh()
-            guard let job = model.jobs.first, job.phase.isFinished else { return false }
-            return model.reports[job.id] != nil
-        })
+        let started = try #require(model.jobs.first)
+        let outcome = try #require(await model.completion(of: started.id))
+        try #require(outcome.report != nil)
         let job = try #require(model.jobs.first)
         let report = try #require(model.reports[job.id], "\(job.phase)")
         #expect(report.facts.frameCount == 48)
@@ -83,10 +92,9 @@ import UIKit
             return (model.jobs.first?.progress.completed ?? 0) >= 1
         })
         NotificationCenter.default.post(name: UIApplication.didEnterBackgroundNotification, object: UIApplication.shared)
-        try #require(await eventually {
-            await model.refresh()
-            return model.jobs.first.map { if case .interrupted = $0.phase { true } else { false } } ?? false
-        })
+        let started = try #require(model.jobs.first)
+        let outcome = try #require(await model.completion(of: started.id))
+        try #require(outcome.job?.phase == .interrupted(reason: .leftForeground))
         let job = try #require(model.jobs.first)
         #expect(job.phase == .interrupted(reason: .leftForeground))
         #expect(job.progress.completed >= 1 && job.progress.completed < 9)

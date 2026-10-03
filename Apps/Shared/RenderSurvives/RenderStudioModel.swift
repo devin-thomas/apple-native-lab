@@ -238,15 +238,22 @@ final class RenderStudioModel {
 
     /// Waits for a worker to end, then reports how it ended.
     private func follow(_ id: JobID) {
-        guard let studio else { return }
         Task { @MainActor in
-            guard let outcome = await studio.outcome(of: id) else { return }
-            progress[id] = nil
-            if let report = outcome.report { reports[id] = report }
-            lastMessage = Self.sentence(for: outcome)
-            await refresh()
+            guard await completion(of: id) != nil else { return }
             LabAnnouncement(text: lastMessage ?? "").post()
         }
+    }
+
+    /// Waits on the worker's task, including its final receipt and cleanup, then refreshes the
+    /// presentation. A stored terminal phase alone does not mean the worker has ended.
+    @discardableResult
+    func completion(of id: JobID) async -> RenderOutcome? {
+        guard let outcome = await studio?.outcome(of: id) else { return nil }
+        progress[id] = nil
+        if let report = outcome.report { reports[id] = report }
+        lastMessage = Self.sentence(for: outcome)
+        await refresh()
+        return outcome
     }
 
     static func sentence(for outcome: RenderOutcome) -> String {

@@ -79,7 +79,7 @@ import Testing
         // 2. The long fixture: render it once, so a published movie exists.
         model.selectedRecipeID = "long-bars"
         model.preferGPU = true
-        let firstLong = try await Self.runToEnd(model, seconds: 90)
+        let firstLong = try await Self.runToEnd(model)
         let longPublished = try #require(model.output)
         check(longPublished.job?.id == firstLong.id && model.reports[firstLong.id]?.facts.frameCount == 576,
               "the long fixture published 576 frames, recorded by its job")
@@ -88,7 +88,7 @@ import Testing
         let paused = try await Self.start(model)
         try #require(await Self.eventually(seconds: 60) { await Self.job(paused.id, in: model)?.progress.completed ?? 0 >= 2 })
         await model.pause(try #require(await Self.job(paused.id, in: model)))
-        try #require(await Self.eventually { await Self.job(paused.id, in: model)?.phase.name == .interrupted })
+        _ = try #require(await model.completion(of: paused.id))
         let stopped = try #require(await Self.job(paused.id, in: model))
         check(stopped.phase == .interrupted(reason: .paused) && stopped.progress.completed >= 2,
               "Pause stopped the long render at a checkpoint (\(stopped.progress.phrase))")
@@ -100,7 +100,7 @@ import Testing
         check(afterRelaunch == stopped, "after the relaunch the job reads exactly as it was stopped")
         relaunched.selectedRecipeID = "long-bars"
         await relaunched.resume(afterRelaunch)
-        try #require(await Self.eventually(seconds: 90) { await Self.job(paused.id, in: relaunched)?.phase.isFinished ?? false })
+        _ = try #require(await relaunched.completion(of: paused.id))
         let resumed = try #require(await Self.job(paused.id, in: relaunched))
         let resumedReport = try #require(relaunched.reports[paused.id], "\(resumed.phase)")
         check(resumedReport.facts.frameCount == 576 && resumedReport.repairedSegments.isEmpty,
@@ -113,7 +113,7 @@ import Testing
         let cancelled = try await Self.start(relaunched)
         try #require(await Self.eventually(seconds: 60) { await Self.job(cancelled.id, in: relaunched)?.progress.completed ?? 0 >= 1 })
         await relaunched.cancel(try #require(await Self.job(cancelled.id, in: relaunched)))
-        try #require(await Self.eventually { await Self.job(cancelled.id, in: relaunched)?.phase == .cancelled })
+        _ = try #require(await relaunched.completion(of: cancelled.id))
         await relaunched.refresh()
         check(relaunched.output?.sha256 == resumedOutput.sha256 && relaunched.output?.byteCount == resumedOutput.byteCount,
               "the cancel left the published long movie byte for byte")
@@ -208,10 +208,10 @@ import Testing
     }
 
     /// Starts the selected recipe and waits for its job to finish and its report to arrive.
-    static func runToEnd(_ model: RenderStudioModel, seconds: Int = 30) async throws -> LabJob {
+    static func runToEnd(_ model: RenderStudioModel) async throws -> LabJob {
         let job = try await start(model)
-        try #require(await eventually(seconds: seconds) { model.reports[job.id] != nil })
-        await model.refresh()
+        let outcome = try #require(await model.completion(of: job.id))
+        try #require(outcome.report != nil)
         return try #require(model.jobs.first { $0.id == job.id })
     }
 
