@@ -597,3 +597,13 @@ Source findings: `DesktopNoteRow` combines title and origin and provides a Retur
 ## Pick Up Here qualification (LAB-016-B)
 
 Static source review only, 2026-10-01. `PickUpActions`, `PickUpIncoming`, and `PickUpEditor` use native buttons, labeled text fields, a labeled section picker, and explicit accessibility hints. The phone draft button adds the selected trait. The Mac navigation menu exposes ⌥⌘1. No pointer or assistive-technology interaction was run. Individual actions have no Mac menu commands; the decision sentence is repeated in the action and incoming areas and may be announced twice. Manual VoiceOver, Voice Control, Full Keyboard Access, large text, reduced motion, and iPad layout remain not-run. See the [walkthrough](walkthroughs/LAB-016-pick-up-here.md).
+## Durable Sync Ledger qualification (LAB-017-B, 2026-10-01)
+
+Static source inspection only; no assistive-technology or layout pass. Native controls have text labels; conflict choices expose device names and edit hints; Mac rows combine device/state; explanations wrap and use words. Mac navigation has View › Durable Sync Ledger (⌥⌘4). Hosted session tests do not prove focus, control reachability, or rendered accessibility.
+
+| Gate | Result | Remaining check |
+|---|---|---|
+| VoiceOver / Voice Control | not-run | Device selector, both conflict choices, deletion/reset confirmation, result announcement |
+| Keyboard / Full Keyboard Access | not-run | Save/reconnect/manual exchange and focus after conflict resolution; these actions have no Mac menu shortcuts |
+| Large text / contrast / reduced motion | not-run | Compact form scrolling, full explanations, manual exchange below the editor |
+| Source privacy/rights | static review | Only original synthetic inputs in evidence; no screenshots or real accounts |

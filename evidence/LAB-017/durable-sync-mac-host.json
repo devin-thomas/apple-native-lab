@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "subject": "LAB-017",
+  "check": "Hosted clean replay and reopening materialization qualification",
+  "date": "2026-10-01T07:24:59Z",
+  "provenance": {
+    "sourceRevision": "e35785c+LAB-017-B-working-tree",
+    "sdkName": "macosx27.0",
+    "xcodeVersion": "27.0",
+    "xcodeBuild": "27A266a",
+    "appVersion": "0.1.0",
+    "buildNumber": "1",
+    "buildProfile": "CoreLocal",
+    "minimumOS": "26.0"
+  },
+  "execution": {
+    "path": "fixture"
+  },
+  "inputs": [
+    "Tests/LabMacTests/DurableSyncQualificationHostTests.swift@sha256:65e95473c79284d979e55ce6aa34677464b76d6dc2ab96d30eeba091705cf0b4",
+    "Apps/Shared/DurableSync/DurableSyncSession.swift@sha256:935340c99b60a0a809d7906778a861f4630948bf3ac2f843a14791fc02759e8c",
+    "Packages/LabFeatures/Sources/DurableSyncLedger/SyncFixtures.swift@sha256:132fcb0b4bde0ce390ce6e9071801ccfcfa6123b1f52f82ed055af91b87d21a7"
+  ],
+  "steps": [
+    "Through labr: LabMac-Core test -only-testing:LabMacTests/DurableSyncHostTests -only-testing:LabMacTests/DurableSyncQualificationHostTests on macOS",
+    "Fresh confined root; save both offline notes; reconnect and inspect conflict; choose North count and reconnect; repeat stale choice; disable profile and observe refusal",
+    "Export/reset/import twice and compare export bytes; delete/export/reset/import tombstone; verify a user-owned sentinel file outside the demo root is byte-identical",
+    "Separately save an edit, export it, open a fresh session on the same root and compare export bytes and live state",
+    "Inspect xcresulttool summary and test nodes; temporary fixture folders removed by test cleanup"
+  ],
+  "outcome": {
+    "result": "failed",
+    "detail": "Test action Passed: 5 tests, 4 passed and 1 expected failure; independent Mac-only repeat gave the same counts. Clean replay passed, including conflict choice, stale refusal, disabled-profile manual exchange, duplicate import, deletion, and external sentinel preservation. Reopening retained export bytes but failed the expected live-state assertion. The persisted applied markers prevent rebuilding into the new host in-memory store; the reopened live record is absent. This expected failure is a failed restoration check, not a successful persistence qualification. Smallest observed mismatch: reopened.selectedPane?.state was .absent, expected .live(title: \"Field note\", note: \"Retained edit\")."
+  },
+  "limitations": [
+    "Hosted model calls only: no UI gestures, file-dialog dispatch, screenshot, accessibility audit or OS reinstall.",
+    "Local FileSyncProfile and DisabledSyncProfile; no CloudKit, live account change, entitlement or external service.",
+    "Hosted fixture on Mac Studio, macOS 27.0 (26A425); not a physical sensor/service qualification.",
+    "Reset protection proves one original sentinel file outside the fixture root; documents imported into the demo root are intentionally cleared.",
+    "Input code is the qualification test source later committed as 787fcfb. No personal data or raw store is published."
+  ]
+}

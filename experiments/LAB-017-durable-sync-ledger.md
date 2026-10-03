@@ -71,6 +71,14 @@ Observed with Xcode 27.0 (27A266a) and the iOS 27.0 SDK's CloudKit interface on 
 - iCloud off is `DisabledSyncProfile`. `sync()` throws before it reads or writes the profile. Export and import of the manual document still run.
 - Two devices that edit apart keep both versions. The screen shows the explanation and a button for each side. Choosing writes a new envelope whose version vector happened after both. A tombstone that dominates an older edit does not recreate the record when a new device directory replays the log.
 
+## Qualification boundaries (LAB-017-B)
+
+The [walkthrough](../docs/walkthroughs/LAB-017-durable-sync-ledger.md) describes the local replay and manual exchange. Qualification records are in [evidence/LAB-017](../evidence/LAB-017/). The experiment remains `implemented`; live CloudKit qualification is blocked because no CloudOptional ledger adapter or host exists. Synthetic account partitions are not an Apple account-switch result, and wiping a fixture ledger directory while retaining its profile is not an OS reinstall.
+
+Hosted qualification found a local restoration defect: reopening retains the exported log but shows a saved live record as absent. Mac and iPhone simulator known-issue tests pin the missing materialization into the new in-memory store. This remains open; it is not a passing durability claim.
+
+The installed iOS 27.0 interface was re-probed on 2026-10-01 with Xcode 27.0 (27A266a); availability and configuration signatures match LAB-017-A. Apple's [CKSyncEngine documentation](https://developer.apple.com/documentation/cloudkit/cksyncengine-5sie5) requires app-owned persistence and handling account changes. The local file replay does not establish either for a live engine. No capability, entitlement, profile, or data destination changed.
+
 ## Delivery
 
 [Implementation ticket](../tickets/LAB-017-A.md) → [qualification ticket](../tickets/LAB-017-B.md).
