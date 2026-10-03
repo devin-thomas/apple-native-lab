@@ -63,6 +63,16 @@ import Testing
         #expect(!described.contains(foreign))
     }
 
+    @Test func theFocusContextEvaluatesNotificationFilterCriteria() throws {
+        let allowed = LabAlertIdentity.notificationID(RespectfulAttention.offers[0].id)
+        let intent = LabFocusFilterIntent(includedIdentifiers: [allowed, "foreign.alert"])
+        let predicate = try #require(intent.appContext.notificationFilterPredicate)
+        #expect(predicate.evaluate(with: allowed))
+        #expect(!predicate.evaluate(with: "foreign.alert"))
+        let empty = try #require(LabFocusFilterIntent(includedIdentifiers: []).appContext.notificationFilterPredicate)
+        #expect(!empty.evaluate(with: allowed))
+    }
+
     @Test func theAgendaShowsTimersWithoutPermission() throws {
         let now = try CivilMoment(year: 2026, month: 10, day: 1, hour: 8, minute: 0, timeZoneIdentifier: "America/Chicago")
             .instant(deviceZone: .current)

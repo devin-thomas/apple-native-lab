@@ -1,6 +1,7 @@
 import Foundation
 import LabDomain
 import LabSupport
+import RespectfulAttention
 import SpeechTimeline
 import Testing
 @testable import NativeLab
@@ -8,6 +9,18 @@ import Testing
 /// LAB-013 inside the built iPhone app: the bundled fixtures, this device's transcriber reading, and
 /// whichever route that reading opens. No microphone is opened.
 @Suite struct SpeechTimelinePhoneTests {
+    // iOS reads this context during launch, even when the person opens another experiment.
+    // A malformed predicate used to trap in AppIntents and be attributed to the speech test.
+    @Test func theLaunchFocusContextCanBeReadWithoutTrapping() throws {
+        let allowed = LabAlertIdentity.notificationID(RespectfulAttention.offers[0].id)
+        let context = LabFocusFilterIntent(includedIdentifiers: [allowed, "foreign.alert"]).appContext
+        let predicate = try #require(context.notificationFilterPredicate)
+        #expect(predicate.evaluate(with: allowed))
+        #expect(!predicate.evaluate(with: "foreign.alert"))
+        let empty = try #require(LabFocusFilterIntent(includedIdentifiers: []).appContext.notificationFilterPredicate)
+        #expect(!empty.evaluate(with: allowed))
+    }
+
     @Test func theOnDeviceRouteOrItsStatedFallbackRunsInsideTheApp() async throws {
         let script = try SpeechFixture.script(at: try #require(SpeechFixture.sampleScript.url(in: .main)))
         let captions = try SpeechFixture.captions(at: try #require(SpeechFixture.sampleCaptions.url(in: .main)))

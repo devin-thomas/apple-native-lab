@@ -49,6 +49,7 @@ struct LiveAttentionSystem: SystemAttentionClient {
             content.title = "Lab reminder"
             content.body = offer.reason
             content.threadIdentifier = "lab-alert"
+            content.filterCriteria = LabAlertIdentity.notificationID(offer.id)
             let trigger = UNCalendarNotificationTrigger(dateMatching: offer.moment.dateComponents, repeats: false)
             let request = UNNotificationRequest(
                 identifier: LabAlertIdentity.notificationID(offer.id), content: content, trigger: trigger

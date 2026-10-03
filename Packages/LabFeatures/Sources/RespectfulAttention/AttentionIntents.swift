@@ -138,8 +138,10 @@ public struct LabFocusFilterIntent: SetFocusFilterIntent {
 
     /// Lab-owned notification identifiers only. A foreign identifier in the parameter is dropped
     /// before the predicate is built, so the filter cannot name another app's alerts.
+    /// Focus evaluates SELF against the notification content's filterCriteria string, not a
+    /// notification request. AppIntents traps when given the request.identifier key path.
     public static func notificationPredicate(includedIdentifiers: [String]) -> NSPredicate {
-        NSPredicate(format: "request.identifier IN %@", FocusScope.labOwned(in: includedIdentifiers) as NSArray)
+        NSPredicate(format: "SELF IN %@", FocusScope.labOwned(in: includedIdentifiers) as NSArray)
     }
 
     public var appContext: FocusFilterAppContext {
