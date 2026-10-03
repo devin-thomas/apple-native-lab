@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "subject": "LAB-016",
+  "check": "Pick Up Here authorized domain qualification and explicit-copy fallback",
+  "date": "2026-10-01T06:55:00Z",
+  "provenance": {
+    "sourceRevision": "e35785c-dirty",
+    "sdkName": "macosx27.0",
+    "xcodeVersion": "27.0",
+    "xcodeBuild": "27A266a",
+    "appVersion": "0.1.0",
+    "buildNumber": "1",
+    "buildProfile": "CoreLocal",
+    "minimumOS": "26.0"
+  },
+  "execution": {
+    "path": "fixture"
+  },
+  "inputs": [
+    "Fixtures/LAB-016/workbench-draft.txt@sha256:1943d54e931084a45165709fb4d4e9e549e2df67a68d534e8b0eca3ab6d1049a",
+    "SampleDraft: original three-section draft",
+    "Sentinel: original rejection and revocation text"
+  ],
+  "steps": [
+    "Through labr: swift test --package-path Packages/LabFeatures --filter PickUpHereTests",
+    "Through labr: xcodebuild -project AppleNativeLab.xcodeproj -scheme LabMac-Core -destination platform=macOS -derivedDataPath build/DerivedData -only-testing:LabMacTests/PickUpHereQualificationHostTests test -quiet; inspected xcresult summary (2 passed, 0 failed)"
+  ],
+  "outcome": {
+    "result": "passed",
+    "detail": "17 tests in ResumeTests and FallbackTests passed. Missing drafts ask to import and reveal no text; revoked or unauthorized reads reveal no text; a newer shorter draft clamps section 1 to 0. With Handoff disabled the explicit document imports as appUI and resumes section 1. Reimport creates no duplicate. Cancellation reads nothing; malformed and extra-field hints/documents, wrong activity type, model-tool import, and unavailable store are refused. Mac hosted qualification: 2 tests passed in the sandboxed app with fresh SQLite stores. The destination prompted import, imported once as appUI, resumed section 1, and retained its user draft after Clear Continuation and Reset Demo. Revocation cleared the offer/result, preparation refused access, the shorter revision clamped section 1 to 0, and a malformed incoming link cleared the prior result."
+  },
+  "limitations": [
+    "Fixture path: package tests use in-memory stores; Mac hosted tests use fresh SQLite stores in the sandboxed app. Copies are passed in process; no system Handoff delivery, rendered UI, or clipboard transfer.",
+    "No physical iPhone/iPad, two-device Team ID delivery, system URL dispatch, or universal-link service.",
+    "No screenshots or exported user material. Only original fixture data is used.",
+    "Manual assistive technology, large text, reduced motion, iPad layout, and 26-SDK compile not run."
+  ]
+}
