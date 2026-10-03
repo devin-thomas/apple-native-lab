@@ -79,6 +79,8 @@ enum SidebarDestination: Hashable {
     case modelRouting
     /// LAB-040: local product fixtures and transaction-state simulator (no real charge).
     case commerceWithoutTricks
+    /// LAB-045: annotate sample media; keep ink editable with document IDs.
+    case inkHasStructure
     case catalog(CatalogScope)
 
     var title: String {
@@ -113,6 +115,7 @@ enum SidebarDestination: Hashable {
         case .homeSceneSandbox: HomeSceneExperiment.title
         case .modelRouting: ModelRoutingExperiment.title
         case .commerceWithoutTricks: CommerceExperiment.title
+        case .inkHasStructure: InkHasStructureExperiment.title
         case .catalog(let scope): scope.title
         }
     }
@@ -150,6 +153,7 @@ enum SidebarDestination: Hashable {
         case .homeSceneSandbox: "home-scene-sandbox"
         case .modelRouting: "model-routing"
         case .commerceWithoutTricks: "commerce-without-tricks"
+        case .inkHasStructure: "ink-has-structure"
         case .catalog(.all): "all"
         case .catalog(.milestone(let milestone)): "milestone:\(milestone.rawValue)"
         case .catalog(.category(let category)): "category:\(category)"
@@ -190,6 +194,7 @@ enum SidebarDestination: Hashable {
         case ("home-scene-sandbox", nil): self = .homeSceneSandbox
         case ("model-routing", nil): self = .modelRouting
         case ("commerce-without-tricks", nil): self = .commerceWithoutTricks
+        case ("ink-has-structure", nil): self = .inkHasStructure
         case ("all", nil): self = .catalog(.all)
         case ("milestone", let raw?): guard let milestone = Milestone(rawValue: raw) else { return nil }
             self = .catalog(.milestone(milestone))
@@ -249,6 +254,8 @@ final class MainWindowState {
     var modelRoutingPane: ModelRoutingPane? = .board
     /// LAB-040: local product fixtures and transaction-state simulator.
     let commerce = CommerceSession()
+    /// LAB-045: this window's annotation session.
+    let ink = InkSession()
     var searchText = ""
     /// Incremented to ask the window to focus its search field.
     var searchRequests = 0

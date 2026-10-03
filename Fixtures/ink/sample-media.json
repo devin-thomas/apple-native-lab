@@ -1,0 +1,20 @@
+{
+  "format": "native-lab-ink-sample",
+  "formatVersion": 1,
+  "media": {
+    "id": "harbor-chart",
+    "title": "Harbor Chart",
+    "summary": "A fictional tide grid for the sample pier. Annotate high-water marks or type a note.",
+    "width": 320,
+    "height": 240
+  },
+  "task": {
+    "instruction": "Mark the high-water line on the harbor chart, or type a note naming it.",
+    "fallback": "Mouse/touch annotations and typed notes."
+  },
+  "absentPencilGestures": [
+    "pencil-squeeze",
+    "pencil-hover-only-tool",
+    "pencil-double-tap-customization"
+  ]
+}

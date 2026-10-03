@@ -55,6 +55,7 @@ struct ExperimentDetailView: View {
                 CommerceLaunch(experiment: experiment)
                 FrontierLaunch(experiment: experiment)
                 TinyDoorwayLaunch(experiment: experiment)
+                InkHasStructureLaunch(experiment: experiment)
                 Text(experiment.moment)
                     .font(.title3)
                     .fixedSize(horizontal: false, vertical: true)

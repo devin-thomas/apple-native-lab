@@ -146,6 +146,9 @@ struct LabCommands: Commands {
             }
             .keyboardShortcut(.defaultAction)
             .disabled(desktop.selectedID == nil)
+            Button(InkHasStructureExperiment.title) { window?.destination = .inkHasStructure }
+                .keyboardShortcut("2", modifiers: [.command, .control, .option])
+                .disabled(window == nil)
         }
 
         CommandGroup(replacing: .textEditing) {

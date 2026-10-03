@@ -180,6 +180,9 @@ targets:
       # LAB-048: entitlement-free lifecycle simulations only.
       - package: LabFeatures
         product: CommercialFrontier
+      # LAB-045 Ink Has Structure: editable anchored ink; PencilKit canvas only on the iPhone host.
+      - package: LabFeatures
+        product: InkHasStructure
     info:
       path: Apps/Mac/Info.plist
       properties:
@@ -368,6 +371,9 @@ targets:
       # LAB-048: entitlement-free lifecycle simulations only.
       - package: LabFeatures
         product: CommercialFrontier
+      # LAB-045 Ink Has Structure: editable anchored ink; PencilKit canvas on iPhone.
+      - package: LabFeatures
+        product: InkHasStructure
     info:
       path: Apps/Phone/Info.plist
       properties:
@@ -552,6 +558,9 @@ targets:
       # LAB-048: entitlement-free lifecycle simulations only.
       - package: LabFeatures
         product: CommercialFrontier
+      # LAB-045 Ink Has Structure, as LabPhone.
+      - package: LabFeatures
+        product: InkHasStructure
       - target: ShareExtension
         embed: true
       # LAB-004: the widget and Control extension, embedded only in this SystemSurfaces variant.
@@ -842,6 +851,8 @@ targets:
         buildPhase: resources
     dependencies:
       - package: LabFeatures
+        product: InkHasStructure
+      - package: LabFeatures
         product: TinyDoorway
       - package: LabSupport
       - package: LabDomain
@@ -1043,6 +1054,8 @@ targets:
       - path: Fixtures/routing/routing-sample-prompt.txt
         buildPhase: resources
     dependencies:
+      - package: LabFeatures
+        product: InkHasStructure
       - package: LabFeatures
         product: TinyDoorway
       - package: LabSupport

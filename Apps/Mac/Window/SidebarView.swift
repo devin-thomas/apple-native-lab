@@ -119,6 +119,9 @@ struct SidebarView: View {
                 Label(CommerceExperiment.title, systemImage: CommerceExperiment.symbol)
                     .tag(SidebarDestination.commerceWithoutTricks)
                     .accessibilityHint("Buy, restore, refund, and offline states with no real charge")
+                Label(InkHasStructureExperiment.title, systemImage: InkHasStructureExperiment.symbol)
+                    .tag(SidebarDestination.inkHasStructure)
+                    .accessibilityHint("Annotate the harbor chart; ink stays editable")
             }
             Section("Experiments") {
                 row(.all, symbol: "square.grid.2x2")

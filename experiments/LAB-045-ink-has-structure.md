@@ -1,7 +1,7 @@
 ---
 id: "LAB-045"
 title: "Ink Has Structure"
-state: "specified"
+state: "implemented"
 milestone: "M4"
 category: "Interaction"
 depends_on: ["LAB-008", "LAB-035"]
@@ -56,6 +56,22 @@ A fixture replay is labeled as a replay. It can prove the domain/UI contract but
 
 Proposed module: `Packages/LabFeatures/ink-has-structure/`, with native adapters only in supported hosts/extensions. Shared operations and imported document structures belong in the domain/store packages rather than a view. Record any narrower module split during implementation.
 
+Implemented split (LAB-045-A):
+
+- `Packages/LabFeatures/Sources/InkHasStructure/`: `InkDocument`, `InkLayer`, `AnnotationAnchor`, `TypedNote`, the working `InkDocumentStore`, `InkSave` (create/update through `OperationService`), `FlattenedPreview`, and `InkCapability`. Depends on LabDomain only; never imports PencilKit.
+- `Apps/Shared/InkHasStructure/`: the session every path calls, the SwiftUI annotation canvas, the iPhone page, and the catalog Open button. On iPhone, `PencilKitAnnotationCanvas` wraps `PKCanvasView` with `drawingPolicy = .anyInput`.
+- `Apps/Mac/Window/InkHasStructureColumns.swift`: Mac list and detail columns (pointer drawing; no `PKCanvasView` in the macOS SDK).
+- `Fixtures/ink/sample-media.json`: the harbor chart and the Pencil gestures this build leaves absent.
+
+## Implementation notes (LAB-045-A)
+
+Observed with Xcode 27.0 (27A266a) and the 27.0 SDKs. These are compile and package-test facts, not device proof.
+
+- `PKDrawing` is declared iOS 13.0 / macOS 10.15. `PKCanvasView` and `drawingPolicy` (including `.anyInput`) are iOS-only in the installed SDKs; the macOS PencilKit framework has no `PKCanvasView` header. Mac completes the task with pointer drawing and typed notes.
+- Unsupported Pencil gestures (`pencil-squeeze`, `pencil-hover-only-tool`, `pencil-double-tap-customization`) are not wired: they are absent from the UI, not shown as broken controls.
+- Strokes persist as unit-space `AnnotationAnchor` points. Resizing the document does not rewrite anchors; undo restores prior strokes/notes against the current size.
+- Saving builds `createItem` (or `updateItem` for the note) through `LabLibrary.submit` as the app UI. Editable ink rides in item extras; a flattened preview is a separate labeled export and never replaces the native document. Reset Demo clears only the experiment store.
+
 ## Delivery
 
 [Implementation ticket](../tickets/LAB-045-A.md) → [qualification ticket](../tickets/LAB-045-B.md).
@@ -65,3 +81,5 @@ Proposed module: `Packages/LabFeatures/ink-has-structure/`, with native adapters
 **Primary-source references:** [S53](../docs/SOURCE_INDEX.md#s53). A source is not device proof.
 
 See [data contracts](../docs/DATA_CONTRACTS.md), [permission boundaries](../docs/EXTENSION_AND_PERMISSION_MATRIX.md), and [test strategy](../docs/TEST_STRATEGY.md) for shared requirements.
+
+Mac shortcut: ⌃⌥⌘2 opens Ink Has Structure.

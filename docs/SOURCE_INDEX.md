@@ -626,6 +626,8 @@ Use in this plan: Drawing and input reference.
 
 Implementation evidence required: actual SDK symbol/availability, permissions or entitlement, and a named compile/device result.
 
+Installed SDK check (2026-09-30, Xcode 27.0 with the macOS and iOS 27.0 SDKs): `PKDrawing` on both platforms; `PKCanvasView` and `drawingPolicy` (including `.anyInput`) iOS-only — recorded in the [installed SDK ledger](VERIFICATION_BOUNDARIES.md#pencilkit-ink-lab-045). No entitlement. Not run on a physical device.
+
 ## S54
 
 **Metal** — reference

@@ -418,4 +418,13 @@ Recorded at [LAB-039-A](../tickets/LAB-039-A.md) from the iOS 27.0 SDK's `AppCli
 | Source | Installed symbol | Declared availability | Demonstrated | Remaining uncertainty |
 |---|---|---|---|---|
 | [S52](SOURCE_INDEX.md#s52) | `APActivationPayload` with `URL` and `confirmAcquiredInRegion:completionHandler:`; `APActivationPayloadErrorCodeDisallowed` / `DoesNotMatch`; `NSUserActivity.appClipActivationPayload` | iOS 14.0 | Symbols read from the installed SDK. Package tests validate the same https URL shape locally and refuse `InvocationContext.source == .appClip` while `DoorwayClipStatus` is not configured. | An embedded App Clip, associated domains, AASA hosting, NFC/visual-code invocation, and location confirmation on a device |
+### PencilKit ink (LAB-045)
+
+Recorded at [LAB-045-A](../tickets/LAB-045-A.md) from the installed PencilKit headers and `.swiftinterface` files of the iOS 27.0 and macOS 27.0 SDKs in Xcode 27.0 (27A266a). No entitlement is needed. Nothing here has run on a physical iPhone or iPad.
+
+| Source | Installed symbol | Declared availability | Demonstrated | Remaining uncertainty |
+|---|---|---|---|---|
+| [S53](SOURCE_INDEX.md#s53) | `PKDrawing`, `dataRepresentation()`, `init(data:)`, `strokes`, `image(from:scale:)`, `transformed(using:)` | iOS 13.0, macOS 10.15 (`strokes` from iOS 14 / macOS 11) | Compiled into the domain round-trip path as the iPhone host's canvas source; package tests persist lab-owned `InkDocument` strokes, not `PKDrawing` bytes | Device Pencil pressure and PK ↔ domain fidelity under real strokes |
+| [S53](SOURCE_INDEX.md#s53) | `PKCanvasView`, `drawing`, `drawingPolicy` (`.default`, `.anyInput`, `.pencilOnly`) | iOS 13.0 / 14.0; **not present** in the macOS 27.0 PencilKit headers | Wired on iPhone with `.anyInput` so finger completes the task. Mac uses SwiftUI pointer drawing instead | iPad, real Apple Pencil, and whether `.default` would prefer Pencil-only with a tool picker visible |
+| [S53](SOURCE_INDEX.md#s53) | Pencil squeeze / hover-only tools / double-tap customization | Present in broader Pencil / PencilKit docs; not adopted | Intentionally absent from the UI (not broken controls) | Whether a later OS surfaces them without an explicit adoption |
 
