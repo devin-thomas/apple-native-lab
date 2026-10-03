@@ -33,10 +33,12 @@ The first run uses original fixtures. Keep the underlying operation independent 
 
 ## Acceptance and proof
 
-- [ ] Denied permissions do not trigger repeated prompts.
-- [ ] Timezone changes retain intended date semantics.
-- [ ] Cancel removes only lab-owned schedules.
-- [ ] The declared fallback completes a meaningful version of the interaction.
+Checked items are fixture/model proof from LAB-043-B. Live system delivery and manual accessibility remain unverified.
+
+- [x] Denied permissions do not trigger repeated prompts.
+- [x] Timezone changes retain intended date semantics.
+- [x] Cancel removes only lab-owned schedules.
+- [x] The declared fallback completes a meaningful version of the interaction.
 - [ ] Essential actions remain available through the platform's assistive and alternate-input paths.
 - [ ] Actual device/OS/permission and adapter-path evidence is recorded; untested combinations remain unverified.
 
@@ -72,6 +74,12 @@ Observed with Xcode 27.0 and the 27.0 SDKs on research. These are compile and pa
 - `NSAlarmKitUsageDescription` is declared only on `LabPhoneSurfaces`. CoreLocal never links AlarmKit or UserNotifications. AlarmKit's `AlarmAttributes` conforms to ActivityKit's `ActivityAttributes`, so SystemSurfaces also links ActivityKit for that conformance alone; no Live Activity starts.
 - Denied permission: `PromptGate` allows at most one system prompt and stores a denial so Allow Lab Alerts does not ask again. The agenda timers still run while the page is open.
 - Cancel Lab Alerts removes only stored lab attentions and, on SystemSurfaces, only lab-owned notification and AlarmKit IDs. Other pending identifiers stay.
+
+## Qualification boundaries (LAB-043-B)
+
+The [walkthrough](../docs/walkthroughs/LAB-043-respectful-attention.md) and [evidence](../evidence/LAB-043/) qualify the agenda and recording-adapter fixtures, with CoreLocal simulator behavior labeled separately. State remains `implemented`. No physical iPhone, live AlarmKit delivery, notification delivery, or Focus filter in Settings was qualified.
+
+Source review found that Reset Demo removes domain attention rows without canceling system schedules; cancel before reset on a live route. Live scheduling discards adapter errors, and the page cannot confirm a schedule (`systemScheduled` is always false). The intents mutate the domain agenda but do not call the live system adapter. Refresh does not upgrade a persisted denial after Settings grants permission. These are existing implementation limits, not proven live outcomes. Original sample dates are fixed on October 1, 2026; they are not rolling future alarms. Accessibility review remains source-only with manual gates not-run.
 
 ## Delivery
 

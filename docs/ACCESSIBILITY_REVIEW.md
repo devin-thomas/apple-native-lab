@@ -607,3 +607,14 @@ Static source inspection only; no assistive-technology or layout pass. Native co
 | Keyboard / Full Keyboard Access | not-run | Save/reconnect/manual exchange and focus after conflict resolution; these actions have no Mac menu shortcuts |
 | Large text / contrast / reduced motion | not-run | Compact form scrolling, full explanations, manual exchange below the editor |
 | Source privacy/rights | static review | Only original synthetic inputs in evidence; no screenshots or real accounts |
+## Respectful Attention qualification (LAB-043-B)
+
+Source review only; no assistive-technology or display-condition pass was run. The shared `AttentionPage` uses system typography, a scroll view, semantic secondary text, labeled permission/result messages, grouped offers, and text countdowns. The navigation command is ⌥⌘6 on Mac. This does not prove focus order, text contrast, large-text layout, or announcements.
+
+| Finding | Evidence | Follow-up |
+|---|---|---|
+| Three buttons say Add to Agenda and share a generic hint without the offer reason | `Apps/Shared/RespectfulAttention/AttentionPage.swift`, source inspection | Give each button an offer-specific spoken label; verify with VoiceOver and Voice Control |
+| Add/cancel have no individual Mac menu commands; repeated buttons must be navigated in the page | `LabCommands` and `AttentionPage`, source inspection | Owner-run keyboard and Full Keyboard Access pass |
+| Result is a text element; no explicit live announcement is posted by `AttentionModel` | source inspection | Check whether VoiceOver discovers schedule, cancel, and denied-permission results |
+
+VoiceOver, Voice Control, Full Keyboard Access, large text, Reduce Motion, Reduce Transparency, Increase Contrast, and Differentiate Without Color remain **not-run**. No screenshot or accessibility audit was captured. The [walkthrough](walkthroughs/LAB-043-respectful-attention.md) names these gaps and separates agenda fixtures from system alerts.

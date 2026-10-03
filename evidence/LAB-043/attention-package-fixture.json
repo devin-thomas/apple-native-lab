@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "subject": "LAB-043",
+  "check": "Domain, calendar, prompt-gate, and SQLite qualification",
+  "date": "2026-10-01T06:59:51Z",
+  "provenance": {
+    "sourceRevision": "e35785c-dirty",
+    "sdkName": "macosx27.0",
+    "xcodeVersion": "27.0",
+    "xcodeBuild": "27A266a"
+  },
+  "execution": {
+    "path": "fixture"
+  },
+  "inputs": [
+    "Packages/LabFeatures/Sources/RespectfulAttention/RespectfulAttention.swift@sha256:81a7af4ddee464e37cf16d3a8768129db0835e5bb9053ad0e92fb24fe810d99a",
+    "Packages/LabFeatures/Tests/RespectfulAttentionTests/RespectfulAttentionTests.swift@sha256:294627bce7a0d36fcfe8532bcda2ecbb8e0a4c16cc6cc4695e9acff7ecb7e6e2",
+    "Packages/LabDomain/Tests/LabDomainTests/AttentionTests.swift@sha256:d7fd6b88ffdaeac3db335cea01d98dc269147d6a7e4887324dbc79c1a67c86e1",
+    "Packages/LabStore/Tests/LabStoreTests/AttentionStoreTests.swift@sha256:a601760314642228f7943999033d4df99eb1566f81be41b12624fddc5d88bdf5"
+  ],
+  "steps": [
+    "Through labr: swift test --package-path Packages/LabFeatures --filter RespectfulAttentionTests",
+    "Through labr: swift test --package-path Packages/LabDomain --filter AttentionTests",
+    "Through labr: swift test --package-path Packages/LabStore --filter AttentionStoreTests"
+  ],
+  "outcome": {
+    "result": "passed",
+    "detail": "13 feature, 9 domain, and 4 SQLite tests passed. Denied and dismissed gates do not prompt again; mixed identifier selection and recording adapter retain foreign alerts; agenda countdown preserves Chicago under a Tokyo device zone. Notification components retain Chicago and the March 7/8 9 AM instants differ by 82800 seconds; nonexistent March 8 2:30 AM is refused. Consent refusal, cancellation, authorization ceilings, stale/duplicate requests, receipt round trip, reopened storage, migration, and reset preserving a user collection also passed."
+  },
+  "limitations": [
+    "Package fixtures and temporary SQLite stores only; no OS permission dialog or alert delivery.",
+    "Calendar-component reconstruction is not UNCalendarNotificationTrigger delivery evidence.",
+    "Physical iPhone, Focus in Settings, and assistive-technology passes are not-run."
+  ]
+}
