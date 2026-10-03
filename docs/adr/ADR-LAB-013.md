@@ -1,4 +1,4 @@
-# ADR-016 — Focus predicates evaluate notification filter criteria
+# ADR-LAB-013 — Focus predicates evaluate notification filter criteria
 
 Status: accepted 2026-10-02 (LAB-013-B).
 

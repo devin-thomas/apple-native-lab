@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "subject": "LAB-013",
+  "check": "Expected-failure control for the iOS launch crash attributed to SpeechTimelinePhoneTests: construct the real Focus context with the previous request.identifier predicate",
+  "date": "2026-10-03T04:31:42Z",
+  "provenance": {
+    "sourceRevision": "51cd668-dirty (old-predicate control with the new host regression)",
+    "appVersion": "unknown",
+    "buildNumber": "unknown",
+    "buildProfile": "CoreLocal",
+    "minimumOS": "26.0",
+    "sdkName": "iphonesimulator27.0",
+    "xcodeVersion": "27.0",
+    "xcodeBuild": "27A266a"
+  },
+  "execution": {
+    "path": "simulator",
+    "simulator": {
+      "platform": "iOS",
+      "osVersion": "27.0 (24A434)",
+      "deviceClass": "iPhone 18 Pro"
+    }
+  },
+  "inputs": [
+    "script:speech-sample-script@sha256:c03523b47c45768c621061b257719e1b97e2a311a44dfc00f6ff69265e52cdf0",
+    "Focus selection: one lab-alert identifier and foreign.alert (original synthetic inputs)"
+  ],
+  "steps": [
+    "Temporarily restore request.identifier IN %@ in LabFocusFilterIntent.notificationPredicate; keep the real context-construction regression",
+    "Create a new simulator named NL LAB-013-B red-context",
+    "xcodebuild -scheme LabPhone-Core -only-testing:LabPhoneTests/SpeechTimelinePhoneTests -collect-test-diagnostics never -resultBundlePath build/focus-control.xcresult test",
+    "Read xcresulttool test-results summary; delete only the simulator created for this run; restore SELF IN %@"
+  ],
+  "outcome": {
+    "result": "failed",
+    "detail": "Expected failure: xcodebuild exited 65. Two tests selected: the speech route test passed; theLaunchFocusContextCanBeReadWithoutTrapping crashed NativeLab. Earlier saved pre-2 and pre-5 result bundles attributed the same launch trap to the speech route and a renderer-only test; their matching crash reports show EXC_BREAKPOINT / SIGTRAP in LabFocusFilterIntent.appContext on a cooperative executor. The recognizer is not created on the simulator unavailable path."
+  },
+  "limitations": [
+    "Deliberate negative control, not a passing product run. Earlier saved result bundles were inspected during this continuation; those runs were not rerun unchanged.",
+    "Raw crash diagnostics remain outside committed evidence because they contain machine paths and unrelated process information.",
+    "No microphone, model download, physical iPhone or iPad, notification delivery, or Focus setting was exercised.",
+    "An earlier method filter omitted parentheses, selected zero tests, and is explicitly excluded from passing evidence."
+  ]
+}

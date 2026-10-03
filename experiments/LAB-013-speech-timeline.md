@@ -33,12 +33,12 @@ The first run uses original fixtures. Keep the underlying operation independent 
 
 ## Acceptance and proof
 
-- [ ] Route changes do not silently lose the session.
-- [ ] Final segments do not duplicate provisional text.
-- [ ] Transcript corrections preserve the original media timestamps.
-- [ ] The declared fallback completes a meaningful version of the interaction.
+- [x] Route changes do not silently lose the session.
+- [x] Final segments do not duplicate provisional text.
+- [x] Transcript corrections preserve the original media timestamps.
+- [x] The declared fallback completes a meaningful version of the interaction.
 - [ ] Essential actions remain available through the platform's assistive and alternate-input paths.
-- [ ] Actual device/OS/permission and adapter-path evidence is recorded; untested combinations remain unverified.
+- [x] Actual device/OS/permission and adapter-path evidence is recorded; untested combinations remain unverified.
 
 ## Hardware, lifecycle, and boundary
 
@@ -83,6 +83,17 @@ Observed with Xcode 27.0 (27A266a), the macOS 27.0 and iOS 27.0 SDKs, and this e
 - **Recording.** The source builds declare no microphone purpose string, and the Mac build has no `com.apple.security.device.audio-input` entitlement, so Record falls back with that reason and never prompts. `OnDeviceSpeechCapture` compiles and has never run. It keeps no audio.
 - **Sample audio.** No audio is committed. The device's own synthesizer speaks the committed script into the experiment's folder, because the system voices are not licensed for redistributing their output.
 - **Navigation.** The session lives in one model for the app, not in a view, so leaving the experiment and returning keeps it.
+
+## Qualification notes (LAB-013-B)
+
+Qualified on the development Mac and in the iOS 27.0 simulator; no physical iPhone or iPad took part, and no microphone was opened. The state stays `implemented`. The [walkthrough](../docs/walkthroughs/LAB-013-speech-timeline.md) says what ran where.
+
+- **A late guess over finalized audio is dropped.** A generated-stream test found that a guess delivered after a final, starting before it and running past it, was shown over the finalized segment, so its words appeared twice. `TranscriptTimeline` now drops any guess that overlaps a finalized segment, as it already dropped one wholly inside finalized audio.
+- **A segment is one line, Unicode separators included.** The line and paragraph separators (U+2028, U+2029) are refused like a line break.
+- **Which audio changes stop a recording is `CaptureStop`.** The capture now stops, and the session pauses and says why, on the engine's configuration change on both platforms and, on iOS, on "no suitable route for the category" as well as a device connected, a device lost, and a route configuration change. Compiled and tested as a mapping; never run on hardware.
+- **The app's session.** A recording stopped by a route change, an interruption, or a failure is announced, not only shown; a Resume that cannot start names the segments it kept; a second Record press while the first waits for the gate does nothing; and a new timeline is never saved as a retry of the previous one's save.
+- **The intermittent iOS host-test crash was a launch metadata trap.** Crash stacks point to `LabFocusFilterIntent.appContext`, not recognizer teardown. The Focus adapter now uses `SELF IN` against notification content filter criteria; a negative-control build with the old predicate crashes in the real context-construction regression ([ADR-LAB-013](../docs/adr/ADR-LAB-013.md)). Repeated targeted simulator runs are recorded in the qualification ticket. The unsupported speech path never creates a recognizer.
+- **Live recording is blocked on an owner decision**, not failed: the microphone purpose string in the source builds and `com.apple.security.device.audio-input` for the Mac host.
 
 ## Delivery
 

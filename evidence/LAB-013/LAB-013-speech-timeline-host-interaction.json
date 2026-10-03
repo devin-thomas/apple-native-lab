@@ -1,0 +1,44 @@
+{
+  "check" : "Speech Timeline's complete interaction in the Mac host from clean state: the unavailable path and caption fallback, transcription with provisional text, corrections, both exports, a recording paused by a route change and resumed, saves with app-UI receipts, and both resets beside the person's items",
+  "date" : "2026-10-03T04:36:58Z",
+  "execution" : {
+    "path" : "fixture"
+  },
+  "inputs" : [
+    "captions:app-bundle/speech-sample-captions.vtt@sha256:1615650c15788f53d1d009d6f8a83ad354a4d3b5b0ba3874d8402ebe5e19ee4b",
+    "script:app-bundle/speech-sample-script.txt@sha256:c03523b47c45768c621061b257719e1b97e2a311a44dfc00f6ff69265e52cdf0",
+    "recognizer:scripted, the update sequence the transcriber produced on the development Mac (LAB-013-A)",
+    "capture:scripted, two runs: a route change (old device unavailable) after one final and one guess, then one final and Stop"
+  ],
+  "limitations" : [
+    "Fixture path: hosted tests in the sandboxed Mac app, on a fresh store in the app container. It supports implemented at most.",
+    "The recognizer and the capture are scripted. No microphone was opened, no audio route changed, and no system interruption happened: the route change is the event the capture would send.",
+    "The views were not driven here; the session model the views call was. SpeechTimelineViewTests presses the rendered fallback through accessibility.",
+    "No physical iPhone or iPad and no iOS simulator ran in this check."
+  ],
+  "outcome" : {
+    "detail" : "All 18 checks matched. unavailable: stated, and Transcribe, Import Audio, and Record are closed; the caption fixture: 4 segments labeled as imported captions; a caption correction kept its time; an annotation was added and an overlapping one refused; the fallback saved with an app-UI receipt; transcription: 4 guesses shown, 2 segments, no guess left; the audio reference is the copy's SHA-256, not its name; a transcript correction kept its time; the caption export kept the times and the corrected text; the timeline export kept times, word times, and the recognized text; the transcript saved once; Save again returned the same receipt; this build's Record fell back with its reason and opened nothing; the route change paused the recording, kept its segment, and was announced; Resume continued the same timeline after the kept segment; the recording saved with an app-UI receipt; the collection holds 3 saved transcripts and the person's own item; the experiment's Reset and Reset Demo left all 4 items unchanged; the store holds the 4 items as the person's own, and each save's app-UI create-item receipt.",
+    "result" : "passed"
+  },
+  "provenance" : {
+    "appVersion" : "0.1.0",
+    "buildNumber" : "1",
+    "buildProfile" : "CoreLocal",
+    "minimumOS" : "26.0",
+    "sdkName" : "macosx27.0",
+    "sourceRevision" : "999b6a1-dirty",
+    "xcodeBuild" : "27A266a",
+    "xcodeVersion" : "27.0"
+  },
+  "schemaVersion" : 1,
+  "steps" : [
+    "xcodebuild -scheme LabMac-Core -only-testing:LabMacTests/SpeechTimelineHostEvidenceTests test",
+    "A fresh SQLite store in the app container; Create Collection; one item of the person's own",
+    "The transcriber faked unavailable: read the statement; Import Sample Captions; correct a cue; annotate; Save",
+    "A scripted recognizer: Import Audio… (a copy in the experiment folder); correct; Export Captions and Export Timeline, read back; Save twice",
+    "Record with this build's real permission stager",
+    "Record with a permission source reporting the microphone allowed and a scripted capture: a route change; Resume Recording; Stop Recording; Save",
+    "Reset Speech Timeline; Reset Demo; the collection and the store read again"
+  ],
+  "subject" : "LAB-013"
+}

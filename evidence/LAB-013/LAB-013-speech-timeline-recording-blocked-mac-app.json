@@ -1,0 +1,41 @@
+{
+  "check" : "Speech Timeline's live recording path (Record, then OnDeviceSpeechCapture through RecordingGate) in the sandboxed Mac app with this build's real permission stager",
+  "date" : "2026-10-03T04:36:58Z",
+  "execution" : {
+    "device" : {
+      "deviceClass" : "Mac17,14",
+      "osVersion" : "Version 27.0 (Build 26A425)",
+      "platform" : "macOS"
+    },
+    "path" : "physical"
+  },
+  "inputs" : [
+    "build:LabMac-Core source build, Info.plist without NSMicrophoneUsageDescription, no com.apple.security.device.audio-input entitlement"
+  ],
+  "limitations" : [
+    "A blocked record supports no state. It shows the closed route is stated and safe in this build, not that recording works.",
+    "The development Mac's own permission state was read by the live stager; no prompt was shown and no microphone was opened.",
+    "No physical iPhone or iPad and no iOS simulator ran in this check."
+  ],
+  "outcome" : {
+    "detail" : "Blocked on an owner decision, not failed: live recording needs NSMicrophoneUsageDescription in the source builds and com.apple.security.device.audio-input in the Mac host's entitlements and Config/ProductPolicy.txt, and neither is declared. Record fell back without a prompt, with 0 captures started: “This build does not declare NSMicrophoneUsageDescription, so the lab does not ask for the microphone. Import an original audio fixture, or pick the reference clip and time by hand. Nothing records.” OnDeviceSpeechCapture, its route-change and interruption observers, and a real route change have never run.",
+    "result" : "blocked"
+  },
+  "provenance" : {
+    "appVersion" : "0.1.0",
+    "buildNumber" : "1",
+    "buildProfile" : "CoreLocal",
+    "minimumOS" : "26.0",
+    "sdkName" : "macosx27.0",
+    "sourceRevision" : "999b6a1-dirty",
+    "xcodeBuild" : "27A266a",
+    "xcodeVersion" : "27.0"
+  },
+  "schemaVersion" : 1,
+  "steps" : [
+    "xcodebuild -scheme LabMac-Core -only-testing:LabMacTests/SpeechTimelineHostEvidenceTests/liveRecordingIsBlockedInThisBuild test",
+    "Confirm the app's Info.plist declares no microphone purpose string, so the stager cannot prompt",
+    "Press Record through SpeechTimelineModel.record() with PermissionStager.live() and a capture that only counts starts"
+  ],
+  "subject" : "LAB-013"
+}

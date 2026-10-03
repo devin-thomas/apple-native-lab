@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "subject": "LAB-013",
+  "check": "SpeechTimelinePhoneTests and SpeechTimelinePhoneQualificationTests pass across eight targeted iOS app test runs after the Focus-context launch fix",
+  "date": "2026-10-03T04:37:33Z",
+  "provenance": {
+    "sourceRevision": "64b5c0e-dirty (qualification script later committed unchanged as 999b6a1)",
+    "appVersion": "unknown",
+    "buildNumber": "unknown",
+    "buildProfile": "CoreLocal",
+    "minimumOS": "26.0",
+    "sdkName": "iphonesimulator27.0",
+    "xcodeVersion": "27.0",
+    "xcodeBuild": "27A266a"
+  },
+  "execution": {
+    "path": "simulator",
+    "simulator": {
+      "platform": "iOS",
+      "osVersion": "27.0 (24A434)",
+      "deviceClass": "iPhone 18 Pro"
+    }
+  },
+  "inputs": [
+    "script:speech-sample-script@sha256:c03523b47c45768c621061b257719e1b97e2a311a44dfc00f6ff69265e52cdf0",
+    "captions:speech-sample-captions@sha256:1615650c15788f53d1d009d6f8a83ad354a4d3b5b0ba3874d8402ebe5e19ee4b",
+    "Focus selection: one lab-alert identifier, foreign.alert, and an empty selection (original synthetic inputs)"
+  ],
+  "steps": [
+    "LAB_SIMULATOR_PREFIX=\"NL LAB-013-B\" script/qualify_speech_timeline_phone.sh on the build host",
+    "Create one ticket-owned iPhone simulator; build and test once, then test-without-building seven times",
+    "Every run uses -only-testing:LabPhoneTests/SpeechTimelinePhoneTests and -only-testing:LabPhoneTests/SpeechTimelinePhoneQualificationTests",
+    "Read each xcresult summary and require Passed, 3 passed tests and 0 failed tests; never accept an empty selection",
+    "Delete the simulator created for the run in the EXIT trap"
+  ],
+  "outcome": {
+    "result": "passed",
+    "detail": "Eight of eight targeted runs passed, each with 3 passed, 0 failed, and 0 skipped tests: 24 passing executions. The real Focus context constructed and evaluated the allowed, foreign and empty selections. The device voice synthesized the original sample; SpeechTranscriber reported unavailable and the flow returned its stated failure. The host session imported 4 captions, corrected without moving timestamps, annotated, exported, saved through an app-UI receipt, refused recording before capture, and reset while preserving the saved transcript. No runner reported Crash: NativeLab. These are repeated simulator checks, not device recognition or a statistical reliability guarantee."
+  },
+  "limitations": [
+    "iOS 27.0 simulator only; the transcriber is unavailable, so these runs prove the unavailable route and the caption fallback, not recognition on an iPhone.",
+    "No microphone, model download, physical iPhone or iPad, notification delivery, or person enabling a Focus was exercised.",
+    "One simulator was reused across eight app test runs; per-test stores and temporary audio folders were fresh and removed by the tests. No clean-install matrix or explicit synthetic CPU-load generator was used.",
+    "The two other selected tests execute alongside the synthesis test using Swift Testing scheduling. Research was shared and queued; system load was not measured.",
+    "Raw result summaries and result bundles stay in build; committed evidence omits simulator identifiers and machine paths."
+  ]
+}

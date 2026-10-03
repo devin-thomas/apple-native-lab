@@ -1,0 +1,44 @@
+{
+  "check" : "Speech Timeline's on-device path in the sandboxed Mac app: the sample spoken by this Mac's synthesizer, transcribed by SpeechAnalyzer through the app's session model, every segment corrected, both exports read back, and a save",
+  "date" : "2026-10-03T04:36:58Z",
+  "execution" : {
+    "device" : {
+      "deviceClass" : "Mac17,14",
+      "osVersion" : "Version 27.0 (Build 26A425)",
+      "platform" : "macOS"
+    },
+    "path" : "physical"
+  },
+  "inputs" : [
+    "script:app-bundle/speech-sample-script.txt@sha256:c03523b47c45768c621061b257719e1b97e2a311a44dfc00f6ff69265e52cdf0",
+    "language:en-US"
+  ],
+  "limitations" : [
+    "Physical path only in that the real transcriber ran in the real app on this Mac's own hardware. A test drove the session model, not a person in the window, and it says nothing about an iPhone or iPad.",
+    "The audio is synthesized speech from the committed script, not a person, and no microphone was opened.",
+    "Sampling every 5 ms can miss a snapshot; the package's live test checks every snapshot the flow reports.",
+    "Timings are single intervals on a shared build machine, not a benchmark."
+  ],
+  "outcome" : {
+    "detail" : "SpeechTimelineModel.transcribeSample in the sandboxed app: the synthesizer's clip (7373 ms, sha256 69f14851966dca9d28a19a24b2a06268fb439f27999139e9336fa2ff5b22d111) transcribed in 1382 ms including the synthesis; 41 provisional snapshots, 0 stale guesses dropped, 0 finals refused or repeated; 4 segments: 0:00.0–0:01.6 “The kettle clicked off at 7.” (6 word times); 0:01.6–0:03.9 “Blue tape marks the 2nd shelf.” (6 word times); 0:03.9–0:05.4 “Water the fern on Thursday.” (5 word times); 0:05.4–0:07.3 “The spare key is in the green tin.” (8 word times). The screen was sampled every 5 ms: 21 samples showed a guess, 0 with a guess over finalized audio. All 4 segments corrected without moving; both exports kept every range and recognized text; the save committed as the app UI.",
+    "result" : "passed"
+  },
+  "provenance" : {
+    "appVersion" : "0.1.0",
+    "buildNumber" : "1",
+    "buildProfile" : "CoreLocal",
+    "minimumOS" : "26.0",
+    "sdkName" : "macosx27.0",
+    "sourceRevision" : "999b6a1-dirty",
+    "xcodeBuild" : "27A266a",
+    "xcodeVersion" : "27.0"
+  },
+  "schemaVersion" : 1,
+  "steps" : [
+    "TEST_RUNNER_LAB_LIVE_SPEECH=1 xcodebuild -scheme LabMac-Core -only-testing:LabMacTests/SpeechTimelineHostEvidenceTests test",
+    "A fresh SQLite store and experiment folder in the app container",
+    "Speak and Transcribe the Sample (SpeechTimelineModel.transcribeSample with OnDeviceSpeechRecognizer); sample the timeline every 5 ms while it runs",
+    "Correct every segment; Export Captions and Export Timeline, read back; Create Collection; Save"
+  ],
+  "subject" : "LAB-013"
+}
