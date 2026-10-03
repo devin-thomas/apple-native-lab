@@ -71,6 +71,12 @@ Observed with Xcode 27.0 and the iOS 27.0 and macOS 27.0 SDKs. These are Mac and
 - No `AppShortcutsProvider` is declared. Ask About Visible Sample and Set Aside Visible Sample are in the typed Shortcut library. Context resolution's sentence is "Context resolution is unavailable." A Siri-disabled reading of the card is the same card.
 - Set Aside is `DomainOperation.archiveItem` through `ActionAtlasActions.archiveItem`, so the grant and the receipt are the existing path. Reset Demo restores a demo sample. Two Mac windows share one published sample: the last one to show a sample is the one a screen-bound decision checks.
 
+## Qualification notes (LAB-002-B)
+
+The [walkthrough](../docs/walkthroughs/LAB-002-context-cards.md) and [fixture evidence](../evidence/LAB-002/context-cards-host-fallback.json) qualify the in-app session and typed intent work without a system presentation. Context resolution remains unavailable; the state stays `implemented`. Siri-off is card-value equivalence, not a run on a Siri-disabled device. No physical iPhone or iPad was used.
+
+The installed iOS 27.0 interface was re-read on 2026-10-01. `AppIntent.requestConfirmation(..., content:)` starts at macOS 15.0 / iOS 18.0 / watchOS 11.0 / tvOS 18.0, correcting the earlier ledger's 13.0 / 16.0 confirmation floor. The result-with-content overload has the older floor; the host's 26.0 minimum is unaffected.
+
 ## Delivery
 
 [Implementation ticket](../tickets/LAB-002-A.md) → [qualification ticket](../tickets/LAB-002-B.md).

@@ -618,3 +618,14 @@ Source review only; no assistive-technology or display-condition pass was run. T
 | Result is a text element; no explicit live announcement is posted by `AttentionModel` | source inspection | Check whether VoiceOver discovers schedule, cancel, and denied-permission results |
 
 VoiceOver, Voice Control, Full Keyboard Access, large text, Reduce Motion, Reduce Transparency, Increase Contrast, and Differentiate Without Color remain **not-run**. No screenshot or accessibility audit was captured. The [walkthrough](walkthroughs/LAB-043-respectful-attention.md) names these gaps and separates agenda fixtures from system alerts.
+## Context Cards qualification (LAB-002-B)
+
+Source review only: `ContextCardsPage` combines sample text, exposes visible refusal words with a “Problem” label, and gives the confirmation Return/Escape shortcuts and action hints. View › Context Cards uses ⌥⌘2. Show the other sample and Set Aside… have no dedicated menu commands. The hosted session replay verifies state and receipts, not the accessibility tree or focus.
+
+| Flow | Automated state check | VoiceOver | Voice Control | Full Keyboard Access | Large text / contrast |
+|---|---|---|---|---|---|
+| Open card; prepare and cancel | Hosted session fixture | not-run | not-run | not-run | not-run |
+| Replace sample; refuse old decision | Hosted session fixture | not-run | not-run | not-run | not-run |
+| Confirm; inspect receipt; reset | Hosted session fixture (receipt contents, no inspector navigation) | not-run | not-run | not-run | not-run |
+
+The system snippet's combined children and its intent button require a system presentation audit. No Context Cards accessibility audit or manual assistive-technology pass ran. These remain release gates.
